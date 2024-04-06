@@ -44,7 +44,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void HandleMove(Vector2 dir)
     {
-        Debug.Log(dir);
         _moveDirection = new Vector3(dir.x, 0f, dir.y);
     }
 
@@ -59,7 +58,6 @@ public class PlayerMovement : MonoBehaviour
         _lookRotation.y += dir.x * _lookSensitivity;
 
         _lookRotation.x = Mathf.Clamp(_lookRotation.x, -90f, 90f);
-        Debug.Log(_lookRotation);
     }
 
     /// <summary>
