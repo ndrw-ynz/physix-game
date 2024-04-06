@@ -53,6 +53,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
     public void OnJump(InputAction.CallbackContext context)
     {
+        JumpEvent?.Invoke();
     }
 
     public void OnLook(InputAction.CallbackContext context)
@@ -62,7 +63,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        Debug.Log($"Phase: {context.phase}, Value: {context.ReadValue<Vector2>()}");
+        MoveEvent?.Invoke(context.ReadValue<Vector2>());
     }
 
     public void OnResume(InputAction.CallbackContext context)
