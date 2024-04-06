@@ -49,6 +49,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
     public event Action<Vector2> MoveEvent;
     public event Action<Vector2> LookEvent;
     public event Action JumpEvent;
+    public event Action InteractEvent;
     public event Action PauseEvent;
     public event Action ResumeEvent;
 
@@ -70,5 +71,10 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
     public void OnResume(InputAction.CallbackContext context)
     {
         
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        InteractEvent?.Invoke();
     }
 }
