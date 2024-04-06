@@ -243,6 +243,7 @@ GameObject:
   - component: {fileID: 101379343}
   - component: {fileID: 101379347}
   - component: {fileID: 101379348}
+  - component: {fileID: 101379349}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -381,7 +382,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdd99bb46d0bd4e45a9a9048c1a20887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
+  _input: {fileID: 11400000, guid: 814afce522f247f4f91d4ca5f861c36a, type: 2}
+  _movementSpeed: 5
+  _moveSmoothTime: 0.1
+  _jumpSpeed: 6
+  _gravity: 9.8
+  _lookSensitivity: 0
+--- !u!143 &101379349
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 101379342}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1079468372
 GameObject:
   m_ObjectHideFlags: 0
