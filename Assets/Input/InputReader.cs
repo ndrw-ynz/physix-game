@@ -35,6 +35,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
     {
         _gameInput.Gameplay.Enable();
         _gameInput.UI.Disable();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     /// <summary>
@@ -44,6 +45,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
     {
         _gameInput.UI.Enable();
         _gameInput.Gameplay.Disable();
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public event Action<Vector2> MoveEvent;
@@ -68,13 +70,20 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
         MoveEvent?.Invoke(context.ReadValue<Vector2>());
     }
 
-    public void OnResume(InputAction.CallbackContext context)
-    {
-        
-    }
-
     public void OnInteract(InputAction.CallbackContext context)
     {
         InteractEvent?.Invoke();
+    }
+
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        PauseEvent?.Invoke();
+        SetUI();
+    }
+
+    public void OnResume(InputAction.CallbackContext context)
+    {
+        ResumeEvent?.Invoke();
+        SetGameplay();
     }
 }

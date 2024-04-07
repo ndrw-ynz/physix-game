@@ -31,8 +31,6 @@ public class PlayerMovement : MonoBehaviour
         _input.LookEvent += HandleLook;
 
         _controller = GetComponent<CharacterController>();
-
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
