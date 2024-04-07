@@ -25,7 +25,8 @@ public class Interactor : MonoBehaviour
 
     private void HandleInteract()
     {
-        Ray r = new Ray(interactorSource.position, interactorSource.forward);
+        Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
+        Ray r = Camera.main.ScreenPointToRay(screenCenter);
         if (Physics.Raycast(r, out RaycastHit hit, interactRange))
         {
             if (hit.collider.gameObject.TryGetComponent(out IInteractable interactObj))
