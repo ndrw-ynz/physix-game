@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ScientificNotation : MonoBehaviour, IInteractable
+public class ScientificNotation : IInteractable
 {
     // button from UI needed here, or UI itself
     [SerializeField] private InputReader _inputReader;
@@ -12,7 +12,7 @@ public class ScientificNotation : MonoBehaviour, IInteractable
         return;
     }
     // need game object for UI.
-    public void Interact()
+    public override void Interact()
     {
         _inputReader.SetUI();
         viewScientificNotationUI.SetActive(true);

@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Variance : MonoBehaviour, IInteractable
+public class Variance : IInteractable
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private GameObject viewVarianceUI;
-    public void Interact()
+    public override void Interact()
     {
         Debug.Log("Activated variance panel!");
         _inputReader.SetUI();

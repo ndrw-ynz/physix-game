@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Errors : MonoBehaviour, IInteractable
+public class Errors : IInteractable
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private GameObject viewErrorsUI;
-    public void Interact()
+    public override void Interact()
     {
         Debug.Log("Activated errors panel!");
         _inputReader.SetUI();
