@@ -17,10 +17,4 @@ public class ScientificNotation : IInteractable
         _inputReader.SetUI();
         viewScientificNotationUI.SetActive(true);
     }
-
-    // handle events for input on submit, if right or wrong
-    private void CheckSubmission()
-    {
-
-    }
 }

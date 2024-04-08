@@ -6,8 +6,8 @@ using Random = UnityEngine.Random;
 public class BoxContainer : IInteractable
 {
     public TextMeshPro measurementText;
-    public int numericalValue;
-    public string unitOfMeasurement;
+    private int _numericalValue;
+    private string _unitOfMeasurement;
 
     public static event Action<BoxContainer> BoxInteractEvent;
 
@@ -19,10 +19,10 @@ public class BoxContainer : IInteractable
 
     public void SetValues(ScientificNotationSO levelData)
     {
-        numericalValue = Random.Range(levelData.minimumNumericalValue, levelData.maximumNumericalValue);
+        _numericalValue = Random.Range(levelData.minimumNumericalValue, levelData.maximumNumericalValue);
         int randomIndex = Random.Range(0, levelData.unitOfMeasurements.Count);
-        unitOfMeasurement = levelData.unitOfMeasurements[randomIndex];
+        _unitOfMeasurement = levelData.unitOfMeasurements[randomIndex];
 
-        measurementText.text = $"{numericalValue} {unitOfMeasurement}";
+        measurementText.text = $"{_numericalValue} {_unitOfMeasurement}";
     }
 }
