@@ -1,16 +1,20 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.UIElements;
+using System;
+using Random = UnityEngine.Random;
 
 public class BoxContainer : IInteractable
 {
-    [SerializeField] private TextMeshPro measurementText;
+    public TextMeshPro measurementText;
     private int _numericalValue;
     private string _unitOfMeasurement;
 
+    public static event Action<BoxContainer> BoxInteractEvent;
+
     public override void Interact()
     {
-
+        Debug.Log("Interacted " + measurementText.text);
+        BoxInteractEvent?.Invoke(this);
     }
 
     public void SetValues(ScientificNotationSO levelData)
