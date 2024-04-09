@@ -73,24 +73,24 @@ public class GameManager : MonoBehaviour
             { "Millimeter", -3 }
         };
 
-        // convert unit of measurement to number of zeroes.
         if (unitPowers.TryGetValue(unitOfMeasurement, out int power))
         {
-            // Multiply the numerical value by 10 raised to the power associated with the unit
-            double result = numericalValue * Mathf.Pow(10, power);
-            // Convert the number to absolute value for manipulation
-            double absoluteValue = Math.Abs(result);
+            double baseForm = numericalValue * Math.Pow(10, power);
+            int exponent = (int)Math.Floor(Math.Log10(Math.Abs(baseForm)));
 
-            // Calculate the exponent
-            int exponent = (int)Math.Floor(Math.Log10(absoluteValue));
+            double coefficient = baseForm / Math.Pow(10, exponent);
 
-            // Extract the leading digit (nonzero)
-            double leadingDigit = absoluteValue / Math.Pow(10, exponent - 1);
+            string valueString = baseForm.ToString();
 
-            // Format the value in scientific notation
-            string formattedValue = string.Format("{0:F2}x10^{1}", absoluteValue / leadingDigit, exponent);
+            valueString = valueString.Replace(".", "");
 
-            return formattedValue;
+            valueString = valueString.TrimStart('0').TrimEnd('0');
+
+            int significantFigures = valueString.Length == 1 ? valueString.Length : valueString.Length-1;
+
+            string formattedCoefficient = coefficient.ToString($"F{significantFigures}");
+
+            return $"{formattedCoefficient} × 10^{exponent}";
         }
         else
         {
