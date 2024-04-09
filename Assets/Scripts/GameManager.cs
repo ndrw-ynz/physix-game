@@ -56,9 +56,10 @@ public class GameManager : MonoBehaviour
     private void CheckSubmittedAnswer(string answer)
     {
         // with contents of _currentboxcontainer, convert to proper answer, and compare with answer.
-        Debug.Log($"Checking answer: {answer}!");
+        Debug.Log($"Checking answer: {answer}");
         string correctAnswer = GetCorrectAnswer(_currentBoxContainer.numericalValue, _currentBoxContainer.unitOfMeasurement);
         Debug.Log($"Desired answer: {correctAnswer}");
+        Debug.Log("Result: " + correctAnswer.Equals(answer));
     }
 
     private string GetCorrectAnswer(int numericalValue, string unitOfMeasurement)
@@ -90,7 +91,7 @@ public class GameManager : MonoBehaviour
 
             string formattedCoefficient = coefficient.ToString($"F{significantFigures}");
 
-            return $"{formattedCoefficient} × 10^{exponent}";
+            return $"{formattedCoefficient} x 10^{exponent}";
         }
         else
         {
