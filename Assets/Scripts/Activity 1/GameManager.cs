@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +10,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private ScientificNotationSO level1;
     [SerializeField] private List<BoxContainer> boxContainers;
+    private Bounds _APFloorBounds;
+
     private BoxContainer _currentBoxContainer;
+    private int _correctAnswer;
 
     void Start()
     {
@@ -21,6 +25,25 @@ public class GameManager : MonoBehaviour
 
         // TODO: handle event for randomizing contents of box containers
         RandomlyGenerateBoxValues();
+
+        // Gets boundaries for AP Floor.
+        _APFloorBounds = GameObject.Find("AP Floor").GetComponent<Renderer>().bounds;
+        // Display the bounds properties
+        Debug.Log("Center: " + _APFloorBounds.center);
+        Debug.Log("Size: " + _APFloorBounds.size);
+        Debug.Log("Extents: " + _APFloorBounds.extents);
+        Debug.Log("Min: " + _APFloorBounds.min);
+        Debug.Log("Max: " + _APFloorBounds.max);
+
+        // Calculate the width, length, and height
+        float width = _APFloorBounds.size.x;
+        float length = _APFloorBounds.size.z;
+        float height = _APFloorBounds.size.y;
+
+        // Display the width, length, and height
+        Debug.Log("Width: " + width);
+        Debug.Log("Length: " + length);
+        Debug.Log("Height: " + height);
     }
 
     private void HandlePause()
@@ -59,7 +82,39 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Checking answer: {answer}");
         string correctAnswer = GetCorrectAnswer(_currentBoxContainer.numericalValue, _currentBoxContainer.unitOfMeasurement);
         Debug.Log($"Desired answer: {correctAnswer}");
-        Debug.Log("Result: " + correctAnswer.Equals(answer));
+        bool isCorrect = answer.Equals(correctAnswer);
+        Debug.Log("Result: " + isCorrect);
+        // Handle random position for box 
+        if (isCorrect)
+        {
+            _correctAnswer += 1;
+
+            Vector3 center = _APFloorBounds.center;
+            Vector3 extents = _APFloorBounds.extents;
+            Vector3 randomPosition = _APFloorBounds.center;
+            // Multiply extents, only alter x and z
+            if (_correctAnswer == 1)
+            {
+                randomPosition.x = Random.Range(center.x - extents.x, center.x);
+                randomPosition.z = Random.Range(center.z, center.z + extents.z);
+            }
+            if (_correctAnswer == 2)
+            {
+                randomPosition.x = Random.Range(center.x, center.x + extents.x);
+                randomPosition.z = Random.Range(center.z, center.z + extents.z);
+            }
+            if (_correctAnswer == 3)
+            {
+                randomPosition.x = Random.Range(center.x - extents.x, center.x);
+                randomPosition.z = Random.Range(center.z, center.z - extents.z);
+            }
+            if (_correctAnswer == 4)
+            {
+                randomPosition.x = Random.Range(center.x, center.x + extents.x);
+                randomPosition.z = Random.Range(center.z, center.z - extents.z);
+            }
+            _currentBoxContainer.transform.position = randomPosition;
+        }
     }
 
     private string GetCorrectAnswer(int numericalValue, string unitOfMeasurement)
