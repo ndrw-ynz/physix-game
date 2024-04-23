@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
         BoxContainer.BoxInteractEvent += OnSelectBox;
         ViewScientificNotation.OpenViewEvent += OnOpenViewSN;
         ViewScientificNotation.SubmitAnswerEvent += CheckSubmittedAnswer;
+        ViewAccuracyPrecision.OpenViewEvent += OnOpenViewAP;
 
         // TODO: handle event for randomizing contents of box containers
         RandomlyGenerateBoxValues();
@@ -74,6 +76,11 @@ public class GameManager : MonoBehaviour
         {
             view.measurementText.text = _currentBoxContainer.measurementText.text;
         }
+    }
+    
+    private void OnOpenViewAP(ViewAccuracyPrecision view)
+    {
+        IsAccurate();
     }
 
     private void CheckSubmittedAnswer(string answer)
@@ -153,5 +160,30 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Unit of measurement not found!");
             return null;
         }
+    }
+
+    // method for determining accuracy
+    private bool IsAccurate()
+    {
+        Debug.Log("Determining accuracy!");
+		Vector3 center = _APFloorBounds.center;
+		Vector3 extents = _APFloorBounds.extents;
+
+        float sum = 0;
+
+		foreach (BoxContainer box in boxContainers)
+        {
+            Bounds boxBounds = box.GetComponent<Renderer>().bounds;
+            float dx = Math.Abs(boxBounds.center.x - center.x);
+            float dy = Math.Abs(boxBounds.center.y - center.y);
+            float distance = Vector3.Distance(boxBounds.center, center);
+            Debug.Log("Distance of a box: " + distance);
+            sum += distance;
+        }
+
+
+        Debug.Log("average: " + sum/4);
+        Debug.Log("acceptable avg: " + extents/2);
+        return false;
     }
 }
