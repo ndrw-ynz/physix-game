@@ -81,6 +81,7 @@ public class GameManager : MonoBehaviour
     private void OnOpenViewAP(ViewAccuracyPrecision view)
     {
         IsAccurate();
+        IsPrecise();
     }
 
     private void CheckSubmittedAnswer(string answer)
@@ -185,5 +186,54 @@ public class GameManager : MonoBehaviour
         Debug.Log("average: " + sum/4);
         Debug.Log("acceptable avg: " + extents/2);
         return false;
+    }
+
+    // This method determines precision of boxes, the standard
+    // being that the measure of sd is within 1 sd.
+    private bool IsPrecise()
+    {
+        List<float> distanceValues = new List<float>();
+
+        // Compute centroid of boxes
+        Vector3 centroid = new Vector3();
+        foreach (BoxContainer box in boxContainers)
+        {
+			Bounds boxBounds = box.GetComponent<Renderer>().bounds;
+            
+            centroid += boxBounds.center;
+        }
+        centroid /= 4;
+
+        // Calculate average distance to centroid
+        float avgDistance = 0;
+        foreach (BoxContainer box in boxContainers)
+        {
+			Bounds boxBounds = box.GetComponent<Renderer>().bounds;
+            float boxDistance = Vector3.Distance(centroid, boxBounds.center);
+
+            distanceValues.Add(boxDistance);
+			avgDistance += boxDistance;
+		}
+        avgDistance /= 4;
+
+        // Calculate standard deviation
+        double sd = 0;
+        foreach (float distanceValue in distanceValues)
+        {
+            sd += Math.Pow(distanceValue-avgDistance, 2);
+		}
+        sd /= 4;
+        sd = Math.Sqrt(sd);
+
+        // Compare standard deviation to be within 1 sd
+        if (sd < 1)
+        {
+            Debug.Log("Precise!");
+        } else
+        {
+            Debug.Log("Not precise!");
+        }
+
+		return sd < 1;
     }
 }
