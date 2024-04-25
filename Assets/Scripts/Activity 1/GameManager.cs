@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
         ViewScientificNotation.OpenViewEvent += OnOpenViewSN;
         ViewScientificNotation.SubmitAnswerEvent += CheckSubmittedAnswer;
         ViewAccuracyPrecision.OpenViewEvent += OnOpenViewAP;
+        ViewAccuracyPrecision.SubmitAPEvent += CheckAPAnswer;
 
         // TODO: handle event for randomizing contents of box containers
         RandomlyGenerateBoxValues();
@@ -80,8 +81,7 @@ public class GameManager : MonoBehaviour
     
     private void OnOpenViewAP(ViewAccuracyPrecision view)
     {
-        IsAccurate();
-        IsPrecise();
+        
     }
 
     private void CheckSubmittedAnswer(string answer)
@@ -235,5 +235,19 @@ public class GameManager : MonoBehaviour
         }
 
 		return sd < 1;
+    }
+
+    private void CheckAPAnswer(bool accuracySubmission, bool precisionSubmission)
+    {
+        bool actualAccuracy = IsAccurate();
+		bool actualPrecision = IsPrecise();
+        if (actualAccuracy == accuracySubmission && actualPrecision == precisionSubmission)
+        {
+            Debug.Log("AP Answer is correct.");
+        } else
+        {
+            Debug.Log("AP Answer is incorrect.");
+        }
+		
     }
 }
