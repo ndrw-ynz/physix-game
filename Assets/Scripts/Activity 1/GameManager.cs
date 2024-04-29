@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
         ViewScientificNotation.SubmitAnswerEvent += CheckSubmittedAnswer;
         ViewAccuracyPrecision.OpenViewEvent += OnOpenViewAP;
         ViewAccuracyPrecision.SubmitAPEvent += CheckAPAnswer;
+        ViewVariance.OpenVarianceEvent += OnOpenViewVariance;
 
         // TODO: handle event for randomizing contents of box containers
         RandomlyGenerateBoxValues();
@@ -82,6 +83,15 @@ public class GameManager : MonoBehaviour
     private void OnOpenViewAP(ViewAccuracyPrecision view)
     {
         
+    }
+
+    private void OnOpenViewVariance(ViewVariance view)
+    {
+        for (int i = 0; i < view.givenNumbers.Count; i++)
+        {
+            float d = Vector3.Distance(boxContainers[i].transform.position, _APFloorBounds.center);
+            view.givenNumbers[i].SetValue((float) Math.Round(d, 2));
+        }
     }
 
     private void CheckSubmittedAnswer(string answer)
@@ -250,4 +260,6 @@ public class GameManager : MonoBehaviour
         }
 		
     }
+
+
 }
