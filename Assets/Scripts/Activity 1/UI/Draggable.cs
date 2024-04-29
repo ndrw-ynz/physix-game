@@ -21,6 +21,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		_thisImage.raycastTarget = false;
+		_placeholderText.raycastTarget = false;
 	}
 
 	public void OnDrag(PointerEventData eventData)
@@ -30,7 +31,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void OnEndDrag(PointerEventData eventData)
 	{
-		_thisImage.raycastTarget = true;
 		transform.position = _startPosition;
+		_thisImage.raycastTarget = true;
+		_placeholderText.raycastTarget = true;
 	}
 }
