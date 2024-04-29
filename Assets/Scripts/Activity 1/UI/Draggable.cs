@@ -10,8 +10,9 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	private Image _thisImage;
 	private Vector3 _startPosition;
 	private TextMeshProUGUI _placeholderText;
+	private float _value = 0;
 
-	public void Start()
+	public void Awake()
 	{
 		_thisImage = GetComponent<Image>();
 		_startPosition = _thisImage.transform.position;
@@ -34,5 +35,11 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		transform.position = _startPosition;
 		_thisImage.raycastTarget = true;
 		_placeholderText.raycastTarget = true;
+	}
+
+	public void SetValue(float value)
+	{
+		_value = value;
+		_placeholderText.text = _value.ToString();
 	}
 }
