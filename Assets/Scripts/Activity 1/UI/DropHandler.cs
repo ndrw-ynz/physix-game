@@ -19,10 +19,7 @@ public class DropHandler : MonoBehaviour, IDropHandler
 	{
 		string pointerName = eventData.pointerDrag.transform.name;
 		Debug.Log(pointerName);
-		if (pointerName == "1")
-		{
-			Debug.Log("One is dropped!");
-			_placeholderText.text = eventData.pointerDrag.transform.name;
-		}
+		_placeholderText.text = eventData.pointerDrag.transform.name;
 	}
 }
+
