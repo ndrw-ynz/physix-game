@@ -12,12 +12,12 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	private TextMeshProUGUI _placeholderText;
 	private float _value = 0;
 
-	public void Awake()
+	public void Start()
 	{
 		_thisImage = GetComponent<Image>();
 		_startPosition = _thisImage.transform.position;
 		_placeholderText = GetComponentInChildren<TextMeshProUGUI>();
-		_placeholderText.text = transform.name;
+		_placeholderText.text = _value.ToString();
 	}
 	public void OnBeginDrag(PointerEventData eventData)
 	{
@@ -41,5 +41,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	{
 		_value = value;
 		_placeholderText.text = _value.ToString();
+	}
+
+	public float GetValue()
+	{
+		return _value;
 	}
 }

@@ -17,9 +17,8 @@ public class DropHandler : MonoBehaviour, IDropHandler
 
 	public void OnDrop(PointerEventData eventData)
 	{
-		string pointerName = eventData.pointerDrag.transform.name;
-		Debug.Log(pointerName);
-		_placeholderText.text = eventData.pointerDrag.transform.name;
+		Draggable dragObject = eventData.pointerDrag.GetComponent<Draggable>();
+		_placeholderText.text = dragObject.GetValue().ToString();
 	}
 }
 

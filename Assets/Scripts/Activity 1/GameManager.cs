@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < view.givenNumbers.Count; i++)
         {
             float d = Vector3.Distance(boxContainers[i].transform.position, _APFloorBounds.center);
+            view.givenNumbers[i].Start(); // calling Start() is a band-aid solution. Will settle for now.
             view.givenNumbers[i].SetValue((float) Math.Round(d, 2));
         }
     }
