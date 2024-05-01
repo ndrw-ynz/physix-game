@@ -11,6 +11,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	private Vector3 _startPosition;
 	private TextMeshProUGUI _placeholderText;
 	private float _value = 0;
+	private Transform _parentAfterDrag;
 
 	public void Start()
 	{
@@ -23,6 +24,8 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	{
 		_thisImage.raycastTarget = false;
 		_placeholderText.raycastTarget = false;
+		_parentAfterDrag = transform.parent;
+		transform.SetParent(transform.root);
 	}
 
 	public void OnDrag(PointerEventData eventData)
@@ -35,6 +38,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 		transform.position = _startPosition;
 		_thisImage.raycastTarget = true;
 		_placeholderText.raycastTarget = true;
+		transform.SetParent(_parentAfterDrag);
 	}
 
 	public void SetValue(float value)
