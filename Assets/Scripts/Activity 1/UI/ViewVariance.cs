@@ -7,6 +7,7 @@ public class ViewVariance : MonoBehaviour
 {
 	public static event Action<ViewVariance> OpenVarianceEvent;
 	public List<Draggable> givenNumbers;
+	public List<OperandButton> operandButtons;
 
 	private void OnEnable()
 	{
@@ -14,6 +15,11 @@ public class ViewVariance : MonoBehaviour
 		foreach (Draggable gn in givenNumbers)
 		{
 			gn.Initialize();
+		}
+
+		foreach(OperandButton ob in operandButtons)
+		{
+			ob.Initialize();
 		}
 
 		OpenVarianceEvent?.Invoke(this);
