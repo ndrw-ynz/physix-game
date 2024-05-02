@@ -10,6 +10,12 @@ public class ViewVariance : MonoBehaviour
 
 	private void OnEnable()
 	{
+		// Initializes draggable given numbers.
+		foreach (Draggable gn in givenNumbers)
+		{
+			gn.Initialize();
+		}
+
 		OpenVarianceEvent?.Invoke(this);
 	}
 }

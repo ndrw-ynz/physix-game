@@ -13,7 +13,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 	private float _value = 0;
 	private Transform _parentAfterDrag;
 
-	public void Start()
+	public void Initialize()
 	{
 		_thisImage = GetComponent<Image>();
 		_startPosition = _thisImage.transform.position;
