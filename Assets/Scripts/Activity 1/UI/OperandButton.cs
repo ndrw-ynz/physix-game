@@ -11,6 +11,7 @@ public class OperandButton : MonoBehaviour
 	public void Initialize()
     {
         _operand = int.Parse(transform.name);
+        _operandText = GetComponentInChildren<TextMeshProUGUI>();
         _operandText.text = transform.name;
     }
 
