@@ -47,7 +47,6 @@ public class DropHandler : MonoBehaviour, IDropHandler
 				case ")":
 					// Need to keep track of ( parentheses count
 					int openParenthesesCount = 0;
-					// bool isEmpty = false;
 					foreach (char c in _placeholderText.text)
 					{
 						if (c == '(')
@@ -61,30 +60,6 @@ public class DropHandler : MonoBehaviour, IDropHandler
 								return;
 							}
 							openParenthesesCount--;
-
-							// Ensure non-empty parentheses upon closing...
-							/*int index = _placeholderText.text.LastIndexOf('(', _placeholderText.text.IndexOf(c));
-							Debug.Log(index);
-							if (index >= 0)
-							{
-								string substr = _placeholderText.text.Substring(index + 1, _placeholderText.text.IndexOf(c) - index - 1);
-								bool hasDigit = false;
-								Debug.Log("substring : " + substr);
-								foreach (char chr in substr)
-								{
-									if (char.IsDigit(chr))
-									{
-										hasDigit = true;
-										Debug.Log("has digit, therefore aint empty");
-										break;
-									}
-								}
-								if (!hasDigit)
-								{
-									Debug.Log("this EMPTY AFFFF!!!!");
-									isEmpty = true;
-								}
-							}*/
 						}
 					}
 
@@ -94,7 +69,7 @@ public class DropHandler : MonoBehaviour, IDropHandler
 						return;
 					} 
 					// Number of open parentheses must be > 0 to add
-					else if (openParenthesesCount > 0) // && !isEmpty)
+					else if (openParenthesesCount > 0)
 					{
 						_placeholderText.text += op;
 					}
