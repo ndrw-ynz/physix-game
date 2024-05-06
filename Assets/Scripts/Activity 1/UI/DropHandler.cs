@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +9,8 @@ using UnityEngine.UI;
 
 public class DropHandler : MonoBehaviour, IDropHandler
 {
+	public static event Action<string> UpdateHandlerText;
 	private TextMeshProUGUI _placeholderText;
-
 	public void Start()
 	{
 		_placeholderText = GetComponentInChildren<TextMeshProUGUI>();
@@ -28,6 +29,8 @@ public class DropHandler : MonoBehaviour, IDropHandler
 	private void InsertOperand(int operand)
 	{
 		_placeholderText.text += operand.ToString();
+		// Invoke action of event upon attempt of appending an operand.
+		UpdateHandlerText?.Invoke(_placeholderText.text);
 	}
 
 	private void InsertOperator(string op)
@@ -105,6 +108,8 @@ public class DropHandler : MonoBehaviour, IDropHandler
 				_placeholderText.text += op;
 			}
 		}
+		// Invoke action of event upon attempt of appending operator.
+		UpdateHandlerText?.Invoke(_placeholderText.text);
 	}
 }
 
