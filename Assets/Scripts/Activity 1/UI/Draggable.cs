@@ -9,7 +9,7 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 {
 	private Image _thisImage;
 	private Vector3 _startPosition;
-	private TextMeshProUGUI _placeholderText;
+	protected TextMeshProUGUI _placeholderText;
 	private float _value = 0;
 	private Transform _parentAfterDrag;
 
