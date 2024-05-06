@@ -111,5 +111,11 @@ public class DropHandler : MonoBehaviour, IDropHandler
 		// Invoke action of event upon attempt of appending operator.
 		UpdateHandlerText?.Invoke(_placeholderText.text);
 	}
+
+	public void ClearEntry()
+	{
+		if (_placeholderText.text != "") _placeholderText.text = _placeholderText.text.Substring(0, _placeholderText.text.Length - 1);
+		UpdateHandlerText?.Invoke(_placeholderText.text);
+	}
 }
 
