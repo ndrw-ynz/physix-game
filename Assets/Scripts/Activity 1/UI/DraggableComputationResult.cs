@@ -6,9 +6,11 @@ using UnityEngine;
 public class DraggableComputationResult : Draggable
 {
 	public static event Action<float> EvaluateMathExpression;
+	private float _expressionValue;
 	private void Start()
 	{
 		DropHandler.UpdateHandlerText += OnTextUpdate;
+		Initialize();
 	}
 
 	private void OnTextUpdate(string mathExp)
@@ -17,10 +19,14 @@ public class DraggableComputationResult : Draggable
 		if (result == 0)
 		{
 			Debug.Log("Invalid expression! Cannot evaluate.");
+			_expressionValue = 0;
+			_placeholderText.text = "Invalid";
 
 		} else
 		{
-			Debug.Log("parsing result: " + result.ToString());
+			Debug.Log("Result: " + result.ToString());
+			_expressionValue = (float) Math.Round(result, 4);
+			_placeholderText.text = _expressionValue.ToString();
 		}
 	}
 }
