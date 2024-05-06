@@ -23,10 +23,10 @@ public class DropHandler : MonoBehaviour, IDropHandler
 	public void OnDrop(PointerEventData eventData)
 	{
 		Draggable dragObject = eventData.pointerDrag.GetComponent<Draggable>();
-		_placeholderText.text = dragObject.GetValue().ToString();
+		InsertOperand(dragObject.GetValue());
 	}
 
-	private void InsertOperand(int operand)
+	private void InsertOperand(float operand)
 	{
 		_placeholderText.text += operand.ToString();
 		// Invoke action of event upon attempt of appending an operand.

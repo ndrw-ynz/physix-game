@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class OperandButton : MonoBehaviour
 {
-    public static event Action<int> OperandButtonEvent;
+    public static event Action<float> OperandButtonEvent;
 	private TextMeshProUGUI _operandText;
     private int _operand;
 
