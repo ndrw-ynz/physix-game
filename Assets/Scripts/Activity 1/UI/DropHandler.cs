@@ -18,6 +18,7 @@ public class DropHandler : MonoBehaviour, IDropHandler
 
 		OperandButton.OperandButtonEvent += InsertOperand;
 		OperatorButton.OperatorButtonEvent += InsertOperator;
+		ComputationResultButton.ComputationResultButtonClickEvent += ClearAllEntry;
 	}
 
 	public void OnDrop(PointerEventData eventData)
@@ -115,6 +116,12 @@ public class DropHandler : MonoBehaviour, IDropHandler
 	public void ClearEntry()
 	{
 		if (_placeholderText.text != "") _placeholderText.text = _placeholderText.text.Substring(0, _placeholderText.text.Length - 1);
+		UpdateHandlerText?.Invoke(_placeholderText.text);
+	}
+
+	public void ClearAllEntry()
+	{
+		_placeholderText.text = "";
 		UpdateHandlerText?.Invoke(_placeholderText.text);
 	}
 }
