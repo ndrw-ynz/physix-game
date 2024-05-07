@@ -43,6 +43,10 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 
 	public void SetValue(float value)
 	{
+		if (_placeholderText is null)
+		{
+			Initialize();
+		}
 		_value = value;
 		_placeholderText.text = _value.ToString();
 	}
