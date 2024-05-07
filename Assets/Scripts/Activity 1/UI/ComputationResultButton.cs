@@ -1,16 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class DraggableComputationResult : Draggable
+public class ComputationResultButton : MonoBehaviour
 {
-	public static event Action<float> EvaluateMathExpression;
+	private TextMeshProUGUI _placeholderText;
 	private float _expressionValue;
-	private void Start()
+	public void Initialize()
 	{
+		_placeholderText = GetComponentInChildren<TextMeshProUGUI>();
 		DropHandler.UpdateHandlerText += OnTextUpdate;
-		Initialize();
 	}
 
 	private void OnTextUpdate(string mathExp)
