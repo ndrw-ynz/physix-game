@@ -232,7 +232,7 @@ public class GameManager : MonoBehaviour
         {
             sd += Math.Pow(distanceValue-avgDistance, 2);
 		}
-        sd /= 4;
+        sd /= 3;
         sd = Math.Sqrt(sd);
 
         // Compare standard deviation to be within 1 sd
@@ -261,5 +261,14 @@ public class GameManager : MonoBehaviour
 		
     }
 
-
+    public List<float> GetBoxDistanceValues()
+    {
+        List<float> values = new List<float>();
+        foreach (BoxContainer box in boxContainers)
+        {
+			float d = Vector3.Distance(box.transform.position, _APFloorBounds.center);
+            values.Add((float)Math.Round(d, 2));
+        }
+        return values;
+    }
 }
