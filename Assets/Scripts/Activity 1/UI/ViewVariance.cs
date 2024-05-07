@@ -9,6 +9,7 @@ public class ViewVariance : MonoBehaviour
 	public List<Draggable> givenNumbers;
 	public List<OperandButton> operandButtons;
 	public List<OperatorButton> operatorButtons;
+	public ComputationResultButton computationResultButton;
 	private void OnEnable()
 	{
 		// Initializes draggable given numbers.
@@ -26,6 +27,8 @@ public class ViewVariance : MonoBehaviour
 		{
 			ob.Initialize();
 		}
+		// Initialize computation result button
+		computationResultButton.Initialize();
 
 		OpenVarianceEvent?.Invoke(this);
 	}
