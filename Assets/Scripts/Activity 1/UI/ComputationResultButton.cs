@@ -16,7 +16,7 @@ public class ComputationResultButton : MonoBehaviour
 	public void Initialize()
 	{
 		_placeholderText = GetComponentInChildren<TextMeshProUGUI>();
-		DropHandler.UpdateHandlerText += OnTextUpdate;
+		ComputationDropHandler.UpdateHandlerText += OnTextUpdate;
 		_isExpressionValid = false;
 	}
 

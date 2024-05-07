@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ClearEntryButton : MonoBehaviour
 {
-    public DropHandler dropHandler;
+    public ComputationDropHandler dropHandler;
     public void OnClick()
     {
         dropHandler.ClearEntry();

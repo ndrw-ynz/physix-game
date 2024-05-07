@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DropHandler : MonoBehaviour, IDropHandler
+public class ComputationDropHandler : MonoBehaviour, IDropHandler
 {
 	public static event Action<string> UpdateHandlerText;
 	private TextMeshProUGUI _placeholderText;
