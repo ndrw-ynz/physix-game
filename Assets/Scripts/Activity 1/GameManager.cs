@@ -191,11 +191,14 @@ public class GameManager : MonoBehaviour
             Debug.Log("Distance of a box: " + distance);
             sum += distance;
         }
+        float avg = sum/4;
 
+        float acceptableAvg = extents.x / 2;
 
-        Debug.Log("average: " + sum/4);
-        Debug.Log("acceptable avg: " + extents/2);
-        return false;
+        Debug.Log("Average: " + avg);
+        Debug.Log("Acceptable avg: " + acceptableAvg);
+
+        return avg <= acceptableAvg ;
     }
 
     // This method determines precision of boxes, the standard
