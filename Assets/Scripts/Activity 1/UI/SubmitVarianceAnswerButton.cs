@@ -16,7 +16,7 @@ public class SubmitVarianceAnswerButton : MonoBehaviour
         Debug.Log("Variance answer: " + varianceAnswer);
         Debug.Log("Submitted answer: " + submittedAnswer);
 
-        bool isApproximatelyCorrect = Mathf.Approximately((float)varianceAnswer, (float)submittedAnswer);
+        bool isApproximatelyCorrect = Mathf.Abs((float) (varianceAnswer - submittedAnswer)) <= 0.0001;
         Debug.Log("Is approximately correct: " + isApproximatelyCorrect);
     }
 
