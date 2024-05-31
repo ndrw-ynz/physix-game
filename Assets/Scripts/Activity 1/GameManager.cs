@@ -10,11 +10,24 @@ public class GameManager : MonoBehaviour
     [SerializeField] private InputReader _input;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private ScientificNotationSO level1;
-    [SerializeField] private List<BoxContainer> boxContainers;
-    private Bounds _APFloorBounds;
+
+    public List<BoxContainer> ejectionAreaOneBoxContainers;
+    private List<BoxContainer> _ejectionAreaTwoBoxContainers;
+    private List<BoxContainer> _ejectionAreaThreeBoxContainers;
+
+    private Bounds _ejectionAreaOne;
+    private Bounds _ejectionAreaTwo;
+    private Bounds _ejectionAreaThree;
 
     private BoxContainer _currentBoxContainer;
     private int _correctAnswer;
+    // 4 bools... to check if possible to open panels...
+    private bool isScientificNotationFinished;
+    private bool isAccuracyAndPrecisionFinished;
+    private bool isVarianceFinished;
+    private bool isErrorsFinished;
+
+    public GameObject boxContainerPrefab;
 
     void Start()
     {
@@ -26,28 +39,29 @@ public class GameManager : MonoBehaviour
         ViewAccuracyPrecision.OpenViewEvent += OnOpenViewAP;
         ViewAccuracyPrecision.SubmitAPEvent += CheckAPAnswer;
         ViewVariance.OpenVarianceEvent += OnOpenViewVariance;
+        ViewErrors.SubmitErrorsEvent += CheckErrorsAnswer;
 
-        // TODO: handle event for randomizing contents of box containers
+        // Handle event for randomizing contents of box containers.
         RandomlyGenerateBoxValues();
 
-        // Gets boundaries for AP Floor.
-        _APFloorBounds = GameObject.Find("AP Floor").GetComponent<Renderer>().bounds;
-        // Display the bounds properties
-        Debug.Log("Center: " + _APFloorBounds.center);
-        Debug.Log("Size: " + _APFloorBounds.size);
-        Debug.Log("Extents: " + _APFloorBounds.extents);
-        Debug.Log("Min: " + _APFloorBounds.min);
-        Debug.Log("Max: " + _APFloorBounds.max);
+        // Gets boundaries for ejecton areas.
+        _ejectionAreaOne = GameObject.Find("Ejection Area One").GetComponent<Renderer>().bounds;
+		_ejectionAreaTwo = GameObject.Find("Ejection Area Two").GetComponent<Renderer>().bounds;
+		_ejectionAreaThree = GameObject.Find("Ejection Area Three").GetComponent<Renderer>().bounds;
 
-        // Calculate the width, length, and height
-        float width = _APFloorBounds.size.x;
-        float length = _APFloorBounds.size.z;
-        float height = _APFloorBounds.size.y;
+        // Initialize box containers
+        _ejectionAreaTwoBoxContainers = new List<BoxContainer>();
+        _ejectionAreaThreeBoxContainers = new List<BoxContainer>();
 
-        // Display the width, length, and height
-        Debug.Log("Width: " + width);
-        Debug.Log("Length: " + length);
-        Debug.Log("Height: " + height);
+		// Fill up empty ejection areas.
+		SetupEjectionArea(_ejectionAreaTwo, _ejectionAreaTwoBoxContainers);
+        SetupEjectionArea(_ejectionAreaThree, _ejectionAreaThreeBoxContainers);
+
+		// Set bool values for panels.
+		isScientificNotationFinished = false;
+        isAccuracyAndPrecisionFinished = false;
+        isVarianceFinished = false;
+        isErrorsFinished = false;
     }
 
     private void HandlePause()
@@ -62,11 +76,48 @@ public class GameManager : MonoBehaviour
 
     private void RandomlyGenerateBoxValues()
     {
-        foreach (BoxContainer box in boxContainers)
+        foreach (BoxContainer box in ejectionAreaOneBoxContainers)
         {
             box.SetValues(level1);
         }
     }
+    private void SetupEjectionArea(Bounds ejectionArea, List<BoxContainer> ejectionAreaBoxes)
+    {
+		Vector3 center = ejectionArea.center;
+		Vector3 extents = ejectionArea.extents;
+        for (int quadrant = 0; quadrant < 4; quadrant++)
+        {
+
+            GameObject instantiatedBoxContainer = Instantiate(boxContainerPrefab);
+            BoxContainer boxContainer = instantiatedBoxContainer.GetComponentInChildren<BoxContainer>();
+            
+		    Vector3 randomPosition = ejectionArea.center;
+
+		    if (quadrant == 1)
+		    {
+			    randomPosition.x = Random.Range(center.x - extents.x, center.x);
+			    randomPosition.z = Random.Range(center.z, center.z + extents.z);
+		    }
+		    if (quadrant == 2)
+		    {
+			    randomPosition.x = Random.Range(center.x, center.x + extents.x);
+			    randomPosition.z = Random.Range(center.z, center.z + extents.z);
+		    }
+		    if (quadrant == 3)
+		    {
+			    randomPosition.x = Random.Range(center.x - extents.x, center.x);
+			    randomPosition.z = Random.Range(center.z, center.z - extents.z);
+		    }
+		    if (quadrant == 4)
+		    {
+			    randomPosition.x = Random.Range(center.x, center.x + extents.x);
+			    randomPosition.z = Random.Range(center.z, center.z - extents.z);
+		    }
+		    boxContainer.transform.position = randomPosition;
+
+			ejectionAreaBoxes.Add(boxContainer);
+        }   
+	}
     private void OnSelectBox(BoxContainer container)
     {
         _currentBoxContainer = container;
@@ -89,7 +140,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < view.givenNumbers.Count; i++)
         {
-            float d = Vector3.Distance(boxContainers[i].transform.position, _APFloorBounds.center);
+            float d = Vector3.Distance(ejectionAreaOneBoxContainers[i].transform.position, _ejectionAreaOne.center);
             view.givenNumbers[i].SetValue((float) Math.Round(d, 2));
         }
     }
@@ -107,9 +158,9 @@ public class GameManager : MonoBehaviour
         {
             _correctAnswer += 1;
 
-            Vector3 center = _APFloorBounds.center;
-            Vector3 extents = _APFloorBounds.extents;
-            Vector3 randomPosition = _APFloorBounds.center;
+            Vector3 center = _ejectionAreaOne.center;
+            Vector3 extents = _ejectionAreaOne.extents;
+            Vector3 randomPosition = _ejectionAreaOne.center;
             // Multiply extents, only alter x and z
             if (_correctAnswer == 1)
             {
@@ -174,11 +225,11 @@ public class GameManager : MonoBehaviour
     }
 
     // method for determining accuracy
-    private bool IsAccurate()
+    private bool IsAccurate(Bounds ejectionArea, List<BoxContainer> boxContainers)
     {
         Debug.Log("Determining accuracy!");
-		Vector3 center = _APFloorBounds.center;
-		Vector3 extents = _APFloorBounds.extents;
+		Vector3 center = ejectionArea.center;
+		Vector3 extents = ejectionArea.extents;
 
         float sum = 0;
 
@@ -188,22 +239,22 @@ public class GameManager : MonoBehaviour
             float dx = Math.Abs(boxBounds.center.x - center.x);
             float dy = Math.Abs(boxBounds.center.y - center.y);
             float distance = Vector3.Distance(boxBounds.center, center);
-            Debug.Log("Distance of a box: " + distance);
+            //Debug.Log("Distance of a box: " + distance);
             sum += distance;
         }
         float avg = sum/4;
 
         float acceptableAvg = extents.x / 2;
 
-        Debug.Log("Average: " + avg);
-        Debug.Log("Acceptable avg: " + acceptableAvg);
+        //Debug.Log("Average: " + avg);
+        //Debug.Log("Acceptable avg: " + acceptableAvg);
 
         return avg <= acceptableAvg ;
     }
 
     // This method determines precision of boxes, the standard
     // being that the measure of sd is within 1 sd.
-    private bool IsPrecise()
+    private bool IsPrecise(List<BoxContainer> boxContainers)
     {
         List<float> distanceValues = new List<float>();
 
@@ -252,8 +303,8 @@ public class GameManager : MonoBehaviour
 
     private void CheckAPAnswer(bool accuracySubmission, bool precisionSubmission)
     {
-        bool actualAccuracy = IsAccurate();
-		bool actualPrecision = IsPrecise();
+        bool actualAccuracy = IsAccurate(_ejectionAreaOne, ejectionAreaOneBoxContainers);
+		bool actualPrecision = IsPrecise(ejectionAreaOneBoxContainers);
         if (actualAccuracy == accuracySubmission && actualPrecision == precisionSubmission)
         {
             Debug.Log("AP Answer is correct.");
@@ -261,15 +312,49 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("AP Answer is incorrect.");
         }
-		
     }
 
-    public List<float> GetBoxDistanceValues()
+    public bool IsSystematicError()
+    {
+        int numOfAccurate = 0;
+        numOfAccurate += IsAccurate(_ejectionAreaOne, ejectionAreaOneBoxContainers) ? 1 : 0;
+		numOfAccurate += IsAccurate(_ejectionAreaTwo, _ejectionAreaTwoBoxContainers) ? 1 : 0;
+		numOfAccurate += IsAccurate(_ejectionAreaThree, _ejectionAreaThreeBoxContainers) ? 1 : 0;
+
+		return numOfAccurate <= 1;
+    }
+
+    public bool IsRandomError()
+    {
+        int numOfPrecise = 0;
+        numOfPrecise += IsPrecise(ejectionAreaOneBoxContainers) ? 1 : 0;
+		numOfPrecise += IsPrecise(_ejectionAreaTwoBoxContainers) ? 1 : 0;
+		numOfPrecise += IsPrecise(_ejectionAreaThreeBoxContainers) ? 1 : 0;
+
+		return numOfPrecise <= 1;
+    }
+
+    public void CheckErrorsAnswer(bool systematicErrorSubmission, bool randomErrorSubmission)
+    {
+        bool actualSystematicError = IsSystematicError();
+        bool actualRandomError = IsRandomError();
+        Debug.Log($"Submitted Errors Answers: S={systematicErrorSubmission} R={randomErrorSubmission}");
+        Debug.Log($"Actual Errors Answers: S={actualSystematicError} R={actualRandomError}");
+        if (actualSystematicError == systematicErrorSubmission && actualRandomError == randomErrorSubmission)
+        {
+            Debug.Log("Errors answer is correct.");
+        } else
+        {
+            Debug.Log("Errors answer is incorrect.");
+        }
+    }
+
+    public List<float> GetBoxDistanceValues(Bounds ejectionArea, List<BoxContainer> boxContainers)
     {
         List<float> values = new List<float>();
         foreach (BoxContainer box in boxContainers)
         {
-			float d = Vector3.Distance(box.transform.position, _APFloorBounds.center);
+			float d = Vector3.Distance(box.transform.position, ejectionArea.center);
             values.Add((float)Math.Round(d, 2));
         }
         return values;

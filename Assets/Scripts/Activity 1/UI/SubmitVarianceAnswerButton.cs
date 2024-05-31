@@ -7,7 +7,13 @@ public class SubmitVarianceAnswerButton : MonoBehaviour
 {
     public AnswerDropHandler answerDropHandler;
     public GameManager gameManager;
-    public void OnClick()
+    private Bounds _ejectionAreaOne;
+	public void Start()
+	{
+		_ejectionAreaOne = GameObject.Find("Ejection Area One").GetComponent<Renderer>().bounds;
+
+	}
+	public void OnClick()
     {
 
         double varianceAnswer = Math.Round(CalcVariance(), 4);
@@ -22,7 +28,7 @@ public class SubmitVarianceAnswerButton : MonoBehaviour
 
     private double CalcVariance()
     {
-        List<float> distanceValues = gameManager.GetBoxDistanceValues();
+        List<float> distanceValues = gameManager.GetBoxDistanceValues(_ejectionAreaOne, gameManager.ejectionAreaOneBoxContainers);
         // Calculate average of values
         double avg = 0;
         foreach (float d in distanceValues)
