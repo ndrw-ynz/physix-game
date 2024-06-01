@@ -6,11 +6,14 @@ public class AccuracyAndPrecision : IInteractable
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private GameObject viewAccuracyAndPrecisionUI;
+    [SerializeField] private ActivityOneManager activityOneManager;
     public override void Interact()
     {
-        Debug.Log("Activated accuracy and precision panel!");
-        _inputReader.SetUI();
-        viewAccuracyAndPrecisionUI.SetActive(true);
+        if (activityOneManager.isScientificNotationFinished == true && activityOneManager.isAccuracyAndPrecisionFinished == false)
+        {
+            _inputReader.SetUI();
+            viewAccuracyAndPrecisionUI.SetActive(true);
+        }
     }
     // Start is called before the first frame update
     void Start()

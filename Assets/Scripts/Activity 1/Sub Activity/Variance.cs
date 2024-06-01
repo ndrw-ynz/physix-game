@@ -6,11 +6,15 @@ public class Variance : IInteractable
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private GameObject viewVarianceUI;
-    public override void Interact()
+	[SerializeField] private ActivityOneManager activityOneManager;
+
+	public override void Interact()
     {
-        Debug.Log("Activated variance panel!");
-        _inputReader.SetUI();
-        viewVarianceUI.SetActive(true);
+        if (activityOneManager.isAccuracyAndPrecisionFinished == true && activityOneManager.isVarianceFinished == false)
+        {
+            _inputReader.SetUI();
+            viewVarianceUI.SetActive(true);
+        }
     }
     // Start is called before the first frame update
     void Start()

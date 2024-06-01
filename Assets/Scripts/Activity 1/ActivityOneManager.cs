@@ -183,6 +183,7 @@ public class ActivityOneManager : MonoBehaviour
                 randomPosition.x = Random.Range(center.x, center.x + extents.x);
                 randomPosition.z = Random.Range(center.z, center.z - extents.z);
 
+                
                 isScientificNotationFinished = true;
             }
             _currentBoxContainer.transform.position = randomPosition;
@@ -311,6 +312,7 @@ public class ActivityOneManager : MonoBehaviour
         if (actualAccuracy == accuracySubmission && actualPrecision == precisionSubmission)
         {
             Debug.Log("AP Answer is correct.");
+            
             isAccuracyAndPrecisionFinished = true;
         } else
         {
@@ -358,6 +360,8 @@ public class ActivityOneManager : MonoBehaviour
 
 		bool isApproximatelyCorrect = Mathf.Abs((float)(varianceAnswer - submittedAnswer)) <= 0.0001;
 		Debug.Log("Is approximately correct: " + isApproximatelyCorrect);
+
+        if (isApproximatelyCorrect) isVarianceFinished = true;
 	}
 
 	public bool IsSystematicError()
@@ -389,6 +393,7 @@ public class ActivityOneManager : MonoBehaviour
         if (actualSystematicError == systematicErrorSubmission && actualRandomError == randomErrorSubmission)
         {
             Debug.Log("Errors answer is correct.");
+            isErrorsFinished = true;
         } else
         {
             Debug.Log("Errors answer is incorrect.");

@@ -6,11 +6,14 @@ public class Errors : IInteractable
 {
     [SerializeField] private InputReader _inputReader;
     [SerializeField] private GameObject viewErrorsUI;
-    public override void Interact()
+	[SerializeField] private ActivityOneManager activityOneManager;
+	public override void Interact()
     {
-        Debug.Log("Activated errors panel!");
-        _inputReader.SetUI();
-        viewErrorsUI.SetActive(true);
+        if (activityOneManager.isVarianceFinished == true && activityOneManager.isErrorsFinished == false)
+        {
+            _inputReader.SetUI();
+            viewErrorsUI.SetActive(true);
+        }
     }
     // Start is called before the first frame update
     void Start()
