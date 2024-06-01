@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameManager : MonoBehaviour
+public class ActivityOneManager : MonoBehaviour
 {
     [SerializeField] private InputReader _input;
     [SerializeField] private GameObject pauseMenu;
@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
         _input.ResumeEvent += HandleResume;
         BoxContainer.BoxInteractEvent += OnSelectBox;
         ViewScientificNotation.OpenViewEvent += OnOpenViewSN;
-        ViewScientificNotation.SubmitAnswerEvent += CheckSubmittedAnswer;
+        ViewScientificNotation.SubmitAnswerEvent += CheckSubmittedSNAnswer;
         ViewAccuracyPrecision.OpenViewEvent += OnOpenViewAP;
         ViewAccuracyPrecision.SubmitAPEvent += CheckAPAnswer;
         ViewVariance.OpenVarianceEvent += OnOpenViewVariance;
@@ -145,11 +145,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void CheckSubmittedAnswer(string answer)
+    private void CheckSubmittedSNAnswer(string answer)
     {
         // with contents of _currentboxcontainer, convert to proper answer, and compare with answer.
         Debug.Log($"Checking answer: {answer}");
-        string correctAnswer = GetCorrectAnswer(_currentBoxContainer.numericalValue, _currentBoxContainer.unitOfMeasurement);
+        string correctAnswer = GetCorrectSNAnswer(_currentBoxContainer.numericalValue, _currentBoxContainer.unitOfMeasurement);
         Debug.Log($"Desired answer: {correctAnswer}");
         bool isCorrect = answer.Equals(correctAnswer);
         Debug.Log("Result: " + isCorrect);
@@ -186,7 +186,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private string GetCorrectAnswer(int numericalValue, string unitOfMeasurement)
+    private string GetCorrectSNAnswer(int numericalValue, string unitOfMeasurement)
     {
         Dictionary<string, int> unitPowers = new Dictionary<string, int>()
         {
