@@ -22,10 +22,10 @@ public class ActivityOneManager : MonoBehaviour
     private BoxContainer _currentBoxContainer;
     private int _correctAnswer;
     // 4 bools... to check if possible to open panels...
-    private bool isScientificNotationFinished;
-    private bool isAccuracyAndPrecisionFinished;
-    private bool isVarianceFinished;
-    private bool isErrorsFinished;
+    public bool isScientificNotationFinished;
+    public bool isAccuracyAndPrecisionFinished;
+    public bool isVarianceFinished;
+    public bool isErrorsFinished;
 
     public GameObject boxContainerPrefab;
 
@@ -39,6 +39,7 @@ public class ActivityOneManager : MonoBehaviour
         ViewAccuracyPrecision.OpenViewEvent += OnOpenViewAP;
         ViewAccuracyPrecision.SubmitAPEvent += CheckAPAnswer;
         ViewVariance.OpenVarianceEvent += OnOpenViewVariance;
+        ViewVariance.SubmitVarianceEvent += CheckVarianceAnswer;
         ViewErrors.SubmitErrorsEvent += CheckErrorsAnswer;
 
         // Handle event for randomizing contents of box containers.
@@ -181,6 +182,8 @@ public class ActivityOneManager : MonoBehaviour
             {
                 randomPosition.x = Random.Range(center.x, center.x + extents.x);
                 randomPosition.z = Random.Range(center.z, center.z - extents.z);
+
+                isScientificNotationFinished = true;
             }
             _currentBoxContainer.transform.position = randomPosition;
         }
@@ -308,13 +311,56 @@ public class ActivityOneManager : MonoBehaviour
         if (actualAccuracy == accuracySubmission && actualPrecision == precisionSubmission)
         {
             Debug.Log("AP Answer is correct.");
+            isAccuracyAndPrecisionFinished = true;
         } else
         {
             Debug.Log("AP Answer is incorrect.");
         }
     }
 
-    public bool IsSystematicError()
+	private double CalculateVariance()
+	{
+		List<float> distanceValues = GetBoxDistanceValues(_ejectionAreaOne, ejectionAreaOneBoxContainers);
+		// Calculate average of values
+		double avg = 0;
+		foreach (float d in distanceValues)
+		{
+			avg += d;
+		}
+		avg = Math.Round(avg / 4, 4);
+		// Calculate variance
+		double variance = 0;
+		foreach (float d in distanceValues)
+		{
+			variance += Math.Pow(d - avg, 2);
+		}
+		variance = Math.Round(variance / 3, 4);
+
+		return variance;
+	}
+	private List<float> GetBoxDistanceValues(Bounds ejectionArea, List<BoxContainer> boxContainers)
+	{
+		List<float> values = new List<float>();
+		foreach (BoxContainer box in boxContainers)
+		{
+			float d = Vector3.Distance(box.transform.position, ejectionArea.center);
+			values.Add((float)Math.Round(d, 2));
+		}
+		return values;
+	}
+
+    private void CheckVarianceAnswer(float submittedAnswer)
+    {
+		double varianceAnswer = Math.Round(CalculateVariance(), 4);
+
+		Debug.Log("Variance answer: " + varianceAnswer);
+		Debug.Log("Submitted answer: " + submittedAnswer);
+
+		bool isApproximatelyCorrect = Mathf.Abs((float)(varianceAnswer - submittedAnswer)) <= 0.0001;
+		Debug.Log("Is approximately correct: " + isApproximatelyCorrect);
+	}
+
+	public bool IsSystematicError()
     {
         int numOfAccurate = 0;
         numOfAccurate += IsAccurate(_ejectionAreaOne, ejectionAreaOneBoxContainers) ? 1 : 0;
@@ -347,16 +393,5 @@ public class ActivityOneManager : MonoBehaviour
         {
             Debug.Log("Errors answer is incorrect.");
         }
-    }
-
-    public List<float> GetBoxDistanceValues(Bounds ejectionArea, List<BoxContainer> boxContainers)
-    {
-        List<float> values = new List<float>();
-        foreach (BoxContainer box in boxContainers)
-        {
-			float d = Vector3.Distance(box.transform.position, ejectionArea.center);
-            values.Add((float)Math.Round(d, 2));
-        }
-        return values;
     }
 }
