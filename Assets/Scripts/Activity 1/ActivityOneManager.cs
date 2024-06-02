@@ -21,13 +21,26 @@ public class ActivityOneManager : MonoBehaviour
 
     private BoxContainer _currentBoxContainer;
     private int _correctAnswer;
-    // 4 bools... to check if possible to open panels...
-    public bool isScientificNotationFinished;
-    public bool isAccuracyAndPrecisionFinished;
-    public bool isVarianceFinished;
-    public bool isErrorsFinished;
 
     public GameObject boxContainerPrefab;
+
+    // Gameplay performance metrics
+
+    // For Scientific Notation activity
+    public bool isScientificNotationFinished;
+    private int numIncorrectSNSubmission;
+
+    // For Accuracy and Precision activity
+    public bool isAccuracyAndPrecisionFinished;
+    private int numIncorrectAPSubmission;
+
+    // For Variance activity
+    public bool isVarianceFinished;
+    private int numIncorrectVarianceSubmission;
+
+    // For Errors activity
+    public bool isErrorsFinished;
+    private int numIncorrectErrorsSubmission;
 
     void Start()
     {
@@ -41,6 +54,7 @@ public class ActivityOneManager : MonoBehaviour
         ViewVariance.OpenVarianceEvent += OnOpenViewVariance;
         ViewVariance.SubmitVarianceEvent += CheckVarianceAnswer;
         ViewErrors.SubmitErrorsEvent += CheckErrorsAnswer;
+        ViewActivityOnePerformance.OpenViewEvent += OnOpenViewActivityOnePerformance;
 
         // Handle event for randomizing contents of box containers.
         RandomlyGenerateBoxValues();
@@ -146,6 +160,21 @@ public class ActivityOneManager : MonoBehaviour
         }
     }
 
+    private void OnOpenViewActivityOnePerformance(ViewActivityOnePerformance view)
+    {
+        view.SNStatusText.text += isScientificNotationFinished ? "Accomplished" : "Not accomplished";
+        view.SNIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectSNSubmission}";
+
+		view.APStatusText.text += isAccuracyAndPrecisionFinished ? "Accomplished" : "Not accomplished";
+		view.APIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectAPSubmission}";
+
+		view.VarianceStatusText.text += isVarianceFinished ? "Accomplished" : "Not accomplished";
+		view.VarianceIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectVarianceSubmission}";
+
+		view.ErrorsStatusText.text += isErrorsFinished ? "Accomplished" : "Not accomplished";
+		view.ErrorsIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectErrorsSubmission}";
+	}
+
     private void CheckSubmittedSNAnswer(string answer)
     {
         // with contents of _currentboxcontainer, convert to proper answer, and compare with answer.
@@ -187,6 +216,9 @@ public class ActivityOneManager : MonoBehaviour
                 isScientificNotationFinished = true;
             }
             _currentBoxContainer.transform.position = randomPosition;
+        } else
+        {
+            numIncorrectSNSubmission++;
         }
     }
 
@@ -317,6 +349,8 @@ public class ActivityOneManager : MonoBehaviour
         } else
         {
             Debug.Log("AP Answer is incorrect.");
+
+            numIncorrectAPSubmission++;
         }
     }
 
@@ -361,7 +395,13 @@ public class ActivityOneManager : MonoBehaviour
 		bool isApproximatelyCorrect = Mathf.Abs((float)(varianceAnswer - submittedAnswer)) <= 0.0001;
 		Debug.Log("Is approximately correct: " + isApproximatelyCorrect);
 
-        if (isApproximatelyCorrect) isVarianceFinished = true;
+        if (isApproximatelyCorrect)
+        {
+            isVarianceFinished = true;
+        } else
+        {
+            numIncorrectVarianceSubmission++;
+        }
 	}
 
 	public bool IsSystematicError()
@@ -397,6 +437,7 @@ public class ActivityOneManager : MonoBehaviour
         } else
         {
             Debug.Log("Errors answer is incorrect.");
+            numIncorrectErrorsSubmission++;
         }
     }
 }
