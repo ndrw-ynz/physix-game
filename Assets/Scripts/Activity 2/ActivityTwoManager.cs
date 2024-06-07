@@ -56,7 +56,7 @@ public class ActivityTwoManager : MonoBehaviour
 			string vectorMeasurementText = vectorizableScalarMeasurements[Random.Range(0, vectorizableScalarMeasurements.Count)];
 			string directionDescriptorText = directionDescriptors[Random.Range(0, directionDescriptors.Count)];
 			
-			vectorQuantity.Initialize(QuantityType.Scalar, $"{magnitudeValue} {vectorMeasurementText} {directionDescriptorText}");
+			vectorQuantity.Initialize(QuantityType.Vector, $"{magnitudeValue} {vectorMeasurementText} {directionDescriptorText}");
 
 			vectorQuantity.transform.SetParent(given.itemHolder.transform, false);
 		}
