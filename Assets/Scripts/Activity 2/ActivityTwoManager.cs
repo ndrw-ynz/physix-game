@@ -9,8 +9,13 @@ public class ActivityTwoManager : MonoBehaviour
 	[SerializeField] private ViewQuantities viewQuantities;
 
 	public DraggableQuantityText draggableQuantityTextPrefab;
+
+	private bool isQuantitiesSubActivityFinished;
+	private int numIncorrectQuantitiesSubmission;
 	private void Start()
 	{
+		ViewQuantities.SubmitQuantitiesAnswerEvent += CheckQuantitiesAnswer;
+
 		SetupViewQuantities();
 	}
 
@@ -55,5 +60,45 @@ public class ActivityTwoManager : MonoBehaviour
 
 			vectorQuantity.transform.SetParent(given.itemHolder.transform, false);
 		}
+	}
+
+	private void CheckQuantitiesAnswer(DraggableQuantityText[] unsolvedQuantities, DraggableQuantityText[] scalarQuantities, DraggableQuantityText[] vectorQuantities)
+	{
+		bool isCorrect = true;
+
+		// Checking of submitted unsolved quantities.
+		if (unsolvedQuantities.Length > 0)
+		{
+			numIncorrectQuantitiesSubmission += unsolvedQuantities.Length;
+			isCorrect = false;
+		}
+
+		// Checking of submitted scalar quantities.
+		foreach (DraggableQuantityText quantity in scalarQuantities)
+		{
+			if (quantity.quantityType != QuantityType.Scalar)
+			{
+				numIncorrectQuantitiesSubmission += 1;
+				if (isCorrect) isCorrect = false;
+			}
+		}
+
+		// Checking of submitted vector quantities.
+		foreach (DraggableQuantityText quantity in vectorQuantities)
+		{
+			if (quantity.quantityType != QuantityType.Vector)
+			{
+				numIncorrectQuantitiesSubmission += 1;
+				if (isCorrect) isCorrect = false;
+			}
+		}
+
+		// Turn isQuantitiesSubActivityFinished metric to true if no mistakes.
+		if (isCorrect)
+		{
+			isQuantitiesSubActivityFinished = true;
+		}
+
+		Debug.Log($"Number of incorrect submissions: {numIncorrectQuantitiesSubmission}");
 	}
 }
