@@ -17,4 +17,6 @@ public class VectorsSubActivitySO : ScriptableObject
     public int maximumMagnitudeValue;
     [Header("Direction Settings")]
     public DirectionType directionType;
+    [Header("Number of Vectors")]
+    public int numberOfVectors;
 }
