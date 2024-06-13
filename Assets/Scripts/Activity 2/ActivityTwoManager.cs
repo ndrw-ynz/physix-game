@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 public class ActivityTwoManager : MonoBehaviour
 {
-    [SerializeField] private QuantitiesSubActivitySO quantitiesLevelOneSO;
+	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelOneSO;
 	[SerializeField] private VectorsSubActivitySO vectorsLevelOneSO;
-	
+
 	[SerializeField] private ViewQuantities viewQuantities;
 	[SerializeField] private ViewCartesianComponents viewCartesianComponents;
-	
+
 	private bool isQuantitiesSubActivityFinished;
 	private int numIncorrectQuantitiesSubmission;
 	private void Start()
@@ -58,7 +58,7 @@ public class ActivityTwoManager : MonoBehaviour
 			int magnitudeValue = Random.Range(minimumMagnitudeValue, maximumMagnitudeValue);
 			string vectorMeasurementText = vectorizableScalarMeasurements[Random.Range(0, vectorizableScalarMeasurements.Count)];
 			string directionDescriptorText = directionDescriptors[Random.Range(0, directionDescriptors.Count)];
-			
+
 			vectorQuantity.Initialize(QuantityType.Vector, $"{magnitudeValue} {vectorMeasurementText} {directionDescriptorText}");
 
 			vectorQuantity.transform.SetParent(given.itemHolder.transform, false);
@@ -126,10 +126,10 @@ public class ActivityTwoManager : MonoBehaviour
 					directionValue = cardinalDirectionValues[Random.Range(0, cardinalDirectionValues.Length)];
 					break;
 				case DirectionType.Standard:
-					int[] standardDirectionValues = new int[] { 0, 30, 45, 60, 90, 120, 135, 1150, 180, 210, 225, 240, 270, 300, 315, 330};
+					int[] standardDirectionValues = new int[] { 0, 30, 45, 60, 90, 120, 135, 1150, 180, 210, 225, 240, 270, 300, 315, 330 };
 					directionValue = standardDirectionValues[Random.Range(0, standardDirectionValues.Length)];
 					break;
-				
+
 				case DirectionType.FullRange:
 					directionValue = Random.Range(0, 360);
 					break;
