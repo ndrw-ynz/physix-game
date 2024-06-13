@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 public class ViewQuantities : MonoBehaviour
 {
-    public static event Action<DraggableQuantityText[], DraggableQuantityText[], DraggableQuantityText[]> SubmitQuantitiesAnswerEvent;
+	public static event Action<DraggableQuantityText[], DraggableQuantityText[], DraggableQuantityText[]> SubmitQuantitiesAnswerEvent;
 
 	public QuantityArea givenQuantitiesHolder;
-    public QuantityArea scalarQuantitiesHolder;
-    public QuantityArea vectorQuantitiesHolder;
+	public QuantityArea scalarQuantitiesHolder;
+	public QuantityArea vectorQuantitiesHolder;
 	public DraggableQuantityText draggableQuantityTextPrefab;
 	public Button submitQuantitiesAnswerButton;
 
