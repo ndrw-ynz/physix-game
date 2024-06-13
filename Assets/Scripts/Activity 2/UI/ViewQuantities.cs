@@ -11,7 +11,8 @@ public class ViewQuantities : MonoBehaviour
 	public QuantityArea givenQuantitiesHolder;
     public QuantityArea scalarQuantitiesHolder;
     public QuantityArea vectorQuantitiesHolder;
-    public Button submitQuantitiesAnswerButton;
+	public DraggableQuantityText draggableQuantityTextPrefab;
+	public Button submitQuantitiesAnswerButton;
 
 	private void OnEnable()
 	{

@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ActivityTwoManager : MonoBehaviour
 {
     [SerializeField] private QuantitiesSubActivitySO quantitiesLevelOneSO;
+	[SerializeField] private VectorsSubActivitySO vectorsLevelOneSO;
+	
 	[SerializeField] private ViewQuantities viewQuantities;
-
-	public DraggableQuantityText draggableQuantityTextPrefab;
-
+	[SerializeField] private ViewCartesianComponents viewCartesianComponents;
+	
 	private bool isQuantitiesSubActivityFinished;
 	private int numIncorrectQuantitiesSubmission;
 	private void Start()
@@ -17,6 +19,7 @@ public class ActivityTwoManager : MonoBehaviour
 		ViewQuantities.SubmitQuantitiesAnswerEvent += CheckQuantitiesAnswer;
 
 		SetupViewQuantities();
+		SetupViewCartesianComponents();
 	}
 
 	// Randomly generate values for DraggableQuantityText for Quantities subactivity.
@@ -34,7 +37,7 @@ public class ActivityTwoManager : MonoBehaviour
 		// Generate Scalars
 		for (int i = 0; i < numScalarQuantity; i++)
 		{
-			DraggableQuantityText scalarQuantity = Instantiate(draggableQuantityTextPrefab);
+			DraggableQuantityText scalarQuantity = Instantiate(viewQuantities.draggableQuantityTextPrefab);
 
 			// Generate Scalar quantity text display
 			int magnitudeValue = Random.Range(minimumMagnitudeValue, maximumMagnitudeValue);
@@ -49,7 +52,7 @@ public class ActivityTwoManager : MonoBehaviour
 		// Generate Vectors
 		for (int i = 0; i < numVectorQuantity; i++)
 		{
-			DraggableQuantityText vectorQuantity = Instantiate(draggableQuantityTextPrefab);
+			DraggableQuantityText vectorQuantity = Instantiate(viewQuantities.draggableQuantityTextPrefab);
 
 			// Generate Vector quantity text display
 			int magnitudeValue = Random.Range(minimumMagnitudeValue, maximumMagnitudeValue);
@@ -100,5 +103,42 @@ public class ActivityTwoManager : MonoBehaviour
 		}
 
 		Debug.Log($"Number of incorrect submissions: {numIncorrectQuantitiesSubmission}");
+	}
+
+	private void SetupViewCartesianComponents()
+	{
+		// Randomly generate vectors from SO
+		int minimumMagnitudeValue = vectorsLevelOneSO.minimumMagnitudeValue;
+		int maximumMagnitudeValue = vectorsLevelOneSO.maximumMagnitudeValue;
+		int numberOfVectors = vectorsLevelOneSO.numberOfVectors;
+		DirectionType directionType = vectorsLevelOneSO.directionType;
+
+		for (int i = 0; i < numberOfVectors; i++)
+		{
+			// Setting magnitude value
+			int magnitudeValue = Random.Range(minimumMagnitudeValue, maximumMagnitudeValue);
+			// Setting direction value
+			int directionValue = 0;
+			switch (directionType)
+			{
+				case DirectionType.Cardinal:
+					int[] cardinalDirectionValues = new int[] { 0, 90, 180, 270 };
+					directionValue = cardinalDirectionValues[Random.Range(0, cardinalDirectionValues.Length)];
+					break;
+				case DirectionType.Standard:
+					int[] standardDirectionValues = new int[] { 0, 30, 45, 60, 90, 120, 135, 1150, 180, 210, 225, 240, 270, 300, 315, 330};
+					directionValue = standardDirectionValues[Random.Range(0, standardDirectionValues.Length)];
+					break;
+				
+				case DirectionType.FullRange:
+					directionValue = Random.Range(0, 360);
+					break;
+			}
+			Debug.Log($"Magnitude: {magnitudeValue} \nDirection: {directionValue}");
+
+			viewCartesianComponents.AddVectorInfo(magnitudeValue, directionValue);
+		}
+
+		// FINAL CALL FOR SETUP OF CARTESIAN COPONENTS?
 	}
 }
