@@ -1,8 +1,9 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class VectorDisplay : MonoBehaviour
 {
@@ -30,6 +31,8 @@ public class VectorDisplay : MonoBehaviour
 		vectorTextInfo.text = $"{vectorInfo.magnitudeValue}m {vectorInfo.directionValue}°";
 
 		SetupChoiceHolders(vectorInfo);
+
+		submitButton.onClick.AddListener(() => CheckSubmission(vectorInfo));
 	}
 
 	private void SetupChoiceHolders(VectorInfo vectorInfo)
@@ -85,5 +88,62 @@ public class VectorDisplay : MonoBehaviour
 			fakeTrigonometricExpressionY.Initialize($"cos({randomizedDirectionValue})");
 			fakeTrigonometricExpressionY.transform.SetParent(choiceHolderRight.transform, false);
 		}
+	}
+
+	private void CheckSubmission(VectorInfo vectorInfo)
+	{
+		// Check submitted equation for x component
+		DraggableNumericalExpression[] xComponentNumericalExpressions = xComponentEquationHolder.expressionHolder.GetComponentsInChildren<DraggableNumericalExpression>();
+		float xComponentEquationResult = EvaluateNumericalExpressions(xComponentNumericalExpressions);
+		Debug.Log($"Resulting x equation value: {xComponentEquationResult}");
+
+		// Check submitted value for x component
+		bool isXValueCorrect = IsValueSubmissionCorrect(xComponentInputText.text, vectorInfo.vectorComponents.x);
+		Debug.Log($"Result of submitted x: {isXValueCorrect}");
+
+		// Check submitted equation for y component
+		DraggableNumericalExpression[] yComponentNumericalExpressions = yComponentEquationHolder.expressionHolder.GetComponentsInChildren<DraggableNumericalExpression>();
+		float yComponentEquationResult = EvaluateNumericalExpressions(yComponentNumericalExpressions);
+		Debug.Log($"Resulting y equation value: {yComponentEquationResult}");
+
+		// Check submitted value for y component
+		bool isYValueCorrect = IsValueSubmissionCorrect(yComponentInputText.text, vectorInfo.vectorComponents.y);
+		Debug.Log($"Result of submitted y: {isYValueCorrect}");
+	}
+
+	private float EvaluateNumericalExpressions(DraggableNumericalExpression[] numericalExpressions)
+	{
+		float currentValue = numericalExpressions.Length == 2 ? 1 : 0; // beware of errors here.
+		foreach (DraggableNumericalExpression expression in numericalExpressions)
+		{
+			string expressionText = expression.numericalExpression;
+			expressionText = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\bsin\(([^)]+)\)", m => $"sin({ConvertToRadians(m.Groups[1].Value)})");
+			expressionText  = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\bcos\(([^)]+)\)", m => $"cos({ConvertToRadians(m.Groups[1].Value)})");
+			expressionText = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\btan\(([^)]+)\)", m => $"tan({ConvertToRadians(m.Groups[1].Value)})");
+
+			bool canEvaluate = ExpressionEvaluator.Evaluate(expressionText, out float value);
+			if (canEvaluate) currentValue *= value;
+		}
+		return currentValue;
+	}
+
+	private string ConvertToRadians(string degrees)
+	{
+		double degreesValue;
+		if (double.TryParse(degrees, out degreesValue))
+		{
+			double radians = degreesValue * (Math.PI / 180);
+			return radians.ToString();
+		}
+		else
+		{
+			throw new ArgumentException("Invalid degrees value");
+		}
+	}
+
+	private bool IsValueSubmissionCorrect(string submittedText, float correctValue)
+	{
+		bool canEvaluate = ExpressionEvaluator.Evaluate(submittedText, out float value);
+		return canEvaluate && value == correctValue;
 	}
 }
