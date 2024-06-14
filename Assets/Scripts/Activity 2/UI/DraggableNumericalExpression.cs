@@ -13,12 +13,12 @@ public class DraggableNumericalExpression : MonoBehaviour, IDragHandler, IBeginD
 	public TextMeshProUGUI displayText;
 	public string numericalExpression;
 
-	public void Initialize(string numericalExpression, string text)
+	public void Initialize(string numericalExpression)
 	{
 		_image = GetComponent<Image>();
 		startPosition = _image.transform.position;
 		displayText = GetComponentInChildren<TextMeshProUGUI>();
-		displayText.text = text;
+		displayText.text = numericalExpression;
 		this.numericalExpression = numericalExpression;
 	}
 
