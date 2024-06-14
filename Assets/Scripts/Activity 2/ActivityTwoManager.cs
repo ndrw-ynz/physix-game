@@ -136,7 +136,7 @@ public class ActivityTwoManager : MonoBehaviour
 			}
 			Debug.Log($"Magnitude: {magnitudeValue} \nDirection: {directionValue}");
 
-			viewCartesianComponents.AddVectorInfo(magnitudeValue, directionValue);
+			viewCartesianComponents.AddVectorInfo(magnitudeValue, directionValue, directionType);
 		}
 
 		// FINAL CALL FOR SETUP OF CARTESIAN COPONENTS?
