@@ -30,17 +30,17 @@ public class ViewCartesianComponents : MonoBehaviour
 		vectorLineRenderer.SetupVector(targetPoint);
 	}
 
-	public void AddVectorInfo(int magnitudeValue, int directionValue)
+	public void AddVectorInfo(int magnitudeValue, int directionValue, DirectionType directionType)
 	{
 		// Setup Vector Display
 		VectorDisplay vectorDisplay = Instantiate(vectorDisplayPrefab);
-		vectorDisplay.SetupVectorDisplay(magnitudeValue, directionValue);
 		vectorDisplay.transform.SetParent(vectorDisplayHolder.transform, false);
 		vectorDisplay.gameObject.SetActive(false);
 
 		// Setup Vector Info
-		VectorInfo vectorInfo = new VectorInfo(magnitudeValue, directionValue, vectorDisplay);
+		VectorInfo vectorInfo = new VectorInfo(magnitudeValue, directionValue, directionType, vectorDisplay);
 		_vectorInfoList.Add(vectorInfo);
+		vectorDisplay.SetupVectorDisplay(vectorInfo);
 
 		// Setup Vector Select Button for accessing Vector Info
 		Button vectorSelectButton = Instantiate(vectorSelectButtonPrefab);
