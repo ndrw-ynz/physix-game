@@ -1,12 +1,14 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class ViewCartesianComponents : MonoBehaviour
 {
+	public static event Action<VectorInfo> SubmitCartesianComponentsAnswerEvent;
+
 	[Header("Vector Display Holder")]
 	public GameObject vectorDisplayHolder;
 	[Header("Line Renderer")]
@@ -75,6 +77,7 @@ public class ViewCartesianComponents : MonoBehaviour
 		buttonText.text = $"{magnitudeValue}m {directionValue}°";
 
 		vectorSelectButton.onClick.AddListener(() => OnVectorSelectButtonClick(vectorInfo));
+		vectorDisplay.submitButton.onClick.AddListener(() => SubmitComponentsAnswer(vectorInfo));
 	}
 
 	private void OnVectorSelectButtonClick(VectorInfo vectorInfo)
@@ -95,5 +98,10 @@ public class ViewCartesianComponents : MonoBehaviour
 		float z = magnitudeValue * Mathf.Sin(directionRadians);
 		Vector3 targetPoint = new Vector3(x, 0, z);
 		vectorLineRenderer.SetupVector(targetPoint);
+	}
+
+	private void SubmitComponentsAnswer(VectorInfo vectorInfo)
+	{
+		SubmitCartesianComponentsAnswerEvent?.Invoke(vectorInfo);
 	}
 }
