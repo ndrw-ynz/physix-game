@@ -31,8 +31,6 @@ public class VectorDisplay : MonoBehaviour
 		vectorTextInfo.text = $"{vectorInfo.magnitudeValue}m {vectorInfo.directionValue}°";
 
 		SetupChoiceHolders(vectorInfo);
-
-		submitButton.onClick.AddListener(() => CheckSubmission(vectorInfo));
 	}
 
 	private void SetupChoiceHolders(VectorInfo vectorInfo)
@@ -88,50 +86,5 @@ public class VectorDisplay : MonoBehaviour
 			fakeTrigonometricExpressionY.Initialize($"cos({randomizedDirectionValue})");
 			fakeTrigonometricExpressionY.transform.SetParent(choiceHolderRight.transform, false);
 		}
-	}
-
-	private void CheckSubmission(VectorInfo vectorInfo)
-	{
-		// Check submitted equation for x component
-		DraggableNumericalExpression[] xComponentNumericalExpressions = xComponentEquationHolder.expressionHolder.GetComponentsInChildren<DraggableNumericalExpression>();
-		float xComponentEquationResult = EvaluateNumericalExpressions(xComponentNumericalExpressions);
-		bool isXComponentEquationCorrect = Mathf.Abs((float)(xComponentEquationResult - vectorInfo.vectorComponents.x)) <= 0.0001;
-		Debug.Log($"Resulting x equation: {isXComponentEquationCorrect}");
-
-		// Check submitted value for x component
-		bool isXValueCorrect = IsValueSubmissionCorrect(xComponentInputText.text, vectorInfo.vectorComponents.x);
-		Debug.Log($"Result of submitted x: {isXValueCorrect}");
-
-		// Check submitted equation for y component
-		DraggableNumericalExpression[] yComponentNumericalExpressions = yComponentEquationHolder.expressionHolder.GetComponentsInChildren<DraggableNumericalExpression>();
-		float yComponentEquationResult = EvaluateNumericalExpressions(yComponentNumericalExpressions);
-		bool isYComponentEquationCorrect = Mathf.Abs((float)(yComponentEquationResult - vectorInfo.vectorComponents.y)) <= 0.0001;
-		Debug.Log($"Resulting y equation: {isYComponentEquationCorrect}");
-
-		// Check submitted value for y component
-		bool isYValueCorrect = IsValueSubmissionCorrect(yComponentInputText.text, vectorInfo.vectorComponents.y);
-		Debug.Log($"Result of submitted y: {isYValueCorrect}");
-	}
-
-	private float EvaluateNumericalExpressions(DraggableNumericalExpression[] numericalExpressions)
-	{
-		float currentValue = numericalExpressions.Length > 0 ? 1 : 0;
-		foreach (DraggableNumericalExpression expression in numericalExpressions)
-		{
-			string expressionText = expression.numericalExpression;
-			expressionText = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\bsin\(([^)]+)\)", m => $"sin({m.Groups[1].Value}*pi/180)");
-			expressionText  = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\bcos\(([^)]+)\)", m => $"cos({m.Groups[1].Value}*pi/180)");
-			expressionText = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\btan\(([^)]+)\)", m => $"tan({m.Groups[1].Value}*pi/180)");
-
-			bool canEvaluate = ExpressionEvaluator.Evaluate(expressionText, out float value);
-			if (canEvaluate) currentValue *= value;
-		}
-		return currentValue;
-	}
-
-	private bool IsValueSubmissionCorrect(string submittedText, float correctValue)
-	{
-		bool canEvaluate = ExpressionEvaluator.Evaluate(submittedText, out float value);
-		return canEvaluate && Mathf.Abs((float)(value - correctValue)) <= 0.0001;
 	}
 }
