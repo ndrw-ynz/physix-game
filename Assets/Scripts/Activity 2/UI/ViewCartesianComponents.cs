@@ -20,17 +20,42 @@ public class ViewCartesianComponents : MonoBehaviour
 	[Header("Private Variables")]
 	private List<VectorInfo> _vectorInfoList = new List<VectorInfo>();
 
-	private void ChangeLineRenderer(int magnitudeValue, int directionValue)
+	public void SetupViewCartesianComponents(VectorsSubActivitySO vectorsSO)
 	{
-		float directionRadians = directionValue * Mathf.Deg2Rad;
+		// Randomly generate vectors from SO
+		int minimumMagnitudeValue = vectorsSO.minimumMagnitudeValue;
+		int maximumMagnitudeValue = vectorsSO.maximumMagnitudeValue;
+		int numberOfVectors = vectorsSO.numberOfVectors;
+		DirectionType directionType = vectorsSO.directionType;
 
-		float x = magnitudeValue * Mathf.Cos(directionRadians);
-		float z = magnitudeValue * Mathf.Sin(directionRadians);
-		Vector3 targetPoint = new Vector3(x, 0, z);
-		vectorLineRenderer.SetupVector(targetPoint);
+		for (int i = 0; i < numberOfVectors; i++)
+		{
+			// Setting magnitude value
+			int magnitudeValue = Random.Range(minimumMagnitudeValue, maximumMagnitudeValue);
+			// Setting direction value
+			int directionValue = 0;
+			switch (directionType)
+			{
+				case DirectionType.Cardinal:
+					int[] cardinalDirectionValues = new int[] { 0, 90, 180, 270 };
+					directionValue = cardinalDirectionValues[Random.Range(0, cardinalDirectionValues.Length)];
+					break;
+				case DirectionType.Standard:
+					int[] standardDirectionValues = new int[] { 0, 30, 45, 60, 90, 120, 135, 1150, 180, 210, 225, 240, 270, 300, 315, 330 };
+					directionValue = standardDirectionValues[Random.Range(0, standardDirectionValues.Length)];
+					break;
+
+				case DirectionType.FullRange:
+					directionValue = Random.Range(0, 360);
+					break;
+			}
+			Debug.Log($"Magnitude: {magnitudeValue} \nDirection: {directionValue}");
+
+			AddVectorInfo(magnitudeValue, directionValue, directionType);
+		}
 	}
 
-	public void AddVectorInfo(int magnitudeValue, int directionValue, DirectionType directionType)
+	private void AddVectorInfo(int magnitudeValue, int directionValue, DirectionType directionType)
 	{
 		// Setup Vector Display
 		VectorDisplay vectorDisplay = Instantiate(vectorDisplayPrefab);
@@ -60,5 +85,15 @@ public class ViewCartesianComponents : MonoBehaviour
 		}
 		vectorInfo.vectorDisplay.gameObject.SetActive(true);
 		ChangeLineRenderer(vectorInfo.magnitudeValue, vectorInfo.directionValue);
+	}
+
+	private void ChangeLineRenderer(int magnitudeValue, int directionValue)
+	{
+		float directionRadians = directionValue * Mathf.Deg2Rad;
+
+		float x = magnitudeValue * Mathf.Cos(directionRadians);
+		float z = magnitudeValue * Mathf.Sin(directionRadians);
+		Vector3 targetPoint = new Vector3(x, 0, z);
+		vectorLineRenderer.SetupVector(targetPoint);
 	}
 }

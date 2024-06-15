@@ -19,7 +19,7 @@ public class ActivityTwoManager : MonoBehaviour
 		ViewQuantities.SubmitQuantitiesAnswerEvent += CheckQuantitiesAnswer;
 
 		viewQuantities.SetupViewQuantities(quantitiesLevelOneSO);
-		SetupViewCartesianComponents();
+		viewCartesianComponents.SetupViewCartesianComponents(vectorsLevelOneSO);
 	}
 
 	private void CheckQuantitiesAnswer(DraggableQuantityText[] unsolvedQuantities, DraggableQuantityText[] scalarQuantities, DraggableQuantityText[] vectorQuantities)
@@ -60,41 +60,5 @@ public class ActivityTwoManager : MonoBehaviour
 		}
 
 		Debug.Log($"Number of incorrect submissions: {numIncorrectQuantitiesSubmission}");
-	}
-
-	private void SetupViewCartesianComponents()
-	{
-		// Randomly generate vectors from SO
-		int minimumMagnitudeValue = vectorsLevelOneSO.minimumMagnitudeValue;
-		int maximumMagnitudeValue = vectorsLevelOneSO.maximumMagnitudeValue;
-		int numberOfVectors = vectorsLevelOneSO.numberOfVectors;
-		DirectionType directionType = vectorsLevelOneSO.directionType;
-
-		for (int i = 0; i < numberOfVectors; i++)
-		{
-			// Setting magnitude value
-			int magnitudeValue = Random.Range(minimumMagnitudeValue, maximumMagnitudeValue);
-			// Setting direction value
-			int directionValue = 0;
-			switch (directionType)
-			{
-				case DirectionType.Cardinal:
-					int[] cardinalDirectionValues = new int[] { 0, 90, 180, 270 };
-					directionValue = cardinalDirectionValues[Random.Range(0, cardinalDirectionValues.Length)];
-					break;
-				case DirectionType.Standard:
-					int[] standardDirectionValues = new int[] { 0, 30, 45, 60, 90, 120, 135, 1150, 180, 210, 225, 240, 270, 300, 315, 330 };
-					directionValue = standardDirectionValues[Random.Range(0, standardDirectionValues.Length)];
-					break;
-
-				case DirectionType.FullRange:
-					directionValue = Random.Range(0, 360);
-					break;
-			}
-			Debug.Log($"Magnitude: {magnitudeValue} \nDirection: {directionValue}");
-
-			viewCartesianComponents.AddVectorInfo(magnitudeValue, directionValue, directionType);
-		}
-
 	}
 }
