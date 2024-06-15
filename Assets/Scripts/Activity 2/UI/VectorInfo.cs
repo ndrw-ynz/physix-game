@@ -8,7 +8,8 @@ public class VectorInfo
 	public int directionValue;
 	public DirectionType directionType;
 	public VectorDisplay vectorDisplay;
-	public Vector2 vectorComponents;
+	public Vector2 vectorComponent;
+	public bool isComponentSolved;
 
 	public VectorInfo(int magnitudeValue, int directionValue, DirectionType directionType, VectorDisplay vectorDisplay)
 	{
@@ -16,6 +17,7 @@ public class VectorInfo
 		this.directionValue = directionValue;
 		this.directionType = directionType;
 		this.vectorDisplay = vectorDisplay;
+		isComponentSolved = false;
 
 		ComputeXYComponents(magnitudeValue, directionValue);
 	}
@@ -27,6 +29,6 @@ public class VectorInfo
 		float x = magnitudeValue * Mathf.Cos(directionRadians);
 		float y = magnitudeValue * Mathf.Sin(directionRadians);
 
-		vectorComponents = new Vector2(x, y);
+		vectorComponent = new Vector2(x, y);
 	}
 }

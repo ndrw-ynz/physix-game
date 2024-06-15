@@ -102,6 +102,9 @@ public class ViewCartesianComponents : MonoBehaviour
 
 	private void SubmitComponentsAnswer(VectorInfo vectorInfo)
 	{
-		SubmitCartesianComponentsAnswerEvent?.Invoke(vectorInfo);
+		if (vectorInfo.isComponentSolved == false)
+		{
+			SubmitCartesianComponentsAnswerEvent?.Invoke(vectorInfo);
+		}
 	}
 }
