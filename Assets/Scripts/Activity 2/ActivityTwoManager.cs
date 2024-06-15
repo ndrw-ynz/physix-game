@@ -18,51 +18,8 @@ public class ActivityTwoManager : MonoBehaviour
 	{
 		ViewQuantities.SubmitQuantitiesAnswerEvent += CheckQuantitiesAnswer;
 
-		SetupViewQuantities();
+		viewQuantities.SetupViewQuantities(quantitiesLevelOneSO);
 		SetupViewCartesianComponents();
-	}
-
-	// Randomly generate values for DraggableQuantityText for Quantities subactivity.
-	private void SetupViewQuantities()
-	{
-		QuantityArea given = viewQuantities.givenQuantitiesHolder;
-		int numScalarQuantity = quantitiesLevelOneSO.numScalarQuantity;
-		int numVectorQuantity = quantitiesLevelOneSO.numVectorQuantity;
-		int minimumMagnitudeValue = quantitiesLevelOneSO.minimumMagnitudeValue;
-		int maximumMagnitudeValue = quantitiesLevelOneSO.maximumMagnitudeValue;
-		List<string> intrinsicScalarMeasurements = quantitiesLevelOneSO.intrinsicallyScalarMeasurements;
-		List<string> vectorizableScalarMeasurements = quantitiesLevelOneSO.vectorizableScalarMeasurements;
-		List<string> directionDescriptors = quantitiesLevelOneSO.directionDescriptors;
-
-		// Generate Scalars
-		for (int i = 0; i < numScalarQuantity; i++)
-		{
-			DraggableQuantityText scalarQuantity = Instantiate(viewQuantities.draggableQuantityTextPrefab);
-
-			// Generate Scalar quantity text display
-			int magnitudeValue = Random.Range(minimumMagnitudeValue, maximumMagnitudeValue);
-			List<string> availableScalarMeasurements = intrinsicScalarMeasurements.Concat(vectorizableScalarMeasurements).ToList();
-			string scalarMeasurementText = availableScalarMeasurements[Random.Range(0, availableScalarMeasurements.Count)];
-
-			scalarQuantity.Initialize(QuantityType.Scalar, $"{magnitudeValue} {scalarMeasurementText}");
-
-			scalarQuantity.transform.SetParent(given.itemHolder.transform, false);
-		}
-
-		// Generate Vectors
-		for (int i = 0; i < numVectorQuantity; i++)
-		{
-			DraggableQuantityText vectorQuantity = Instantiate(viewQuantities.draggableQuantityTextPrefab);
-
-			// Generate Vector quantity text display
-			int magnitudeValue = Random.Range(minimumMagnitudeValue, maximumMagnitudeValue);
-			string vectorMeasurementText = vectorizableScalarMeasurements[Random.Range(0, vectorizableScalarMeasurements.Count)];
-			string directionDescriptorText = directionDescriptors[Random.Range(0, directionDescriptors.Count)];
-
-			vectorQuantity.Initialize(QuantityType.Vector, $"{magnitudeValue} {vectorMeasurementText} {directionDescriptorText}");
-
-			vectorQuantity.transform.SetParent(given.itemHolder.transform, false);
-		}
 	}
 
 	private void CheckQuantitiesAnswer(DraggableQuantityText[] unsolvedQuantities, DraggableQuantityText[] scalarQuantities, DraggableQuantityText[] vectorQuantities)
@@ -139,6 +96,5 @@ public class ActivityTwoManager : MonoBehaviour
 			viewCartesianComponents.AddVectorInfo(magnitudeValue, directionValue, directionType);
 		}
 
-		// FINAL CALL FOR SETUP OF CARTESIAN COPONENTS?
 	}
 }
