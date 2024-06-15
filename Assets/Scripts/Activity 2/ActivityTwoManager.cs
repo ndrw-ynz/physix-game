@@ -14,6 +14,8 @@ public class ActivityTwoManager : MonoBehaviour
 
 	private bool isQuantitiesSubActivityFinished;
 	private int numIncorrectQuantitiesSubmission;
+	private bool isComponentsSubActivityFinished;
+	private int numIncorrectComponentsSubmission;
 	private void Start()
 	{
 		ViewQuantities.SubmitQuantitiesAnswerEvent += CheckQuantitiesAnswer;
@@ -71,20 +73,31 @@ public class ActivityTwoManager : MonoBehaviour
 		DraggableNumericalExpression[] xComponentNumericalExpressions = vectorDisplay.xComponentEquationHolder.expressionHolder.GetComponentsInChildren<DraggableNumericalExpression>();
 		float xComponentEquationResult = ActivityTwoUtilities.EvaluateNumericalExpressions(xComponentNumericalExpressions);
 		bool isXComponentEquationCorrect = Mathf.Abs((float)(xComponentEquationResult - vectorInfo.vectorComponents.x)) <= 0.0001;
+		if (!isXComponentEquationCorrect) numIncorrectComponentsSubmission += 1;
 		Debug.Log($"Resulting x equation: {isXComponentEquationCorrect}");
 
 		// Check submitted value for x component
 		bool isXValueCorrect = ActivityTwoUtilities.ValidateValueSubmission(vectorDisplay.xComponentInputText.text, vectorInfo.vectorComponents.x);
+		if (!isXValueCorrect) numIncorrectComponentsSubmission += 1;
 		Debug.Log($"Result of submitted x: {isXValueCorrect}");
 
 		// Check submitted equation for y component
 		DraggableNumericalExpression[] yComponentNumericalExpressions = vectorDisplay.yComponentEquationHolder.expressionHolder.GetComponentsInChildren<DraggableNumericalExpression>();
 		float yComponentEquationResult = ActivityTwoUtilities.EvaluateNumericalExpressions(yComponentNumericalExpressions);
 		bool isYComponentEquationCorrect = Mathf.Abs((float)(yComponentEquationResult - vectorInfo.vectorComponents.y)) <= 0.0001;
+		if (!isYComponentEquationCorrect) numIncorrectComponentsSubmission += 1;
 		Debug.Log($"Resulting y equation: {isYComponentEquationCorrect}");
 
 		// Check submitted value for y component
 		bool isYValueCorrect = ActivityTwoUtilities.ValidateValueSubmission(vectorDisplay.yComponentInputText.text, vectorInfo.vectorComponents.y);
+		if (!isYValueCorrect) numIncorrectComponentsSubmission += 1;
 		Debug.Log($"Result of submitted y: {isYValueCorrect}");
+
+		if (isXComponentEquationCorrect && isXValueCorrect && isYComponentEquationCorrect && isYValueCorrect)
+		{
+			isComponentsSubActivityFinished = true;
+		}
+
+		Debug.Log($"Number of incorrect submissions: {numIncorrectComponentsSubmission}");
 	}
 }
