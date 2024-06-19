@@ -5,11 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-public class VectorDisplay : MonoBehaviour
+public class VectorInfoDisplay : MonoBehaviour
 {
-	// this just contains information about the VIEW DISPLAYS FOR UI
-	// list all the elements and then link them up! then create methods for use of the display.
-	// seven components here...
 	[Header("Text Information")]
 	public TextMeshProUGUI vectorTextInfo;
 	[Header("Equation Holders")]
@@ -26,7 +23,7 @@ public class VectorDisplay : MonoBehaviour
 	[Header("Submit Button")]
 	public Button submitButton;
 
-	public void SetupVectorDisplay(VectorInfo vectorInfo)
+	public void SetupVectorInfoDisplay(VectorInfo vectorInfo)
 	{
 		vectorTextInfo.text = $"{vectorInfo.magnitudeValue}m {vectorInfo.directionValue}°";
 

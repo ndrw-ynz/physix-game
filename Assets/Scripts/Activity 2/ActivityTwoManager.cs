@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ActivityTwoManager : MonoBehaviour
 {
@@ -70,7 +66,7 @@ public class ActivityTwoManager : MonoBehaviour
 
 	private void CheckComponentsAnswer(VectorInfo vectorInfo)
 	{
-		VectorDisplay vectorDisplay = vectorInfo.vectorDisplay;
+		VectorInfoDisplay vectorDisplay = vectorInfo.vectorInfoDisplay;
 		// Check submitted equation for x component
 		DraggableNumericalExpression[] xComponentNumericalExpressions = vectorDisplay.xComponentEquationHolder.expressionHolder.GetComponentsInChildren<DraggableNumericalExpression>();
 		float xComponentEquationResult = ActivityTwoUtilities.EvaluateNumericalExpressions(xComponentNumericalExpressions);

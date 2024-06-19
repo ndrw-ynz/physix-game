@@ -10,17 +10,17 @@ public class ViewCartesianComponents : MonoBehaviour
 	public static event Action<VectorInfo> SubmitCartesianComponentsAnswerEvent;
 
 	[Header("Vector Display Holder")]
-	public GameObject vectorDisplayHolder;
+	public GameObject vectorInfoDisplayHolder;
 	[Header("Line Renderer")]
 	public VectorLineRenderer vectorLineRenderer;
 	[Header("Prefabs")]
-	public VectorDisplay vectorDisplayPrefab;
+	public VectorInfoDisplay vectorInfoDisplayPrefab;
 	public DraggableQuantityText draggableQuantityTextPrefab;
 	public Button vectorSelectButtonPrefab;
 	[Header("Containers")]
 	public HorizontalLayoutGroup vectorSelectButtonContainer;
-	[Header("Private Variables")]
-	private List<VectorInfo> _vectorInfoList = new List<VectorInfo>();
+	[Header("")]
+	public List<VectorInfo> vectorInfoList = new List<VectorInfo>();
 
 	public void SetupViewCartesianComponents(VectorsSubActivitySO vectorsSO)
 	{
@@ -60,14 +60,14 @@ public class ViewCartesianComponents : MonoBehaviour
 	private void AddVectorInfo(int magnitudeValue, int directionValue, DirectionType directionType)
 	{
 		// Setup Vector Display
-		VectorDisplay vectorDisplay = Instantiate(vectorDisplayPrefab);
-		vectorDisplay.transform.SetParent(vectorDisplayHolder.transform, false);
-		vectorDisplay.gameObject.SetActive(false);
+		VectorInfoDisplay vectorInfoDisplay = Instantiate(vectorInfoDisplayPrefab);
+		vectorInfoDisplay.transform.SetParent(vectorInfoDisplayHolder.transform, false);
+		vectorInfoDisplay.gameObject.SetActive(false);
 
 		// Setup Vector Info
-		VectorInfo vectorInfo = new VectorInfo(magnitudeValue, directionValue, directionType, vectorDisplay);
-		_vectorInfoList.Add(vectorInfo);
-		vectorDisplay.SetupVectorDisplay(vectorInfo);
+		VectorInfo vectorInfo = new VectorInfo(magnitudeValue, directionValue, directionType, vectorInfoDisplay);
+		vectorInfoList.Add(vectorInfo);
+		vectorInfoDisplay.SetupVectorInfoDisplay(vectorInfo);
 
 		// Setup Vector Select Button for accessing Vector Info
 		Button vectorSelectButton = Instantiate(vectorSelectButtonPrefab);
@@ -77,16 +77,16 @@ public class ViewCartesianComponents : MonoBehaviour
 		buttonText.text = $"{magnitudeValue}m {directionValue}°";
 
 		vectorSelectButton.onClick.AddListener(() => OnVectorSelectButtonClick(vectorInfo));
-		vectorDisplay.submitButton.onClick.AddListener(() => SubmitComponentsAnswer(vectorInfo));
+		vectorInfoDisplay.submitButton.onClick.AddListener(() => SubmitComponentsAnswer(vectorInfo));
 	}
 
 	private void OnVectorSelectButtonClick(VectorInfo vectorInfo)
 	{
-		foreach (VectorInfo vi in _vectorInfoList)
+		foreach (VectorInfo vi in vectorInfoList)
 		{
-			vi.vectorDisplay.gameObject.SetActive(false);
+			vi.vectorInfoDisplay.gameObject.SetActive(false);
 		}
-		vectorInfo.vectorDisplay.gameObject.SetActive(true);
+		vectorInfo.vectorInfoDisplay.gameObject.SetActive(true);
 		ChangeLineRenderer(vectorInfo.magnitudeValue, vectorInfo.directionValue);
 	}
 
