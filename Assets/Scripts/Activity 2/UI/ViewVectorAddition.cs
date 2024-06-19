@@ -13,6 +13,10 @@ public class ViewVectorAddition : MonoBehaviour
     public TMP_InputField magnitudeInputFieldOne;
 	public TMP_InputField magnitudeInputFieldTwo;
     public TMP_InputField magnitudeResultField;
+    [Header("Direction Fields")]
+    public TMP_InputField directionInputNumerator;
+	public TMP_InputField directionInputDenominator;
+	public TMP_InputField directionResultField;
 	[Header("Prefabs")]
     public VectorComponentDisplay vectorComponentDisplayPrefab;
     public TMP_InputField valueInputFieldPrefab;
@@ -37,6 +41,9 @@ public class ViewVectorAddition : MonoBehaviour
 
         // Setting up magnitude fields
         SetupMagnitudeFields();
+
+        // Setting up direction fields
+        SetupDirectionFields();
 	 }
 
 	private void SetupInputFieldContainer(HorizontalLayoutGroup inputFieldContainer, TMP_InputField componentResultField, int numberOfVectors)
@@ -86,5 +93,27 @@ public class ViewVectorAddition : MonoBehaviour
         totalResult = Math.Round(Math.Sqrt(totalResult), 4);
 
         magnitudeResultField.text = $"{totalResult}";
+	}
+
+    private void SetupDirectionFields()
+    {
+		directionInputNumerator.onValueChanged.AddListener((_) => UpdateDirectionResultField());
+        directionInputDenominator.onValueChanged.AddListener((_) => UpdateDirectionResultField());
+	}
+
+	private void UpdateDirectionResultField()
+    {
+		bool isNumeratorEvaluated = ExpressionEvaluator.Evaluate($"{directionInputNumerator.text}", out double numeratorResult);
+		bool isDenominatorEvaluated = ExpressionEvaluator.Evaluate($"{directionInputDenominator.text}", out double denominatorResult);
+
+        if (isNumeratorEvaluated == true && isDenominatorEvaluated == true)
+        {
+            double result = Math.Atan2(numeratorResult, denominatorResult) * (180/Math.PI);
+            result = Math.Round(result, 4);
+            directionResultField.text = $"{result}";
+        } else
+        {
+            directionResultField.text = "/";
+        }
 	}
 }
