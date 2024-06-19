@@ -5,15 +5,19 @@ public class ActivityTwoManager : MonoBehaviour
 	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelOneSO;
 	[SerializeField] private VectorsSubActivitySO vectorsLevelOneSO;
 
+	[Header("Views")]
 	[SerializeField] private ViewQuantities viewQuantities;
 	[SerializeField] private ViewCartesianComponents viewCartesianComponents;
+	[SerializeField] private ViewVectorAddition viewVectorAddition;
 
 	[Header("Metrics for Quantities Subactivity")]
 	private bool isQuantitiesSubActivityFinished;
 	private int numIncorrectQuantitiesSubmission;
+
 	[Header("Metrics for Components Subactivity")]
 	private bool isComponentsSubActivityFinished;
 	private int numIncorrectComponentsSubmission;
+
 	private void Start()
 	{
 		ViewQuantities.SubmitQuantitiesAnswerEvent += CheckQuantitiesAnswer;
@@ -21,6 +25,7 @@ public class ActivityTwoManager : MonoBehaviour
 
 		viewQuantities.SetupViewQuantities(quantitiesLevelOneSO);
 		viewCartesianComponents.SetupViewCartesianComponents(vectorsLevelOneSO);
+		viewVectorAddition.SetupViewVectorAddition(viewCartesianComponents.vectorInfoList);
 	}
 
 	private void CheckQuantitiesAnswer(DraggableQuantityText[] unsolvedQuantities, DraggableQuantityText[] scalarQuantities, DraggableQuantityText[] vectorQuantities)
