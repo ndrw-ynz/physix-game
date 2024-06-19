@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -5,9 +6,13 @@ using UnityEngine.UI;
 
 public class ViewVectorAddition : MonoBehaviour
 {
-    [Header("Result Fields")]
+    [Header("Component Fields")]
     public TMP_InputField xComponentResultField;
 	public TMP_InputField yComponentResultField;
+	[Header("Magnitude Fields")]
+    public TMP_InputField magnitudeInputFieldOne;
+	public TMP_InputField magnitudeInputFieldTwo;
+    public TMP_InputField magnitudeResultField;
 	[Header("Prefabs")]
     public VectorComponentDisplay vectorComponentDisplayPrefab;
     public TMP_InputField valueInputFieldPrefab;
@@ -17,7 +22,7 @@ public class ViewVectorAddition : MonoBehaviour
     public HorizontalLayoutGroup xInputFieldContainer;
     public HorizontalLayoutGroup yInputFieldContainer;
      public void SetupViewVectorAddition(List<VectorInfo> vectorInfoList)
-    {
+     {
         // Setting up contents of vectorComponentDisplayContainer
         foreach (VectorInfo vectorInfo in vectorInfoList)
         {
@@ -29,7 +34,10 @@ public class ViewVectorAddition : MonoBehaviour
         // Setting up n-inputFieldContainer
         SetupInputFieldContainer(xInputFieldContainer, xComponentResultField, vectorInfoList.Count);
 		SetupInputFieldContainer(yInputFieldContainer, yComponentResultField, vectorInfoList.Count);
-	}
+
+        // Setting up magnitude fields
+        SetupMagnitudeFields();
+	 }
 
 	private void SetupInputFieldContainer(HorizontalLayoutGroup inputFieldContainer, TMP_InputField componentResultField, int numberOfVectors)
     {
@@ -58,4 +66,25 @@ public class ViewVectorAddition : MonoBehaviour
         }
         componentResultField.text = $"{totalResult}";
     }
+
+    private void SetupMagnitudeFields()
+    {
+        magnitudeInputFieldOne.onValueChanged.AddListener((_) => UpdateMagnitudeResultField());
+        magnitudeInputFieldTwo.onValueChanged.AddListener((_) => UpdateMagnitudeResultField());
+	}
+
+    private void UpdateMagnitudeResultField()
+    {
+        double totalResult = 0;
+
+        bool isInputOneEvaluated = ExpressionEvaluator.Evaluate($"({magnitudeInputFieldOne.text})^2", out double inputOneResult);
+        if (isInputOneEvaluated) totalResult += inputOneResult;
+
+        bool isInputTwoEvaluated = ExpressionEvaluator.Evaluate($"({magnitudeInputFieldTwo.text})^2", out double inputTwoResult);
+        if (isInputTwoEvaluated) totalResult += inputTwoResult;
+
+        totalResult = Math.Round(Math.Sqrt(totalResult), 4);
+
+        magnitudeResultField.text = $"{totalResult}";
+	}
 }
