@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class VectorInfo
@@ -24,18 +23,18 @@ public class VectorInfo
 
 	private void ComputeXYComponents(int magnitudeValue, int directionValue)
 	{
-		double directionRadians = directionValue * (System.Math.PI/180);
+		double directionRadians = directionValue * (Math.PI/180);
 
-		double x = magnitudeValue * System.Math.Cos(directionRadians);
-		double y = magnitudeValue * System.Math.Sin(directionRadians);
+		double x = magnitudeValue * Math.Cos(directionRadians);
+		double y = magnitudeValue * Math.Sin(directionRadians);
 
 		double threshold = 1e-10;
 
-		x = (System.Math.Abs(x) < threshold) ? 0 : x;
-		y = (System.Math.Abs(y) < threshold) ? 0 : y;
+		x = (Math.Abs(x) < threshold) ? 0 : x;
+		y = (Math.Abs(y) < threshold) ? 0 : y;
 
-		float xFloat = (float) x;
-		float yFloat = (float) y;
+		float xFloat = (float) Math.Round(x, 4);
+		float yFloat = (float) Math.Round(y, 4);
 
 		Debug.Log($"x: {xFloat} y: {yFloat}");
 		vectorComponent = new Vector2(xFloat, yFloat);
