@@ -24,11 +24,20 @@ public class VectorInfo
 
 	private void ComputeXYComponents(int magnitudeValue, int directionValue)
 	{
-		float directionRadians = directionValue * Mathf.Deg2Rad;
+		double directionRadians = directionValue * (System.Math.PI/180);
 
-		float x = magnitudeValue * Mathf.Cos(directionRadians);
-		float y = magnitudeValue * Mathf.Sin(directionRadians);
+		double x = magnitudeValue * System.Math.Cos(directionRadians);
+		double y = magnitudeValue * System.Math.Sin(directionRadians);
 
-		vectorComponent = new Vector2(x, y);
+		double threshold = 1e-10;
+
+		x = (System.Math.Abs(x) < threshold) ? 0 : x;
+		y = (System.Math.Abs(y) < threshold) ? 0 : y;
+
+		float xFloat = (float) x;
+		float yFloat = (float) y;
+
+		Debug.Log($"x: {xFloat} y: {yFloat}");
+		vectorComponent = new Vector2(xFloat, yFloat);
 	}
 }
