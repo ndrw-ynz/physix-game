@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class ActivityTwoManager : MonoBehaviour
@@ -22,6 +25,7 @@ public class ActivityTwoManager : MonoBehaviour
 	{
 		ViewQuantities.SubmitQuantitiesAnswerEvent += CheckQuantitiesAnswer;
 		ViewCartesianComponents.SubmitCartesianComponentsAnswerEvent += CheckComponentsAnswer;
+		ViewVectorAddition.SubmitVectorAdditionAnswerEvent += CheckVectorAdditionAnswer;
 
 		viewQuantities.SetupViewQuantities(quantitiesLevelOneSO);
 		viewCartesianComponents.SetupViewCartesianComponents(vectorsLevelOneSO);
@@ -102,5 +106,32 @@ public class ActivityTwoManager : MonoBehaviour
 		}
 
 		Debug.Log($"Number of incorrect submissions: {numIncorrectComponentsSubmission}");
+	}
+
+	private void CheckVectorAdditionAnswer()
+	{
+		// Check submission for x and y component addition.
+		VectorComponentDisplay[] componentDisplays = viewVectorAddition.vectorComponentDisplayContainer.GetComponentsInChildren<VectorComponentDisplay>();
+		List<float> trueXComponents = new List<float>();
+		List<float> trueYComponents = new List<float>();
+		foreach (VectorComponentDisplay componentDisplay in componentDisplays)
+		{
+			trueXComponents.Add(float.Parse(componentDisplay.xComponentField.text));
+			trueYComponents.Add(float.Parse(componentDisplay.yComponentField.text));
+		}
+
+		bool isXComponentFieldsSubmissionCorrect = ActivityTwoUtilities.ValidateComponentInputFields(trueXComponents, viewVectorAddition.xInputFieldContainer);
+		bool isYComponentFieldsSubmissionCorrect = ActivityTwoUtilities.ValidateComponentInputFields(trueYComponents, viewVectorAddition.yInputFieldContainer);
+
+		Debug.Log($"x addition submission: {isXComponentFieldsSubmissionCorrect}");
+		Debug.Log($"y addition submission: {isYComponentFieldsSubmissionCorrect}");
+
+		// Check magnitude submission 
+		bool isMagnitudeSubmissionCorrect = ActivityTwoUtilities.ValidateMagnitudeSubmission(trueXComponents.Sum(), trueYComponents.Sum(), viewVectorAddition.magnitudeResultField);
+		Debug.Log($"Magnitude submission: {isMagnitudeSubmissionCorrect}");
+
+		// Check direction submission
+		bool isDirectionSubmissionCorrect = ActivityTwoUtilities.ValidateDirectionSubmission(trueXComponents.Sum(), trueYComponents.Sum(), viewVectorAddition.directionResultField);
+		Debug.Log($"Direction submission: {isDirectionSubmissionCorrect}");
 	}
 }
