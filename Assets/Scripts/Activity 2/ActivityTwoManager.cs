@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 
 public class ActivityTwoManager : MonoBehaviour
@@ -20,6 +19,10 @@ public class ActivityTwoManager : MonoBehaviour
 	[Header("Metrics for Components Subactivity")]
 	private bool isComponentsSubActivityFinished;
 	private int numIncorrectComponentsSubmission;
+
+	[Header("Metrics for Vector Addition Subactivity")]
+	private bool isVectorAdditionSubActivityFinished;
+	private int numIncorrectVectorAdditionSubmission;
 
 	private void Start()
 	{
@@ -133,5 +136,14 @@ public class ActivityTwoManager : MonoBehaviour
 		// Check direction submission
 		bool isDirectionSubmissionCorrect = ActivityTwoUtilities.ValidateDirectionSubmission(trueXComponents.Sum(), trueYComponents.Sum(), viewVectorAddition.directionResultField);
 		Debug.Log($"Direction submission: {isDirectionSubmissionCorrect}");
+
+		// Update metrics for vector addition subactivity
+		if (isXComponentFieldsSubmissionCorrect && isYComponentFieldsSubmissionCorrect && isMagnitudeSubmissionCorrect && isDirectionSubmissionCorrect)
+		{
+			isVectorAdditionSubActivityFinished = true;
+		} else
+		{
+			numIncorrectVectorAdditionSubmission += 1;
+		}
 	}
 }
