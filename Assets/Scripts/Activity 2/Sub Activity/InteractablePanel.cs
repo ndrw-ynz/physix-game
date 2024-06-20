@@ -1,15 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public enum SubActivityType
+{
+	Quantities,
+	CartesianComponents,
+	VectorAddition
+}
 
 public class InteractablePanel : IInteractable
 {
 	[SerializeField] private InputReader _inputReader;
 	[SerializeField] private GameObject view;
 	[SerializeField] private ActivityTwoManager activityTwoManager;
+	public SubActivityType subActivityType;
 
 	public override void Interact()
 	{
+		switch (subActivityType)
+		{
+			case SubActivityType.Quantities:
+				if (activityTwoManager.isQuantitiesSubActivityFinished == true) return;
+				break;
+			case SubActivityType.CartesianComponents:
+				if (activityTwoManager.isQuantitiesSubActivityFinished == false || activityTwoManager.isComponentsSubActivityFinished == true) return;
+				break;
+			case SubActivityType.VectorAddition:
+				if (activityTwoManager.isComponentsSubActivityFinished == false || activityTwoManager.isVectorAdditionSubActivityFinished == true) return;
+				break;
+		}
 		_inputReader.SetUI();
 		view.gameObject.SetActive(true);
 	}
