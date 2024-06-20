@@ -13,15 +13,15 @@ public class ActivityTwoManager : MonoBehaviour
 	[SerializeField] private ViewVectorAddition viewVectorAddition;
 
 	[Header("Metrics for Quantities Subactivity")]
-	private bool isQuantitiesSubActivityFinished;
+	public bool isQuantitiesSubActivityFinished;
 	private int numIncorrectQuantitiesSubmission;
 
 	[Header("Metrics for Components Subactivity")]
-	private bool isComponentsSubActivityFinished;
+	public bool isComponentsSubActivityFinished;
 	private int numIncorrectComponentsSubmission;
 
 	[Header("Metrics for Vector Addition Subactivity")]
-	private bool isVectorAdditionSubActivityFinished;
+	public bool isVectorAdditionSubActivityFinished;
 	private int numIncorrectVectorAdditionSubmission;
 
 	private void Start()
@@ -33,6 +33,10 @@ public class ActivityTwoManager : MonoBehaviour
 		viewQuantities.SetupViewQuantities(quantitiesLevelOneSO);
 		viewCartesianComponents.SetupViewCartesianComponents(vectorsLevelOneSO);
 		viewVectorAddition.SetupViewVectorAddition(viewCartesianComponents.vectorInfoList);
+
+		isQuantitiesSubActivityFinished = false;
+		isComponentsSubActivityFinished = false;
+		isVectorAdditionSubActivityFinished = false;
 	}
 
 	private void CheckQuantitiesAnswer(DraggableQuantityText[] unsolvedQuantities, DraggableQuantityText[] scalarQuantities, DraggableQuantityText[] vectorQuantities)
@@ -109,6 +113,24 @@ public class ActivityTwoManager : MonoBehaviour
 		}
 
 		Debug.Log($"Number of incorrect submissions: {numIncorrectComponentsSubmission}");
+
+		// Update metrics for cartesian components subactivity
+		isComponentsSubActivityFinished = AreComponentsSolved();
+	}
+
+	private bool AreComponentsSolved()
+	{
+		// Check if every component is solved.
+		bool isSolved = true;
+		foreach (VectorInfo vectorInfo in viewCartesianComponents.vectorInfoList)
+		{
+			if (vectorInfo.isComponentSolved == false)
+			{
+				isSolved = false;
+				break;
+			}
+		}
+		return isSolved;
 	}
 
 	private void CheckVectorAdditionAnswer()
