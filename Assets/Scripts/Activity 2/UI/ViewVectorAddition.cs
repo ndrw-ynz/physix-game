@@ -6,7 +6,9 @@ using UnityEngine.UI;
 
 public class ViewVectorAddition : MonoBehaviour
 {
-    [Header("Component Fields")]
+	public static event Action SubmitVectorAdditionAnswerEvent;
+
+	[Header("Component Fields")]
     public TMP_InputField xComponentResultField;
 	public TMP_InputField yComponentResultField;
 	[Header("Magnitude Fields")]
@@ -25,6 +27,8 @@ public class ViewVectorAddition : MonoBehaviour
     public VerticalLayoutGroup vectorComponentDisplayContainer;
     public HorizontalLayoutGroup xInputFieldContainer;
     public HorizontalLayoutGroup yInputFieldContainer;
+    [Header("Submit Button")]
+    public Button submitVectorAdditionAnswerButton;
      public void SetupViewVectorAddition(List<VectorInfo> vectorInfoList)
      {
         // Setting up contents of vectorComponentDisplayContainer
@@ -115,5 +119,19 @@ public class ViewVectorAddition : MonoBehaviour
         {
             directionResultField.text = "/";
         }
+	}
+	private void OnEnable()
+	{
+		submitVectorAdditionAnswerButton.onClick.AddListener(() => NotifyVectorAdditionSubmission());
+	}
+
+	private void OnDisable()
+	{
+		submitVectorAdditionAnswerButton.onClick.RemoveAllListeners();
+	}
+
+	private void NotifyVectorAdditionSubmission()
+	{
+		SubmitVectorAdditionAnswerEvent?.Invoke();
 	}
 }
