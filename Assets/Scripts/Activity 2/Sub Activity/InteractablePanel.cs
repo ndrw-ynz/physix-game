@@ -4,7 +4,8 @@ public enum SubActivityType
 {
 	Quantities,
 	CartesianComponents,
-	VectorAddition
+	VectorAddition,
+	End
 }
 
 public class InteractablePanel : IInteractable
@@ -26,6 +27,9 @@ public class InteractablePanel : IInteractable
 				break;
 			case SubActivityType.VectorAddition:
 				if (activityTwoManager.isComponentsSubActivityFinished == false || activityTwoManager.isVectorAdditionSubActivityFinished == true) return;
+				break;
+			case SubActivityType.End:
+				if (activityTwoManager.isVectorAdditionSubActivityFinished == false) return;
 				break;
 		}
 		_inputReader.SetUI();
