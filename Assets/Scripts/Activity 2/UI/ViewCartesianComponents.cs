@@ -9,6 +9,8 @@ public class ViewCartesianComponents : MonoBehaviour
 {
 	public static event Action<VectorInfo> SubmitCartesianComponentsAnswerEvent;
 
+	[Header("Problem Statement Text")]
+	public TextMeshProUGUI problemStatementText;
 	[Header("Vector Display Holder")]
 	public GameObject vectorInfoDisplayHolder;
 	[Header("Line Renderer")]
@@ -46,7 +48,6 @@ public class ViewCartesianComponents : MonoBehaviour
 					int[] standardDirectionValues = new int[] { 0, 30, 45, 60, 90, 120, 135, 1150, 180, 210, 225, 240, 270, 300, 315, 330 };
 					directionValue = standardDirectionValues[Random.Range(0, standardDirectionValues.Length)];
 					break;
-
 				case DirectionType.FullRange:
 					directionValue = Random.Range(0, 360);
 					break;
@@ -55,6 +56,14 @@ public class ViewCartesianComponents : MonoBehaviour
 
 			AddVectorInfo(magnitudeValue, directionValue, directionType);
 		}
+
+		// Formulate problem statement and update problem statement text
+		string generatedProblemStatement = "The ship has to change its course! The ship module has found the following vector directions:";
+		foreach (VectorInfo vectorInfo in vectorInfoList)
+		{
+			generatedProblemStatement += $" [{vectorInfo.magnitudeValue}m {vectorInfo.directionValue}°]";
+		}
+		problemStatementText.text = generatedProblemStatement;
 	}
 
 	private void AddVectorInfo(int magnitudeValue, int directionValue, DirectionType directionType)
