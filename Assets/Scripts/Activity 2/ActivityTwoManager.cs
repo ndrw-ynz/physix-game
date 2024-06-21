@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ActivityTwoManager : MonoBehaviour
 {
+	[Header("Level Data")]
 	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelOneSO;
 	[SerializeField] private VectorsSubActivitySO vectorsLevelOneSO;
 
@@ -11,6 +12,7 @@ public class ActivityTwoManager : MonoBehaviour
 	[SerializeField] private ViewQuantities viewQuantities;
 	[SerializeField] private ViewCartesianComponents viewCartesianComponents;
 	[SerializeField] private ViewVectorAddition viewVectorAddition;
+	[SerializeField] private ViewActivityTwoPerformance viewActivityTwoPerformance;
 
 	[Header("Metrics for Quantities Subactivity")]
 	public bool isQuantitiesSubActivityFinished;
@@ -29,6 +31,7 @@ public class ActivityTwoManager : MonoBehaviour
 		ViewQuantities.SubmitQuantitiesAnswerEvent += CheckQuantitiesAnswer;
 		ViewCartesianComponents.SubmitCartesianComponentsAnswerEvent += CheckComponentsAnswer;
 		ViewVectorAddition.SubmitVectorAdditionAnswerEvent += CheckVectorAdditionAnswer;
+		ViewActivityTwoPerformance.OpenViewEvent += OnOpenViewActivityTwoPerformance;
 
 		viewQuantities.SetupViewQuantities(quantitiesLevelOneSO);
 		viewCartesianComponents.SetupViewCartesianComponents(vectorsLevelOneSO);
@@ -167,5 +170,17 @@ public class ActivityTwoManager : MonoBehaviour
 		{
 			numIncorrectVectorAdditionSubmission += 1;
 		}
+	}
+
+	private void OnOpenViewActivityTwoPerformance(ViewActivityTwoPerformance view)
+	{
+		view.QuantitiesStatusText.text += isQuantitiesSubActivityFinished ? "Accomplished" : "Not accomplished";
+		view.QuantitiesIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectQuantitiesSubmission}";
+
+		view.CartesianComponentsStatusText.text += isComponentsSubActivityFinished ? "Accomplished" : "Not accomplished";
+		view.CartesianComponentsIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectComponentsSubmission}";
+
+		view.VectorAdditionStatusText.text += isVectorAdditionSubActivityFinished ? "Accomplished" : "Not accomplished";
+		view.VectorAdditionIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectVectorAdditionSubmission}";
 	}
 }
