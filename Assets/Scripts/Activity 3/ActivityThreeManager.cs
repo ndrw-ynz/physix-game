@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class ActivityThreeManager : MonoBehaviour
 {
+	[Header("Managers")]
+	[SerializeField] private GraphManager graphManager;
+
     [Header("Cameras")]
 	[SerializeField] private Camera mainCamera;
 	[SerializeField] private Camera positionVsTimeGraphCamera;
@@ -24,12 +27,15 @@ public class ActivityThreeManager : MonoBehaviour
 		viewGraphEdit.gameObject.SetActive(true);
 		viewGraphEdit.interactiveGraphCamera = interactiveGraphCamera;
 		viewGraphs.gameObject.SetActive(false);
+		graphManager.interactiveGraphCamera = interactiveGraphCamera;
     }
 
 	private void ChangeViewToGraphView()
 	{
 		mainCamera.enabled = true;
 		viewGraphEdit.gameObject.SetActive(false);
+		viewGraphEdit.interactiveGraphCamera = null;
 		viewGraphs.gameObject.SetActive(true);
+		graphManager.interactiveGraphCamera = null;
 	}
 }
