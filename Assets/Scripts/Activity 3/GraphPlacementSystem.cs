@@ -8,8 +8,13 @@ public class GraphPlacementSystem : MonoBehaviour
 	[Header("Graph Manager")]
     [SerializeField] private GraphManager graphManager;
 
+	private int numGridRecordRows = 9;
+	private int numGridRecordCols = 9;
+	private GameObject[,] gridRecord;
+
 	private void Start()
 	{
+		gridRecord = new GameObject[numGridRecordRows, numGridRecordCols];
 		graphManager.OnMouseClick += PlacePoint;
 	}
 
@@ -35,8 +40,29 @@ public class GraphPlacementSystem : MonoBehaviour
 			Vector3 mousePosition = graphManager.GetSelectedMapPosition();
 			Vector3Int gridPosition = graphManager.currentGraph.graphGrid.WorldToCell(mousePosition);
 			Debug.Log(gridPosition);
+			
+			// Remove duplicate point
+			GameObject dupicatePoint = DuplicatePointOnColumn(gridPosition.x);
+			if (dupicatePoint)
+			{
+				Destroy(dupicatePoint);
+			} 
+			
 			GameObject newPoint = Instantiate(pointIndicator);
 			newPoint.transform.position = graphManager.currentGraph.graphGrid.CellToWorld(gridPosition);
+			gridRecord[gridPosition.z, gridPosition.x] = newPoint;
 		}
+	}
+
+	private GameObject DuplicatePointOnColumn(int column)
+	{
+		for (int y = 0; y < numGridRecordRows; y++)
+		{
+			if (gridRecord[y, column])
+			{
+				return gridRecord[y, column];
+			}
+		}
+		return null;
 	}
 }
