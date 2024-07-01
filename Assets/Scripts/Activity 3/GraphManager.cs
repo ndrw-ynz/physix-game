@@ -7,7 +7,9 @@ public class GraphManager : MonoBehaviour
 {
     public event Action OnMouseClick;
 
-    public Camera interactiveGraphCamera;
+    [Header("Graph")]
+    public Graph currentGraph;
+    [Header("Layer Mask")]
     [SerializeField] private LayerMask placementLayerMask;
 
     private Vector3 lastMousePosition;
@@ -23,9 +25,9 @@ public class GraphManager : MonoBehaviour
 	public Vector3 GetSelectedMapPosition()
     {
         Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = interactiveGraphCamera.nearClipPlane;
+        mousePosition.z = currentGraph.interactiveGraphCamera.nearClipPlane;
         RaycastHit hit;
-        Ray ray = interactiveGraphCamera.ScreenPointToRay(mousePosition);
+        Ray ray = currentGraph.interactiveGraphCamera.ScreenPointToRay(mousePosition);
         if (Physics.Raycast(ray, out hit, 100, placementLayerMask))
         {
             lastMousePosition = hit.point;
