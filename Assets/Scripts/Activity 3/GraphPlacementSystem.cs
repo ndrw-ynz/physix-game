@@ -7,6 +7,11 @@ public class GraphPlacementSystem : MonoBehaviour
     [SerializeField] private GraphManager graphManager;
 	[SerializeField] private Grid grid;
 
+	private void Start()
+	{
+		graphManager.OnMouseClick += PlacePoint;
+	}
+
 	private void Update()
 	{
 		if (graphManager.interactiveGraphCamera)
@@ -20,5 +25,13 @@ public class GraphPlacementSystem : MonoBehaviour
 			mouseIndicator.transform.position = new Vector3(0, -1, 0);
 			pointIndicator.transform.position = new Vector3(0, -1, 0);
 		}
+	}
+
+	private void PlacePoint()
+	{
+		Vector3 mousePosition = graphManager.GetSelectedMapPosition();
+		Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+		GameObject newPoint = Instantiate(pointIndicator);
+		newPoint.transform.position = grid.CellToWorld(gridPosition);
 	}
 }
