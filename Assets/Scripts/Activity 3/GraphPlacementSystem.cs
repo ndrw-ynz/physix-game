@@ -29,9 +29,12 @@ public class GraphPlacementSystem : MonoBehaviour
 
 	private void PlacePoint()
 	{
-		Vector3 mousePosition = graphManager.GetSelectedMapPosition();
-		Vector3Int gridPosition = grid.WorldToCell(mousePosition);
-		GameObject newPoint = Instantiate(pointIndicator);
-		newPoint.transform.position = grid.CellToWorld(gridPosition);
+		if (graphManager.interactiveGraphCamera)
+		{
+			Vector3 mousePosition = graphManager.GetSelectedMapPosition();
+			Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+			GameObject newPoint = Instantiate(pointIndicator);
+			newPoint.transform.position = grid.CellToWorld(gridPosition);
+		}
 	}
 }
