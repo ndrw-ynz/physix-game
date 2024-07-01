@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class GraphEditButton : MonoBehaviour
 {
-    public static event Action<Camera> InitiateGraphEditViewSwitch;
+    public static event Action<Graph> InitiateGraphEditViewSwitch;
 
-    [Header("Interactive Camera")]
-    [SerializeField] private Camera interactiveGraphCamera;
+    [Header("Graph")]
+    [SerializeField] private Graph graph;
 
     public void TriggerGraphEditViewChange()
     {
-        interactiveGraphCamera.enabled = true;
-        InitiateGraphEditViewSwitch?.Invoke(interactiveGraphCamera);
+        graph.interactiveGraphCamera.enabled = true;
+        InitiateGraphEditViewSwitch?.Invoke(graph);
     }
 }
