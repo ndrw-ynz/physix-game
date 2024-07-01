@@ -21,13 +21,13 @@ public class ActivityThreeManager : MonoBehaviour
 		ViewGraphEdit.InitiateGraphViewSwitch += ChangeViewToGraphView;
 	}
 
-    private void ChangeViewToGraphEditView(Camera interactiveGraphCamera)
+    private void ChangeViewToGraphEditView(Graph graph)
     {
 		mainCamera.enabled = false;
 		viewGraphEdit.gameObject.SetActive(true);
-		viewGraphEdit.interactiveGraphCamera = interactiveGraphCamera;
+		viewGraphEdit.interactiveGraphCamera = graph.interactiveGraphCamera;
 		viewGraphs.gameObject.SetActive(false);
-		graphManager.interactiveGraphCamera = interactiveGraphCamera;
+		graphManager.currentGraph = graph;
     }
 
 	private void ChangeViewToGraphView()
@@ -36,6 +36,6 @@ public class ActivityThreeManager : MonoBehaviour
 		viewGraphEdit.gameObject.SetActive(false);
 		viewGraphEdit.interactiveGraphCamera = null;
 		viewGraphs.gameObject.SetActive(true);
-		graphManager.interactiveGraphCamera = null;
+		graphManager.currentGraph = null;
 	}
 }
