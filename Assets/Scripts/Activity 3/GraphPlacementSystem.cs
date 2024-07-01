@@ -2,10 +2,11 @@ using UnityEngine;
 
 public class GraphPlacementSystem : MonoBehaviour
 {
+	[Header("Indicators")]
     [SerializeField] private GameObject mouseIndicator;
 	[SerializeField] private GameObject pointIndicator;
+	[Header("Graph Manager")]
     [SerializeField] private GraphManager graphManager;
-	[SerializeField] private Grid grid;
 
 	private void Start()
 	{
@@ -14,12 +15,12 @@ public class GraphPlacementSystem : MonoBehaviour
 
 	private void Update()
 	{
-		if (graphManager.interactiveGraphCamera)
+		if (graphManager.currentGraph)
 		{
 			Vector3 mousePosition = graphManager.GetSelectedMapPosition();
-			Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+			Vector3Int gridPosition = graphManager.currentGraph.graphGrid.WorldToCell(mousePosition);
 			mouseIndicator.transform.position = mousePosition;
-			pointIndicator.transform.position = grid.CellToWorld(gridPosition);
+			pointIndicator.transform.position = graphManager.currentGraph.graphGrid.CellToWorld(gridPosition);
 		} else
 		{
 			mouseIndicator.transform.position = new Vector3(0, -1, 0);
@@ -29,12 +30,13 @@ public class GraphPlacementSystem : MonoBehaviour
 
 	private void PlacePoint()
 	{
-		if (graphManager.interactiveGraphCamera)
+		if (graphManager.currentGraph)
 		{
 			Vector3 mousePosition = graphManager.GetSelectedMapPosition();
-			Vector3Int gridPosition = grid.WorldToCell(mousePosition);
+			Vector3Int gridPosition = graphManager.currentGraph.graphGrid.WorldToCell(mousePosition);
+			Debug.Log(gridPosition);
 			GameObject newPoint = Instantiate(pointIndicator);
-			newPoint.transform.position = grid.CellToWorld(gridPosition);
+			newPoint.transform.position = graphManager.currentGraph.graphGrid.CellToWorld(gridPosition);
 		}
 	}
 }
