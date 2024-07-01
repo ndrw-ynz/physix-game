@@ -5,7 +5,7 @@ public class ViewGraphEdit : MonoBehaviour
 {
     public static event Action InitiateGraphViewSwitch;
 
-    [Header("Interactive Camera")]
+    [Header("Interactive Graph Camera")]
     public Camera interactiveGraphCamera;
 
     public void TriggerGraphViewChange()
