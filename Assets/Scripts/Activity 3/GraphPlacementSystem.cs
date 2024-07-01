@@ -46,7 +46,10 @@ public class GraphPlacementSystem : MonoBehaviour
 			if (dupicatePoint)
 			{
 				Destroy(dupicatePoint);
-			} 
+			}
+
+			// Update point on line renderer on current graph
+			graphManager.currentGraph.UpdateColumnPointOnGraph(gridPosition.x, gridPosition.z);
 			
 			GameObject newPoint = Instantiate(pointIndicator);
 			newPoint.transform.position = graphManager.currentGraph.graphGrid.CellToWorld(gridPosition);
