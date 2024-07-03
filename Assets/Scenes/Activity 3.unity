@@ -149,7 +149,7 @@ Transform:
   m_GameObject: {fileID: 6941400}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 0.2, z: -4}
+  m_LocalPosition: {x: -4, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -517,6 +517,11 @@ MonoBehaviour:
   interactiveGraphCamera: {fileID: 1188221312}
   graphGrid: {fileID: 918628434}
   graphLineRenderer: {fileID: 6941402}
+  pointIndicator: {fileID: 1384078597}
+  numGridRecordRows: 9
+  numGridRecordCols: 9
+  gridRowBoundary: 8
+  gridColumnBoundary: 4
 --- !u!224 &162774125 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 310142612981165412, guid: 5767e0f13fd0c4c408aeffdf06dc4a50, type: 3}
@@ -1109,7 +1114,7 @@ Transform:
   m_GameObject: {fileID: 626835994}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.5, y: 0, z: -4.5}
+  m_LocalPosition: {x: -4.5, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1242,6 +1247,11 @@ MonoBehaviour:
   interactiveGraphCamera: {fileID: 1722214705}
   graphGrid: {fileID: 598329104}
   graphLineRenderer: {fileID: 1555753165}
+  pointIndicator: {fileID: 1384078597}
+  numGridRecordRows: 9
+  numGridRecordCols: 9
+  gridRowBoundary: 8
+  gridColumnBoundary: 4
 --- !u!1 &667156637
 GameObject:
   m_ObjectHideFlags: 0
@@ -1380,6 +1390,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5d31a0cc3d2454790a1927662c1822, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  graphsLevelOne: {fileID: 11400000, guid: 32a751686fe1dd44d90f854cb918fa03, type: 2}
+  graphsLevelTwo: {fileID: 11400000, guid: 7a8ad647c59ff924ab1ad05891f69242, type: 2}
+  graphsLevelThree: {fileID: 11400000, guid: ef308198e7ef61b479747601492214a4, type: 2}
   graphManager: {fileID: 1973563702}
   mainCamera: {fileID: 871878858}
   positionVsTimeGraphCamera: {fileID: 1188221312}
@@ -1800,6 +1813,9 @@ MonoBehaviour:
   mouseIndicator: {fileID: 1164776571}
   pointIndicator: {fileID: 1384078597}
   graphManager: {fileID: 1973563702}
+  positionVsTimeGraph: {fileID: 137648732}
+  velocityVsTimeGraph: {fileID: 652064868}
+  accelerationVsTimeGraph: {fileID: 1821942327}
 --- !u!1 &1140958083
 GameObject:
   m_ObjectHideFlags: 0
@@ -2160,7 +2176,7 @@ Transform:
   m_GameObject: {fileID: 1168340879}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.5, y: 0, z: -4.5}
+  m_LocalPosition: {x: -4.5, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2984,7 +3000,7 @@ Transform:
   m_GameObject: {fileID: 1555753163}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 0.2, z: -4}
+  m_LocalPosition: {x: -4, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3802,6 +3818,11 @@ MonoBehaviour:
   interactiveGraphCamera: {fileID: 1569217836}
   graphGrid: {fileID: 667156639}
   graphLineRenderer: {fileID: 1860688985}
+  pointIndicator: {fileID: 1384078597}
+  numGridRecordRows: 9
+  numGridRecordCols: 9
+  gridRowBoundary: 8
+  gridColumnBoundary: 4
 --- !u!1 &1860688983
 GameObject:
   m_ObjectHideFlags: 0
@@ -3828,7 +3849,7 @@ Transform:
   m_GameObject: {fileID: 1860688983}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 0.2, z: -4}
+  m_LocalPosition: {x: -4, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4085,6 +4106,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f42ee6b76186134fa9114f6cedb8f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  positionVsTimeGraph: {fileID: 137648732}
+  velocityVsTimeGraph: {fileID: 652064868}
+  accelerationVsTimeGraph: {fileID: 1821942327}
   currentGraph: {fileID: 0}
   placementLayerMask:
     serializedVersion: 2
@@ -4114,7 +4138,7 @@ Transform:
   m_GameObject: {fileID: 2072639254}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.5, y: 0, z: -4.5}
+  m_LocalPosition: {x: -4.5, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
