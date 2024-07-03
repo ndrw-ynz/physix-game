@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class ActivityThreeManager : MonoBehaviour
 {
+	[Header("Level Data - Graphs")]
+	[SerializeField] private GraphsSubActivitySO graphsLevelOne;
+	[SerializeField] private GraphsSubActivitySO graphsLevelTwo;
+	[SerializeField] private GraphsSubActivitySO graphsLevelThree;
+
 	[Header("Managers")]
 	[SerializeField] private GraphManager graphManager;
 
@@ -19,6 +24,8 @@ public class ActivityThreeManager : MonoBehaviour
 	{
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
 		ViewGraphEdit.InitiateGraphViewSwitch += ChangeViewToGraphView;
+
+		graphManager.SetupGraphs(graphsLevelOne);
 	}
 
     private void ChangeViewToGraphEditView(Graph graph)
