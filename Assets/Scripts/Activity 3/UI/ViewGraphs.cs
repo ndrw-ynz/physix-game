@@ -8,6 +8,8 @@ public class ViewGraphs : MonoBehaviour
 
 	[Header("Buttons")]
 	public Button submitGraphsButton;
+	[Header("Overlay")]
+	public Image overlay;
 
 	private void OnEnable()
 	{
