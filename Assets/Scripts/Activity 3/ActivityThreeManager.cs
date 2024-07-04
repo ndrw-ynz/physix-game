@@ -24,6 +24,9 @@ public class ActivityThreeManager : MonoBehaviour
     [SerializeField] private ViewGraphs viewGraphs;
     [SerializeField] private ViewGraphEdit viewGraphEdit;
 
+	[Header("Modal Windows")]
+	[SerializeField] private GraphSubmissionModalWindow graphSubmissionModalWindow;
+
 	private List<int> correctPositionValues;
 	private List<int> correctVelocityValues;
 	private List<int> correctAccelerationValues;
@@ -37,6 +40,7 @@ public class ActivityThreeManager : MonoBehaviour
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
 		ViewGraphEdit.InitiateGraphViewSwitch += ChangeViewToGraphView;
 		ViewGraphs.SubmitGraphsAnswerEvent += CheckGraphsAnswer;
+		GraphSubmissionModalWindow.RetryGraphSubmission += RestoreViewGraphState;
 
 		currentGraphsLevel = graphsLevelOne; // alter in the future, on changing upon submission in loading of scene.
 
@@ -117,5 +121,16 @@ public class ActivityThreeManager : MonoBehaviour
 		Debug.Log(isPositionVsTimeGraphCorrect);
 		Debug.Log(isVelocityVsTimeGraphCorrect);
 		Debug.Log(isAccelerationVsTimeGraphCorrect);
+
+		// Showing overlay and graph submission modal window.
+		viewGraphs.overlay.gameObject.SetActive(true);
+		graphSubmissionModalWindow.gameObject.SetActive(true);
+		graphSubmissionModalWindow.SetDisplayFromSubmissionResult(isPositionVsTimeGraphCorrect, isVelocityVsTimeGraphCorrect, isAccelerationVsTimeGraphCorrect);
+	}
+
+	private void RestoreViewGraphState()
+	{
+		viewGraphs.overlay.gameObject.SetActive(false);
+		graphSubmissionModalWindow.gameObject.SetActive(false);
 	}
 }
