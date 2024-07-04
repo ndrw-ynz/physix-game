@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class GraphSubmissionModalWindow : MonoBehaviour
 {
+	public static event Action InitiateNextSubActivity;
 	public static event Action RetryGraphSubmission;
 	
     [Header("Images")]
@@ -46,11 +47,13 @@ public class GraphSubmissionModalWindow : MonoBehaviour
 
 	private void OnEnable()
 	{
+		nextButton.onClick.AddListener(() => InitiateNextSubActivity?.Invoke());
 		tryAgainButton.onClick.AddListener(() => RetryGraphSubmission?.Invoke());
 	}
 
 	private void OnDisable()
 	{
+		nextButton.onClick.RemoveAllListeners();
 		nextButton.onClick.RemoveAllListeners();
 	}
 }
