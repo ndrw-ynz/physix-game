@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using static GraphsSubActivitySO;
-using Random = UnityEngine.Random;
 
 public class GraphManager : MonoBehaviour
 {
@@ -19,25 +16,11 @@ public class GraphManager : MonoBehaviour
 
     private Vector3 lastMousePosition;
 
-    public void SetupGraphs(GraphsSubActivitySO graphsSO)
+    public void SetupGraphs(List<int> positionValues, List<int> velocityValues, List<int> accelerationValues)
     {
-        foreach (GraphDataset graphDataset in graphsSO.datasets)
-        {
-            string rawStringDataValues = graphDataset.dataset[Random.Range(0, graphDataset.dataset.Count)];
-			List<int> graphPointValues = rawStringDataValues.Split(',').Select(int.Parse).ToList();
-			switch (graphDataset.datasetType)
-            {
-                case DatasetType.Position:
-                    positionVsTimeGraph.InitializeGraph(graphPointValues);
-					break;
-                case DatasetType.Velocity:
-					velocityVsTimeGraph.InitializeGraph(graphPointValues);
-					break;
-                case DatasetType.Acceleration:
-					accelerationVsTimeGraph.InitializeGraph(graphPointValues);
-					break;
-            }
-        }
+        positionVsTimeGraph.InitializeGraph(positionValues);
+		velocityVsTimeGraph.InitializeGraph(velocityValues);
+		accelerationVsTimeGraph.InitializeGraph(accelerationValues);
     }
 
 	private void Update()
