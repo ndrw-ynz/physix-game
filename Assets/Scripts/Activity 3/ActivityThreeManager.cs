@@ -28,6 +28,10 @@ public class ActivityThreeManager : MonoBehaviour
 	private List<int> correctVelocityValues;
 	private List<int> correctAccelerationValues;
 
+	[Header("Metrics for Graphs Subactivity")]
+	public bool isGraphsSubActivityFinished;
+	private int numIncorrectGraphsSubmission;
+
 	private void Start()
 	{
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
@@ -89,6 +93,26 @@ public class ActivityThreeManager : MonoBehaviour
 		bool isPositionVsTimeGraphCorrect = ActivityThreeUtilities.ValidateGraphSubmission(correctPositionValues, positionVsTimeGraph);
 		bool isVelocityVsTimeGraphCorrect = ActivityThreeUtilities.ValidateGraphSubmission(correctVelocityValues, velocityVsTimeGraph);
 		bool isAccelerationVsTimeGraphCorrect = ActivityThreeUtilities.ValidateGraphSubmission(correctAccelerationValues, accelerationVsTimeGraph);
+
+		if (isPositionVsTimeGraphCorrect && isVelocityVsTimeGraphCorrect && isAccelerationVsTimeGraphCorrect)
+		{
+			isGraphsSubActivityFinished = true;
+		}
+
+		if (!isPositionVsTimeGraphCorrect)
+		{
+			numIncorrectGraphsSubmission++;
+		}
+
+		if (!isVelocityVsTimeGraphCorrect)
+		{
+			numIncorrectGraphsSubmission++;
+		}
+
+		if (!isAccelerationVsTimeGraphCorrect)
+		{
+			numIncorrectGraphsSubmission++;
+		}
 
 		Debug.Log(isPositionVsTimeGraphCorrect);
 		Debug.Log(isVelocityVsTimeGraphCorrect);
