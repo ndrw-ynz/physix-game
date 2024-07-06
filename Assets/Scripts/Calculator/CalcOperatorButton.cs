@@ -6,7 +6,7 @@ public class CalcOperatorButton : MonoBehaviour
     public static event Action<string> OperatorInsertEvent;
     private string _operator;
     private bool _isInitialized;
-	private void Start()
+	private void OnEnable()
 	{
 		if (!_isInitialized)
 		{

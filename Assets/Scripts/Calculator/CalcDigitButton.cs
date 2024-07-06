@@ -6,7 +6,7 @@ public class CalcDigitButton : MonoBehaviour
     public static event Action<int> DigitInsertEvent;
 	private int _digit;
 	private bool _isInitialized;
-	private void Start()
+	private void OnEnable()
 	{
 		if (!_isInitialized)
 		{
