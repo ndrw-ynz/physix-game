@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class DiscussionPrevNextButton : MonoBehaviour
+public class DiscussionPrevNextSectorButton : MonoBehaviour
 {
     public DiscussionNavigator discussionNavigator;
-    public int step;
+    public string action;
 
     public void OnClick()
     {
-        discussionNavigator.changePage(step);
+        discussionNavigator.changeSector(action);
     }
-
 }
