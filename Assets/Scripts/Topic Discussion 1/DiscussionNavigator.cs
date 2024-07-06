@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -21,8 +22,6 @@ public class DiscussionNavigator : MonoBehaviour
     public DiscussionPrevNextPageButton nextPageButton;
     public DiscussionPrevNextSectorButton prevSectorButton;
     public DiscussionPrevNextSectorButton nextSectorButton;
-    public TextMeshProUGUI prevSectorText;
-    public TextMeshProUGUI nextSectorText;
 
     private int _currentSectorIndex = 0;
     private int _currentPageIndex = 0;
@@ -35,6 +34,17 @@ public class DiscussionNavigator : MonoBehaviour
             _currentPageIndex += direction;
             showPage(_currentPageIndex);
             changeButtonState();
+            //Debug.Log($"Current Sector: {_currentSectorIndex}");
+            //Debug.Log($"Current Sector: {_currentSectorIndex--}");
+            Debug.Log($"Is Prev Sector Active: {prevSectorButton.gameObject.activeSelf}");
+            Debug.Log($"Is Next Sector Active: {nextSectorButton.gameObject.activeSelf}");
+            int currentSector = _currentSectorIndex;
+            Debug.Log($"Current Sector: {currentSector}");
+            Debug.Log($"Next Sector: {currentSector+1}");
+
+            //Debug.Log($"Next Sector Title: {subTopicsList[_currentSectorIndex++].sectorTitle}");
+
+
         }
     }
 
@@ -43,20 +53,33 @@ public class DiscussionNavigator : MonoBehaviour
         // Change sectors
         if (action == "next")
         {
-            subTopicsList[_currentSectorIndex].pages[_currentPageIndex].SetActive(false);
+            GameObject currentSectorLastPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex];
+            int nextSectorFirstPageIndex = 0;
+
+            currentSectorLastPage.SetActive(false);
             _currentSectorIndex++;
-            _currentPageIndex = 0;
+            _currentPageIndex = nextSectorFirstPageIndex;
             showPage(_currentPageIndex);
             changeButtonState();
+            int currentSector = _currentSectorIndex;
+            Debug.Log($"Current Sector: {currentSector++}");
+            
 
         }
         if (action == "previous")
         {
-            subTopicsList[_currentSectorIndex].pages[_currentPageIndex].SetActive(false);
+            GameObject currentSectorFirstPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex];
+            
+            currentSectorFirstPage.SetActive(false);
             _currentSectorIndex--;
-            _currentPageIndex = subTopicsList[_currentSectorIndex].pages.Count - 1;
+
+            int previousSectorLastPageIndex = subTopicsList[_currentSectorIndex].pages.Count - 1;
+            _currentPageIndex = previousSectorLastPageIndex;
             showPage(_currentPageIndex);
             changeButtonState();
+            int currentSector = _currentSectorIndex;
+            Debug.Log($"Current Sector: {currentSector++}");
+
 
         }
     }
@@ -76,9 +99,36 @@ public class DiscussionNavigator : MonoBehaviour
         }
     }
 
-    public void setSectorText(string sectorText)
+    public string setPrevSectorText() // To Do: Put change sector text to changeButtonStates
     {
+        bool prevSectorButtonIsActive = prevSectorButton.gameObject.activeSelf;
 
+        if (prevSectorButtonIsActive)
+        {
+            int currentSector = _currentSectorIndex;
+            string prevSectorText = subTopicsList[currentSector-1].sectorTitle;
+            return prevSectorText;
+        }
+        else
+        {
+            return "";
+        }
+    }
+
+    public string setNextSectorText() // To Do: Put change sector text to changeButtonStates
+    {
+        bool nextSectorButtonIsActive = nextSectorButton.gameObject.activeSelf;
+
+        if (nextSectorButtonIsActive)
+        {
+            int currentSector = _currentSectorIndex;
+            string nextSectorText = subTopicsList[currentSector+1].sectorTitle;
+            return nextSectorText;
+        }
+        else
+        {
+            return "";
+        }
     }
 
     private void changeButtonState()
@@ -94,8 +144,6 @@ public class DiscussionNavigator : MonoBehaviour
                 && subTopicsList[_currentSectorIndex].pages.Count == 1)                     //Only 1 page in a sector
         {
             // To Do: Make the Next and Previous Topic Title Automatically Adjustable
-            prevSectorText.SetText("Previous Topic" + subTopicsList[_currentSectorIndex--].sectorTitle);
-            nextSectorText.SetText("Next Topic" + subTopicsList[_currentSectorIndex++].sectorTitle);
             // Sector - Previous and Sector - Next
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
