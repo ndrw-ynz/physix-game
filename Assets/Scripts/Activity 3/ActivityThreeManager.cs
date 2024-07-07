@@ -42,7 +42,9 @@ public class ActivityThreeManager : MonoBehaviour
 
 	[Header("Metrics for 1D Kinematics Subactivity")]
 	public bool isAccelerationCalculationFinished;
+	public bool isFreeFallCalculationFinished;
 	private int numIncorrectAccelerationSubmission;
+	private int numIncorrectFreeFallSubmission;
 
 	[Header("Generated Given Values")]
 	private int initialVelocityValue;
@@ -60,6 +62,7 @@ public class ActivityThreeManager : MonoBehaviour
 		GraphSubmissionModalWindow.InitiateNextSubActivity += ChangeViewToCalculatorView;
 
 		View1DKinematics.SubmitAccelerationAnswerEvent += CheckAccelerationAnswer;
+		View1DKinematics.SubmitFreeFallAnswerEvent += CheckFreeFallAnswer;
 
 		currentGraphsLevel = graphsLevelOne; // alter in the future, on changing upon submission in loading of scene.
 		currentKinematics1DLevel = kinematics1DLevelOne;
@@ -186,6 +189,18 @@ public class ActivityThreeManager : MonoBehaviour
 		} else
 		{
 			numIncorrectAccelerationSubmission++;
+		}
+	}
+
+	private void CheckFreeFallAnswer(float freeFallAnswer)
+	{
+		bool isFreeFallCorrect = ActivityThreeUtilities.ValidateFreeFallSubmission(freeFallAnswer, totalTimeValueTwo);
+		if (isFreeFallCorrect)
+		{
+			isFreeFallCalculationFinished = true;
+		} else
+		{
+			numIncorrectFreeFallSubmission++;
 		}
 	}
 
