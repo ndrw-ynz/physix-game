@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class View1DKinematics : MonoBehaviour
 {
 	public static event Action<float> SubmitAccelerationAnswerEvent;
+	public static event Action<float> SubmitFreeFallAnswerEvent;
 
 	[Header("Given Text")]
 	[SerializeField] private TextMeshProUGUI accelerationGivenText;
@@ -26,11 +27,13 @@ public class View1DKinematics : MonoBehaviour
 	{
 		CalcCalculateButton.CalculateResultEvent += EvaluateInput;
 		accelerateButton.onClick.AddListener(() => SubmitAccelerationAnswerEvent?.Invoke(answerArea.answerValue));
+		freeFallButton.onClick.AddListener(() => SubmitFreeFallAnswerEvent?.Invoke(answerArea.answerValue));
 	}
 
 	private void OnDisable()
 	{
 		accelerateButton.onClick.RemoveAllListeners();
+		freeFallButton.onClick.RemoveAllListeners();
 	}
 
 	private void EvaluateInput()
