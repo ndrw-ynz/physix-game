@@ -53,6 +53,8 @@ public class ActivityThreeManager : MonoBehaviour
 		GraphSubmissionModalWindow.RetryGraphSubmission += RestoreViewGraphState;
 		GraphSubmissionModalWindow.InitiateNextSubActivity += ChangeViewToCalculatorView;
 
+		View1DKinematics.SubmitAccelerationAnswerEvent += CheckAccelerationAnswer;
+
 		currentGraphsLevel = graphsLevelOne; // alter in the future, on changing upon submission in loading of scene.
 		currentKinematics1DLevel = kinematics1DLevelOne;
 
@@ -164,7 +166,12 @@ public class ActivityThreeManager : MonoBehaviour
 		initialVelocityValue = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
 		finalVelocityValue = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
 		totalTimeValue = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
-		Debug.Log($"{initialVelocityValue} {finalVelocityValue} {totalTimeValue}");
+	}
+
+	private void CheckAccelerationAnswer(float accelerationAnswer)
+	{
+		bool result = ActivityThreeUtilities.ValidateAccelerationSubmission(accelerationAnswer, initialVelocityValue, finalVelocityValue, totalTimeValue);
+		Debug.Log("result of accelreetaion: " + result);
 	}
 
 	#endregion
