@@ -13,4 +13,10 @@ public class CalcAnswerArea : MonoBehaviour, IDropHandler
 		answerValue = compResult.result;
 		answerText.text = answerValue.ToString();
 	}
+
+	public void ResetAnswerArea()
+	{
+		answerText.text = "N/A";
+		answerValue = 0;
+	}
 }
