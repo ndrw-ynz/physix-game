@@ -11,6 +11,10 @@ public class ActivityThreeManager : MonoBehaviour
 	[SerializeField] private GraphsSubActivitySO graphsLevelThree;
 	public GraphsSubActivitySO currentGraphsLevel;
 
+	[Header("Level Data - 1D Kinematics")]
+	[SerializeField] private Kinematics1DSubActivitySO kinematics1DLevelOne;
+	public Kinematics1DSubActivitySO currentKinematics1DLevel;
+
 	[Header("Managers")]
 	[SerializeField] private GraphManager graphManager;
 
@@ -36,6 +40,11 @@ public class ActivityThreeManager : MonoBehaviour
 	public bool isGraphsSubActivityFinished;
 	private int numIncorrectGraphsSubmission;
 
+	[Header("Generated Given Values")]
+	private int initialVelocityValue;
+	private int finalVelocityValue;
+	private int totalTimeValue;
+
 	private void Start()
 	{
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
@@ -45,13 +54,17 @@ public class ActivityThreeManager : MonoBehaviour
 		GraphSubmissionModalWindow.InitiateNextSubActivity += ChangeViewToCalculatorView;
 
 		currentGraphsLevel = graphsLevelOne; // alter in the future, on changing upon submission in loading of scene.
+		currentKinematics1DLevel = kinematics1DLevelOne;
 
 		InitializeCorrectGraphValues();
-
 		graphManager.SetupGraphs(correctPositionValues, correctVelocityValues, correctAccelerationValues);
+
+		Initialize1DKinematicsGiven();
+		view1DKinematics.SetupGivenText(initialVelocityValue, finalVelocityValue, totalTimeValue);
 	}
 
-    private void ChangeViewToGraphEditView(Graph graph)
+	#region Graphs Sub Activity
+	private void ChangeViewToGraphEditView(Graph graph)
     {
 		mainCamera.enabled = false;
 		viewGraphEdit.gameObject.SetActive(true);
@@ -142,4 +155,17 @@ public class ActivityThreeManager : MonoBehaviour
 		viewGraphs.overlay.gameObject.SetActive(false);
 		graphSubmissionModalWindow.gameObject.SetActive(false);
 	}
+
+	#endregion
+
+	#region 1D Kinematics Sub Activity
+	private void Initialize1DKinematicsGiven()
+	{
+		initialVelocityValue = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
+		finalVelocityValue = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
+		totalTimeValue = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
+		Debug.Log($"{initialVelocityValue} {finalVelocityValue} {totalTimeValue}");
+	}
+
+	#endregion
 }
