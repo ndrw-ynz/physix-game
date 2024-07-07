@@ -31,6 +31,7 @@ public class ActivityThreeManager : MonoBehaviour
 
 	[Header("Modal Windows")]
 	[SerializeField] private GraphSubmissionModalWindow graphSubmissionModalWindow;
+	[SerializeField] private Kinematics1DSubmissionModalWindow kinematics1DSubmissionModalWindow;
 
 	private List<int> correctPositionValues;
 	private List<int> correctVelocityValues;
@@ -58,11 +59,13 @@ public class ActivityThreeManager : MonoBehaviour
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
 		ViewGraphEdit.InitiateGraphViewSwitch += ChangeViewToGraphView;
 		ViewGraphs.SubmitGraphsAnswerEvent += CheckGraphsAnswer;
-		GraphSubmissionModalWindow.RetryGraphSubmission += RestoreViewGraphState;
+		GraphSubmissionModalWindow.RetryGraphSubmission += RestoreGraphViewState;
 		GraphSubmissionModalWindow.InitiateNextSubActivity += ChangeViewToCalculatorView;
 
 		View1DKinematics.SubmitAccelerationAnswerEvent += CheckAccelerationAnswer;
 		View1DKinematics.SubmitFreeFallAnswerEvent += CheckFreeFallAnswer;
+		Kinematics1DSubmissionModalWindow.RetrySubmission += Restore1DKinematicsViewState;
+		Kinematics1DSubmissionModalWindow.InitiateNext += Update1DKinematicsView;
 
 		currentGraphsLevel = graphsLevelOne; // alter in the future, on changing upon submission in loading of scene.
 		currentKinematics1DLevel = kinematics1DLevelOne;
@@ -162,7 +165,7 @@ public class ActivityThreeManager : MonoBehaviour
 		graphSubmissionModalWindow.SetDisplayFromSubmissionResult(isPositionVsTimeGraphCorrect, isVelocityVsTimeGraphCorrect, isAccelerationVsTimeGraphCorrect);
 	}
 
-	private void RestoreViewGraphState()
+	private void RestoreGraphViewState()
 	{
 		viewGraphs.overlay.gameObject.SetActive(false);
 		graphSubmissionModalWindow.gameObject.SetActive(false);
@@ -185,11 +188,14 @@ public class ActivityThreeManager : MonoBehaviour
 		if (isAccelerationCorrect)
 		{
 			isAccelerationCalculationFinished = true;
-			view1DKinematics.SwitchToFreeFallView();
 		} else
 		{
 			numIncorrectAccelerationSubmission++;
 		}
+
+		view1DKinematics.overlay.gameObject.SetActive(true);
+		kinematics1DSubmissionModalWindow.gameObject.SetActive(true);
+		kinematics1DSubmissionModalWindow.SetDisplayFromSubmissionResult(isAccelerationCorrect, "Acceleration");
 	}
 
 	private void CheckFreeFallAnswer(float freeFallAnswer)
@@ -202,6 +208,31 @@ public class ActivityThreeManager : MonoBehaviour
 		{
 			numIncorrectFreeFallSubmission++;
 		}
+
+		view1DKinematics.overlay.gameObject.SetActive(true);
+		kinematics1DSubmissionModalWindow.gameObject.SetActive(true);
+		kinematics1DSubmissionModalWindow.SetDisplayFromSubmissionResult(isFreeFallCorrect, "Free Fall");
+	}
+
+	private void Restore1DKinematicsViewState()
+	{
+		view1DKinematics.overlay.gameObject.SetActive(false);
+		kinematics1DSubmissionModalWindow.gameObject.SetActive(false);
+	}
+
+	private void Update1DKinematicsView()
+	{
+		if (isAccelerationCalculationFinished && isFreeFallCalculationFinished)
+		{
+			// deactivate view kineamtics
+			// show summary
+		} else if (isAccelerationCalculationFinished && !isFreeFallCalculationFinished)
+		{
+			view1DKinematics.SwitchToFreeFallView();
+		}
+
+		view1DKinematics.overlay.gameObject.SetActive(false);
+		kinematics1DSubmissionModalWindow.gameObject.SetActive(false);
 	}
 
 	#endregion
