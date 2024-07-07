@@ -23,4 +23,11 @@ public static class ActivityThreeUtilities
 		ExpressionEvaluator.Evaluate($"({finalVelocity} - {initialVelocity}) / ({totalTime} * (1/60))", out float computationResult);
         return Mathf.Abs(submittedAcceleration - computationResult) <= 0.0001;
 	}
+
+    public static bool ValidateFreeFallSubmission(float submittedFreeFall, float totalTime)
+    {
+        ExpressionEvaluator.Evaluate($"-9.81*({totalTime}*60)^2 / 2", out float computationResult);
+        Debug.Log(computationResult);
+        return Mathf.Abs(submittedFreeFall - computationResult) <= 0.0001;
+    }
 }
