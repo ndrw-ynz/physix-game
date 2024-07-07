@@ -40,6 +40,10 @@ public class ActivityThreeManager : MonoBehaviour
 	public bool isGraphsSubActivityFinished;
 	private int numIncorrectGraphsSubmission;
 
+	[Header("Metrics for 1D Kinematics Subactivity")]
+	public bool isAccelerationCalculationFinished;
+	private int numIncorrectAccelerationSubmission;
+
 	[Header("Generated Given Values")]
 	private int initialVelocityValue;
 	private int finalVelocityValue;
@@ -170,8 +174,14 @@ public class ActivityThreeManager : MonoBehaviour
 
 	private void CheckAccelerationAnswer(float accelerationAnswer)
 	{
-		bool result = ActivityThreeUtilities.ValidateAccelerationSubmission(accelerationAnswer, initialVelocityValue, finalVelocityValue, totalTimeValue);
-		Debug.Log("result of accelreetaion: " + result);
+		bool isAccelerationCorrect = ActivityThreeUtilities.ValidateAccelerationSubmission(accelerationAnswer, initialVelocityValue, finalVelocityValue, totalTimeValue);
+		if (isAccelerationCorrect)
+		{
+			isAccelerationCalculationFinished = true;
+		} else
+		{
+			numIncorrectAccelerationSubmission++;
+		}
 	}
 
 	#endregion
