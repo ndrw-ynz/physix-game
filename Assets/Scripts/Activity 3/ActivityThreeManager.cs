@@ -47,7 +47,9 @@ public class ActivityThreeManager : MonoBehaviour
 	[Header("Generated Given Values")]
 	private int initialVelocityValue;
 	private int finalVelocityValue;
-	private int totalTimeValue;
+	private int totalTimeValueOne;
+	private int totalTimeValueTwo;
+
 
 	private void Start()
 	{
@@ -66,7 +68,8 @@ public class ActivityThreeManager : MonoBehaviour
 		graphManager.SetupGraphs(correctPositionValues, correctVelocityValues, correctAccelerationValues);
 
 		Initialize1DKinematicsGiven();
-		view1DKinematics.SetupGivenText(initialVelocityValue, finalVelocityValue, totalTimeValue);
+		view1DKinematics.SetupAccelerationGivenText(initialVelocityValue, finalVelocityValue, totalTimeValueOne);
+		view1DKinematics.SetupFreeFallGivenText(totalTimeValueTwo);
 	}
 
 	#region Graphs Sub Activity
@@ -169,15 +172,17 @@ public class ActivityThreeManager : MonoBehaviour
 	{
 		initialVelocityValue = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
 		finalVelocityValue = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
-		totalTimeValue = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
+		totalTimeValueOne = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
+		totalTimeValueTwo = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
 	}
 
 	private void CheckAccelerationAnswer(float accelerationAnswer)
 	{
-		bool isAccelerationCorrect = ActivityThreeUtilities.ValidateAccelerationSubmission(accelerationAnswer, initialVelocityValue, finalVelocityValue, totalTimeValue);
+		bool isAccelerationCorrect = ActivityThreeUtilities.ValidateAccelerationSubmission(accelerationAnswer, initialVelocityValue, finalVelocityValue, totalTimeValueOne);
 		if (isAccelerationCorrect)
 		{
 			isAccelerationCalculationFinished = true;
+			view1DKinematics.SwitchToFreeFallView();
 		} else
 		{
 			numIncorrectAccelerationSubmission++;
