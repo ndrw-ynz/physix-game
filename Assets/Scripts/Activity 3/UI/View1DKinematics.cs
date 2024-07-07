@@ -22,6 +22,8 @@ public class View1DKinematics : MonoBehaviour
 	[Header("Buttons")]
 	[SerializeField] private Button accelerateButton;
 	[SerializeField] private Button freeFallButton;
+	[Header("Overlay")]
+	public Image overlay;
 
 	private void OnEnable()
 	{
