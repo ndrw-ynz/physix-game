@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class View1DKinematics : MonoBehaviour
 {
+	public static event Action<float> SubmitAccelerationAnswerEvent;
+
 	[Header("Given Text")]
 	[SerializeField] private TextMeshProUGUI accelerationGivenText;
     [Header("Prefabs")]
@@ -21,6 +23,12 @@ public class View1DKinematics : MonoBehaviour
 	private void OnEnable()
 	{
 		CalcCalculateButton.CalculateResultEvent += EvaluateInput;
+		accelerateButton.onClick.AddListener(() => SubmitAccelerationAnswerEvent?.Invoke(answerArea.answerValue));
+	}
+
+	private void OnDisable()
+	{
+		accelerateButton.onClick.RemoveAllListeners();
 	}
 
 	private void EvaluateInput()
