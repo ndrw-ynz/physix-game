@@ -28,6 +28,7 @@ public class ActivityThreeManager : MonoBehaviour
     [SerializeField] private ViewGraphs viewGraphs;
     [SerializeField] private ViewGraphEdit viewGraphEdit;
 	[SerializeField] private View1DKinematics view1DKinematics;
+	[SerializeField] private ViewActivityThreePerformance viewActivityThreePerformance;
 
 	[Header("Modal Windows")]
 	[SerializeField] private GraphSubmissionModalWindow graphSubmissionModalWindow;
@@ -53,7 +54,6 @@ public class ActivityThreeManager : MonoBehaviour
 	private int totalTimeValueOne;
 	private int totalTimeValueTwo;
 
-
 	private void Start()
 	{
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
@@ -66,6 +66,8 @@ public class ActivityThreeManager : MonoBehaviour
 		View1DKinematics.SubmitFreeFallAnswerEvent += CheckFreeFallAnswer;
 		Kinematics1DSubmissionModalWindow.RetrySubmission += Restore1DKinematicsViewState;
 		Kinematics1DSubmissionModalWindow.InitiateNext += Update1DKinematicsView;
+
+		ViewActivityThreePerformance.OpenViewEvent += OnOpenViewActivityThreePerformance;
 
 		currentGraphsLevel = graphsLevelOne; // alter in the future, on changing upon submission in loading of scene.
 		currentKinematics1DLevel = kinematics1DLevelOne;
@@ -224,8 +226,7 @@ public class ActivityThreeManager : MonoBehaviour
 	{
 		if (isAccelerationCalculationFinished && isFreeFallCalculationFinished)
 		{
-			// deactivate view kineamtics
-			// show summary
+			viewActivityThreePerformance.gameObject.SetActive(true);
 		} else if (isAccelerationCalculationFinished && !isFreeFallCalculationFinished)
 		{
 			view1DKinematics.SwitchToFreeFallView();
@@ -236,4 +237,18 @@ public class ActivityThreeManager : MonoBehaviour
 	}
 
 	#endregion
+
+	private void OnOpenViewActivityThreePerformance(ViewActivityThreePerformance view)
+	{
+		view.GraphsStatusText.text += isGraphsSubActivityFinished ? "Accomplished" : "Not accomplished";
+		view.GraphsIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectGraphsSubmission}";
+
+		view.Kinematics1DStatusText.text += isAccelerationCalculationFinished && isFreeFallCalculationFinished ? "Accomplished" : "Not accmplished";
+
+		view.AccelerationProblemStatusText.text += isAccelerationCalculationFinished ? "Accomplished" : "Not accomplished";
+		view.AccelerationProblemIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectAccelerationSubmission}";
+
+		view.FreeFallProblemStatusText.text += isFreeFallCalculationFinished ? "Accomplished" : "Not accomplished";
+		view.FreeFallProblemIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectFreeFallSubmission}";
+	}
 }
