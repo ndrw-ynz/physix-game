@@ -10,9 +10,8 @@ public class View1DKinematics : MonoBehaviour
     [SerializeField] private TMP_InputField inputField;
 	[Header("Layout Holders")]
 	[SerializeField] private VerticalLayoutGroup compResultHolder;
-	// insert the area where the draggable numbers be in bruh
 
-	private void Start()
+	private void OnEnable()
 	{
 		CalcCalculateButton.CalculateResultEvent += EvaluateInput;
 	}
