@@ -17,4 +17,10 @@ public static class ActivityThreeUtilities
 
         return true;
     }
+
+    public static bool ValidateAccelerationSubmission(float submittedAcceleration, float initialVelocity, float finalVelocity, float totalTime)
+    {
+		ExpressionEvaluator.Evaluate($"({finalVelocity} - {initialVelocity}) / {totalTime} * (1/60)", out float computationResult);
+        return Mathf.Abs(submittedAcceleration - computationResult) <= 0.0001;
+	}
 }
