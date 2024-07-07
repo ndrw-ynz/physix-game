@@ -23,6 +23,7 @@ public class ActivityThreeManager : MonoBehaviour
 	[Header("Views")]
     [SerializeField] private ViewGraphs viewGraphs;
     [SerializeField] private ViewGraphEdit viewGraphEdit;
+	[SerializeField] private View1DKinematics view1DKinematics;
 
 	[Header("Modal Windows")]
 	[SerializeField] private GraphSubmissionModalWindow graphSubmissionModalWindow;
@@ -41,6 +42,7 @@ public class ActivityThreeManager : MonoBehaviour
 		ViewGraphEdit.InitiateGraphViewSwitch += ChangeViewToGraphView;
 		ViewGraphs.SubmitGraphsAnswerEvent += CheckGraphsAnswer;
 		GraphSubmissionModalWindow.RetryGraphSubmission += RestoreViewGraphState;
+		GraphSubmissionModalWindow.InitiateNextSubActivity += ChangeViewToCalculatorView;
 
 		currentGraphsLevel = graphsLevelOne; // alter in the future, on changing upon submission in loading of scene.
 
@@ -65,6 +67,13 @@ public class ActivityThreeManager : MonoBehaviour
 		viewGraphEdit.interactiveGraphCamera = null;
 		viewGraphs.gameObject.SetActive(true);
 		graphManager.currentGraph = null;
+	}
+
+	private void ChangeViewToCalculatorView()
+	{
+		viewGraphs.gameObject.SetActive(false);
+		graphSubmissionModalWindow.gameObject.SetActive(false);
+		view1DKinematics.gameObject.SetActive(true);
 	}
 
 	private void InitializeCorrectGraphValues()
