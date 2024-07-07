@@ -9,6 +9,7 @@ public class View1DKinematics : MonoBehaviour
 
 	[Header("Given Text")]
 	[SerializeField] private TextMeshProUGUI accelerationGivenText;
+	[SerializeField] private TextMeshProUGUI freeFallGivenText;
     [Header("Prefabs")]
 	[SerializeField] private CalcCompResult compResultPrefab;
     [Header("Input Field")]
@@ -19,6 +20,7 @@ public class View1DKinematics : MonoBehaviour
 	[SerializeField] private VerticalLayoutGroup compResultHolder;
 	[Header("Buttons")]
 	[SerializeField] private Button accelerateButton;
+	[SerializeField] private Button freeFallButton;
 
 	private void OnEnable()
 	{
@@ -54,8 +56,24 @@ public class View1DKinematics : MonoBehaviour
 		}
 	}
 
-	public void SetupGivenText(float initialVelocity, float finalVelocity, float totalTime)
+	public void SetupAccelerationGivenText(float initialVelocity, float finalVelocity, float totalTime)
 	{
-		accelerationGivenText.text = $"Initial Velocity = {initialVelocity} km/hr Final Velocity = {finalVelocity} km/hr Time = {totalTime} minutes";
+		accelerationGivenText.text = $"Initial Velocity = {initialVelocity} km/hr Final Velocity = {finalVelocity} km/hr Time = {totalTime} minute/s";
+	}
+
+	public void SetupFreeFallGivenText(int totalTime)
+	{
+		freeFallGivenText.text = $"Time = {totalTime} minute/s / {totalTime * 60} second/s";
+	}
+
+	public void SwitchToFreeFallView()
+	{
+		accelerationGivenText.gameObject.SetActive(false);
+		freeFallGivenText.gameObject.SetActive(true);
+
+		accelerateButton.gameObject.SetActive(false);
+		freeFallButton.gameObject.SetActive(true);
+
+		answerArea.ResetAnswerArea();
 	}
 }
