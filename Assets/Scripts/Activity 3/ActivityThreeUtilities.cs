@@ -27,7 +27,6 @@ public static class ActivityThreeUtilities
     public static bool ValidateFreeFallSubmission(float submittedFreeFall, float totalTime)
     {
         ExpressionEvaluator.Evaluate($"-9.81*({totalTime}*60)^2 / 2", out float computationResult);
-        Debug.Log(computationResult);
         return Mathf.Abs(submittedFreeFall - computationResult) <= 0.0001;
     }
 }
