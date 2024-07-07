@@ -51,7 +51,7 @@ public class CalcInputField : MonoBehaviour
 					}
 
 					// Previous char must not be an operator +-/
-					if (lastChar == '+' || lastChar == '-' || lastChar == '/')
+					if (lastChar == '+' || lastChar == '-' || lastChar == '/' || lastChar == 'x')
 					{
 						return;
 					}
@@ -62,7 +62,7 @@ public class CalcInputField : MonoBehaviour
 					}
 					break;
 
-				// Checking for operators '+', '-', and '/'
+				// Checking for operators '+', '-', '/', and 'x'
 				case "+":
 				case "-":
 				case "/":
@@ -72,13 +72,19 @@ public class CalcInputField : MonoBehaviour
 					{
 						inputField.text = inputField.text.Remove(inputField.text.Length - 1) + op;
 					}
-					// If previous char is a digit or a parentheses, append.
-					if (char.IsDigit(lastChar) || lastChar == ')')
+					// If previous char is a digit, closing parenthesis, or a decimal point, append.
+					else if (char.IsDigit(lastChar) || lastChar == ')' || lastChar == '.')
+					{
+						inputField.text += op;
+					}
+					// Allow '-' after an opening parenthesis or at the start for negative numbers
+					else if (op == "-" && (lastChar == '(' || string.IsNullOrEmpty(inputField.text)))
 					{
 						inputField.text += op;
 					}
 					break;
 
+				// Case for squared operator '^2'
 				case "^2":
 					if (char.IsDigit(lastChar) || lastChar == ')')
 					{
@@ -86,14 +92,15 @@ public class CalcInputField : MonoBehaviour
 					}
 					break;
 
+				// Case for decimal point '.'
 				case ".":
 					// Check if the current number segment already contains a decimal point
-					int lastOperatorIndex = inputField.text.LastIndexOfAny(new char[] { '+', '-', '/', '*', '(', ')' });
+					int lastOperatorIndex = inputField.text.LastIndexOfAny(new char[] { '+', '-', '/', 'x', '(', ')' });
 					string currentNumberSegment = lastOperatorIndex == -1 ? inputField.text : inputField.text.Substring(lastOperatorIndex + 1);
 
 					if (!currentNumberSegment.Contains("."))
 					{
-						if (string.IsNullOrEmpty(inputField.text) || lastChar == '+' || lastChar == '-' || lastChar == '/' || lastChar == '*' || lastChar == '(')
+						if (string.IsNullOrEmpty(inputField.text) || lastChar == '+' || lastChar == '-' || lastChar == '/' || lastChar == 'x' || lastChar == '(')
 						{
 							inputField.text += "0" + op;
 						}
@@ -105,10 +112,10 @@ public class CalcInputField : MonoBehaviour
 					break;
 			}
 		}
-		// If the string is empty, the only possible symbol is (
+		// If the string is empty, the only possible symbols are '(' or '-'
 		else
 		{
-			if (op == "(")
+			if (op == "(" || op == "-")
 			{
 				inputField.text += op;
 			}
