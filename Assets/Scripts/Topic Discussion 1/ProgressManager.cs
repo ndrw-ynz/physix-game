@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProgressManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class ProgressManager : MonoBehaviour
     public class ProgressBar
     {
         public GameObject progressBar;
+        public Image progressBarRect;
         public TextMeshProUGUI sectorTitle;
         public TextMeshProUGUI progressCounter;
     }
@@ -27,9 +29,8 @@ public class ProgressManager : MonoBehaviour
         for (int i = 0; i < discussionNavigator.subTopicsList.Count; i++)
         {
             string currentSectorTitle = discussionNavigator.subTopicsList[i].sectorTitle;
-            int understoodPages = 0;
-            int currentSectorTotalPages = discussionNavigator.subTopicsList[i].pages.Count;
-            Debug.Log("Num of Pages:" + discussionNavigator.subTopicsList[i].pages.Count);
+            double understoodPages = 0;
+            double currentSectorTotalPages = discussionNavigator.subTopicsList[i].pages.Count;
 
             for (int j = 0; j < discussionNavigator.subTopicsList[i].pages.Count; j++)
             {
@@ -41,17 +42,26 @@ public class ProgressManager : MonoBehaviour
                 }
             }
 
+            double progressPercentage = (understoodPages / currentSectorTotalPages) * 100;
+
+            if (progressPercentage == 100)
+            {
+                sectorProgressBars[i].progressBarRect.color = Color.green;
+            }
+            else if (progressPercentage > 50)
+            {
+                sectorProgressBars[i].progressBarRect.color = Color.yellow;
+            }
+            else
+            {
+                sectorProgressBars[i].progressBarRect.color = Color.gray;
+            }
+
             sectorProgressBars[i].sectorTitle.SetText(currentSectorTitle);
             sectorProgressBars[i].progressCounter.SetText($"{understoodPages}/{currentSectorTotalPages}");
             
         }
     }
-
-    private void changeMarkButtonState()
-    {
-
-    }
-
 
     private bool currentPageIsMarkedUnderstood(int currentSectorIndex, int currentPageIndex)
     {
