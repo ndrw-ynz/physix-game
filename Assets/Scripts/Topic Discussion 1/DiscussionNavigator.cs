@@ -13,8 +13,15 @@ public class DiscussionNavigator : MonoBehaviour
     [System.Serializable]
     public class Sector
     {
+        [System.Serializable]
+        public class Page
+        {
+            public GameObject page;
+            public bool isMarkedUnderstood;
+        }
+
         public string sectorTitle;
-        public List<GameObject> pages;
+        public List<Page> pages;
     }
 
     public List<Sector> subTopicsList;
@@ -22,6 +29,8 @@ public class DiscussionNavigator : MonoBehaviour
     public DiscussionPrevNextPageButton nextPageButton;
     public DiscussionPrevNextSectorButton prevSectorButton;
     public DiscussionPrevNextSectorButton nextSectorButton;
+    public ComprehensionButton markAsUnderstoodButton;
+    public ComprehensionButton markAsNotYetUnderstoodButton;
 
     private int _currentSectorIndex = 0;
     private int _currentPageIndex = 0;
@@ -34,17 +43,7 @@ public class DiscussionNavigator : MonoBehaviour
             _currentPageIndex += direction;
             showPage(_currentPageIndex);
             changeButtonState();
-            //Debug.Log($"Current Sector: {_currentSectorIndex}");
-            //Debug.Log($"Current Sector: {_currentSectorIndex--}");
-            Debug.Log($"Is Prev Sector Active: {prevSectorButton.gameObject.activeSelf}");
-            Debug.Log($"Is Next Sector Active: {nextSectorButton.gameObject.activeSelf}");
-            int currentSector = _currentSectorIndex;
-            Debug.Log($"Current Sector: {currentSector}");
-            Debug.Log($"Next Sector: {currentSector+1}");
-
-            //Debug.Log($"Next Sector Title: {subTopicsList[_currentSectorIndex++].sectorTitle}");
-
-
+            changeComprehensionButtonState();
         }
     }
 
@@ -53,7 +52,7 @@ public class DiscussionNavigator : MonoBehaviour
         // Change sectors
         if (action == "next")
         {
-            GameObject currentSectorLastPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex];
+            GameObject currentSectorLastPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex].page;
             int nextSectorFirstPageIndex = 0;
 
             currentSectorLastPage.SetActive(false);
@@ -61,6 +60,7 @@ public class DiscussionNavigator : MonoBehaviour
             _currentPageIndex = nextSectorFirstPageIndex;
             showPage(_currentPageIndex);
             changeButtonState();
+            changeComprehensionButtonState();
             int currentSector = _currentSectorIndex;
             Debug.Log($"Current Sector: {currentSector++}");
             
@@ -68,7 +68,7 @@ public class DiscussionNavigator : MonoBehaviour
         }
         if (action == "previous")
         {
-            GameObject currentSectorFirstPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex];
+            GameObject currentSectorFirstPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex].page;
             
             currentSectorFirstPage.SetActive(false);
             _currentSectorIndex--;
@@ -77,10 +77,29 @@ public class DiscussionNavigator : MonoBehaviour
             _currentPageIndex = previousSectorLastPageIndex;
             showPage(_currentPageIndex);
             changeButtonState();
+            changeComprehensionButtonState();
             int currentSector = _currentSectorIndex;
             Debug.Log($"Current Sector: {currentSector++}");
+        }
+    }
 
+    public void changeComprehensionMark(bool flag)
+    {
+        subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood = flag;
+        changeComprehensionButtonState();
+    }
 
+    public void changeComprehensionButtonState()
+    {
+        if (!subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood)
+        {
+            markAsUnderstoodButton.gameObject.SetActive(true);
+            markAsNotYetUnderstoodButton.gameObject.SetActive(false);
+        }
+        else
+        {
+            markAsUnderstoodButton.gameObject.SetActive(false);
+            markAsNotYetUnderstoodButton.gameObject.SetActive(true);
         }
     }
 
@@ -90,11 +109,11 @@ public class DiscussionNavigator : MonoBehaviour
         {
             if (i == currentPage)
             {
-                subTopicsList[_currentSectorIndex].pages[i].SetActive(true);
+                subTopicsList[_currentSectorIndex].pages[i].page.SetActive(true);
             }
             else
             {
-                subTopicsList[_currentSectorIndex].pages[i].SetActive(false);
+                subTopicsList[_currentSectorIndex].pages[i].page.SetActive(false);
             }
         }
     }
