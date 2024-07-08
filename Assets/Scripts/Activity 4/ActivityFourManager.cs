@@ -8,6 +8,9 @@ public class ActivityFourManager : MonoBehaviour
 	[SerializeField] private ProjectileMotionSubActivitySO projectileMotionLevelThree;
 	private ProjectileMotionSubActivitySO currentProjectileMotionLevel;
 
+	[Header("Views")]
+	[SerializeField] private ViewProjectileMotion viewProjectileMotion;
+
 	[Header("Given Values - Projectile Motion")]
 	private int initialProjectileVelocityValue;
 	private int projectileHeightValue;
@@ -18,6 +21,8 @@ public class ActivityFourManager : MonoBehaviour
 		currentProjectileMotionLevel = projectileMotionLevelOne; // modify this in the future, to add change of level
 
 		InitializeProjectileMotionGiven(currentProjectileMotionLevel);
+
+		viewProjectileMotion.SetupProjectileMotionProblemDisplay(initialProjectileVelocityValue, projectileHeightValue, projectileAngleValue);
 	}
 
 	#region Projectile Motion
