@@ -19,7 +19,7 @@ public class CalcInputField : MonoBehaviour
 	private void InsertDigit(int digit)
 	{
 		inputField.text += digit.ToString();
-		UpdateInputField?.Invoke();
+		UpdateInputField?.Invoke(inputField.text);
 	}
 
 	private void InsertOperator(string op)
@@ -114,14 +114,24 @@ public class CalcInputField : MonoBehaviour
 						}
 					}
 					break;
+
+				// Case for sin operator
+				case "sin":
+					// Append 'sin(' to the input
+					inputField.text += "sin(";
+					break;
 			}
 		}
-		// If the string is empty, the only possible symbols are '(' or '-'
+		// If the string is empty, the only possible symbols are '(', '-', or 'sin'
 		else
 		{
 			if (op == "(" || op == "-")
 			{
 				inputField.text += op;
+			}
+			else if (op == "sin")
+			{
+				inputField.text += "sin(";
 			}
 		}
 		UpdateInputField?.Invoke(inputField.text);
