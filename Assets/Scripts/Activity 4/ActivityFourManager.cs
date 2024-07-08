@@ -28,8 +28,8 @@ public class ActivityFourManager : MonoBehaviour
 	public bool isHorizontalRangeCalculationFinished;
 	public bool isTimeOfFlightCalculationFinished;
 	public int numIncorrectMaximumHeightSubmission;
-	public bool numIncorrectHorizontalRangeSubmission;
-	public bool numIncorrectTimeOfFlightSubmission;
+	public int numIncorrectHorizontalRangeSubmission;
+	public int numIncorrectTimeOfFlightSubmission;
 
 	private void Start()
 	{
