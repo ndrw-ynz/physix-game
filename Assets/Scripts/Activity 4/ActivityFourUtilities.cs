@@ -9,4 +9,12 @@ public static class ActivityFourUtilities
 		Debug.Log($"submitted : {submittedMaximumHeight}");
 		return Mathf.Abs(submittedMaximumHeight - computationResult) <= 0.0001;
 	}
+
+	public static bool ValidateHorizontalRangeSubmission(float submittedHorizontalRange, float projectileInitialVelocity)
+	{
+		ExpressionEvaluator.Evaluate($"-({projectileInitialVelocity})^2*sin(pi/2)/(2*-9.81)", out float computationResult);
+		Debug.Log($"computed result: {computationResult}");
+		Debug.Log($"submitted : {submittedHorizontalRange}");
+		return Mathf.Abs(submittedHorizontalRange - computationResult) <= 0.0001;
+	}
 }
