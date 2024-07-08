@@ -17,4 +17,12 @@ public static class ActivityFourUtilities
 		Debug.Log($"submitted : {submittedHorizontalRange}");
 		return Mathf.Abs(submittedHorizontalRange - computationResult) <= 0.0001;
 	}
+
+	public static bool ValidateTimeOfFlightSubmission(float timeOfFlight, float projectileInitialVelocity, float projectileAngle)
+	{
+		ExpressionEvaluator.Evaluate($"-({projectileInitialVelocity})*sin({projectileAngle}*(pi/180))/-9.81", out float computationResult);
+		Debug.Log($"computed result: {computationResult}");
+		Debug.Log($"submitted : {timeOfFlight}");
+		return Mathf.Abs(timeOfFlight - computationResult) <= 0.0001;
+	}
 }
