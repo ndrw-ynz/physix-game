@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class ActivityFourManager : MonoBehaviour
@@ -11,6 +12,12 @@ public class ActivityFourManager : MonoBehaviour
 	[Header("Views")]
 	[SerializeField] private ViewProjectileMotion viewProjectileMotion;
 
+	[Header("Problem Display Content")]
+	[SerializeField] private TextMeshProUGUI problemText;
+
+	[Header("Modal Window")]
+	[SerializeField] private CalcSubmissionModalWindow submissionModalWindow;
+
 	[Header("Given Values - Projectile Motion")]
 	private int initialProjectileVelocityValue;
 	private int projectileHeightValue;
@@ -19,10 +26,13 @@ public class ActivityFourManager : MonoBehaviour
 	[Header("Metrics - Projectile Motion")]
 	public bool isMaximumHeightCalculationFinished;
 	public int numIncorrectMaximumHeightSubmission;
-	
+
 	private void Start()
 	{
 		ViewProjectileMotion.SubmitMaximumHeightAnswerEvent += CheckMaximumHeightAnswer;
+
+		CalcSubmissionModalWindow.RetrySubmission += RestoreViewState;
+		CalcSubmissionModalWindow.InitiateNext += RestoreViewState;
 
 		currentProjectileMotionLevel = projectileMotionLevelOne; // modify this in the future, to add change of level
 
@@ -56,12 +66,25 @@ public class ActivityFourManager : MonoBehaviour
 		if (isMaximumHeightCorrect)
 		{
 			isMaximumHeightCalculationFinished = true;
+
+			problemText.text = "What is the horizontal range of the projectile?";
 		}
 		else
 		{
 			numIncorrectMaximumHeightSubmission++;
 		}
+
+		viewProjectileMotion.SetOverlays(true);
+		viewProjectileMotion.ResetState();
+		submissionModalWindow.gameObject.SetActive(true);
+		submissionModalWindow.SetDisplayFromSubmissionResult(isMaximumHeightCorrect, "Maximum Height");
 	}
 
 	#endregion
+
+	private void RestoreViewState()
+	{
+		submissionModalWindow.gameObject.SetActive(false);
+		viewProjectileMotion.SetOverlays(false);
+	}
 }
