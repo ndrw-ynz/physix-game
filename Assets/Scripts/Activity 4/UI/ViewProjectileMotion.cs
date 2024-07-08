@@ -26,6 +26,8 @@ public class ViewProjectileMotion : MonoBehaviour
 	[SerializeField] private Button maximumHeightButton;
 	[SerializeField] private Button horizontalRangeButton;
 	[SerializeField] private Button timeOfFlightButton;
+	[SerializeField] private CalcUnitSymbolButton meterUnitSymbolButton;
+	[SerializeField] private CalcUnitSymbolButton secondUnitSymbolButton;
 	[Header("Overlays")]
 	[SerializeField] private Image calculatorAreaOverlay;
 	[SerializeField] private Image satelliteModuleOverlay;
@@ -94,11 +96,24 @@ public class ViewProjectileMotion : MonoBehaviour
 		givenValuesText.text = $"Initial Velocity = {initialProjectileVelocityValue} meters, Height = {projectileHeightValue} meters, Angle = {projectileAngleValue}°";
 		problemText.text = "What is the maximum height of the projectile?";
 	}
+
+	public void UpdateProblemText(string problemText)
+	{
+		this.problemText.text = problemText;
+	}
+
 	#endregion
 
 	public void SetOverlays(bool value)
 	{
 		calculatorAreaOverlay.gameObject.SetActive(value);
 		satelliteModuleOverlay.gameObject.SetActive(value);
+	}
+
+	public void ResetState()
+	{
+		answerArea.ResetAnswerArea();
+		meterUnitSymbolButton.ResetState();
+		secondUnitSymbolButton.ResetState();
 	}
 }
