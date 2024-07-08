@@ -15,6 +15,10 @@ public class ActivityFourManager : MonoBehaviour
 	private int initialProjectileVelocityValue;
 	private int projectileHeightValue;
 	private int projectileAngleValue;
+
+	[Header("Metrics - Projectile Motion")]
+	public bool isMaximumHeightCalculationFinished;
+	public int numIncorrectMaximumHeightSubmission;
 	
 	private void Start()
 	{
@@ -49,7 +53,14 @@ public class ActivityFourManager : MonoBehaviour
 	private void CheckMaximumHeightAnswer(float maximumHeightAnswer)
 	{
 		bool isMaximumHeightCorrect = ActivityFourUtilities.ValidateMaximumHeightSubmission(maximumHeightAnswer, initialProjectileVelocityValue, projectileAngleValue);
-
+		if (isMaximumHeightCorrect)
+		{
+			isMaximumHeightCalculationFinished = true;
+		}
+		else
+		{
+			numIncorrectMaximumHeightSubmission++;
+		}
 	}
 
 	#endregion
