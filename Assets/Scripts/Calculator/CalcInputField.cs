@@ -1,8 +1,11 @@
+using System;
 using TMPro;
 using UnityEngine;
 
 public class CalcInputField : MonoBehaviour
 {
+	public static event Action<string> UpdateInputField;
+
     [SerializeField] private TMP_InputField inputField;
 
 	private void Start()
@@ -16,6 +19,7 @@ public class CalcInputField : MonoBehaviour
 	private void InsertDigit(int digit)
 	{
 		inputField.text += digit.ToString();
+		UpdateInputField?.Invoke();
 	}
 
 	private void InsertOperator(string op)
@@ -120,6 +124,7 @@ public class CalcInputField : MonoBehaviour
 				inputField.text += op;
 			}
 		}
+		UpdateInputField?.Invoke(inputField.text);
 	}
 
 	private void ClearResultField()
@@ -128,11 +133,13 @@ public class CalcInputField : MonoBehaviour
 		{
 			inputField.text = inputField.text.Substring(0, inputField.text.Length - 1);
 		}
+		UpdateInputField?.Invoke(inputField.text);
 	}
 
 	private void ClearAllResultField()
 	{
 		inputField.text = "";
+		UpdateInputField?.Invoke(inputField.text);
 	}
 
 }
