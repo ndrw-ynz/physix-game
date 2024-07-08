@@ -6,6 +6,8 @@ using UnityEngine.UI;
 public class ViewProjectileMotion : MonoBehaviour
 {
 	public static event Action<float> SubmitMaximumHeightAnswerEvent;
+	public static event Action<float> SubmitHorizontalRangeAnswerEvent;
+
 
 	[Header("Problem Display UI")]
 	[SerializeField] private TextMeshProUGUI problemTypeText;
@@ -38,11 +40,13 @@ public class ViewProjectileMotion : MonoBehaviour
 		CalcInputField.UpdateInputField += UpdateCalcStatusIndicator;
 
 		maximumHeightButton.onClick.AddListener(() => SubmitMaximumHeightAnswerEvent?.Invoke(answerArea.answerValue));
+		horizontalRangeButton.onClick.AddListener(() => SubmitHorizontalRangeAnswerEvent?.Invoke(answerArea.answerValue));
 	}
 
 	private void OnDisable()
 	{
 		maximumHeightButton.onClick.RemoveAllListeners();
+		horizontalRangeButton.onClick.RemoveAllListeners();
 	}
 
 	#region Calculator
