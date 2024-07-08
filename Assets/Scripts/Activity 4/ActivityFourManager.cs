@@ -18,6 +18,8 @@ public class ActivityFourManager : MonoBehaviour
 	
 	private void Start()
 	{
+		ViewProjectileMotion.SubmitMaximumHeightAnswerEvent += CheckMaximumHeightAnswer;
+
 		currentProjectileMotionLevel = projectileMotionLevelOne; // modify this in the future, to add change of level
 
 		InitializeProjectileMotionGiven(currentProjectileMotionLevel);
@@ -42,6 +44,12 @@ public class ActivityFourManager : MonoBehaviour
 				projectileAngleValue = Random.Range(1, 90);
 				break;
 		}
+	}
+
+	private void CheckMaximumHeightAnswer(float maximumHeightAnswer)
+	{
+		bool isMaximumHeightCorrect = ActivityFourUtilities.ValidateMaximumHeightSubmission(maximumHeightAnswer, initialProjectileVelocityValue, projectileAngleValue);
+
 	}
 
 	#endregion
