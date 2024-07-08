@@ -26,6 +26,9 @@ public class ViewProjectileMotion : MonoBehaviour
 	[SerializeField] private Button maximumHeightButton;
 	[SerializeField] private Button horizontalRangeButton;
 	[SerializeField] private Button timeOfFlightButton;
+	[Header("Overlays")]
+	[SerializeField] private Image calculatorAreaOverlay;
+	[SerializeField] private Image satelliteModuleOverlay;
 
 	private void OnEnable()
 	{
@@ -92,4 +95,10 @@ public class ViewProjectileMotion : MonoBehaviour
 		problemText.text = "What is the maximum height of the projectile?";
 	}
 	#endregion
+
+	public void SetOverlays(bool value)
+	{
+		calculatorAreaOverlay.gameObject.SetActive(value);
+		satelliteModuleOverlay.gameObject.SetActive(value);
+	}
 }
