@@ -18,10 +18,10 @@ public class CalcUnitSymbolButton : MonoBehaviour
 
 	private void OnEnable()
 	{
-		UpdateClickedEvent += UpdateStatus;
+		UpdateClickedEvent += ResetState;
 	}
 
-    private void UpdateStatus()
+    public void ResetState()
     {
         isClicked = false;
         buttonImage.color = new Color32(255, 255, 255, 255);
