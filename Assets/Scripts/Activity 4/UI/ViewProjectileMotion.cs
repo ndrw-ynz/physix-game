@@ -110,6 +110,13 @@ public class ViewProjectileMotion : MonoBehaviour
 		satelliteModuleOverlay.gameObject.SetActive(value);
 	}
 
+	public void SetSubmissionButtonStates(bool isMaximumHeightActive, bool isHorizontalRangeActive, bool isTimeOfFlightActive)
+	{
+		maximumHeightButton.gameObject.SetActive(isMaximumHeightActive);
+		horizontalRangeButton.gameObject.SetActive(isHorizontalRangeActive);
+		timeOfFlightButton.gameObject.SetActive(isTimeOfFlightActive);
+	}
+
 	public void ResetState()
 	{
 		answerArea.ResetAnswerArea();
