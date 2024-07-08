@@ -1,9 +1,12 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ViewProjectileMotion : MonoBehaviour
 {
+	public static event Action<float> SubmitMaximumHeightAnswerEvent;
+
 	[Header("Problem Display UI")]
 	[SerializeField] private TextMeshProUGUI problemTypeText;
 	[SerializeField] private TextMeshProUGUI givenValuesText;
@@ -12,16 +15,29 @@ public class ViewProjectileMotion : MonoBehaviour
 	[SerializeField] private CalcCompResult compResultPrefab;
 	[Header("Input Field")]
 	[SerializeField] private TMP_InputField inputField;
+	[Header("Answer Area")]
+	[SerializeField] private CalcAnswerArea answerArea;
 	[Header("Layout Holders")]
 	[SerializeField] private VerticalLayoutGroup compResultHolder;
 	[Header("Calculation Status Indicator")]
 	[SerializeField] private Image calcStatusImage;
 	[SerializeField] private TextMeshProUGUI calcStatusText;
+	[Header("Buttons")]
+	[SerializeField] private Button maximumHeightButton;
+	[SerializeField] private Button horizontalRangeButton;
+	[SerializeField] private Button timeOfFlightButton;
 
 	private void OnEnable()
 	{
 		CalcCalculateButton.CalculateResultEvent += EvaluateInput;
 		CalcInputField.UpdateInputField += UpdateCalcStatusIndicator;
+
+		maximumHeightButton.onClick.AddListener(() => SubmitMaximumHeightAnswerEvent?.Invoke(answerArea.answerValue));
+	}
+
+	private void OnDisable()
+	{
+		maximumHeightButton.onClick.RemoveAllListeners();
 	}
 
 	#region Calculator
