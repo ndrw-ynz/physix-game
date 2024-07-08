@@ -25,14 +25,18 @@ public class ActivityFourManager : MonoBehaviour
 
 	[Header("Metrics - Projectile Motion")]
 	public bool isMaximumHeightCalculationFinished;
+	public bool isHorizontalRangeCalculationFinished;
+	public bool isTimeOfFlightCalculationFinished;
 	public int numIncorrectMaximumHeightSubmission;
+	public bool numIncorrectHorizontalRangeSubmission;
+	public bool numIncorrectTimeOfFlightSubmission;
 
 	private void Start()
 	{
 		ViewProjectileMotion.SubmitMaximumHeightAnswerEvent += CheckMaximumHeightAnswer;
 
 		CalcSubmissionModalWindow.RetrySubmission += RestoreViewState;
-		CalcSubmissionModalWindow.InitiateNext += RestoreViewState;
+		CalcSubmissionModalWindow.InitiateNext += UpdateViewState;
 
 		currentProjectileMotionLevel = projectileMotionLevelOne; // modify this in the future, to add change of level
 
@@ -86,5 +90,20 @@ public class ActivityFourManager : MonoBehaviour
 	{
 		submissionModalWindow.gameObject.SetActive(false);
 		viewProjectileMotion.SetOverlays(false);
+	}
+
+	private void UpdateViewState()
+	{
+		if (isMaximumHeightCalculationFinished && isHorizontalRangeCalculationFinished && !isTimeOfFlightCalculationFinished)
+		{
+			// All solved except time of flight
+			viewProjectileMotion.SetSubmissionButtonStates(false, false, true);
+		} else if (isMaximumHeightCalculationFinished && !isHorizontalRangeCalculationFinished)
+		{
+			// Maximum height solved but not horizontal range
+			viewProjectileMotion.SetSubmissionButtonStates(false, true, false);
+		}
+
+		RestoreViewState();
 	}
 }
