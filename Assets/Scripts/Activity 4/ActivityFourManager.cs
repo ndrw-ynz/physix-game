@@ -34,6 +34,7 @@ public class ActivityFourManager : MonoBehaviour
 	private void Start()
 	{
 		ViewProjectileMotion.SubmitMaximumHeightAnswerEvent += CheckMaximumHeightAnswer;
+		ViewProjectileMotion.SubmitHorizontalRangeAnswerEvent += CheckHorizontalRangeAnswer;
 
 		CalcSubmissionModalWindow.RetrySubmission += RestoreViewState;
 		CalcSubmissionModalWindow.InitiateNext += UpdateViewState;
@@ -82,6 +83,26 @@ public class ActivityFourManager : MonoBehaviour
 		viewProjectileMotion.ResetState();
 		submissionModalWindow.gameObject.SetActive(true);
 		submissionModalWindow.SetDisplayFromSubmissionResult(isMaximumHeightCorrect, "Maximum Height");
+	}
+
+	private void CheckHorizontalRangeAnswer(float horizontalRangeAnswer)
+	{
+		bool isHorizontalRangeCorrect = ActivityFourUtilities.ValidateHorizontalRangeSubmission(horizontalRangeAnswer, initialProjectileVelocityValue);
+		if (isHorizontalRangeCorrect)
+		{
+			isHorizontalRangeCalculationFinished = true;
+
+			problemText.text = "What is the time of flight of the projectile?";
+		}
+		else
+		{
+			numIncorrectHorizontalRangeSubmission++;
+		}
+
+		viewProjectileMotion.SetOverlays(true);
+		viewProjectileMotion.ResetState();
+		submissionModalWindow.gameObject.SetActive(true);
+		submissionModalWindow.SetDisplayFromSubmissionResult(isHorizontalRangeCalculationFinished, "Horizontal Range");
 	}
 
 	#endregion
