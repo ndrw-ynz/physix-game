@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 public class ViewProjectileMotion : MonoBehaviour
 {
+	[Header("Problem Display UI")]
+	[SerializeField] private TextMeshProUGUI problemTypeText;
+	[SerializeField] private TextMeshProUGUI givenValuesText;
+	[SerializeField] private TextMeshProUGUI problemText;
 	[Header("Prefabs")]
 	[SerializeField] private CalcCompResult compResultPrefab;
 	[Header("Input Field")]
@@ -62,5 +66,14 @@ public class ViewProjectileMotion : MonoBehaviour
 		}
 	}
 
+	#endregion
+
+	#region Problem Display UI
+	public void SetupProjectileMotionProblemDisplay(int initialProjectileVelocityValue, int projectileHeightValue, int projectileAngleValue)
+	{
+		problemTypeText.text = "Projectile Motion";
+		givenValuesText.text = $"Initial Velocity = {initialProjectileVelocityValue} meters, Height = {projectileHeightValue} meters, Angle = {projectileAngleValue}°";
+		problemText.text = "What is the maximum height of the projectile?";
+	}
 	#endregion
 }
