@@ -24,12 +24,12 @@ public class ActivityFourManager : MonoBehaviour
 	private int projectileAngleValue;
 
 	[Header("Metrics - Projectile Motion")]
-	public bool isMaximumHeightCalculationFinished;
-	public bool isHorizontalRangeCalculationFinished;
-	public bool isTimeOfFlightCalculationFinished;
-	public int numIncorrectMaximumHeightSubmission;
-	public int numIncorrectHorizontalRangeSubmission;
-	public int numIncorrectTimeOfFlightSubmission;
+	private bool isMaximumHeightCalculationFinished;
+	private bool isHorizontalRangeCalculationFinished;
+	private bool isTimeOfFlightCalculationFinished;
+	private int numIncorrectMaximumHeightSubmission;
+	private int numIncorrectHorizontalRangeSubmission;
+	private int numIncorrectTimeOfFlightSubmission;
 
 	private void Start()
 	{
