@@ -10,7 +10,6 @@ public class ProgressManager : MonoBehaviour
     public ProgressBarButton progressBarButtonPrefab;
     public RectTransform progressAreaParent;
     public DiscussionNavigator discussionNavigator;
-    public List<ProgressBarButton> sectorProgressBars;
 
     public int numButtons;
     private float buttonSpacing = 300.0f;
