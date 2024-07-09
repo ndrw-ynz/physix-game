@@ -14,7 +14,7 @@ public class ComprehensionButton : MonoBehaviour
     public void OnClick()
     {
         discussionNavigator.changeComprehensionMark(flag);
-        progressManager.loadProgressBars();
+        //progressManager.loadProgressBars();
         Debug.Log("Loaded Progress Bars");
     }
 
