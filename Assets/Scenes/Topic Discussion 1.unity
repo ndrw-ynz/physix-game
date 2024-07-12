@@ -852,27 +852,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 144418426}
   m_CullTransparentMesh: 1
---- !u!1 &154816613 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7774550051720679186, guid: 44c24964f2e279b41acc83ea7aca15ea, type: 3}
-  m_PrefabInstance: {fileID: 2041646489095860993}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &154816614 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2213845376378254094, guid: 44c24964f2e279b41acc83ea7aca15ea, type: 3}
   m_PrefabInstance: {fileID: 2041646489095860993}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &154816615 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3406151287200080041, guid: 44c24964f2e279b41acc83ea7aca15ea, type: 3}
-  m_PrefabInstance: {fileID: 2041646489095860993}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 154816613}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &181512548
 GameObject:
   m_ObjectHideFlags: 0
@@ -2140,7 +2124,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &394673633
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5340,7 +5324,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &827701363
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8898,7 +8882,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1407318686
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11031,7 +11015,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1772755674
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11959,33 +11943,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1893905365}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f05edb2de825415469778bf1b9b2992f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  progressBarButtonPrefab: {fileID: 0}
+  progressAreaParent: {fileID: 0}
   discussionNavigator: {fileID: 1893905367}
-  sectorProgressBars:
-  - progressBar: {fileID: 154816613}
-    progressBarRect: {fileID: 154816615}
-    sectorTitle: {fileID: 0}
-    progressCounter: {fileID: 0}
-  - progressBar: {fileID: 1407318685}
-    progressBarRect: {fileID: 1407318687}
-    sectorTitle: {fileID: 544295616}
-    progressCounter: {fileID: 1780763092}
-  - progressBar: {fileID: 827701362}
-    progressBarRect: {fileID: 827701364}
-    sectorTitle: {fileID: 1299312747}
-    progressCounter: {fileID: 387640910}
-  - progressBar: {fileID: 1772755673}
-    progressBarRect: {fileID: 1772755675}
-    sectorTitle: {fileID: 1028268770}
-    progressCounter: {fileID: 2089084377}
-  - progressBar: {fileID: 394673632}
-    progressBarRect: {fileID: 394673634}
-    sectorTitle: {fileID: 986860516}
-    progressCounter: {fileID: 1253482249}
+  numButtons: 0
 --- !u!1 &1950124013
 GameObject:
   m_ObjectHideFlags: 0
@@ -12206,6 +12172,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1978870125}
+  - component: {fileID: 1978870126}
   m_Layer: 5
   m_Name: Progress Area
   m_TagString: Untagged
@@ -12237,6 +12204,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 385.94}
   m_SizeDelta: {x: 0.00036621094, y: -980.11554}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1978870126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1978870124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f05edb2de825415469778bf1b9b2992f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  progressBarButtonPrefab: {fileID: -7053905164636787354, guid: 44c24964f2e279b41acc83ea7aca15ea, type: 3}
+  progressAreaParent: {fileID: 0}
+  discussionNavigator: {fileID: 1893905367}
+  numButtons: 6
 --- !u!1 &2036519065
 GameObject:
   m_ObjectHideFlags: 0
@@ -13457,6 +13440,10 @@ PrefabInstance:
     - target: {fileID: 7774550051720679186, guid: 44c24964f2e279b41acc83ea7aca15ea, type: 3}
       propertyPath: m_Name
       value: Scientific Notation Progress Rect
+      objectReference: {fileID: 0}
+    - target: {fileID: 7774550051720679186, guid: 44c24964f2e279b41acc83ea7aca15ea, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
