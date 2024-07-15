@@ -17,6 +17,7 @@ public class ActivityFourManager : MonoBehaviour
 
 	[Header("Views")]
 	[SerializeField] private ViewProjectileMotion viewProjectileMotion;
+	[SerializeField] private ViewCircularMotion viewCircularMotion;
 
 	[Header("Problem Display Content")]
 	[SerializeField] private TextMeshProUGUI problemText;
@@ -125,8 +126,12 @@ public class ActivityFourManager : MonoBehaviour
 		{
 			isTimeOfFlightCalculationFinished = true;
 
-			problemText.text = "";
-		} else
+			viewProjectileMotion.gameObject.SetActive(false);
+			viewCircularMotion.gameObject.SetActive(true);
+
+			viewCircularMotion.SetupCentripetalAccelerationProblemDisplay(satelliteRadiusValue, satelliteTimePeriodValue);
+		}
+		else
 		{
 			numIncorrectTimeOfFlightSubmission++;
 		}
