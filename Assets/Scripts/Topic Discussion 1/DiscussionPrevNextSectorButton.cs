@@ -7,6 +7,7 @@ public class DiscussionPrevNextSectorButton : MonoBehaviour
 {
     public DiscussionNavigator discussionNavigator;
     public string action;
+    public TextMeshProUGUI sectorButtonText;
 
     public void OnClick()
     {
