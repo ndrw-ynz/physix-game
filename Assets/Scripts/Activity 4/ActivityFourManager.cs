@@ -9,6 +9,12 @@ public class ActivityFourManager : MonoBehaviour
 	[SerializeField] private ProjectileMotionSubActivitySO projectileMotionLevelThree;
 	private ProjectileMotionSubActivitySO currentProjectileMotionLevel;
 
+	[Header("Level Data - Circular Motion")]
+	[SerializeField] private CircularMotionSubActivitySO circularMotionLevelOne;
+	[SerializeField] private CircularMotionSubActivitySO circularMotionLevelTwo;
+	[SerializeField] private CircularMotionSubActivitySO circularMotionLevelThree;
+	private CircularMotionSubActivitySO currentCircularMotionLevel;
+
 	[Header("Views")]
 	[SerializeField] private ViewProjectileMotion viewProjectileMotion;
 
@@ -41,6 +47,7 @@ public class ActivityFourManager : MonoBehaviour
 		CalcSubmissionModalWindow.InitiateNext += UpdateViewState;
 
 		currentProjectileMotionLevel = projectileMotionLevelOne; // modify this in the future, to add change of level
+		currentCircularMotionLevel = circularMotionLevelOne; // modify in future, to add change of level
 
 		InitializeProjectileMotionGiven(currentProjectileMotionLevel);
 
