@@ -42,11 +42,16 @@ public class ActivityFourManager : MonoBehaviour
 	private int numIncorrectHorizontalRangeSubmission;
 	private int numIncorrectTimeOfFlightSubmission;
 
+	[Header("Metrics - Circular Motion")]
+	private bool isCentripetalAccelerationCalculationFinished;
+	private int numIncorrectCentripetalAccelerationSubmission;
+
 	private void Start()
 	{
 		ViewProjectileMotion.SubmitMaximumHeightAnswerEvent += CheckMaximumHeightAnswer;
 		ViewProjectileMotion.SubmitHorizontalRangeAnswerEvent += CheckHorizontalRangeAnswer;
 		ViewProjectileMotion.SubmitTimeOfFlightAnswerEvent += CheckTimeOfFlightAnswer;
+		ViewCircularMotion.SubmitCentripetalAccelerationAnswerEvent += CheckCentripetalAccelerationAnswer;
 
 		CalcSubmissionModalWindow.RetrySubmission += RestoreViewState;
 		CalcSubmissionModalWindow.InitiateNext += UpdateViewState;
@@ -150,6 +155,25 @@ public class ActivityFourManager : MonoBehaviour
 	{
 		satelliteRadiusValue = Random.Range(circularMotionSO.minimumRadiusValue, circularMotionSO.maximumRadiusValue);
 		satelliteTimePeriodValue = Random.Range(circularMotionSO.minimumTimePeriodValue, circularMotionSO.maximumTimePeriodValue);
+	}
+
+	private void CheckCentripetalAccelerationAnswer(float centripetalAccelerationAnswer)
+	{
+		bool isCentripetalAccelerationCorrect = ActivityFourUtilities.ValidateCentripetalAccelerationSubmission(centripetalAccelerationAnswer, satelliteRadiusValue, satelliteTimePeriodValue);
+		if (isCentripetalAccelerationCorrect)
+		{
+			isCentripetalAccelerationCorrect = true;
+
+			// TODO: display summary.
+		} else
+		{
+			numIncorrectCentripetalAccelerationSubmission++;
+		}
+
+		viewCircularMotion.SetOverlays(true);
+		viewCircularMotion.ResetState();
+		submissionModalWindow.gameObject.SetActive(true);
+		submissionModalWindow.SetDisplayFromSubmissionResult(isCentripetalAccelerationCorrect, "Centripetal Acceleration");
 	}
 
 	#endregion
