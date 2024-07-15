@@ -41,10 +41,22 @@ public class DiscussionNavigator : MonoBehaviour
         if (_currentPageIndex < subTopicsList[_currentSectorIndex].pages.Count) // If the current page index is < current sector's indexed list count
         {
             _currentPageIndex += direction;
-            showPage(_currentPageIndex);
+            showPage(_currentSectorIndex, _currentPageIndex);
             changeButtonState();
             changeComprehensionButtonState();
         }
+    }
+
+    public void JumpToSector(int sectorIndex) 
+    {
+        GameObject currentSectorAndPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex].page;
+        currentSectorAndPage.SetActive(false);
+
+        _currentSectorIndex = sectorIndex;
+        _currentPageIndex = 0;
+        showPage(_currentSectorIndex, _currentPageIndex);
+        changeButtonState();
+        changeComprehensionButtonState();
     }
 
     public void changeSector(string action)
@@ -58,7 +70,7 @@ public class DiscussionNavigator : MonoBehaviour
             currentSectorLastPage.SetActive(false);
             _currentSectorIndex++;
             _currentPageIndex = nextSectorFirstPageIndex;
-            showPage(_currentPageIndex);
+            showPage(_currentSectorIndex,_currentPageIndex);
             changeButtonState();
             changeComprehensionButtonState();
             int currentSector = _currentSectorIndex;
@@ -75,7 +87,7 @@ public class DiscussionNavigator : MonoBehaviour
 
             int previousSectorLastPageIndex = subTopicsList[_currentSectorIndex].pages.Count - 1;
             _currentPageIndex = previousSectorLastPageIndex;
-            showPage(_currentPageIndex);
+            showPage(_currentSectorIndex, _currentPageIndex);
             changeButtonState();
             changeComprehensionButtonState();
             int currentSector = _currentSectorIndex;
@@ -103,17 +115,17 @@ public class DiscussionNavigator : MonoBehaviour
         }
     }
 
-    private void showPage(int currentPage)
+    private void showPage(int currentSector, int currentPage)
     {
         for (int i = 0; i < subTopicsList[_currentSectorIndex].pages.Count; i++)
         {
             if (i == currentPage)
             {
-                subTopicsList[_currentSectorIndex].pages[i].page.SetActive(true);
+                subTopicsList[currentSector].pages[i].page.SetActive(true);
             }
             else
             {
-                subTopicsList[_currentSectorIndex].pages[i].page.SetActive(false);
+                subTopicsList[currentSector].pages[i].page.SetActive(false);
             }
         }
     }
