@@ -29,6 +29,10 @@ public class ActivityFourManager : MonoBehaviour
 	private int projectileHeightValue;
 	private int projectileAngleValue;
 
+	[Header("Given Values - Circular Motion")]
+	private int satelliteRadiusValue;
+	private int satelliteTimePeriodValue;
+
 	[Header("Metrics - Projectile Motion")]
 	private bool isMaximumHeightCalculationFinished;
 	private bool isHorizontalRangeCalculationFinished;
@@ -50,6 +54,7 @@ public class ActivityFourManager : MonoBehaviour
 		currentCircularMotionLevel = circularMotionLevelOne; // modify in future, to add change of level
 
 		InitializeProjectileMotionGiven(currentProjectileMotionLevel);
+		InitializeCircularMotionGiven(currentCircularMotionLevel);
 
 		viewProjectileMotion.SetupProjectileMotionProblemDisplay(initialProjectileVelocityValue, projectileHeightValue, projectileAngleValue);
 	}
@@ -130,6 +135,16 @@ public class ActivityFourManager : MonoBehaviour
 		viewProjectileMotion.ResetState();
 		submissionModalWindow.gameObject.SetActive(true);
 		submissionModalWindow.SetDisplayFromSubmissionResult(isHorizontalRangeCalculationFinished, "Time of Flight");
+	}
+
+	#endregion
+
+	#region Circular Motion
+
+	private void InitializeCircularMotionGiven(CircularMotionSubActivitySO circularMotionSO)
+	{
+		satelliteRadiusValue = Random.Range(circularMotionSO.minimumRadiusValue, circularMotionSO.maximumRadiusValue);
+		satelliteTimePeriodValue = Random.Range(circularMotionSO.minimumTimePeriodValue, circularMotionSO.maximumTimePeriodValue);
 	}
 
 	#endregion
