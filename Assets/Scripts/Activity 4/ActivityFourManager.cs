@@ -18,6 +18,7 @@ public class ActivityFourManager : MonoBehaviour
 	[Header("Views")]
 	[SerializeField] private ViewProjectileMotion viewProjectileMotion;
 	[SerializeField] private ViewCircularMotion viewCircularMotion;
+	[SerializeField] private ViewActivityFourPerformance viewActivityFourPerformance;
 
 	[Header("Problem Display Content")]
 	[SerializeField] private TextMeshProUGUI problemText;
@@ -52,6 +53,8 @@ public class ActivityFourManager : MonoBehaviour
 		ViewProjectileMotion.SubmitHorizontalRangeAnswerEvent += CheckHorizontalRangeAnswer;
 		ViewProjectileMotion.SubmitTimeOfFlightAnswerEvent += CheckTimeOfFlightAnswer;
 		ViewCircularMotion.SubmitCentripetalAccelerationAnswerEvent += CheckCentripetalAccelerationAnswer;
+
+		ViewActivityFourPerformance.OpenViewEvent += OnOpenViewActivityFourerformance;
 
 		CalcSubmissionModalWindow.RetrySubmission += RestoreViewState;
 		CalcSubmissionModalWindow.InitiateNext += UpdateViewState;
@@ -101,7 +104,7 @@ public class ActivityFourManager : MonoBehaviour
 		viewProjectileMotion.SetOverlays(true);
 		viewProjectileMotion.ResetState();
 		submissionModalWindow.gameObject.SetActive(true);
-		submissionModalWindow.SetDisplayFromSubmissionResult(isMaximumHeightCorrect, "Maximum Height");
+		submissionModalWindow.SetDisplayFromSubmissionResult(isMaximumHeightCalculationFinished, "Maximum Height");
 	}
 
 	private void CheckHorizontalRangeAnswer(float horizontalRangeAnswer)
@@ -162,9 +165,7 @@ public class ActivityFourManager : MonoBehaviour
 		bool isCentripetalAccelerationCorrect = ActivityFourUtilities.ValidateCentripetalAccelerationSubmission(centripetalAccelerationAnswer, satelliteRadiusValue, satelliteTimePeriodValue);
 		if (isCentripetalAccelerationCorrect)
 		{
-			isCentripetalAccelerationCorrect = true;
-
-			// TODO: display summary.
+			isCentripetalAccelerationCalculationFinished = true;
 		} else
 		{
 			numIncorrectCentripetalAccelerationSubmission++;
@@ -173,20 +174,39 @@ public class ActivityFourManager : MonoBehaviour
 		viewCircularMotion.SetOverlays(true);
 		viewCircularMotion.ResetState();
 		submissionModalWindow.gameObject.SetActive(true);
-		submissionModalWindow.SetDisplayFromSubmissionResult(isCentripetalAccelerationCorrect, "Centripetal Acceleration");
+		submissionModalWindow.SetDisplayFromSubmissionResult(isCentripetalAccelerationCalculationFinished, "Centripetal Acceleration");
 	}
 
 	#endregion
+
+	private void OnOpenViewActivityFourerformance(ViewActivityFourPerformance view)
+	{
+		view.MaximumHeightProblemStatusText.text += isMaximumHeightCalculationFinished ? "Accomplished" : "Not accomplished";
+		view.MaximumHeightProblemIncorrectNumText.text += numIncorrectMaximumHeightSubmission;
+
+		view.HorizontalRangeProblemStatusText.text += isHorizontalRangeCalculationFinished ? "Accomplished" : "Not accomplished";
+		view.HorizontalRangeProblemIncorrectNumText.text += numIncorrectHorizontalRangeSubmission;
+
+		view.TimeOfFlightProblemStatusText.text += isTimeOfFlightCalculationFinished ? "Accomplished" : "Not accomplished";
+		view.TimeOfFlightProblemIncorrectNumText.text += numIncorrectTimeOfFlightSubmission;
+
+		view.CentripetalAccelerationProblemStatusText.text += isCentripetalAccelerationCalculationFinished ? "Accomplished" : "Not accomplished";
+		view.CentripetalAccelerationProblemIncorrectNumText.text += numIncorrectCentripetalAccelerationSubmission;
+	}
 
 	private void RestoreViewState()
 	{
 		submissionModalWindow.gameObject.SetActive(false);
 		viewProjectileMotion.SetOverlays(false);
+		viewCircularMotion.SetOverlays(false);
 	}
 
 	private void UpdateViewState()
 	{
-		if (isMaximumHeightCalculationFinished && isHorizontalRangeCalculationFinished && !isTimeOfFlightCalculationFinished)
+		if (isCentripetalAccelerationCalculationFinished)
+		{
+			viewActivityFourPerformance.gameObject.SetActive(true);
+		} else if (isMaximumHeightCalculationFinished && isHorizontalRangeCalculationFinished && !isTimeOfFlightCalculationFinished)
 		{
 			// All solved except time of flight
 			viewProjectileMotion.SetSubmissionButtonStates(false, false, true);
