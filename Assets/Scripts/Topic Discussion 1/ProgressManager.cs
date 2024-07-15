@@ -10,15 +10,17 @@ public class ProgressManager : MonoBehaviour
     public ProgressBarButton progressBarButtonPrefab;
     public RectTransform progressAreaParent;
     public DiscussionNavigator discussionNavigator;
-
+    
+    private List<ProgressBarButton> progressBarButtonList;
     public int numButtons;
+
     private float buttonSpacing = 300.0f;
 
     private void Start()
     {
 
         CreateProgressBarButtons();
-        Debug.Log((numButtons - 1) * buttonSpacing);
+        progressBarButtonList = new List<ProgressBarButton>();
         //loadProgressBars();
     }
 
@@ -35,50 +37,56 @@ public class ProgressManager : MonoBehaviour
             newButton.transform.SetParent(progressAreaParent, false);
             newButton.name = $"Progress Button {i + 1}";
             newButton.transform.localPosition = buttonPosition;
+            newButton.Initialize("Test", "Test", i, OnClick);
+            //progressBarButtonList.Add(newButton);
         }
     }
 
-    //public void loadProgressBars()
-    //{
-    //    for (int i = 0; i < discussionNavigator.subTopicsList.Count; i++)
-    //    {
-    //        string currentSectorTitle = discussionNavigator.subTopicsList[i].sectorTitle;
-    //        double understoodPages = 0;
-    //        double currentSectorTotalPages = discussionNavigator.subTopicsList[i].pages.Count;
-    //
-    //        for (int j = 0; j < discussionNavigator.subTopicsList[i].pages.Count; j++)
-    //        {
-    //            Debug.Log("Current Sector Index:" + i);
-    //            Debug.Log("Current Page Index:" + j);
-    //            if (currentPageIsMarkedUnderstood(i, j))
-    //            {
-    //                understoodPages++;
-    //            }
-    //        }
-    //
-    //        double progressPercentage = (understoodPages / currentSectorTotalPages) * 100;
-    //
-    //        if (progressPercentage == 100)
-    //        {
-    //            sectorProgressBars[i].progressBarRect.color = Color.green;
-    //        }
-    //        else if (progressPercentage > 50)
-    //        {
-    //            sectorProgressBars[i].progressBarRect.color = Color.yellow;
-    //        }
-    //        else
-    //        {
-    //            sectorProgressBars[i].progressBarRect.color = Color.gray;
-    //        }
-    //
-    //        sectorProgressBars[i].sectorTitle.SetText(currentSectorTitle);
-    //        sectorProgressBars[i].progressCounter.SetText($"{understoodPages}/{currentSectorTotalPages}");
-    //        
-    //    }
-    //}
-    //
-    //private bool currentPageIsMarkedUnderstood(int currentSectorIndex, int currentPageIndex)
-    //{
-    //    return discussionNavigator.subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedUnderstood;
-    //}
+    private void OnClick(int i)
+    {
+        Debug.Log("Hello" + i);
+    }
+
+    public void loadProgressBars()
+    {
+        for (int i = 0; i < discussionNavigator.subTopicsList.Count; i++)
+        {
+            string currentSectorTitle = discussionNavigator.subTopicsList[i].sectorTitle;
+            double understoodPages = 0;
+            double currentSectorTotalPages = discussionNavigator.subTopicsList[i].pages.Count;
+    
+            for (int j = 0; j < discussionNavigator.subTopicsList[i].pages.Count; j++)
+            {
+                Debug.Log("Current Sector Index:" + i);
+                Debug.Log("Current Page Index:" + j);
+                if (currentPageIsMarkedUnderstood(i, j))
+                {
+                    understoodPages++;
+                }
+            }
+    
+            double progressPercentage = (understoodPages / currentSectorTotalPages) * 100;
+    
+            if (progressPercentage == 100)
+            {
+                progressBarButtonList[i].progressBarImage.color = Color.green;
+            }
+            else if (progressPercentage > 50)
+            {
+                progressBarButtonList[i].progressBarImage.color = Color.yellow;
+            }
+            else
+            {
+                progressBarButtonList[i].progressBarImage.color = Color.gray;
+            }
+
+            progressBarButtonList[i].progressCountText.SetText($"{understoodPages}/{currentSectorTotalPages}");
+            
+        }
+    }
+    
+    private bool currentPageIsMarkedUnderstood(int currentSectorIndex, int currentPageIndex)
+    {
+        return discussionNavigator.subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedUnderstood;
+    }
 }
