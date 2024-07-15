@@ -1433,7 +1433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61d88d58474e7df4dabe1da84a060443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  discussionNavigator: {fileID: 1893905367}
+  discussionNavigator: {fileID: 0}
   action: next
   prevSectorTitle: {fileID: 374996392}
   nextSectorTitle: {fileID: 455938}
@@ -2459,7 +2459,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1abe2dfbfaf2894eb12146223065078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  discussionNavigator: {fileID: 1893905367}
+  discussionNavigator: {fileID: 0}
   step: -1
   prevSectorTitle: {fileID: 374996392}
   nextSectorTitle: {fileID: 455938}
@@ -3316,7 +3316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61d88d58474e7df4dabe1da84a060443, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  discussionNavigator: {fileID: 1893905367}
+  discussionNavigator: {fileID: 0}
   action: previous
   prevSectorTitle: {fileID: 374996392}
   nextSectorTitle: {fileID: 455938}
@@ -3947,6 +3947,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 758523137}
+  - component: {fileID: 758523138}
   m_Layer: 0
   m_Name: Page Manager
   m_TagString: Untagged
@@ -3969,6 +3970,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 504919720}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &758523138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758523136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce9a2eae2a51e4f4a8cb91c40d41c0b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  subTopicsList:
+  - sectorTitle: Scientific Notation
+    pages:
+    - page: {fileID: 2116948115}
+      isMarkedUnderstood: 0
+    - page: {fileID: 1073531523}
+      isMarkedUnderstood: 0
+    - page: {fileID: 1261294756}
+      isMarkedUnderstood: 0
+  - sectorTitle: Accuracy and Precision
+    pages:
+    - page: {fileID: 2098875363}
+      isMarkedUnderstood: 0
+    - page: {fileID: 1210896641}
+      isMarkedUnderstood: 0
+  - sectorTitle: Variance
+    pages:
+    - page: {fileID: 592681880}
+      isMarkedUnderstood: 0
+    - page: {fileID: 681832306}
+      isMarkedUnderstood: 0
+    - page: {fileID: 817936487}
+      isMarkedUnderstood: 0
+  - sectorTitle: Errors
+    pages:
+    - page: {fileID: 1191547433}
+      isMarkedUnderstood: 0
+  - sectorTitle: Activity Briefing
+    pages:
+    - page: {fileID: 325872513}
+      isMarkedUnderstood: 0
+    - page: {fileID: 1517252837}
+      isMarkedUnderstood: 0
+    - page: {fileID: 643608875}
+      isMarkedUnderstood: 0
+    - page: {fileID: 518830489}
+      isMarkedUnderstood: 0
+    - page: {fileID: 102516260}
+      isMarkedUnderstood: 0
+  prevPageButton: {fileID: 490920062}
+  nextPageButton: {fileID: 796551521}
+  prevSectorButton: {fileID: 591611969}
+  nextSectorButton: {fileID: 316801257}
+  markAsUnderstoodButton: {fileID: 997961746}
+  markAsNotYetUnderstoodButton: {fileID: 788661330}
 --- !u!1 &778196570
 GameObject:
   m_ObjectHideFlags: 0
@@ -4056,7 +4114,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressBarButtonPrefab: {fileID: -7053905164636787354, guid: 44c24964f2e279b41acc83ea7aca15ea, type: 3}
   progressAreaParent: {fileID: 0}
-  discussionNavigator: {fileID: 1893905367}
+  discussionNavigator: {fileID: 0}
   numButtons: 3
 --- !u!1 &783983803
 GameObject:
@@ -4246,8 +4304,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8f49c871bbb947b4cf106f510d4c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  discussionNavigator: {fileID: 1893905367}
-  progressManager: {fileID: 1893905368}
+  discussionNavigator: {fileID: 0}
+  progressManager: {fileID: 0}
   flag: 0
 --- !u!114 &788661331
 MonoBehaviour:
@@ -4623,7 +4681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1abe2dfbfaf2894eb12146223065078, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  discussionNavigator: {fileID: 1893905367}
+  discussionNavigator: {fileID: 0}
   step: 1
   prevSectorTitle: {fileID: 374996392}
   nextSectorTitle: {fileID: 455938}
@@ -6788,8 +6846,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f8f49c871bbb947b4cf106f510d4c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  discussionNavigator: {fileID: 1893905367}
-  progressManager: {fileID: 1893905368}
+  discussionNavigator: {fileID: 0}
+  progressManager: {fileID: 0}
   flag: 1
 --- !u!1 &1073531523
 GameObject:
@@ -11211,8 +11269,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1893905366}
-  - component: {fileID: 1893905367}
-  - component: {fileID: 1893905368}
   m_Layer: 5
   m_Name: DISCUSSION CONTAINER
   m_TagString: Untagged
@@ -11241,79 +11297,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1893905367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1893905365}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce9a2eae2a51e4f4a8cb91c40d41c0b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  subTopicsList:
-  - sectorTitle: Scientific Notation
-    pages:
-    - page: {fileID: 2116948115}
-      isMarkedUnderstood: 0
-    - page: {fileID: 1073531523}
-      isMarkedUnderstood: 0
-    - page: {fileID: 1261294756}
-      isMarkedUnderstood: 0
-  - sectorTitle: Accuracy and Precision
-    pages:
-    - page: {fileID: 2098875363}
-      isMarkedUnderstood: 0
-    - page: {fileID: 1210896641}
-      isMarkedUnderstood: 0
-  - sectorTitle: Variance
-    pages:
-    - page: {fileID: 592681880}
-      isMarkedUnderstood: 0
-    - page: {fileID: 681832306}
-      isMarkedUnderstood: 0
-    - page: {fileID: 817936487}
-      isMarkedUnderstood: 0
-  - sectorTitle: Errors
-    pages:
-    - page: {fileID: 1191547433}
-      isMarkedUnderstood: 0
-  - sectorTitle: Activity Briefing
-    pages:
-    - page: {fileID: 325872513}
-      isMarkedUnderstood: 0
-    - page: {fileID: 1517252837}
-      isMarkedUnderstood: 0
-    - page: {fileID: 643608875}
-      isMarkedUnderstood: 0
-    - page: {fileID: 518830489}
-      isMarkedUnderstood: 0
-    - page: {fileID: 102516260}
-      isMarkedUnderstood: 0
-  prevPageButton: {fileID: 490920062}
-  nextPageButton: {fileID: 796551521}
-  prevSectorButton: {fileID: 591611969}
-  nextSectorButton: {fileID: 316801257}
-  markAsUnderstoodButton: {fileID: 997961746}
-  markAsNotYetUnderstoodButton: {fileID: 788661330}
---- !u!114 &1893905368
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1893905365}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f05edb2de825415469778bf1b9b2992f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  progressBarButtonPrefab: {fileID: 0}
-  progressAreaParent: {fileID: 0}
-  discussionNavigator: {fileID: 1893905367}
-  numButtons: 0
 --- !u!1 &1950124013
 GameObject:
   m_ObjectHideFlags: 0
