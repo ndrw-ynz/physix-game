@@ -144,7 +144,7 @@ public class ActivityFourManager : MonoBehaviour
 		viewProjectileMotion.SetOverlays(true);
 		viewProjectileMotion.ResetState();
 		submissionModalWindow.gameObject.SetActive(true);
-		submissionModalWindow.SetDisplayFromSubmissionResult(isHorizontalRangeCalculationFinished, "Time of Flight");
+		submissionModalWindow.SetDisplayFromSubmissionResult(isTimeOfFlightCalculationFinished, "Time of Flight");
 	}
 
 	#endregion
