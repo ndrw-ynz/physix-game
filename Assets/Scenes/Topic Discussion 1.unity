@@ -291,7 +291,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.8118519}
-  m_AnchoredPosition: {x: 0.00012207031, y: -0.5109863}
+  m_AnchoredPosition: {x: 0, y: -0.5109863}
   m_SizeDelta: {x: 0.0002, y: -1.0240021}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6300743
@@ -1224,7 +1224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 293811973}
   m_Layer: 0
-  m_Name: Button Manager
+  m_Name: Progress Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2586,6 +2586,7 @@ Transform:
   - {fileID: 758523137}
   - {fileID: 293811973}
   - {fileID: 592321632}
+  - {fileID: 756982383}
   m_Father: {fileID: 409958540}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &518830489
@@ -3420,7 +3421,7 @@ GameObject:
   m_Component:
   - component: {fileID: 592321632}
   m_Layer: 0
-  m_Name: UI Manager
+  m_Name: Page Navigation Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3934,6 +3935,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 729971527}
   m_CullTransparentMesh: 1
+--- !u!1 &756982382
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 756982383}
+  m_Layer: 0
+  m_Name: Understand Markers Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &756982383
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756982382}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 504919720}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &758523136
 GameObject:
   m_ObjectHideFlags: 0
@@ -5313,7 +5345,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 1.5024414, y: 0.0004272461}
+  m_AnchoredPosition: {x: 1.5024414, y: 0.00048828125}
   m_SizeDelta: {x: -1, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &843350943
@@ -7285,7 +7317,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.15400001}
-  m_AnchoredPosition: {x: -1.2349854, y: 0.020019531}
+  m_AnchoredPosition: {x: -1.2348633, y: 0.020019531}
   m_SizeDelta: {x: -4.5, y: 2.0499878}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1229833296
@@ -8258,7 +8290,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.9016296}
   m_AnchorMax: {x: 0.21583119, y: 1}
-  m_AnchoredPosition: {x: 0.016601562, y: -1.1499634}
+  m_AnchoredPosition: {x: 0.016601562, y: -1.1499023}
   m_SizeDelta: {x: -0.9868164, y: -1.8200073}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1358502631
