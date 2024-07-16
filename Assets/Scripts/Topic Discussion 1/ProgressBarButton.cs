@@ -19,7 +19,7 @@ public class ProgressBarButton : MonoBehaviour
 
     public void Initialize(string sectorTitle, string progressCount, int index, UnityEngine.Events.UnityAction<int> onClickAction)
     {
-        discussionNavigator = GameObject.Find("MANAGERS").transform.Find("Page Manager").GetComponent<DiscussionNavigator>();
+        discussionNavigator = GameObject.Find("MANAGERS").transform.Find("Discussion Navigator").GetComponent<DiscussionNavigator>();
 
         progressBarImage = GetComponent<Image>();
         startPosition = progressBarImage.transform.position;
