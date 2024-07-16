@@ -9,31 +9,55 @@ using UnityEngine.UI;
 public class ProgressBarButton : MonoBehaviour
 {
     DiscussionNavigator discussionNavigator;
+    TextMeshProUGUI[] textComponents;
     private Button _progressBarButton;
     public Image progressBarImage;
     public Vector2 startPosition;
     public TextMeshProUGUI sectorTitleText;
     public TextMeshProUGUI progressCountText;
-    
+
     public int sectorIndex;
 
-    public void Initialize(string sectorTitle, string progressCount, int index, UnityEngine.Events.UnityAction<int> onClickAction)
+    public void Initialize(int index, UnityEngine.Events.UnityAction<int> onClickAction)
     {
         discussionNavigator = GameObject.Find("MANAGERS").transform.Find("Discussion Navigator").GetComponent<DiscussionNavigator>();
+        textComponents = GetComponentsInChildren<TextMeshProUGUI>();
+        string sectorTitle = discussionNavigator.subTopicsList[index].sectorTitle;
+        string progressCount = $"{CountUnderstoodPages(index).ToString()}/{ CountTotalPages(index).ToString()}";
 
         progressBarImage = GetComponent<Image>();
         startPosition = progressBarImage.transform.position;
-        sectorTitleText = GetComponentInChildren<TextMeshProUGUI>();
+        sectorTitleText = textComponents[0];
         sectorTitleText.text = sectorTitle;
-        progressCountText = GetComponentInChildren<TextMeshProUGUI>();
+        progressCountText = textComponents[1];
         progressCountText.text = progressCount;
         sectorIndex = index;
         _progressBarButton = this.GetComponent<Button>();
         _progressBarButton.onClick.AddListener(() => JumpSectors(sectorIndex));
     }
 
-    private void JumpSectors(int index)
+    private double CountUnderstoodPages(int sectorIndex)
     {
+        double understoodPages = 0;
+        for (int i = 0; i < discussionNavigator.subTopicsList[sectorIndex].pages.Count; i++)
+        {
+            bool isPageUnderstood = discussionNavigator.subTopicsList[sectorIndex].pages[i].isMarkedUnderstood;
+
+            if (isPageUnderstood) 
+            {
+                understoodPages++;
+            }
+        }
+        return understoodPages;
+    }
+
+    private double CountTotalPages(int sectorIndex)
+    {
+        return discussionNavigator.subTopicsList[sectorIndex].pages.Count;
+    }
+
+    private void JumpSectors(int index)
+    { 
         discussionNavigator.JumpToSector(index);
         Debug.Log("Jumped to Sector Index: " + index);
     }
