@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.PlasticSCM.Editor.WebApi;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,35 +11,34 @@ public class ProgressManager : MonoBehaviour
     public ProgressBarButton progressBarButtonPrefab;
     public RectTransform progressAreaParent;
     public DiscussionNavigator discussionNavigator;
-    
     private List<ProgressBarButton> progressBarButtonList;
     public int numButtons;
 
     private float buttonSpacing = 300.0f;
 
-    private void Start()
+    private void OnEnable()
     {
-
         CreateProgressBarButtons();
-        progressBarButtonList = new List<ProgressBarButton>();
-        //loadProgressBars();
     }
 
     private void CreateProgressBarButtons()
     {
         float totalWidth = (numButtons - 1) * buttonSpacing;
         float startX = -totalWidth / 2f;
-    
+        progressBarButtonList = new List<ProgressBarButton>();
+        progressAreaParent = GameObject.Find("BUTTONS").transform.Find("Progress Bar Buttons").GetComponent<RectTransform>();
+
+
         for (int i = 0; i < numButtons; i++)
         {
-            progressAreaParent = GetComponent<RectTransform>();
             Vector2 buttonPosition = new Vector2(startX + i * buttonSpacing, 0f);
             ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
+
             newButton.transform.SetParent(progressAreaParent, false);
             newButton.name = $"Progress Button {i + 1}";
             newButton.transform.localPosition = buttonPosition;
             newButton.Initialize("Test", "Test", i, OnClick);
-            //progressBarButtonList.Add(newButton);
+            progressBarButtonList.Add(newButton);
         }
     }
 
