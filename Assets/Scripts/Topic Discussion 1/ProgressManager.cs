@@ -9,11 +9,13 @@ using UnityEngine.UI;
 public class ProgressManager : MonoBehaviour
 {
     public ProgressBarButton progressBarButtonPrefab;
-    public RectTransform progressAreaParent;
-    public DiscussionNavigator discussionNavigator;
-    private List<ProgressBarButton> progressBarButtonList;
-    public int numButtons;
+    
+    
 
+    private DiscussionNavigator discussionNavigator;
+    private List<ProgressBarButton> progressBarButtonList;
+    private RectTransform progressAreaParent;
+    private int numButtons;
     private float buttonSpacing = 300.0f;
 
     private void OnEnable()
@@ -23,10 +25,13 @@ public class ProgressManager : MonoBehaviour
 
     private void CreateProgressBarButtons()
     {
-        float totalWidth = (numButtons - 1) * buttonSpacing;
-        float startX = -totalWidth / 2f;
         progressBarButtonList = new List<ProgressBarButton>();
         progressAreaParent = GameObject.Find("BUTTONS").transform.Find("Progress Bar Buttons").GetComponent<RectTransform>();
+        discussionNavigator = GameObject.Find("MANAGERS").transform.Find("Discussion Navigator").GetComponent<DiscussionNavigator>();
+        numButtons = discussionNavigator.subTopicsList.Count;
+
+        float totalWidth = (numButtons - 1) * buttonSpacing;
+        float startX = -totalWidth / 2f;
 
 
         for (int i = 0; i < numButtons; i++)
@@ -34,10 +39,11 @@ public class ProgressManager : MonoBehaviour
             Vector2 buttonPosition = new Vector2(startX + i * buttonSpacing, 0f);
             ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
 
+
             newButton.transform.SetParent(progressAreaParent, false);
             newButton.name = $"Progress Button {i + 1}";
             newButton.transform.localPosition = buttonPosition;
-            newButton.Initialize("Test", "Test", i, OnClick);
+            newButton.Initialize(i, OnClick);
             progressBarButtonList.Add(newButton);
         }
     }
