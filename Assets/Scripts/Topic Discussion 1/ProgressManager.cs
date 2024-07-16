@@ -53,7 +53,7 @@ public class ProgressManager : MonoBehaviour
         Debug.Log("Hello" + i);
     }
 
-    public void loadProgressBars()
+    public void UpdateProgressBars()
     {
         for (int i = 0; i < discussionNavigator.subTopicsList.Count; i++)
         {
