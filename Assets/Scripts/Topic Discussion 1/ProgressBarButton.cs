@@ -18,6 +18,8 @@ public class ProgressBarButton : MonoBehaviour
 
     public int sectorIndex;
 
+    public static event Action<int> ProgressBarClickEvent;
+
     public void Initialize(int index, UnityEngine.Events.UnityAction<int> onClickAction)
     {
         discussionNavigator = GameObject.Find("MANAGERS").transform.Find("Discussion Navigator").GetComponent<DiscussionNavigator>();
@@ -33,10 +35,10 @@ public class ProgressBarButton : MonoBehaviour
         progressCountText.text = progressCount;
         sectorIndex = index;
         _progressBarButton = this.GetComponent<Button>();
-        _progressBarButton.onClick.AddListener(() => JumpSectors(sectorIndex));
+        _progressBarButton.onClick.AddListener(() => ProgressBarClickEvent?.Invoke(sectorIndex));
     }
 
-    private double CountUnderstoodPages(int sectorIndex)
+    public double CountUnderstoodPages(int sectorIndex)
     {
         double understoodPages = 0;
         for (int i = 0; i < discussionNavigator.subTopicsList[sectorIndex].pages.Count; i++)
@@ -51,16 +53,8 @@ public class ProgressBarButton : MonoBehaviour
         return understoodPages;
     }
 
-    private double CountTotalPages(int sectorIndex)
+    public double CountTotalPages(int sectorIndex)
     {
         return discussionNavigator.subTopicsList[sectorIndex].pages.Count;
     }
-
-    private void JumpSectors(int index)
-    { 
-        discussionNavigator.JumpToSector(index);
-        Debug.Log("Jumped to Sector Index: " + index);
-    }
-
-
 }
