@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class ProgressBarButton : MonoBehaviour
 {
-    DiscussionNavigator discussionNavigator;
     TextMeshProUGUI[] textComponents;
     private Button _progressBarButton;
     public Image progressBarImage;
@@ -20,12 +19,9 @@ public class ProgressBarButton : MonoBehaviour
 
     public static event Action<int> ProgressBarClickEvent;
 
-    public void Initialize(int index, UnityEngine.Events.UnityAction<int> onClickAction)
+    public void Initialize(string sectorTitle, string progressCount, int index)
     {
-        discussionNavigator = GameObject.Find("MANAGERS").transform.Find("Discussion Navigator").GetComponent<DiscussionNavigator>();
         textComponents = GetComponentsInChildren<TextMeshProUGUI>();
-        string sectorTitle = discussionNavigator.subTopicsList[index].sectorTitle;
-        string progressCount = $"{CountUnderstoodPages(index).ToString()}/{ CountTotalPages(index).ToString()}";
 
         progressBarImage = GetComponent<Image>();
         startPosition = progressBarImage.transform.position;
@@ -36,25 +32,5 @@ public class ProgressBarButton : MonoBehaviour
         sectorIndex = index;
         _progressBarButton = this.GetComponent<Button>();
         _progressBarButton.onClick.AddListener(() => ProgressBarClickEvent?.Invoke(sectorIndex));
-    }
-
-    public double CountUnderstoodPages(int sectorIndex)
-    {
-        double understoodPages = 0;
-        for (int i = 0; i < discussionNavigator.subTopicsList[sectorIndex].pages.Count; i++)
-        {
-            bool isPageUnderstood = discussionNavigator.subTopicsList[sectorIndex].pages[i].isMarkedUnderstood;
-
-            if (isPageUnderstood) 
-            {
-                understoodPages++;
-            }
-        }
-        return understoodPages;
-    }
-
-    public double CountTotalPages(int sectorIndex)
-    {
-        return discussionNavigator.subTopicsList[sectorIndex].pages.Count;
     }
 }
