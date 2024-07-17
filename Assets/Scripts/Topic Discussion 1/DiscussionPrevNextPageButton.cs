@@ -1,16 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DiscussionPrevNextPageButton : MonoBehaviour
 {
     public DiscussionNavigator discussionNavigator;
     public int step;
-    
 
-    public void OnClick()
+    public static event Action<int> PrevNextPageButtonEvent;
+    private Button _prevNextPageButton;
+
+    private void OnEnable()
     {
-        discussionNavigator.changePage(step);
+        _prevNextPageButton = this.GetComponent<Button>();
+        _prevNextPageButton.onClick.AddListener(() => PrevNextPageButtonEvent?.Invoke(step));
     }
 }
