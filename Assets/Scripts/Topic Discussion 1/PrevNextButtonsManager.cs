@@ -19,63 +19,82 @@ public class PrevNextButtonsManager : MonoBehaviour
 
     private void ChangeButtonState(int currentSectorIndex, int currentPageIndex)
     {
+        bool isOnlySinglePageInFirstSector = currentSectorIndex == 0 && discussionNavigator.subTopicsList[currentSectorIndex].pages.Count == 1;
+        bool isFirstSectorFirstPage = currentSectorIndex == 0 && currentPageIndex == 0;
+        bool isOnlySinglePageInSector = currentSectorIndex < discussionNavigator.subTopicsList.Count - 1 && discussionNavigator.subTopicsList[currentSectorIndex].pages.Count == 1;
+        bool isOnlySinglePageInLastSector = currentSectorIndex == discussionNavigator.subTopicsList.Count - 1 && discussionNavigator.subTopicsList[currentSectorIndex].pages.Count == 1;
+        bool isLastSectorLastPage = currentSectorIndex == discussionNavigator.subTopicsList.Count - 1 && currentPageIndex == discussionNavigator.subTopicsList[currentSectorIndex].pages.Count - 1;
+        bool isNotFirstSectorFirstPage = currentSectorIndex > 0 && currentPageIndex == 0;
+        bool isNotLastSectorLastPage = currentSectorIndex < discussionNavigator.subTopicsList.Count - 1 && currentPageIndex == discussionNavigator.subTopicsList[currentSectorIndex].pages.Count - 1;
+
         //Change button states.
-        if (currentSectorIndex == 0 && currentPageIndex == 0)                             // First Sector, First Page
+        if (isOnlySinglePageInFirstSector)
         {
-            // Deactivate previous button functions
+            // ACTIVATE ONLY Next Sector Button
+            nextSectorButton.gameObject.SetActive(true);
+
+            prevSectorButton.gameObject.SetActive(false);
+            prevPageButton.gameObject.SetActive(false);
+            nextPageButton.gameObject.SetActive(false);
+        }
+        else if (isFirstSectorFirstPage)
+        {
+            // DEACTIVATE Both Previous Buttons
             prevPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
         }
-        else if (currentSectorIndex < discussionNavigator.subTopicsList.Count - 1
-                && discussionNavigator.subTopicsList[currentSectorIndex].pages.Count == 1)                     //Only 1 page in a sector
+        else if (isOnlySinglePageInSector)
         {
-            // To Do: Make the Next and Previous Topic Title Automatically Adjustable
-            // Sector - Previous and Sector - Next
-            prevPageButton.gameObject.SetActive(false);
-            nextPageButton.gameObject.SetActive(false);
+            // ACTIVATE Both Sector Buttons
             prevSectorButton.gameObject.SetActive(true);
             nextSectorButton.gameObject.SetActive(true);
-        }
-        else if (currentSectorIndex == discussionNavigator.subTopicsList.Count - 1
-                && discussionNavigator.subTopicsList[currentSectorIndex].pages.Count == 1)                      //Only 1 page in the last sector
-        {
-            // Sector - Previous
+
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
+        }
+        else if (isNotFirstSectorFirstPage)
+        {
+            // ACTIVATE Previous Sector and Next Page Button
             prevSectorButton.gameObject.SetActive(true);
-            nextSectorButton.gameObject.SetActive(false);
-        }
-        else if (currentSectorIndex == discussionNavigator.subTopicsList.Count - 1
-                && currentPageIndex == discussionNavigator.subTopicsList[currentSectorIndex].pages.Count - 1) // Last Sector, Last Page
-        {
-            // Deactivate next button functions
-            nextPageButton.gameObject.SetActive(false);
-            nextSectorButton.gameObject.SetActive(false);
-        }
-        else if (currentSectorIndex > 0 && currentPageIndex == 0)                         // The first page of any Sector Except First 
-        {
-            // Page - Next and Sector - Previous
-            prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(true);
-            prevSectorButton.gameObject.SetActive(true);
+
+            prevPageButton.gameObject.SetActive(false);
             nextSectorButton.gameObject.SetActive(false);
         }
-        else if (currentSectorIndex < discussionNavigator.subTopicsList.Count - 1
-                && currentPageIndex == discussionNavigator.subTopicsList[currentSectorIndex].pages.Count - 1) // The last page of any sector except last
+        else if (isNotLastSectorLastPage)
         {
-            // Page - Previous and Sector - Next
+            // ACTIVATE Next Sector and Previous Page Button
             prevPageButton.gameObject.SetActive(true);
+            nextSectorButton.gameObject.SetActive(true);
+
             nextPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
-            nextSectorButton.gameObject.SetActive(true);
+        }
+        else if (isOnlySinglePageInLastSector)
+        {
+            // ACTIVATE ONLY Previous Sector Button
+            prevSectorButton.gameObject.SetActive(true);
+
+            prevPageButton.gameObject.SetActive(false);
+            nextPageButton.gameObject.SetActive(false);
+            nextSectorButton.gameObject.SetActive(false);
+        }
+        else if (isLastSectorLastPage)
+        {
+            // DEACTIVATE Both Next Buttons
+            nextPageButton.gameObject.SetActive(false);
+            nextSectorButton.gameObject.SetActive(false);
         }
         else
         {
-            // Activate both previous and next page buttons
+            // ACTIVATE Both Page Buttons
             prevPageButton.gameObject.SetActive(true);
             nextPageButton.gameObject.SetActive(true);
+
             nextSectorButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
         }
     }
+
+
 }
