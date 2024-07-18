@@ -158,7 +158,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0.00012207031, y: -20.000002}
-  m_SizeDelta: {x: -0.0001, y: -59.9694}
+  m_SizeDelta: {x: -15.2782, y: -59.9694}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &455938
 MonoBehaviour:
@@ -207,10 +207,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26
+  m_fontSize: 27.4
   m_fontSizeBase: 26
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -1796,10 +1796,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26
+  m_fontSize: 27.4
   m_fontSizeBase: 26
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -1862,8 +1862,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -20}
-  m_SizeDelta: {x: -0.0001, y: -59.9694}
+  m_AnchoredPosition: {x: 0.00012207031, y: -20}
+  m_SizeDelta: {x: -15.278194, y: -59.9694}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &376141837
 GameObject:
@@ -3434,6 +3434,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 592321632}
+  - component: {fileID: 592321633}
   m_Layer: 0
   m_Name: PrevNext Navigation Manager
   m_TagString: Untagged
@@ -3456,6 +3457,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 504919720}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &592321633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 592321631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0bcdbc2a2da4984183f4130fed82a4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  discussionNavigator: {fileID: 0}
+  prevPageButton: {fileID: 490920062}
+  nextPageButton: {fileID: 796551521}
+  prevSectorButton: {fileID: 591611969}
+  nextSectorButton: {fileID: 316801257}
 --- !u!1 &592681880
 GameObject:
   m_ObjectHideFlags: 0
@@ -4063,10 +4081,6 @@ MonoBehaviour:
       isMarkedUnderstood: 0
     - page: {fileID: 102516260}
       isMarkedUnderstood: 0
-  prevPageButton: {fileID: 490920062}
-  nextPageButton: {fileID: 796551521}
-  prevSectorButton: {fileID: 591611969}
-  nextSectorButton: {fileID: 316801257}
   markAsUnderstoodButton: {fileID: 997961746}
   markAsNotYetUnderstoodButton: {fileID: 788661330}
 --- !u!1 &778196570
@@ -6608,8 +6622,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 796551520}
   - {fileID: 490920061}
+  - {fileID: 796551520}
   m_Father: {fileID: 833220461}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
