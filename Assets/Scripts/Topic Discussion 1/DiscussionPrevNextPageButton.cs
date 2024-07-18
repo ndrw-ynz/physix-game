@@ -18,4 +18,8 @@ public class DiscussionPrevNextPageButton : MonoBehaviour
         _prevNextPageButton = this.GetComponent<Button>();
         _prevNextPageButton.onClick.AddListener(() => PrevNextPageClickEvent?.Invoke(step));
     }
+    private void OnDisable()
+    {
+        _prevNextPageButton.onClick.RemoveAllListeners();
+    }
 }
