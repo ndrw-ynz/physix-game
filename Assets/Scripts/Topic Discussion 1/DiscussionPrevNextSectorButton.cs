@@ -19,4 +19,9 @@ public class DiscussionPrevNextSectorButton : MonoBehaviour
         _prevNextSectorButton = this.GetComponent<Button>();
         _prevNextSectorButton.onClick.AddListener(() => PrevNextSectorClickEvent.Invoke(action));
     }
+
+    private void OnDisable()
+    {
+        _prevNextSectorButton.onClick.RemoveAllListeners();
+    }
 }
