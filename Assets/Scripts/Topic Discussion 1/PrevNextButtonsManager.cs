@@ -10,33 +10,20 @@ public class PrevNextButtonsManager : MonoBehaviour
     public DiscussionPrevNextSectorButton prevSectorButton;
     public DiscussionPrevNextSectorButton nextSectorButton;
 
-    public static event Action<PrevNextButtonsManager> PreviousSectorButtonActiveEvent;
-    public static event Action<PrevNextButtonsManager> NextSectorButtonActiveEvent;
-
     private void OnEnable()
     {
         DiscussionNavigator.PageChangeEvent += ChangeButtonState;
     }
 
-    public void SetPrevSectorText(string previousSectorTitle)
+    private void ChangeButtonState(DiscussionNavigator discNav)
     {
-        prevSectorButton.sectorButtonText.text = previousSectorTitle;
-    }
-
-    public void SetNextSectorText(string nextSectorTitle)
-    {
-        nextSectorButton.sectorButtonText.text = nextSectorTitle;
-    }
-
-    private void ChangeButtonState(int currentSectorIndex, int currentPageIndex, int subTopicsListCount, int currentSectorPagesCount)
-    {
-        bool isOnlySinglePageInFirstSector = currentSectorIndex == 0 && currentSectorPagesCount == 1;
-        bool isFirstSectorFirstPage = currentSectorIndex == 0 && currentPageIndex == 0;
-        bool isOnlySinglePageInSector = currentSectorIndex < subTopicsListCount - 1 && currentSectorPagesCount == 1;
-        bool isOnlySinglePageInLastSector = currentSectorIndex == subTopicsListCount - 1 && currentSectorPagesCount == 1;
-        bool isLastSectorLastPage = currentSectorIndex == subTopicsListCount - 1 && currentPageIndex == currentSectorPagesCount - 1;
-        bool isNotFirstSectorFirstPage = currentSectorIndex > 0 && currentPageIndex == 0;
-        bool isNotLastSectorLastPage = currentSectorIndex < subTopicsListCount - 1 && currentPageIndex == currentSectorPagesCount - 1;
+        bool isOnlySinglePageInFirstSector = discNav.GetCurrentSectorIndex() == 0 && discNav.GetCurrentSectorPagesCount() == 1;
+        bool isFirstSectorFirstPage = discNav.GetCurrentSectorIndex() == 0 && discNav.GetCurrentPageIndex() == 0;
+        bool isOnlySinglePageInSector = discNav.GetCurrentSectorIndex() < discNav.GetSubTopicListCount() - 1 && discNav.GetCurrentSectorPagesCount() == 1;
+        bool isOnlySinglePageInLastSector = discNav.GetCurrentSectorIndex() == discNav.GetSubTopicListCount() - 1 && discNav.GetCurrentSectorPagesCount() == 1;
+        bool isLastSectorLastPage = discNav.GetCurrentSectorIndex() == discNav.GetSubTopicListCount() - 1 && discNav.GetCurrentPageIndex() == discNav.GetCurrentSectorPagesCount() - 1;
+        bool isNotFirstSectorFirstPage = discNav.GetCurrentSectorIndex() > 0 && discNav.GetCurrentPageIndex() == 0;
+        bool isNotLastSectorLastPage = discNav.GetCurrentSectorIndex() < discNav.GetSubTopicListCount() - 1 && discNav.GetCurrentPageIndex() == discNav.GetCurrentSectorPagesCount() - 1;
 
         //Change button states.
         if (isOnlySinglePageInFirstSector)
@@ -44,7 +31,7 @@ public class PrevNextButtonsManager : MonoBehaviour
             // ACTIVATE ONLY Next Sector Button
             nextSectorButton.gameObject.SetActive(true);
 
-            NextSectorButtonActiveEvent?.Invoke(this);
+            SetNextSectorText(discNav.GetNextSectorTitle());
 
             prevSectorButton.gameObject.SetActive(false);
             prevPageButton.gameObject.SetActive(false);
@@ -56,7 +43,7 @@ public class PrevNextButtonsManager : MonoBehaviour
             prevPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
 
-            NextSectorButtonActiveEvent?.Invoke(this);
+            SetNextSectorText(discNav.GetNextSectorTitle());
         }
         else if (isOnlySinglePageInSector)
         {
@@ -64,8 +51,8 @@ public class PrevNextButtonsManager : MonoBehaviour
             prevSectorButton.gameObject.SetActive(true);
             nextSectorButton.gameObject.SetActive(true);
 
-            PreviousSectorButtonActiveEvent?.Invoke(this);
-            NextSectorButtonActiveEvent?.Invoke(this);
+            SetPrevSectorText(discNav.GetPreviousSectorTitle());
+            SetNextSectorText(discNav.GetNextSectorTitle());
 
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
@@ -76,7 +63,7 @@ public class PrevNextButtonsManager : MonoBehaviour
             prevSectorButton.gameObject.SetActive(true);
             nextPageButton.gameObject.SetActive(true);
 
-            PreviousSectorButtonActiveEvent?.Invoke(this);
+            SetPrevSectorText(discNav.GetPreviousSectorTitle());
 
             prevPageButton.gameObject.SetActive(false);
             nextSectorButton.gameObject.SetActive(false);
@@ -87,7 +74,7 @@ public class PrevNextButtonsManager : MonoBehaviour
             prevPageButton.gameObject.SetActive(true);
             nextSectorButton.gameObject.SetActive(true);
 
-            NextSectorButtonActiveEvent?.Invoke(this);
+            SetNextSectorText(discNav.GetNextSectorTitle());
 
             nextPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
@@ -97,7 +84,7 @@ public class PrevNextButtonsManager : MonoBehaviour
             // ACTIVATE ONLY Previous Sector Button
             prevSectorButton.gameObject.SetActive(true);
 
-            PreviousSectorButtonActiveEvent?.Invoke(this);
+            SetPrevSectorText(discNav.GetPreviousSectorTitle());
 
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
@@ -109,7 +96,7 @@ public class PrevNextButtonsManager : MonoBehaviour
             nextPageButton.gameObject.SetActive(false);
             nextSectorButton.gameObject.SetActive(false);
 
-            PreviousSectorButtonActiveEvent?.Invoke(this);
+            SetPrevSectorText(discNav.GetPreviousSectorTitle());
         }
         else
         {
@@ -120,5 +107,15 @@ public class PrevNextButtonsManager : MonoBehaviour
             nextSectorButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
         }
+    }
+
+    private void SetPrevSectorText(string previousSectorTitle)
+    {
+        prevSectorButton.sectorButtonText.text = previousSectorTitle;
+    }
+
+    private void SetNextSectorText(string nextSectorTitle)
+    {
+        nextSectorButton.sectorButtonText.text = nextSectorTitle;
     }
 }

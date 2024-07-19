@@ -28,7 +28,7 @@ public class DiscussionNavigator : MonoBehaviour
     public UnderstoodNotUnderstoodButton markAsUnderstoodButton;
     public UnderstoodNotUnderstoodButton markAsNotYetUnderstoodButton;
 
-    public static event Action<int, int, int, int> PageChangeEvent;
+    public static event Action<DiscussionNavigator> PageChangeEvent;
     public static event Action<DiscussionNavigator> DiscussionPageStart;
     private int _currentSectorIndex = 0;
     private int _currentPageIndex = 0;
@@ -41,9 +41,6 @@ public class DiscussionNavigator : MonoBehaviour
             ProgressBarButton.ProgressBarClickEvent += JumpToSector;
             UnderstoodNotUnderstoodButton.UnderstoodNotUnderstoodClickEvent += ChangeComprehensionMark;
 
-            PrevNextButtonsManager.PreviousSectorButtonActiveEvent += OnPreviousSectorButtonActive;
-            PrevNextButtonsManager.NextSectorButtonActiveEvent += OnNextSectorButtonActive;
-
             DiscussionPageStart?.Invoke(this);
     }
 
@@ -54,8 +51,7 @@ public class DiscussionNavigator : MonoBehaviour
         {
             _currentPageIndex += direction;
             ShowPage(_currentSectorIndex, _currentPageIndex);
-            PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count, 
-                subTopicsList[_currentSectorIndex].pages.Count);
+            PageChangeEvent?.Invoke(this);
             ChangeComprehensionButtonState();
         }
     }
@@ -67,8 +63,7 @@ public class DiscussionNavigator : MonoBehaviour
         _currentSectorIndex = sectorIndex;
         _currentPageIndex = 0;
         ShowPage(_currentSectorIndex, _currentPageIndex);
-        PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count,
-                subTopicsList[_currentSectorIndex].pages.Count);
+        PageChangeEvent?.Invoke(this);
         ChangeComprehensionButtonState();
     }
 
@@ -86,8 +81,7 @@ public class DiscussionNavigator : MonoBehaviour
             ShowPage(_currentSectorIndex,_currentPageIndex);
             ChangeComprehensionButtonState();
 
-            PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count,
-                subTopicsList[_currentSectorIndex].pages.Count);
+            PageChangeEvent?.Invoke(this);
         }
         if (action == "previous")
         {
@@ -101,8 +95,7 @@ public class DiscussionNavigator : MonoBehaviour
 
             ChangeComprehensionButtonState();
 
-            PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count,
-                subTopicsList[_currentSectorIndex].pages.Count);
+            PageChangeEvent?.Invoke(this);
         }
     }
 
@@ -156,6 +149,37 @@ public class DiscussionNavigator : MonoBehaviour
         }
     }
 
+
+    public int GetCurrentSectorIndex()
+    {
+        return _currentSectorIndex;
+    }
+
+    public int GetCurrentSectorPagesCount()
+    {
+        return subTopicsList[_currentSectorIndex].pages.Count;
+    }
+
+    public int GetCurrentPageIndex()
+    {
+        return _currentPageIndex;
+    }
+
+    public int GetSubTopicListCount()
+    {
+        return subTopicsList.Count;
+    }
+
+    public string GetPreviousSectorTitle()
+    {
+        return subTopicsList[_currentSectorIndex - 1].sectorTitle;
+    }
+
+    public string GetNextSectorTitle()
+    {
+        return subTopicsList[_currentSectorIndex + 1].sectorTitle;
+    }
+
     private void CloseCurrentPage()
     {
         GameObject currentSectorAndPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex].page;
@@ -177,13 +201,4 @@ public class DiscussionNavigator : MonoBehaviour
         }
     }
 
-    private void OnPreviousSectorButtonActive(PrevNextButtonsManager prevNextButtonsManager)
-    {
-        prevNextButtonsManager.SetPrevSectorText(subTopicsList[_currentSectorIndex - 1].sectorTitle);
-    }
-    
-    private void OnNextSectorButtonActive(PrevNextButtonsManager prevNextButtonsManager)
-    {
-        prevNextButtonsManager.SetNextSectorText(subTopicsList[_currentSectorIndex + 1].sectorTitle);
-    }
 }
