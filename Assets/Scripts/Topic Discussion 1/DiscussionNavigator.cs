@@ -45,8 +45,7 @@ public class DiscussionNavigator : MonoBehaviour
 
     public void ChangePage(int direction)
     {
-        // Change pages
-        if (_currentPageIndex < subTopicsList[_currentSectorIndex].pages.Count) // If the current page index is < current sector's indexed list count
+        if (_currentPageIndex < subTopicsList[_currentSectorIndex].pages.Count)
         {
             _currentPageIndex += direction;
             ShowPage(_currentSectorIndex, _currentPageIndex);
@@ -98,6 +97,8 @@ public class DiscussionNavigator : MonoBehaviour
         }
     }
 
+
+
     public double CountUnderstoodPages(int sectorIndex)
     {
         double understoodPages = 0;
@@ -117,8 +118,6 @@ public class DiscussionNavigator : MonoBehaviour
     {
         return subTopicsList[sectorIndex].pages.Count;
     }
-
-
 
     public int GetCurrentSectorIndex()
     {
