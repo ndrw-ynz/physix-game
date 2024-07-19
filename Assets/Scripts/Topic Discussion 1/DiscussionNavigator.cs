@@ -74,28 +74,35 @@ public class DiscussionNavigator : MonoBehaviour
         // Change sectors
         if (action == "next")
         {
-            int nextSectorFirstPageIndex = 0;
-
             CloseCurrentPage();
+
+            int nextSectorFirstPageIndex = 0;
             _currentSectorIndex++;
             _currentPageIndex = nextSectorFirstPageIndex;
             ShowPage(_currentSectorIndex,_currentPageIndex);
             PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count,
                 subTopicsList[_currentSectorIndex].pages.Count);
             ChangeComprehensionButtonState();
+            int currentSector = _currentSectorIndex;
+            Debug.Log($"Current Sector: {currentSector++}");
+            
+
         }
         if (action == "previous")
         {
-            int previousSectorLastPageIndex = subTopicsList[_currentSectorIndex].pages.Count - 1;
-
-            CloseCurrentPage();
+            GameObject currentSectorFirstPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex].page;
+            
+            currentSectorFirstPage.SetActive(false);
             _currentSectorIndex--;
+
+            int previousSectorLastPageIndex = subTopicsList[_currentSectorIndex].pages.Count - 1;
             _currentPageIndex = previousSectorLastPageIndex;
             ShowPage(_currentSectorIndex, _currentPageIndex);
-
             PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count,
                 subTopicsList[_currentSectorIndex].pages.Count);
             ChangeComprehensionButtonState();
+            int currentSector = _currentSectorIndex;
+            Debug.Log($"Current Sector: {currentSector++}");
         }
     }
 
