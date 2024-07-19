@@ -124,11 +124,6 @@ public class DiscussionNavigator : MonoBehaviour
         return subTopicsList[sectorIndex].sectorTitle;
     }
 
-    public int GetTotalSubTopicListCount()
-    {
-        return subTopicsList.Count;
-    }
-
     public void ChangeComprehensionMark(bool flag)
     {
         subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood = flag;

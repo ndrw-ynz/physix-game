@@ -24,7 +24,7 @@ public class ProgressManager : MonoBehaviour
     private void CreateProgressBarButtons(DiscussionNavigator discNavig)
     {
         progressAreaParent = GameObject.Find("BUTTONS").transform.Find("Progress Bar Buttons").GetComponent<RectTransform>();
-        numButtons = discNavig.GetTotalSubTopicListCount();
+        numButtons = discNavig.GetSubTopicListCount();
 
         float totalWidth = (numButtons - 1) * buttonSpacing;
         float startX = -totalWidth / 2f;
