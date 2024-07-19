@@ -12,20 +12,19 @@ public class PrevNextButtonsManager : MonoBehaviour
 
     private void OnEnable()
     {
-        discussionNavigator = discussionNavigator = GameObject.Find("MANAGERS").transform.Find("Discussion Navigator").GetComponent<DiscussionNavigator>();
         DiscussionNavigator.PageChangeEvent += ChangeButtonState;
     }
 
 
-    private void ChangeButtonState(int currentSectorIndex, int currentPageIndex)
+    private void ChangeButtonState(int currentSectorIndex, int currentPageIndex, int subTopicsListCount, int currentSectorPagesCount)
     {
-        bool isOnlySinglePageInFirstSector = currentSectorIndex == 0 && discussionNavigator.subTopicsList[currentSectorIndex].pages.Count == 1;
+        bool isOnlySinglePageInFirstSector = currentSectorIndex == 0 && currentSectorPagesCount == 1;
         bool isFirstSectorFirstPage = currentSectorIndex == 0 && currentPageIndex == 0;
-        bool isOnlySinglePageInSector = currentSectorIndex < discussionNavigator.subTopicsList.Count - 1 && discussionNavigator.subTopicsList[currentSectorIndex].pages.Count == 1;
-        bool isOnlySinglePageInLastSector = currentSectorIndex == discussionNavigator.subTopicsList.Count - 1 && discussionNavigator.subTopicsList[currentSectorIndex].pages.Count == 1;
-        bool isLastSectorLastPage = currentSectorIndex == discussionNavigator.subTopicsList.Count - 1 && currentPageIndex == discussionNavigator.subTopicsList[currentSectorIndex].pages.Count - 1;
+        bool isOnlySinglePageInSector = currentSectorIndex < subTopicsListCount - 1 && currentSectorPagesCount == 1;
+        bool isOnlySinglePageInLastSector = currentSectorIndex == subTopicsListCount - 1 && currentSectorPagesCount == 1;
+        bool isLastSectorLastPage = currentSectorIndex == subTopicsListCount - 1 && currentPageIndex == currentSectorPagesCount - 1;
         bool isNotFirstSectorFirstPage = currentSectorIndex > 0 && currentPageIndex == 0;
-        bool isNotLastSectorLastPage = currentSectorIndex < discussionNavigator.subTopicsList.Count - 1 && currentPageIndex == discussionNavigator.subTopicsList[currentSectorIndex].pages.Count - 1;
+        bool isNotLastSectorLastPage = currentSectorIndex < subTopicsListCount - 1 && currentPageIndex == currentSectorPagesCount - 1;
 
         //Change button states.
         if (isOnlySinglePageInFirstSector)

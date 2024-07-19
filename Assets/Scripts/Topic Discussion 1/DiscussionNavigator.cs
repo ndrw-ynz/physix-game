@@ -28,7 +28,7 @@ public class DiscussionNavigator : MonoBehaviour
     public UnderstoodNotUnderstoodButton markAsUnderstoodButton;
     public UnderstoodNotUnderstoodButton markAsNotYetUnderstoodButton;
 
-    public static event Action<int, int> PageChangeEvent;
+    public static event Action<int, int, int, int> PageChangeEvent;
     private int _currentSectorIndex = 0;
     private int _currentPageIndex = 0;
 
@@ -48,7 +48,8 @@ public class DiscussionNavigator : MonoBehaviour
         {
             _currentPageIndex += direction;
             ShowPage(_currentSectorIndex, _currentPageIndex);
-            PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex);
+            PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count, 
+                subTopicsList[_currentSectorIndex].pages.Count);
             ChangeComprehensionButtonState();
         }
     }
@@ -61,7 +62,8 @@ public class DiscussionNavigator : MonoBehaviour
         _currentSectorIndex = sectorIndex;
         _currentPageIndex = 0;
         ShowPage(_currentSectorIndex, _currentPageIndex);
-        PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex);
+        PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count,
+                subTopicsList[_currentSectorIndex].pages.Count);
         ChangeComprehensionButtonState();
     }
 
@@ -77,7 +79,8 @@ public class DiscussionNavigator : MonoBehaviour
             _currentSectorIndex++;
             _currentPageIndex = nextSectorFirstPageIndex;
             ShowPage(_currentSectorIndex,_currentPageIndex);
-            PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex);
+            PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count,
+                subTopicsList[_currentSectorIndex].pages.Count);
             ChangeComprehensionButtonState();
             int currentSector = _currentSectorIndex;
             Debug.Log($"Current Sector: {currentSector++}");
@@ -94,7 +97,8 @@ public class DiscussionNavigator : MonoBehaviour
             int previousSectorLastPageIndex = subTopicsList[_currentSectorIndex].pages.Count - 1;
             _currentPageIndex = previousSectorLastPageIndex;
             ShowPage(_currentSectorIndex, _currentPageIndex);
-            PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex);
+            PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count,
+                subTopicsList[_currentSectorIndex].pages.Count);
             ChangeComprehensionButtonState();
             int currentSector = _currentSectorIndex;
             Debug.Log($"Current Sector: {currentSector++}");
