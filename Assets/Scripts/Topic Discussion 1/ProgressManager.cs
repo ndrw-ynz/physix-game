@@ -11,65 +11,43 @@ public class ProgressManager : MonoBehaviour
 {
     public ProgressBarButton progressBarButtonPrefab;
 
-    private DiscussionNavigator discussionNavigator;
-    private List<ProgressBarButton> progressBarButtonList;
+    private List<ProgressBarButton> progressBarButtonList = new List<ProgressBarButton>();
     private RectTransform progressAreaParent;
     private int numButtons;
     private float buttonSpacing = 300.0f;
 
     private void OnEnable()
     {
-        CreateProgressBarButtons();
+        DiscussionNavigator.DiscussionPageStart += CreateProgressBarButtons;
     }
 
-    private void CreateProgressBarButtons()
+    private void CreateProgressBarButtons(DiscussionNavigator discNavig)
     {
-        progressBarButtonList = new List<ProgressBarButton>();
         progressAreaParent = GameObject.Find("BUTTONS").transform.Find("Progress Bar Buttons").GetComponent<RectTransform>();
-        discussionNavigator = GameObject.Find("MANAGERS").transform.Find("Discussion Navigator").GetComponent<DiscussionNavigator>();
-        numButtons = discussionNavigator.subTopicsList.Count;
+        numButtons = discNavig.GetTotalSubTopicListCount();
 
         float totalWidth = (numButtons - 1) * buttonSpacing;
         float startX = -totalWidth / 2f;
-
 
         for (int i = 0; i < numButtons; i++)
         {
             Vector2 buttonPosition = new Vector2(startX + i * buttonSpacing, 0f);
             ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
 
-
             newButton.transform.SetParent(progressAreaParent, false);
             newButton.name = $"Progress Button {i + 1}";
             newButton.transform.localPosition = buttonPosition;
 
-            string sectorTitle = discussionNavigator.subTopicsList[i].sectorTitle;
-            string progressCount = $"{CountUnderstoodPages(i).ToString()}/{CountTotalPages(i).ToString()}";
+            string sectorTitle = discNavig.GetSectorTitle(i);
+            string progressCount = $"{discNavig.CountUnderstoodPages(i).ToString()}/{discNavig.CountTotalPages(i).ToString()}";
 
             newButton.Initialize(sectorTitle, progressCount, i);
             progressBarButtonList.Add(newButton);
         }
     }
 
-    private double CountUnderstoodPages(int sectorIndex)
-    {
-        double understoodPages = 0;
-        for (int i = 0; i < discussionNavigator.subTopicsList[sectorIndex].pages.Count; i++)
-        {
-            bool isPageUnderstood = discussionNavigator.subTopicsList[sectorIndex].pages[i].isMarkedUnderstood;
 
-            if (isPageUnderstood)
-            {
-                understoodPages++;
-            }
-        }
-        return understoodPages;
-    }
 
-    private double CountTotalPages(int sectorIndex)
-    {
-        return discussionNavigator.subTopicsList[sectorIndex].pages.Count;
-    }
     //public void UpdateProgressBar(int sectorIndex)
     //{
     //    for (int i = 0; i < discussionNavigator.subTopicsList.Count; i++)

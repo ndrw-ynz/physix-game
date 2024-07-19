@@ -29,6 +29,7 @@ public class DiscussionNavigator : MonoBehaviour
     public UnderstoodNotUnderstoodButton markAsNotYetUnderstoodButton;
 
     public static event Action<int, int, int, int> PageChangeEvent;
+    public static event Action<DiscussionNavigator> DiscussionPageStart;
     private int _currentSectorIndex = 0;
     private int _currentPageIndex = 0;
 
@@ -42,6 +43,8 @@ public class DiscussionNavigator : MonoBehaviour
 
             PrevNextButtonsManager.PreviousSectorButtonActiveEvent += OnPreviousSectorButtonActive;
             PrevNextButtonsManager.NextSectorButtonActiveEvent += OnNextSectorButtonActive;
+
+            DiscussionPageStart?.Invoke(this);
     }
 
     public void ChangePage(int direction)
@@ -101,6 +104,36 @@ public class DiscussionNavigator : MonoBehaviour
             PageChangeEvent?.Invoke(_currentSectorIndex, _currentPageIndex, subTopicsList.Count,
                 subTopicsList[_currentSectorIndex].pages.Count);
         }
+    }
+
+    public double CountUnderstoodPages(int sectorIndex)
+    {
+        double understoodPages = 0;
+        for (int i = 0; i < subTopicsList[sectorIndex].pages.Count; i++)
+        {
+            bool isPageUnderstood = subTopicsList[sectorIndex].pages[i].isMarkedUnderstood;
+
+            if (isPageUnderstood)
+            {
+                understoodPages++;
+            }
+        }
+        return understoodPages;
+    }
+
+    public double CountTotalPages(int sectorIndex)
+    {
+        return subTopicsList[sectorIndex].pages.Count;
+    }
+
+    public string GetSectorTitle(int sectorIndex) 
+    { 
+        return subTopicsList[sectorIndex].sectorTitle;
+    }
+
+    public int GetTotalSubTopicListCount()
+    {
+        return subTopicsList.Count;
     }
 
     public void ChangeComprehensionMark(bool flag)
