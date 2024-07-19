@@ -7,7 +7,6 @@ using UnityEngine.UI;
 
 public class DiscussionPrevNextPageButton : MonoBehaviour
 {
-    public DiscussionNavigator discussionNavigator;
     public int step;
 
     public static event Action<int> PrevNextPageClickEvent;
