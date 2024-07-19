@@ -67,7 +67,6 @@ public class DiscussionNavigator : MonoBehaviour
 
     public void ChangeSector(string action)
     {
-        // Change sectors
         if (action == "next")
         {
             CloseCurrentPage();
