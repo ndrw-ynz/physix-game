@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +11,23 @@ public class PrevNextButtonsManager : MonoBehaviour
     public DiscussionPrevNextSectorButton prevSectorButton;
     public DiscussionPrevNextSectorButton nextSectorButton;
 
+    public static event Action<PrevNextButtonsManager> PreviousSectorButtonActiveEvent;
+    public static event Action<PrevNextButtonsManager> NextSectorButtonActiveEvent;
+
     private void OnEnable()
     {
         DiscussionNavigator.PageChangeEvent += ChangeButtonState;
     }
 
+    public void SetPrevSectorText(string previousSectorTitle)
+    {
+        prevSectorButton.sectorButtonText.text = previousSectorTitle;
+    }
+
+    public void SetNextSectorText(string nextSectorTitle)
+    {
+        nextSectorButton.sectorButtonText.text = nextSectorTitle;
+    }
 
     private void ChangeButtonState(int currentSectorIndex, int currentPageIndex, int subTopicsListCount, int currentSectorPagesCount)
     {
@@ -32,6 +45,8 @@ public class PrevNextButtonsManager : MonoBehaviour
             // ACTIVATE ONLY Next Sector Button
             nextSectorButton.gameObject.SetActive(true);
 
+            NextSectorButtonActiveEvent?.Invoke(this);
+
             prevSectorButton.gameObject.SetActive(false);
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
@@ -41,12 +56,17 @@ public class PrevNextButtonsManager : MonoBehaviour
             // DEACTIVATE Both Previous Buttons
             prevPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
+
+            NextSectorButtonActiveEvent?.Invoke(this);
         }
         else if (isOnlySinglePageInSector)
         {
             // ACTIVATE Both Sector Buttons
             prevSectorButton.gameObject.SetActive(true);
             nextSectorButton.gameObject.SetActive(true);
+
+            PreviousSectorButtonActiveEvent?.Invoke(this);
+            NextSectorButtonActiveEvent?.Invoke(this);
 
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
@@ -57,6 +77,8 @@ public class PrevNextButtonsManager : MonoBehaviour
             prevSectorButton.gameObject.SetActive(true);
             nextPageButton.gameObject.SetActive(true);
 
+            PreviousSectorButtonActiveEvent?.Invoke(this);
+
             prevPageButton.gameObject.SetActive(false);
             nextSectorButton.gameObject.SetActive(false);
         }
@@ -66,6 +88,8 @@ public class PrevNextButtonsManager : MonoBehaviour
             prevPageButton.gameObject.SetActive(true);
             nextSectorButton.gameObject.SetActive(true);
 
+            NextSectorButtonActiveEvent?.Invoke(this);
+
             nextPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
         }
@@ -73,6 +97,8 @@ public class PrevNextButtonsManager : MonoBehaviour
         {
             // ACTIVATE ONLY Previous Sector Button
             prevSectorButton.gameObject.SetActive(true);
+
+            PreviousSectorButtonActiveEvent?.Invoke(this);
 
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
@@ -83,6 +109,8 @@ public class PrevNextButtonsManager : MonoBehaviour
             // DEACTIVATE Both Next Buttons
             nextPageButton.gameObject.SetActive(false);
             nextSectorButton.gameObject.SetActive(false);
+
+            PreviousSectorButtonActiveEvent?.Invoke(this);
         }
         else
         {
@@ -94,6 +122,4 @@ public class PrevNextButtonsManager : MonoBehaviour
             prevSectorButton.gameObject.SetActive(false);
         }
     }
-
-
 }
