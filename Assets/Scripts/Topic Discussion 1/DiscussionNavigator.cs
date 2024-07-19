@@ -120,12 +120,6 @@ public class DiscussionNavigator : MonoBehaviour
 
 
 
-    public void ChangeComprehensionMark(bool flag)
-    {
-        subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood = flag;
-        UnderstandMarkerChangeEvent?.Invoke(this);
-    }
-
     public int GetCurrentSectorIndex()
     {
         return _currentSectorIndex;
@@ -185,6 +179,12 @@ public class DiscussionNavigator : MonoBehaviour
                 subTopicsList[currentSector].pages[i].page.SetActive(false);
             }
         }
+    }
+
+    private void ChangeComprehensionMark(bool flag)
+    {
+        subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood = flag;
+        UnderstandMarkerChangeEvent?.Invoke(this);
     }
 
 }
