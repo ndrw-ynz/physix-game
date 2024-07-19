@@ -39,6 +39,9 @@ public class DiscussionNavigator : MonoBehaviour
             DiscussionPrevNextSectorButton.PrevNextSectorClickEvent += ChangeSector;
             ProgressBarButton.ProgressBarClickEvent += JumpToSector;
             UnderstoodNotUnderstoodButton.UnderstoodNotUnderstoodClickEvent += ChangeComprehensionMark;
+
+            PrevNextButtonsManager.PreviousSectorButtonActiveEvent += OnPreviousSectorButtonActive;
+            PrevNextButtonsManager.NextSectorButtonActiveEvent += OnNextSectorButtonActive;
     }
 
     public void ChangePage(int direction)
@@ -56,8 +59,7 @@ public class DiscussionNavigator : MonoBehaviour
 
     public void JumpToSector(int sectorIndex) 
     {
-        GameObject currentSectorAndPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex].page;
-        currentSectorAndPage.SetActive(false);
+        CloseCurrentPage();
 
         _currentSectorIndex = sectorIndex;
         _currentPageIndex = 0;
@@ -72,10 +74,9 @@ public class DiscussionNavigator : MonoBehaviour
         // Change sectors
         if (action == "next")
         {
-            GameObject currentSectorLastPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex].page;
-            int nextSectorFirstPageIndex = 0;
+            CloseCurrentPage();
 
-            currentSectorLastPage.SetActive(false);
+            int nextSectorFirstPageIndex = 0;
             _currentSectorIndex++;
             _currentPageIndex = nextSectorFirstPageIndex;
             ShowPage(_currentSectorIndex,_currentPageIndex);
@@ -125,6 +126,12 @@ public class DiscussionNavigator : MonoBehaviour
         }
     }
 
+    private void CloseCurrentPage()
+    {
+        GameObject currentSectorAndPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex].page;
+        currentSectorAndPage.SetActive(false);
+    }
+
     private void ShowPage(int currentSector, int currentPage)
     {
         for (int i = 0; i < subTopicsList[_currentSectorIndex].pages.Count; i++)
@@ -140,35 +147,13 @@ public class DiscussionNavigator : MonoBehaviour
         }
     }
 
-    //public string SetPrevSectorText() // To Do: Put change sector text to changeButtonStates
-    //{
-    //    bool prevSectorButtonIsActive = prevSectorButton.gameObject.activeSelf;
-    //
-    //    if (prevSectorButtonIsActive)
-    //    {
-    //        int currentSector = _currentSectorIndex;
-    //        string prevSectorText = subTopicsList[currentSector-1].sectorTitle;
-    //        return prevSectorText;
-    //    }
-    //    else
-    //    {
-    //        return "";
-    //    }
-    //}
-    //
-    //public string SetNextSectorText() // To Do: Put change sector text to changeButtonStates
-    //{
-    //    bool nextSectorButtonIsActive = nextSectorButton.gameObject.activeSelf;
-    //
-    //    if (nextSectorButtonIsActive)
-    //    {
-    //        int currentSector = _currentSectorIndex;
-    //        string nextSectorText = subTopicsList[currentSector+1].sectorTitle;
-    //        return nextSectorText;
-    //    }
-    //    else
-    //    {
-    //        return "";
-    //    }
-    //}
+    private void OnPreviousSectorButtonActive(PrevNextButtonsManager prevNextButtonsManager)
+    {
+        prevNextButtonsManager.SetPrevSectorText(subTopicsList[_currentSectorIndex - 1].sectorTitle);
+    }
+    
+    private void OnNextSectorButtonActive(PrevNextButtonsManager prevNextButtonsManager)
+    {
+        prevNextButtonsManager.SetNextSectorText(subTopicsList[_currentSectorIndex + 1].sectorTitle);
+    }
 }
