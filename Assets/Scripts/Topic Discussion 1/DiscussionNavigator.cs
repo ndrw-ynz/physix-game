@@ -25,13 +25,12 @@ public class DiscussionNavigator : MonoBehaviour
     }
 
     public List<Sector> subTopicsList;
-
     public static event Action<DiscussionNavigator> PageChangeEvent;
     public static event Action<DiscussionNavigator> UnderstandMarkerChangeEvent;
     public static event Action<DiscussionNavigator> DiscussionPageStart;
+
     private int _currentSectorIndex = 0;
     private int _currentPageIndex = 0;
-
 
     private void Start()
     {
@@ -43,6 +42,7 @@ public class DiscussionNavigator : MonoBehaviour
             DiscussionPageStart?.Invoke(this);
     }
 
+    // Changing of sector and pages related functions
     public void ChangePage(int direction)
     {
         if (_currentPageIndex < subTopicsList[_currentSectorIndex].pages.Count)
@@ -99,8 +99,7 @@ public class DiscussionNavigator : MonoBehaviour
         }
     }
 
-
-
+    // Counting related functions
     public double CountUnderstoodPages(int sectorIndex)
     {
         double understoodPages = 0;
@@ -121,52 +120,48 @@ public class DiscussionNavigator : MonoBehaviour
         return subTopicsList[sectorIndex].pages.Count;
     }
 
+    // Getting DiscussionNavigator's private variables related functions
     public int GetCurrentSectorIndex()
     {
         return _currentSectorIndex;
     }
-
-    public int GetCurrentSectorPagesCount()
-    {
-        return subTopicsList[_currentSectorIndex].pages.Count;
-    }
-
     public int GetCurrentPageIndex()
     {
         return _currentPageIndex;
     }
-
+    public int GetCurrentSectorPagesCount()
+    {
+        return subTopicsList[_currentSectorIndex].pages.Count;
+    }
     public int GetSubTopicListCount()
     {
         return subTopicsList.Count;
     }
-
     public string GetSectorTitle(int sectorIndex)
     {
         return subTopicsList[sectorIndex].sectorTitle;
     }
-
     public string GetPreviousSectorTitle()
     {
         return subTopicsList[_currentSectorIndex - 1].sectorTitle;
     }
-
     public string GetNextSectorTitle()
     {
         return subTopicsList[_currentSectorIndex + 1].sectorTitle;
     }
 
+    // Checking for condition related functions
     public bool CurrentPageIsMarkedUnderstood()
     {
         return subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood;
     }
 
+    // Private functions, used only inside this class
     private void CloseCurrentPage()
     {
         GameObject currentSectorAndPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex].page;
         currentSectorAndPage.SetActive(false);
     }
-
     private void ShowPage(int currentSector, int currentPage)
     {
         for (int i = 0; i < subTopicsList[_currentSectorIndex].pages.Count; i++)
@@ -181,7 +176,6 @@ public class DiscussionNavigator : MonoBehaviour
             }
         }
     }
-
     private void ChangeComprehensionMark(bool flag)
     {
         subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood = flag;
