@@ -48,7 +48,9 @@ public class DiscussionNavigator : MonoBehaviour
         if (_currentPageIndex < subTopicsList[_currentSectorIndex].pages.Count)
         {
             _currentPageIndex += direction;
+
             ShowPage(_currentSectorIndex, _currentPageIndex);
+
             PageChangeEvent?.Invoke(this);
             UnderstandMarkerChangeEvent?.Invoke(this);
         }
@@ -60,7 +62,9 @@ public class DiscussionNavigator : MonoBehaviour
 
         _currentSectorIndex = sectorIndex;
         _currentPageIndex = 0;
+
         ShowPage(_currentSectorIndex, _currentPageIndex);
+
         PageChangeEvent?.Invoke(this);
         UnderstandMarkerChangeEvent?.Invoke(this);
     }
@@ -76,23 +80,22 @@ public class DiscussionNavigator : MonoBehaviour
             _currentPageIndex = nextSectorFirstPageIndex;
 
             ShowPage(_currentSectorIndex,_currentPageIndex);
-            UnderstandMarkerChangeEvent?.Invoke(this);
 
             PageChangeEvent?.Invoke(this);
+            UnderstandMarkerChangeEvent?.Invoke(this);
         }
         if (action == "previous")
         {
             CloseCurrentPage();
 
             _currentSectorIndex--;
-            int previousSectorLastPageIndex = subTopicsList[_currentSectorIndex].pages.Count - 1;
+            int previousSectorLastPageIndex = GetCurrentSectorPagesCount() - 1;
             _currentPageIndex = previousSectorLastPageIndex;
 
             ShowPage(_currentSectorIndex, _currentPageIndex);
 
-            UnderstandMarkerChangeEvent?.Invoke(this);
-
             PageChangeEvent?.Invoke(this);
+            UnderstandMarkerChangeEvent?.Invoke(this);
         }
     }
 
