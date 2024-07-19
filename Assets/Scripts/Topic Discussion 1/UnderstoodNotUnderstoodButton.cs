@@ -21,4 +21,9 @@ public class UnderstoodNotUnderstoodButton : MonoBehaviour
         _understoodNotUnderstoodButton = this.GetComponent<Button>();
         _understoodNotUnderstoodButton.onClick.AddListener(() => UnderstoodNotUnderstoodClickEvent?.Invoke(flag));
     }
+
+    private void OnDisable()
+    {
+        _understoodNotUnderstoodButton.onClick.RemoveAllListeners();
+    }
 }
