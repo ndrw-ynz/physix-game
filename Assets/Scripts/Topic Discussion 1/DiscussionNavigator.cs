@@ -25,8 +25,6 @@ public class DiscussionNavigator : MonoBehaviour
     }
 
     public List<Sector> subTopicsList;
-    public UnderstoodNotUnderstoodButton markAsUnderstoodButton;
-    public UnderstoodNotUnderstoodButton markAsNotYetUnderstoodButton;
 
     public static event Action<DiscussionNavigator> PageChangeEvent;
     public static event Action<DiscussionNavigator> DiscussionPageStart;
@@ -52,7 +50,7 @@ public class DiscussionNavigator : MonoBehaviour
             _currentPageIndex += direction;
             ShowPage(_currentSectorIndex, _currentPageIndex);
             PageChangeEvent?.Invoke(this);
-            ChangeComprehensionButtonState();
+            //ChangeComprehensionButtonState();
         }
     }
 
@@ -64,7 +62,7 @@ public class DiscussionNavigator : MonoBehaviour
         _currentPageIndex = 0;
         ShowPage(_currentSectorIndex, _currentPageIndex);
         PageChangeEvent?.Invoke(this);
-        ChangeComprehensionButtonState();
+        //ChangeComprehensionButtonState();
     }
 
     public void ChangeSector(string action)
@@ -79,7 +77,7 @@ public class DiscussionNavigator : MonoBehaviour
             _currentPageIndex = nextSectorFirstPageIndex;
 
             ShowPage(_currentSectorIndex,_currentPageIndex);
-            ChangeComprehensionButtonState();
+            //ChangeComprehensionButtonState();
 
             PageChangeEvent?.Invoke(this);
         }
@@ -93,7 +91,7 @@ public class DiscussionNavigator : MonoBehaviour
 
             ShowPage(_currentSectorIndex, _currentPageIndex);
 
-            ChangeComprehensionButtonState();
+            //ChangeComprehensionButtonState();
 
             PageChangeEvent?.Invoke(this);
         }
@@ -119,10 +117,7 @@ public class DiscussionNavigator : MonoBehaviour
         return subTopicsList[sectorIndex].pages.Count;
     }
 
-    public string GetSectorTitle(int sectorIndex) 
-    { 
-        return subTopicsList[sectorIndex].sectorTitle;
-    }
+
 
     public void ChangeComprehensionMark(bool flag)
     {
@@ -130,19 +125,6 @@ public class DiscussionNavigator : MonoBehaviour
         //ChangeComprehensionButtonState();
     }
 
-    public void ChangeComprehensionButtonState()
-    {
-        if (!subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood)
-        {
-            markAsUnderstoodButton.gameObject.SetActive(true);
-            markAsNotYetUnderstoodButton.gameObject.SetActive(false);
-        }
-        else
-        {
-            markAsUnderstoodButton.gameObject.SetActive(false);
-            markAsNotYetUnderstoodButton.gameObject.SetActive(true);
-        }
-    }
 
 
     public int GetCurrentSectorIndex()
@@ -165,6 +147,11 @@ public class DiscussionNavigator : MonoBehaviour
         return subTopicsList.Count;
     }
 
+    public string GetSectorTitle(int sectorIndex)
+    {
+        return subTopicsList[sectorIndex].sectorTitle;
+    }
+
     public string GetPreviousSectorTitle()
     {
         return subTopicsList[_currentSectorIndex - 1].sectorTitle;
@@ -173,6 +160,11 @@ public class DiscussionNavigator : MonoBehaviour
     public string GetNextSectorTitle()
     {
         return subTopicsList[_currentSectorIndex + 1].sectorTitle;
+    }
+
+    public bool CurrentPageIsMarkedUnderstood()
+    {
+        return subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood;
     }
 
     private void CloseCurrentPage()
