@@ -7,6 +7,11 @@ public class UnderstandMarkersManager : MonoBehaviour
     public UnderstoodNotUnderstoodButton markAsUnderstoodButton;
     public UnderstoodNotUnderstoodButton markAsNotYetUnderstoodButton;
 
+    private void OnEnable()
+    {
+        DiscussionNavigator.UnderstandMarkerChangeEvent += ChangeComprehensionButtonState;
+    }
+
     public void ChangeComprehensionButtonState(DiscussionNavigator discNav)
     {
         if (!discNav.CurrentPageIsMarkedUnderstood())

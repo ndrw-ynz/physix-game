@@ -27,6 +27,7 @@ public class DiscussionNavigator : MonoBehaviour
     public List<Sector> subTopicsList;
 
     public static event Action<DiscussionNavigator> PageChangeEvent;
+    public static event Action<DiscussionNavigator> UnderstandMarkerChangeEvent;
     public static event Action<DiscussionNavigator> DiscussionPageStart;
     private int _currentSectorIndex = 0;
     private int _currentPageIndex = 0;
@@ -50,7 +51,7 @@ public class DiscussionNavigator : MonoBehaviour
             _currentPageIndex += direction;
             ShowPage(_currentSectorIndex, _currentPageIndex);
             PageChangeEvent?.Invoke(this);
-            //ChangeComprehensionButtonState();
+            UnderstandMarkerChangeEvent?.Invoke(this);
         }
     }
 
@@ -62,7 +63,7 @@ public class DiscussionNavigator : MonoBehaviour
         _currentPageIndex = 0;
         ShowPage(_currentSectorIndex, _currentPageIndex);
         PageChangeEvent?.Invoke(this);
-        //ChangeComprehensionButtonState();
+        UnderstandMarkerChangeEvent?.Invoke(this);
     }
 
     public void ChangeSector(string action)
@@ -77,7 +78,7 @@ public class DiscussionNavigator : MonoBehaviour
             _currentPageIndex = nextSectorFirstPageIndex;
 
             ShowPage(_currentSectorIndex,_currentPageIndex);
-            //ChangeComprehensionButtonState();
+            UnderstandMarkerChangeEvent?.Invoke(this);
 
             PageChangeEvent?.Invoke(this);
         }
@@ -91,7 +92,7 @@ public class DiscussionNavigator : MonoBehaviour
 
             ShowPage(_currentSectorIndex, _currentPageIndex);
 
-            //ChangeComprehensionButtonState();
+            UnderstandMarkerChangeEvent?.Invoke(this);
 
             PageChangeEvent?.Invoke(this);
         }
@@ -122,10 +123,8 @@ public class DiscussionNavigator : MonoBehaviour
     public void ChangeComprehensionMark(bool flag)
     {
         subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood = flag;
-        //ChangeComprehensionButtonState();
+        UnderstandMarkerChangeEvent?.Invoke(this);
     }
-
-
 
     public int GetCurrentSectorIndex()
     {
