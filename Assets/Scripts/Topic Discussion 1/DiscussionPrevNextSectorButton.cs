@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class DiscussionPrevNextSectorButton : MonoBehaviour
 {
+    public DiscussionNavigator discussionNavigator;
     public string action;
     public TextMeshProUGUI sectorButtonText;
 
