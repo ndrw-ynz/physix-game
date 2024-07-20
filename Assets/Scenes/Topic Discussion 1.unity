@@ -3232,8 +3232,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -326, y: -22}
-  m_SizeDelta: {x: 605.4924, y: 488.2979}
+  m_AnchoredPosition: {x: -319, y: -0.000015259}
+  m_SizeDelta: {x: 507.0537, y: 507.0537}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &585579998
 MonoBehaviour:
@@ -3972,6 +3972,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 756982383}
+  - component: {fileID: 756982384}
   m_Layer: 0
   m_Name: Understand Markers Manager
   m_TagString: Untagged
@@ -3994,6 +3995,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 504919720}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &756982384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 756982382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a02bf3933c2dc8a4ea0d54d1464e5286, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  markAsUnderstoodButton: {fileID: 997961746}
+  markAsNotYetUnderstoodButton: {fileID: 788661330}
 --- !u!1 &758523136
 GameObject:
   m_ObjectHideFlags: 0
@@ -4077,8 +4092,6 @@ MonoBehaviour:
       isMarkedUnderstood: 0
     - page: {fileID: 102516260}
       isMarkedUnderstood: 0
-  markAsUnderstoodButton: {fileID: 997961746}
-  markAsNotYetUnderstoodButton: {fileID: 788661330}
 --- !u!1 &778196570
 GameObject:
   m_ObjectHideFlags: 0
@@ -4485,8 +4498,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -326, y: -22}
-  m_SizeDelta: {x: 605.4924, y: 488.2979}
+  m_AnchoredPosition: {x: -319, y: -0.000015259}
+  m_SizeDelta: {x: 507.0537, y: 507.0537}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &788752229
 MonoBehaviour:
@@ -4702,7 +4715,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 600, y: 0}
-  m_SizeDelta: {x: 334.3582, y: 89.2897}
+  m_SizeDelta: {x: 250.3142, y: 89.2897}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &796551521
 MonoBehaviour:
@@ -8620,7 +8633,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -0.000034213, y: -0.0000038146973}
-  m_SizeDelta: {x: 221.5324, y: 38.08}
+  m_SizeDelta: {x: 189.0578, y: 38.08}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1441845978
 MonoBehaviour:
