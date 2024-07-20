@@ -19,6 +19,7 @@ public class ProgressManager : MonoBehaviour
     private void OnEnable()
     {
         DiscussionNavigator.DiscussionPageStart += CreateProgressBarButtons;
+        DiscussionNavigator.UnderstandMarkerChangeEvent += UpdateProgressBar;
     }
 
     private void CreateProgressBarButtons(DiscussionNavigator discNavig)
@@ -33,60 +34,39 @@ public class ProgressManager : MonoBehaviour
         {
             Vector2 buttonPosition = new Vector2(startX + i * buttonSpacing, 0f);
             ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
-
             newButton.transform.SetParent(progressAreaParent, false);
             newButton.name = $"Progress Button {i + 1}";
             newButton.transform.localPosition = buttonPosition;
 
             string sectorTitle = discNavig.GetSectorTitle(i);
             string progressCount = $"{discNavig.CountUnderstoodPages(i).ToString()}/{discNavig.CountTotalPages(i).ToString()}";
-
             newButton.Initialize(sectorTitle, progressCount, i);
             progressBarButtonList.Add(newButton);
         }
     }
 
+    private void UpdateProgressBar(DiscussionNavigator discNavig)
+    {
 
+        for (int i = 0; i < progressBarButtonList.Count; i++)
+        {
+            double currUnderstoodPagesCount = discNavig.CountUnderstoodPages(i);
+            double currSectorPagesCount = discNavig.CountTotalPages(i);
+            progressBarButtonList[i].progressCountText.text = $"{currUnderstoodPagesCount}/{currSectorPagesCount}";
 
-    //public void UpdateProgressBar(int sectorIndex)
-    //{
-    //    for (int i = 0; i < discussionNavigator.subTopicsList.Count; i++)
-    //    {
-    //        double understoodPages = 0;
-    //        double currentSectorTotalPages = 0;
-    //
-    //        for (int j = 0; j < discussionNavigator.subTopicsList[i].pages.Count; j++)
-    //        {
-    //            Debug.Log("Current Sector Index:" + i);
-    //            Debug.Log("Current Page Index:" + j);
-    //            if (currentPageIsMarkedUnderstood(i, j))
-    //            {
-    //                understoodPages++;
-    //            }
-    //        }
-    //
-    //        double progressPercentage = (understoodPages / currentSectorTotalPages) * 100;
-    //
-    //        if (progressPercentage == 100)
-    //        {
-    //            progressBarButtonList[i].progressBarImage.color = Color.green;
-    //        }
-    //        else if (progressPercentage > 50)
-    //        {
-    //            progressBarButtonList[i].progressBarImage.color = Color.yellow;
-    //        }
-    //        else
-    //        {
-    //            progressBarButtonList[i].progressBarImage.color = Color.gray;
-    //        }
-    //
-    //        progressBarButtonList[i].progressCountText.SetText($"{understoodPages}/{currentSectorTotalPages}");
-    //        
-    //    }
-    //}
-    //
-    //private bool currentPageIsMarkedUnderstood(int currentSectorIndex, int currentPageIndex)
-    //{
-    //    return discussionNavigator.subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedUnderstood;
-    //}
+            double currProgressBarPercentage = currUnderstoodPagesCount / currSectorPagesCount * 100;
+            if (currProgressBarPercentage == 100)
+            {
+                progressBarButtonList[i].progressBarImage.color = new Color(0.5890471f, 1f, 0.5264151f);
+            }
+            else if (currProgressBarPercentage > 50)
+            {
+                progressBarButtonList[i].progressBarImage.color = new Color(0.9546386f, 1f, 0.5254902f);
+            }
+            else
+            {
+                progressBarButtonList[i].progressBarImage.color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
+            }
+        }
+    }
 }
