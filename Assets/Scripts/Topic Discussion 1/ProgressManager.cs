@@ -19,6 +19,7 @@ public class ProgressManager : MonoBehaviour
     private void OnEnable()
     {
         DiscussionNavigator.DiscussionPageStart += CreateProgressBarButtons;
+        DiscussionNavigator.DiscussionPageStart += UpdateProgressBar;
         DiscussionNavigator.UnderstandMarkerChangeEvent += UpdateProgressBar;
     }
 
@@ -63,9 +64,13 @@ public class ProgressManager : MonoBehaviour
             {
                 progressBarButtonList[i].progressBarImage.color = new Color(0.9546386f, 1f, 0.5254902f);
             }
-            else
+            else if(currUnderstoodPagesCount > 0)
             {
                 progressBarButtonList[i].progressBarImage.color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
+            }
+            else
+            {  
+                progressBarButtonList[i].progressBarImage.color = Color.gray;
             }
         }
     }
