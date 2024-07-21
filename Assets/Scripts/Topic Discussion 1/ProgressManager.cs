@@ -6,12 +6,15 @@ using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.VolumeComponent;
 
 public class ProgressManager : MonoBehaviour
 {
     public ProgressBarButton progressBarButtonPrefab;
+    public SectorCircleIndicator sectorCircleIndicatorPrefab;
 
     private List<ProgressBarButton> progressBarButtonList = new List<ProgressBarButton>();
+    private List<SectorCircleIndicator> sectorCircleIndicatorList = new List<SectorCircleIndicator>();
     private RectTransform progressAreaParent;
     private int numButtons;
     private float buttonSpacing = 300.0f;
@@ -50,7 +53,21 @@ public class ProgressManager : MonoBehaviour
             string progressCount = $"{discNavig.CountUnderstoodPages(i).ToString()}/{discNavig.CountTotalPages(i).ToString()}";
             newButton.Initialize(sectorTitle, progressCount, i);
             progressBarButtonList.Add(newButton);
+            GenerateSectorCircleIndicator(buttonPosition, i);
         }
+    }
+
+    private void GenerateSectorCircleIndicator(Vector2 buttonPosition, int i)
+    {
+        Vector2 circlePosition = new Vector2(buttonPosition.x, buttonPosition.y - 46);
+        SectorCircleIndicator newCircleIndicator = Instantiate(sectorCircleIndicatorPrefab);
+        newCircleIndicator.name = $"Circle Button {i + 1}";
+        newCircleIndicator.transform.position = circlePosition;
+        newCircleIndicator.transform.SetParent(progressAreaParent, false);
+        newCircleIndicator.Initialize();
+        sectorCircleIndicatorList.Add(newCircleIndicator);
+
+        Debug.Log(circlePosition);
     }
 
     private void UpdateProgressBar(DiscussionNavigator discNavig)
