@@ -11,10 +11,10 @@ using static UnityEngine.Rendering.VolumeComponent;
 public class ProgressManager : MonoBehaviour
 {
     public ProgressBarButton progressBarButtonPrefab;
-    public SectorCircleIndicator sectorCircleIndicatorPrefab;
+    public SectorIndicator sectorCircleIndicatorPrefab;
 
     private List<ProgressBarButton> progressBarButtonList = new List<ProgressBarButton>();
-    private List<SectorCircleIndicator> sectorCircleIndicatorList = new List<SectorCircleIndicator>();
+    private List<SectorIndicator> sectorCircleIndicatorList = new List<SectorIndicator>();
     private RectTransform progressAreaParent;
     private int _numButtons;
     private float _buttonSpacing = 300.0f;
@@ -109,12 +109,12 @@ public class ProgressManager : MonoBehaviour
 
     private void GenerateSectorCircleIndicator(Vector2 circlePosition, int i)
     {
-        SectorCircleIndicator newCircleIndicator = Instantiate(sectorCircleIndicatorPrefab);
-        newCircleIndicator.transform.SetParent(progressAreaParent, false);
-        newCircleIndicator.name = $"Circle Button {i + 1}";
-        newCircleIndicator.transform.localPosition = circlePosition;
-        newCircleIndicator.Initialize();
-        sectorCircleIndicatorList.Add(newCircleIndicator);
+        SectorIndicator newIndicator = Instantiate(sectorCircleIndicatorPrefab);
+        newIndicator.transform.SetParent(progressAreaParent, false);
+        newIndicator.name = $"Circle Button {i + 1}";
+        newIndicator.transform.localPosition = circlePosition;
+        newIndicator.Initialize();
+        sectorCircleIndicatorList.Add(newIndicator);
     }
 
     private void UpdateProgressBar(DiscussionNavigator discNavig)

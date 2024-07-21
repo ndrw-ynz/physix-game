@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SectorCircleIndicator : MonoBehaviour
+public class SectorIndicator : MonoBehaviour
 {
     public Image circleIndicatorImage;
     public RectTransform circleIndicatorRectTransform;
