@@ -1,16 +1,31 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class CenterOfMassView : MonoBehaviour
 {
-	[Header("Layout Containers")]
+	[Header("Mass Coordinate Component Container")]
 	[SerializeField] private VerticalLayoutGroup massCoordinateComponentContainer;
+	[Header("Mass Coordinate Product Containers")]
 	[SerializeField] private HorizontalLayoutGroup XMassCoordinateProductContainer;
 	[SerializeField] private HorizontalLayoutGroup YMassCoordinateProductContainer;
+	[Header("Sum of Mass Coordinate Product Containers")]
+	[SerializeField] private HorizontalLayoutGroup XSumOfMassCoordinateProductContainer;
+	[SerializeField] private HorizontalLayoutGroup YSumOfMassCoordinateProductContainer;
+	[Header("Sum of Mass Containers")]
+	[SerializeField] private HorizontalLayoutGroup XSumOfMassContainer;
+	[SerializeField] private HorizontalLayoutGroup YSumOfMassContainer;
+	[Header("Sum Result Fields")]
+	[SerializeField] private TMP_InputField XMassCoordinateProductSumResultField;
+	[SerializeField] private TMP_InputField YMassCoordinateProductSumResultField;
+	[SerializeField] private TMP_InputField XSumOfMassResultField;
+	[SerializeField] private TMP_InputField YSumOfMassResultField;
 	[Header("Prefabs")]
 	[SerializeField] private MassCoordinateComponentDisplay massCoordinateComponentDisplayPrefab;
 	[SerializeField] private MassCoordinateProductDisplay massCoordinateProductDisplayPrefab;
+	[SerializeField] private TMP_InputField numberInputFieldPrefab;
+	[SerializeField] private TextMeshProUGUI plusSignTextPrefab;
 	[Header("Calculation Displays")]
 	[SerializeField] private GameObject MassTimesXCoords;
 	[SerializeField] private GameObject MassTimesYCoords;
@@ -34,6 +49,14 @@ public class CenterOfMassView : MonoBehaviour
 		// Setting up mass coordinate product displays in calculation display
 		SetupMassCoordinateProductContainers(massCoordinatePairs.Count, XMassCoordinateProductContainer);
 		SetupMassCoordinateProductContainers(massCoordinatePairs.Count, YMassCoordinateProductContainer);
+
+		// Setting up LEQ of XY Sum of Mass Coordinate Products
+		SetupLeftSumEquationContainer(massCoordinatePairs.Count, XSumOfMassCoordinateProductContainer, XMassCoordinateProductSumResultField);
+		SetupLeftSumEquationContainer(massCoordinatePairs.Count, YSumOfMassCoordinateProductContainer, YMassCoordinateProductSumResultField);
+
+		// Setting up LEQ of XY Sum of Mass
+		SetupLeftSumEquationContainer(massCoordinatePairs.Count, XSumOfMassContainer, XSumOfMassResultField);
+		SetupLeftSumEquationContainer(massCoordinatePairs.Count, YSumOfMassContainer, YSumOfMassResultField);
 	}
 
 	private void SetupMassCoordinateProductContainers(int coordinatePairsCount, HorizontalLayoutGroup massCoordinateProductContainer)
@@ -44,6 +67,33 @@ public class CenterOfMassView : MonoBehaviour
 			massCoordinateProductDisplay.SetupText(i + 1);
 			massCoordinateProductDisplay.transform.SetParent(massCoordinateProductContainer.transform, false);
 		}
+	}
+
+	private void SetupLeftSumEquationContainer(int addendsCount, HorizontalLayoutGroup leftSumEquationContainer, TMP_InputField sumResultField)
+	{
+		for (int i = 0; i < addendsCount; i++)
+		{
+			TMP_InputField numberInputField = Instantiate(numberInputFieldPrefab);
+			numberInputField.transform.SetParent(leftSumEquationContainer.transform, false);
+			numberInputField.onValueChanged.AddListener((_) => UpdateSumResultField(leftSumEquationContainer, sumResultField));
+
+			if (i + 1 < addendsCount)
+			{
+				TextMeshProUGUI plusSignText = Instantiate(plusSignTextPrefab);
+				plusSignText.transform.SetParent(leftSumEquationContainer.transform, false);
+			}
+		}
+	}
+	private void UpdateSumResultField(HorizontalLayoutGroup leftSumEquationContainer, TMP_InputField sumResultField)
+	{
+		float sum = 0;
+		TMP_InputField[] numberInputFields = leftSumEquationContainer.GetComponentsInChildren<TMP_InputField>();
+		foreach (TMP_InputField numberInputField in numberInputFields)
+		{
+			bool isEvaluated = ExpressionEvaluator.Evaluate(numberInputField.text, out float expressionResult);
+			if (isEvaluated) sum += expressionResult;
+		}
+		sumResultField.text = $"{sum}";
 	}
 	#endregion
 
