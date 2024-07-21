@@ -40,7 +40,7 @@ public class ProgressManager : MonoBehaviour
     {
         DiscussionNavigator.DiscussionPageStart -= LoadProgressBar;
         DiscussionNavigator.DiscussionPageStart -= LoadCircleIndicators;
-        DiscussionNavigator.DiscussionPageStart -= UpdateCircleIndicators;
+        DiscussionNavigator.DiscussionPageStart -= UpdateProgressBar;
         DiscussionNavigator.SectorChangeEvent -= UpdateCircleIndicators;
         DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdateProgressBar;
     }
