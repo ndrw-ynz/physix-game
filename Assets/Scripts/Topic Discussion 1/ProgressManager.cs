@@ -30,8 +30,8 @@ public class ProgressManager : MonoBehaviour
     private void OnEnable()
     {
         DiscussionNavigator.DiscussionPageStart += LoadProgressBar;
+        DiscussionNavigator.DiscussionPageStart += LoadCircleIndicators;
         DiscussionNavigator.DiscussionPageStart += UpdateProgressBar;
-        DiscussionNavigator.DiscussionPageStart += UpdateCircleIndicators;
         DiscussionNavigator.SectorChangeEvent += UpdateCircleIndicators;
         DiscussionNavigator.UnderstandMarkerChangeEvent += UpdateProgressBar;
     }
@@ -77,6 +77,22 @@ public class ProgressManager : MonoBehaviour
 
             Vector2 circlePosition = new Vector2(buttonPosition.x, buttonPosition.y - 46);
             GenerateSectorCircleIndicator(circlePosition, i);
+        }
+    }
+
+    private void LoadCircleIndicators(DiscussionNavigator discNav)
+    {
+        int currentSectorIndex = discNav.GetCurrentSectorIndex();
+        for (int i = 0; i < sectorCircleIndicatorList.Count; i++)
+        {
+            if (i == currentSectorIndex)
+            {
+                sectorCircleIndicatorList[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                sectorCircleIndicatorList[i].gameObject.SetActive(false);
+            }
         }
     }
 
