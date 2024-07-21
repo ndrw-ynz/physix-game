@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-public class MassCoordinateComponent : MonoBehaviour
+public class MassCoordinateComponentDisplay : MonoBehaviour
 {
     [Header("Text")]
     [SerializeField] private TextMeshProUGUI massNumberText;
