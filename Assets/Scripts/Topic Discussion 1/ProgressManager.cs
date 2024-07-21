@@ -11,10 +11,10 @@ using static UnityEngine.Rendering.VolumeComponent;
 public class ProgressManager : MonoBehaviour
 {
     public ProgressBarButton progressBarButtonPrefab;
-    public SectorIndicator sectorCircleIndicatorPrefab;
+    public SectorIndicatorRect sectorIndicatorRectPrefab;
 
     private List<ProgressBarButton> progressBarButtonList = new List<ProgressBarButton>();
-    private List<SectorIndicator> sectorCircleIndicatorList = new List<SectorIndicator>();
+    private List<SectorIndicatorRect> sectorIndicatorRectList = new List<SectorIndicatorRect>();
     private RectTransform progressAreaParent;
     private int _numButtons;
     private float _buttonSpacing = 300.0f;
@@ -30,18 +30,18 @@ public class ProgressManager : MonoBehaviour
     private void OnEnable()
     {
         DiscussionNavigator.DiscussionPageStart += LoadProgressBar;
-        DiscussionNavigator.DiscussionPageStart += LoadCircleIndicators;
+        DiscussionNavigator.DiscussionPageStart += LoadIndicatorRects;
         DiscussionNavigator.DiscussionPageStart += UpdateProgressBar;
-        DiscussionNavigator.SectorChangeEvent += UpdateCircleIndicators;
+        DiscussionNavigator.SectorChangeEvent += UpdateIndicatorRects;
         DiscussionNavigator.UnderstandMarkerChangeEvent += UpdateProgressBar;
     }
 
     private void OnDisable()
     {
         DiscussionNavigator.DiscussionPageStart -= LoadProgressBar;
-        DiscussionNavigator.DiscussionPageStart -= LoadCircleIndicators;
+        DiscussionNavigator.DiscussionPageStart -= LoadIndicatorRects;
         DiscussionNavigator.DiscussionPageStart -= UpdateProgressBar;
-        DiscussionNavigator.SectorChangeEvent -= UpdateCircleIndicators;
+        DiscussionNavigator.SectorChangeEvent -= UpdateIndicatorRects;
         DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdateProgressBar;
     }
 
@@ -51,7 +51,7 @@ public class ProgressManager : MonoBehaviour
         {
             if (_currentWidth < _targetWidth) {
                 _currentWidth += Time.deltaTime * _indicatorAnimationSpeed;
-                sectorCircleIndicatorList[_currentIndicatorIndex].circleIndicatorRectTransform.sizeDelta = new Vector2(_currentWidth, _currentHeight);
+                sectorIndicatorRectList[_currentIndicatorIndex].indicatorRectTransform.sizeDelta = new Vector2(_currentWidth, _currentHeight);
             }
             else
             {
@@ -75,23 +75,23 @@ public class ProgressManager : MonoBehaviour
             string progressCount = $"{discNavig.CountUnderstoodPages(i).ToString()}/{discNavig.CountTotalPages(i).ToString()}";
             GenerateProgressBarButton(buttonPosition, i, sectorTitle, progressCount);
 
-            Vector2 circlePosition = new Vector2(buttonPosition.x, buttonPosition.y - 46);
-            GenerateSectorCircleIndicator(circlePosition, i);
+            Vector2 rectPosition = new Vector2(buttonPosition.x, buttonPosition.y - 46);
+            GenerateSectorIndicatorRect(rectPosition, i);
         }
     }
 
-    private void LoadCircleIndicators(DiscussionNavigator discNav)
+    private void LoadIndicatorRects(DiscussionNavigator discNav)
     {
         int currentSectorIndex = discNav.GetCurrentSectorIndex();
-        for (int i = 0; i < sectorCircleIndicatorList.Count; i++)
+        for (int i = 0; i < sectorIndicatorRectList.Count; i++)
         {
             if (i == currentSectorIndex)
             {
-                sectorCircleIndicatorList[i].gameObject.SetActive(true);
+                sectorIndicatorRectList[i].gameObject.SetActive(true);
             }
             else
             {
-                sectorCircleIndicatorList[i].gameObject.SetActive(false);
+                sectorIndicatorRectList[i].gameObject.SetActive(false);
             }
         }
     }
@@ -107,14 +107,14 @@ public class ProgressManager : MonoBehaviour
 
     }
 
-    private void GenerateSectorCircleIndicator(Vector2 circlePosition, int i)
+    private void GenerateSectorIndicatorRect(Vector2 rectPosition, int i)
     {
-        SectorIndicator newIndicator = Instantiate(sectorCircleIndicatorPrefab);
-        newIndicator.transform.SetParent(progressAreaParent, false);
-        newIndicator.name = $"Circle Button {i + 1}";
-        newIndicator.transform.localPosition = circlePosition;
-        newIndicator.Initialize();
-        sectorCircleIndicatorList.Add(newIndicator);
+        SectorIndicatorRect newIndicatorRect = Instantiate(sectorIndicatorRectPrefab);
+        newIndicatorRect.transform.SetParent(progressAreaParent, false);
+        newIndicatorRect.name = $"Indicator Rect {i + 1}";
+        newIndicatorRect.transform.localPosition = rectPosition;
+        newIndicatorRect.Initialize();
+        sectorIndicatorRectList.Add(newIndicatorRect);
     }
 
     private void UpdateProgressBar(DiscussionNavigator discNavig)
@@ -145,22 +145,22 @@ public class ProgressManager : MonoBehaviour
         }
     }
 
-    private void UpdateCircleIndicators(DiscussionNavigator discNav)
+    private void UpdateIndicatorRects(DiscussionNavigator discNav)
     {
         int currentSectorIndex = discNav.GetCurrentSectorIndex();
-        for (int i = 0; i < sectorCircleIndicatorList.Count; i++)
+        for (int i = 0; i < sectorIndicatorRectList.Count; i++)
         {
             if (i == currentSectorIndex)
             {
-                sectorCircleIndicatorList[i].gameObject.SetActive(true);
+                sectorIndicatorRectList[i].gameObject.SetActive(true);
                 _currentIndicatorIndex = i;
                 _currentWidth = 0;
-                _currentHeight = sectorCircleIndicatorList[i].circleIndicatorRectTransform.rect.height;
+                _currentHeight = sectorIndicatorRectList[i].indicatorRectTransform.rect.height;
                 _animateIndicator = true;
             }
             else 
             {
-                sectorCircleIndicatorList[i].gameObject.SetActive(false);
+                sectorIndicatorRectList[i].gameObject.SetActive(false);
             }
         }
     }
