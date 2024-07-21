@@ -29,7 +29,7 @@ public class ProgressManager : MonoBehaviour
 
     private void OnEnable()
     {
-        DiscussionNavigator.DiscussionPageStart += CreateProgressBarButtons;
+        DiscussionNavigator.DiscussionPageStart += LoadProgressBar;
         DiscussionNavigator.DiscussionPageStart += UpdateProgressBar;
         DiscussionNavigator.DiscussionPageStart += UpdateCircleIndicators;
         DiscussionNavigator.SectorChangeEvent += UpdateCircleIndicators;
@@ -38,7 +38,7 @@ public class ProgressManager : MonoBehaviour
 
     private void OnDisable()
     {
-        DiscussionNavigator.DiscussionPageStart -= CreateProgressBarButtons;
+        DiscussionNavigator.DiscussionPageStart -= LoadProgressBar;
         DiscussionNavigator.DiscussionPageStart -= UpdateProgressBar;
         DiscussionNavigator.DiscussionPageStart -= UpdateCircleIndicators;
         DiscussionNavigator.SectorChangeEvent -= UpdateCircleIndicators;
@@ -60,7 +60,7 @@ public class ProgressManager : MonoBehaviour
         }
     }
 
-    private void CreateProgressBarButtons(DiscussionNavigator discNavig)
+    private void LoadProgressBar(DiscussionNavigator discNavig)
     {
         progressAreaParent = GameObject.Find("BUTTONS").transform.Find("Progress Bar Buttons").GetComponent<RectTransform>();
         _numButtons = discNavig.GetSubTopicListCount();
@@ -71,27 +71,32 @@ public class ProgressManager : MonoBehaviour
         for (int i = 0; i < _numButtons; i++)
         {
             Vector2 buttonPosition = new Vector2(startX + i * _buttonSpacing, 0f);
-            ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
-            newButton.transform.SetParent(progressAreaParent, false);
-            newButton.name = $"Progress Button {i + 1}";
-            newButton.transform.localPosition = buttonPosition;
-
             string sectorTitle = discNavig.GetSectorTitle(i);
             string progressCount = $"{discNavig.CountUnderstoodPages(i).ToString()}/{discNavig.CountTotalPages(i).ToString()}";
-            newButton.Initialize(sectorTitle, progressCount, i);
-            progressBarButtonList.Add(newButton);
+            GenerateProgressBarButton(buttonPosition, i, sectorTitle, progressCount);
 
-            GenerateSectorCircleIndicator(buttonPosition, i);
+            Vector2 circlePosition = new Vector2(buttonPosition.x, buttonPosition.y - 46);
+            GenerateSectorCircleIndicator(circlePosition, i);
         }
     }
 
-    private void GenerateSectorCircleIndicator(Vector2 buttonPosition, int i)
+    private void GenerateProgressBarButton(Vector2 buttonPosition, int i, string sectorTitle, string progressCount)
     {
-        Vector2 circlePosition = new Vector2(buttonPosition.x, buttonPosition.y - 46);
+        ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
+        newButton.transform.SetParent(progressAreaParent, false);
+        newButton.name = $"Progress Button {i + 1}";
+        newButton.transform.localPosition = buttonPosition;
+        newButton.Initialize(sectorTitle, progressCount, i);
+        progressBarButtonList.Add(newButton);
+
+    }
+
+    private void GenerateSectorCircleIndicator(Vector2 circlePosition, int i)
+    {
         SectorCircleIndicator newCircleIndicator = Instantiate(sectorCircleIndicatorPrefab);
-        newCircleIndicator.name = $"Circle Button {i + 1}";
-        newCircleIndicator.transform.position = circlePosition;
         newCircleIndicator.transform.SetParent(progressAreaParent, false);
+        newCircleIndicator.name = $"Circle Button {i + 1}";
+        newCircleIndicator.transform.localPosition = circlePosition;
         newCircleIndicator.Initialize();
         sectorCircleIndicatorList.Add(newCircleIndicator);
     }
