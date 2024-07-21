@@ -6,8 +6,11 @@ public class CenterOfMassView : MonoBehaviour
 {
 	[Header("Layout Containers")]
 	[SerializeField] private VerticalLayoutGroup massCoordinateComponentContainer;
+	[SerializeField] private HorizontalLayoutGroup XMassCoordinateProductContainer;
+	[SerializeField] private HorizontalLayoutGroup YMassCoordinateProductContainer;
 	[Header("Prefabs")]
-	[SerializeField] private MassCoordinateComponent massCoordinateComponentPrefab;
+	[SerializeField] private MassCoordinateComponentDisplay massCoordinateComponentDisplayPrefab;
+	[SerializeField] private MassCoordinateProductDisplay massCoordinateProductDisplayPrefab;
 	[Header("Calculation Displays")]
 	[SerializeField] private GameObject MassTimesXCoords;
 	[SerializeField] private GameObject MassTimesYCoords;
@@ -23,9 +26,23 @@ public class CenterOfMassView : MonoBehaviour
 		// Setting up mass coordinate components for UI display of given values
 		for (int i = 0; i < massCoordinatePairs.Count; i++)
 		{
-			MassCoordinateComponent massCoordinate = Instantiate(massCoordinateComponentPrefab);
-			massCoordinate.SetupInputFields(massCoordinatePairs[i], i + 1);
-			massCoordinate.transform.SetParent(massCoordinateComponentContainer.transform, false);
+			MassCoordinateComponentDisplay massCoordinateComponentDisplay = Instantiate(massCoordinateComponentDisplayPrefab);
+			massCoordinateComponentDisplay.SetupInputFields(massCoordinatePairs[i], i + 1);
+			massCoordinateComponentDisplay.transform.SetParent(massCoordinateComponentContainer.transform, false);
+		}
+
+		// Setting up mass coordinate product displays in calculation display
+		SetupMassCoordinateProductContainers(massCoordinatePairs.Count, XMassCoordinateProductContainer);
+		SetupMassCoordinateProductContainers(massCoordinatePairs.Count, YMassCoordinateProductContainer);
+	}
+
+	private void SetupMassCoordinateProductContainers(int coordinatePairsCount, HorizontalLayoutGroup massCoordinateProductContainer)
+	{
+		for (int i = 0; i < coordinatePairsCount; i++)
+		{
+			MassCoordinateProductDisplay massCoordinateProductDisplay = Instantiate(massCoordinateProductDisplayPrefab);
+			massCoordinateProductDisplay.SetupText(i + 1);
+			massCoordinateProductDisplay.transform.SetParent(massCoordinateProductContainer.transform, false);
 		}
 	}
 	#endregion
