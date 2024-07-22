@@ -38,6 +38,7 @@ public class DiscussionNavigator : MonoBehaviour
         DiscussionPrevNextPageButton.PrevNextPageClickEvent += ChangePage;
         DiscussionPrevNextSectorButton.PrevNextSectorClickEvent += ChangeSector;
         ProgressBarButton.ProgressBarClickEvent += JumpToSector;
+        PageCircleButton.OnPageCircleClick += JumpToPage;
         UnderstoodNotUnderstoodButton.UnderstoodNotUnderstoodClickEvent += ChangeComprehensionMark;
 
         DiscussionPageStart?.Invoke(this);
@@ -75,6 +76,18 @@ public class DiscussionNavigator : MonoBehaviour
 
         PageChangeEvent?.Invoke(this);
         SectorChangeEvent?.Invoke(this);
+        UnderstandMarkerChangeEvent?.Invoke(this);
+    }
+
+    public void JumpToPage(int pageIndex)
+    {
+        _currentPageIndex = pageIndex;
+        ShowPage(_currentSectorIndex, _currentPageIndex);
+
+        Debug.Log(_currentSectorIndex + "    " + _currentPageIndex);
+        Debug.Log(GetCurrentSectorPagesCount());
+
+        PageChangeEvent?.Invoke(this);
         UnderstandMarkerChangeEvent?.Invoke(this);
     }
 
@@ -165,6 +178,11 @@ public class DiscussionNavigator : MonoBehaviour
     public bool CurrentPageIsMarkedUnderstood()
     {
         return subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood;
+    }
+
+    public bool IsPageMarkedUnderstood(int pageIndex)
+    {
+        return subTopicsList[_currentSectorIndex].pages[pageIndex].isMarkedUnderstood;
     }
 
     // Private functions, used only inside this class

@@ -46,8 +46,8 @@ public class PrevNextButtonsManager : MonoBehaviour
             // DEACTIVATE Both Previous Buttons
             prevPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
-
-            SetNextSectorText(discNav.GetNextSectorTitle());
+            nextPageButton.gameObject.SetActive(true);
+            nextSectorButton.gameObject.SetActive(false);
         }
         else if (isOnlySinglePageInSector)
         {
@@ -97,10 +97,10 @@ public class PrevNextButtonsManager : MonoBehaviour
         else if (isLastSectorLastPage)
         {
             // DEACTIVATE Both Next Buttons
+            prevPageButton.gameObject.SetActive(true);
+            prevSectorButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
             nextSectorButton.gameObject.SetActive(false);
-
-            SetPrevSectorText(discNav.GetPreviousSectorTitle());
         }
         else
         {
