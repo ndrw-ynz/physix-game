@@ -9,6 +9,7 @@ public class CenterOfMassEquationDisplay : MonoBehaviour
     [SerializeField] private TMP_InputField denominatorInputField;
     [Header("Result Field")]
     [SerializeField] private TMP_InputField centerOfMassResultInputField;
+	public float? centerOfMassValue { get; private set; }
 
 	public void OnInputFieldChange()
 	{
@@ -21,10 +22,12 @@ public class CenterOfMassEquationDisplay : MonoBehaviour
 		result = (float) Math.Round(result, 2);
 		if (canEvaluate)
 		{
+			centerOfMassValue = result;
 			centerOfMassResultInputField.text = $"{result}";
 		}
 		else
 		{
+			centerOfMassValue = null;
 			centerOfMassResultInputField.text = "N/A";
 		}
 	}
