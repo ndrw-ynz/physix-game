@@ -22,11 +22,14 @@ public class ActivitySevenManager : MonoBehaviour
     [Header("Views")]
     [SerializeField] CenterOfMassView centerOfMassView;
 
-    [Header("Private Given Values - Center of Mass")]
-    List<MassCoordinatePair> massCoordinatePairs;
+
+	// Given Values - Center of Mass
+    private List<MassCoordinatePair> massCoordinatePairs;
 
     void Start()
     {
+        CenterOfMassView.SubmitAnswerEvent += CheckCenterOfMassAnswers;
+
         currentCenterOfMassLevel = centerOfMassLevelOne;
         
         // Initializing given values
@@ -53,5 +56,52 @@ public class ActivitySevenManager : MonoBehaviour
 			massCoordinatePairs.Add(massCoordinatePair);
 		}
     }
+
+    private void CheckCenterOfMassAnswers(CenterOfMassAnswerSubmission centerOfMassAnswer)
+    {
+		// Extracting necessary info from massCoordinatePairs
+		int[] massValues = new int[massCoordinatePairs.Count];
+		int[] xCoordinateValues = new int[massCoordinatePairs.Count];
+		int[] yCoordinateValues = new int[massCoordinatePairs.Count];
+		for (int i = 0; i < massCoordinatePairs.Count; i++)
+		{
+			massValues[i] = massCoordinatePairs[i].mass;
+			xCoordinateValues[i] = (int) massCoordinatePairs[i].coordinate.x;
+			yCoordinateValues[i] = (int) massCoordinatePairs[i].coordinate.y;
+		}
+
+		// Validating massTimesXCoordinates submission
+		bool isMassTimesXCoordinatesCorrect = ActivitySevenUtilities.ValidateMassTimesCoordinatesSubmission(centerOfMassAnswer.massTimesXCoordinates, massValues, xCoordinateValues);
+
+		// Validating massTimesYCoordinates submission
+		bool isMassTimesYCoordinatesCorrect = ActivitySevenUtilities.ValidateMassTimesCoordinatesSubmission(centerOfMassAnswer.massTimesYCoordinates, massValues, yCoordinateValues);
+
+		// Validating sumOfMassTimesXCoordinates
+		bool isSumOfMassTimesXCoordinatesCorrect = ActivitySevenUtilities.ValidateSumOfMassTimesCoordinatesSubmission(centerOfMassAnswer.sumOfMassTimesXCoordinates, massValues, xCoordinateValues);
+		
+		// Validating sumOfMassTimesYCoordinates
+		bool isSumOfMassTimesYCoordinatesCorrect = ActivitySevenUtilities.ValidateSumOfMassTimesCoordinatesSubmission(centerOfMassAnswer.sumOfMassTimesYCoordinates, massValues, yCoordinateValues);
+
+		// Validating totalMassX
+		bool isTotalMassXCorrect = ActivitySevenUtilities.ValidateTotalMassSubmission(centerOfMassAnswer.totalMassX, massValues);
+
+		// Validating totalMassY
+		bool isTotalMassYCorrect = ActivitySevenUtilities.ValidateTotalMassSubmission(centerOfMassAnswer.totalMassY, massValues);
+
+		// Validating centerOfMassX
+		bool isCenterOfMassXCorrect = ActivitySevenUtilities.ValidateCenterOfMassSubmission(centerOfMassAnswer.centerOfMassX, massValues, xCoordinateValues);
+		
+		// Validating centerOfMassY
+		bool isCenterOfMassYCorrect = ActivitySevenUtilities.ValidateCenterOfMassSubmission(centerOfMassAnswer.centerOfMassY, massValues, yCoordinateValues);
+
+		Debug.Log(isMassTimesXCoordinatesCorrect);
+		Debug.Log(isMassTimesYCoordinatesCorrect);
+		Debug.Log(isSumOfMassTimesXCoordinatesCorrect);
+		Debug.Log(isSumOfMassTimesYCoordinatesCorrect);
+		Debug.Log(isTotalMassXCorrect);
+		Debug.Log(isTotalMassYCorrect);
+		Debug.Log(isCenterOfMassXCorrect);
+		Debug.Log(isCenterOfMassYCorrect);
+	}
 	#endregion
 }
