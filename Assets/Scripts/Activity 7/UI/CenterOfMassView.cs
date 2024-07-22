@@ -29,10 +29,10 @@ public class CenterOfMassView : MonoBehaviour
 	[SerializeField] private TMP_InputField numberInputFieldPrefab;
 	[SerializeField] private TextMeshProUGUI plusSignTextPrefab;
 	[Header("Calculation Displays")]
-	[SerializeField] private GameObject MassTimesXCoords;
-	[SerializeField] private GameObject MassTimesYCoords;
-	[SerializeField] private GameObject CenterOfMassXDir;
-	[SerializeField] private GameObject CenterOfMassYDir;
+	[SerializeField] private GameObject massTimesXCoords;
+	[SerializeField] private GameObject massTimesYCoords;
+	[SerializeField] private GameObject centerOfMassXDir;
+	[SerializeField] private GameObject centerOfMassYDir;
 	[Header("Interactive Buttons")]
     [SerializeField] private Button leftPageButton;
 	[SerializeField] private Button rightPageButton;
@@ -111,11 +111,11 @@ public class CenterOfMassView : MonoBehaviour
 		leftPageButton.gameObject.SetActive(false);
 		rightPageButton.gameObject.SetActive(true);
 
-		MassTimesXCoords.gameObject.SetActive(true);
-		CenterOfMassXDir.gameObject.SetActive(true);
+		massTimesXCoords.gameObject.SetActive(true);
+		centerOfMassXDir.gameObject.SetActive(true);
 
-		MassTimesYCoords.gameObject.SetActive(false);
-		CenterOfMassYDir.gameObject.SetActive(false);
+		massTimesYCoords.gameObject.SetActive(false);
+		centerOfMassYDir.gameObject.SetActive(false);
 	}
 
 	public void OnRightPageButtonClick()
@@ -123,11 +123,11 @@ public class CenterOfMassView : MonoBehaviour
 		leftPageButton.gameObject.SetActive(true);
 		rightPageButton.gameObject.SetActive(false);
 
-		MassTimesXCoords.gameObject.SetActive(false);
-		CenterOfMassXDir.gameObject.SetActive(false);
+		massTimesXCoords.gameObject.SetActive(false);
+		centerOfMassXDir.gameObject.SetActive(false);
 
-		MassTimesYCoords.gameObject.SetActive(true);
-		CenterOfMassYDir.gameObject.SetActive(true);
+		massTimesYCoords.gameObject.SetActive(true);
+		centerOfMassYDir.gameObject.SetActive(true);
 	}
 	#endregion
 }
