@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CenterOfMassView : MonoBehaviour
 {
+	[Header("Graph Coordinate Plotter")]
+	[SerializeField] private GraphCoordinatePlotter graphCoordinatePlotter;
 	[Header("Mass Coordinate Component Container")]
 	[SerializeField] private VerticalLayoutGroup massCoordinateComponentContainer;
 	[Header("Mass Coordinate Product Containers")]
@@ -57,6 +59,12 @@ public class CenterOfMassView : MonoBehaviour
 		// Setting up LEQ of XY Sum of Mass
 		SetupLeftSumEquationContainer(massCoordinatePairs.Count, XSumOfMassContainer, XSumOfMassResultField);
 		SetupLeftSumEquationContainer(massCoordinatePairs.Count, YSumOfMassContainer, YSumOfMassResultField);
+
+		// Setup graph points
+		for (int i = 0; i < massCoordinatePairs.Count; i++)
+		{
+			graphCoordinatePlotter.PlacePoint(massCoordinatePairs[i].coordinate);
+		}
 	}
 
 	private void SetupMassCoordinateProductContainers(int coordinatePairsCount, HorizontalLayoutGroup massCoordinateProductContainer)
