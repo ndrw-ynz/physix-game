@@ -13,6 +13,52 @@ public class MassCoordinatePair
 	}
 }
 
+public class CenterOfMassAnswerSubmissionResults
+{
+	public bool isMassTimesXCoordinatesCorrect { get; private set; }
+	public bool isMassTimesYCoordinatesCorrect { get; private set; }
+	public bool isSumOfMassTimesXCoordinatesCorrect { get; private set; }
+	public bool isSumOfMassTimesYCoordinatesCorrect { get; private set; }
+	public bool isTotalMassXCorrect { get; private set; }
+	public bool isTotalMassYCorrect { get; private set; }
+	public bool isCenterOfMassXCorrect { get; private set; }
+	public bool isCenterOfMassYCorrect { get; private set; }
+
+	public CenterOfMassAnswerSubmissionResults(
+		bool isMassTimesXCoordinatesCorrect, 
+		bool isMassTimesYCoordinatesCorrect,
+		bool isSumOfMassTimesXCoordinatesCorrect,
+		bool isSumOfMassTimesYCoordinatesCorrect,
+		bool isTotalMassXCorrect,
+		bool isTotalMassYCorrect,
+		bool isCenterOfMassXCorrect,
+		bool isCenterOfMassYCorrect)
+	{
+		this.isMassTimesXCoordinatesCorrect = isMassTimesXCoordinatesCorrect;
+		this.isMassTimesYCoordinatesCorrect = isMassTimesYCoordinatesCorrect;
+		this.isSumOfMassTimesXCoordinatesCorrect = isSumOfMassTimesXCoordinatesCorrect;
+		this.isSumOfMassTimesYCoordinatesCorrect = isSumOfMassTimesYCoordinatesCorrect;
+		this.isTotalMassXCorrect = isTotalMassXCorrect;
+		this.isTotalMassYCorrect = isTotalMassYCorrect;
+		this.isCenterOfMassXCorrect = isCenterOfMassXCorrect;
+		this.isCenterOfMassYCorrect = isCenterOfMassYCorrect;
+	}
+
+	public bool isAllCorrect()
+	{
+		return (
+			isMassTimesXCoordinatesCorrect &&
+			isMassTimesYCoordinatesCorrect &&
+			isSumOfMassTimesXCoordinatesCorrect &&
+			isSumOfMassTimesYCoordinatesCorrect &&
+			isTotalMassXCorrect &&
+			isTotalMassYCorrect &&
+			isCenterOfMassXCorrect &&
+			isCenterOfMassYCorrect
+			);
+	}
+}
+
 public class ActivitySevenManager : MonoBehaviour
 {
     [Header("Level Data - Center of Mass")]
@@ -72,57 +118,30 @@ public class ActivitySevenManager : MonoBehaviour
 			yCoordinateValues[i] = (int) massCoordinatePairs[i].coordinate.y;
 		}
 
-		// Validating massTimesXCoordinates submission
-		bool isMassTimesXCoordinatesCorrect = ActivitySevenUtilities.ValidateMassTimesCoordinatesSubmission(centerOfMassAnswer.massTimesXCoordinates, massValues, xCoordinateValues);
+		// Validate submissions and store in CenterOfMassAnswerSubmissionResults class instance.
+		CenterOfMassAnswerSubmissionResults results = new CenterOfMassAnswerSubmissionResults(
+			isMassTimesXCoordinatesCorrect: ActivitySevenUtilities.ValidateMassTimesCoordinatesSubmission(centerOfMassAnswer.massTimesXCoordinates, massValues, xCoordinateValues),
+			isMassTimesYCoordinatesCorrect: ActivitySevenUtilities.ValidateMassTimesCoordinatesSubmission(centerOfMassAnswer.massTimesYCoordinates, massValues, yCoordinateValues),
+			isSumOfMassTimesXCoordinatesCorrect: ActivitySevenUtilities.ValidateSumOfMassTimesCoordinatesSubmission(centerOfMassAnswer.sumOfMassTimesXCoordinates, massValues, xCoordinateValues),
+			isSumOfMassTimesYCoordinatesCorrect: ActivitySevenUtilities.ValidateSumOfMassTimesCoordinatesSubmission(centerOfMassAnswer.sumOfMassTimesYCoordinates, massValues, yCoordinateValues),
+			isTotalMassXCorrect: ActivitySevenUtilities.ValidateTotalMassSubmission(centerOfMassAnswer.totalMassX, massValues),
+			isTotalMassYCorrect: ActivitySevenUtilities.ValidateTotalMassSubmission(centerOfMassAnswer.totalMassY, massValues),
+			isCenterOfMassXCorrect: ActivitySevenUtilities.ValidateCenterOfMassSubmission(centerOfMassAnswer.centerOfMassX, massValues, xCoordinateValues),
+			isCenterOfMassYCorrect: ActivitySevenUtilities.ValidateCenterOfMassSubmission(centerOfMassAnswer.centerOfMassY, massValues, yCoordinateValues)
+			);
 
-		// Validating massTimesYCoordinates submission
-		bool isMassTimesYCoordinatesCorrect = ActivitySevenUtilities.ValidateMassTimesCoordinatesSubmission(centerOfMassAnswer.massTimesYCoordinates, massValues, yCoordinateValues);
-
-		// Validating sumOfMassTimesXCoordinates
-		bool isSumOfMassTimesXCoordinatesCorrect = ActivitySevenUtilities.ValidateSumOfMassTimesCoordinatesSubmission(centerOfMassAnswer.sumOfMassTimesXCoordinates, massValues, xCoordinateValues);
-		
-		// Validating sumOfMassTimesYCoordinates
-		bool isSumOfMassTimesYCoordinatesCorrect = ActivitySevenUtilities.ValidateSumOfMassTimesCoordinatesSubmission(centerOfMassAnswer.sumOfMassTimesYCoordinates, massValues, yCoordinateValues);
-
-		// Validating totalMassX
-		bool isTotalMassXCorrect = ActivitySevenUtilities.ValidateTotalMassSubmission(centerOfMassAnswer.totalMassX, massValues);
-
-		// Validating totalMassY
-		bool isTotalMassYCorrect = ActivitySevenUtilities.ValidateTotalMassSubmission(centerOfMassAnswer.totalMassY, massValues);
-
-		// Validating centerOfMassX
-		bool isCenterOfMassXCorrect = ActivitySevenUtilities.ValidateCenterOfMassSubmission(centerOfMassAnswer.centerOfMassX, massValues, xCoordinateValues);
-		
-		// Validating centerOfMassY
-		bool isCenterOfMassYCorrect = ActivitySevenUtilities.ValidateCenterOfMassSubmission(centerOfMassAnswer.centerOfMassY, massValues, yCoordinateValues);
-
-		Debug.Log(isMassTimesXCoordinatesCorrect);
-		Debug.Log(isMassTimesYCoordinatesCorrect);
-		Debug.Log(isSumOfMassTimesXCoordinatesCorrect);
-		Debug.Log(isSumOfMassTimesYCoordinatesCorrect);
-		Debug.Log(isTotalMassXCorrect);
-		Debug.Log(isTotalMassYCorrect);
-		Debug.Log(isCenterOfMassXCorrect);
-		Debug.Log(isCenterOfMassYCorrect);
-
-		
-		if (
-			isMassTimesXCoordinatesCorrect && 
-			isMassTimesYCoordinatesCorrect &&
-			isSumOfMassTimesXCoordinatesCorrect &&
-			isSumOfMassTimesYCoordinatesCorrect &&
-			isTotalMassXCorrect &&
-			isTotalMassYCorrect &&
-			isCenterOfMassXCorrect &&
-			isCenterOfMassYCorrect
-			)
+		// Modify display border and text
+		if (results.isAllCorrect())
 		{
-			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, "Correct Submission");
+			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, "Calculations correct. The power cube is now accessible.");
 		} else
 		{
-			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(false, "Incorrect Submission");
+			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
-		
+
+		// Modify status border displays from all results
+		centerOfMassSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
 		centerOfMassSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 	#endregion
