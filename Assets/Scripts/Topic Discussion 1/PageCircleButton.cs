@@ -23,7 +23,7 @@ public class PageCircleButton : MonoBehaviour
         images = GetComponentsInChildren<Image>();
 
         buttonOutline = images[0];
-        buttonColor = images[1];
+        buttonColor = images[2];
         startPosition = buttonColor.transform.position;
         pageIndex = index;
 

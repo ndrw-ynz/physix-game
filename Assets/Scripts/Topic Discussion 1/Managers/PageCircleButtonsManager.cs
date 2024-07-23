@@ -22,6 +22,16 @@ public class PageCircleButtonsManager : MonoBehaviour
         DiscussionNavigator.UnderstandMarkerChangeEvent += UpdatePageCircleButtonColors;
     }
 
+    private void OnDisable()
+    {
+        DiscussionNavigator.DiscussionPageStart -= LoadPageCircleButtons;
+        DiscussionNavigator.DiscussionPageStart -= UpdatePageCircleButtonStates;
+        DiscussionNavigator.SectorChangeEvent -= LoadPageCircleButtons;
+        DiscussionNavigator.SectorChangeEvent -= UpdatePageCircleButtonStates;
+        DiscussionNavigator.PageChangeEvent -= UpdatePageCircleButtonStates;
+        DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdatePageCircleButtonColors;
+    }
+
     private void LoadPageCircleButtons(DiscussionNavigator discNav)
     {
         if (pageCircleButtonList.Count > 0) { RemoveAllButtons(); }
@@ -71,7 +81,7 @@ public class PageCircleButtonsManager : MonoBehaviour
         {
             if (discNav.IsPageMarkedUnderstood(i))
             {
-                pageCircleButtonList[i].buttonColor.color = Color.green;
+                pageCircleButtonList[i].buttonColor.color = new Color(0.51f, 1, 0.22f);
             }
             else
             {
