@@ -16,7 +16,8 @@ public class PageCircleButton : MonoBehaviour
     public int pageIndex;
     public static event Action<int> OnPageCircleClick;
 
-    private Button pageCircleButton;
+    private SpriteRenderer _buttonRenderer;
+    private Button _pageCircleButton;
 
     public void Initialize(int index)
     {
@@ -26,13 +27,14 @@ public class PageCircleButton : MonoBehaviour
         buttonColor = images[2];
         startPosition = buttonColor.transform.position;
         pageIndex = index;
+        _buttonRenderer = GetComponentInChildren<SpriteRenderer>();
 
-        pageCircleButton = GetComponentInChildren<Button>();
-        pageCircleButton.onClick.AddListener(() => OnPageCircleClick?.Invoke(pageIndex));
+        _pageCircleButton = GetComponentInChildren<Button>();
+        _pageCircleButton.onClick.AddListener(() => OnPageCircleClick?.Invoke(pageIndex));
     }
 
     private void OnDisable()
     {
-        pageCircleButton.onClick.RemoveAllListeners();
+        _pageCircleButton.onClick.RemoveAllListeners();
     }
 }

@@ -12,6 +12,13 @@ public class PageCircleButtonsManager : MonoBehaviour
     private int _numButtons;
     private float _buttonSpacing = 100.0f;
 
+    private float _cirleAnimationSpeed = 3f;
+    private int _currentCircleIndex = 0;
+    private float _targetAlpha = 1.0f;
+    private float _currentAlpha;
+    private Color _currentColor;
+    private bool _animatePageCircle = false;
+
     private void OnEnable()
     {
         DiscussionNavigator.DiscussionPageStart += LoadPageCircleButtons;
@@ -30,6 +37,19 @@ public class PageCircleButtonsManager : MonoBehaviour
         DiscussionNavigator.SectorChangeEvent -= UpdatePageCircleButtonStates;
         DiscussionNavigator.PageChangeEvent -= UpdatePageCircleButtonStates;
         DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdatePageCircleButtonColors;
+    }
+
+    private void Update()
+    {
+        if (_animatePageCircle)
+        {
+            if(_currentAlpha < _targetAlpha)
+            {
+                _currentAlpha += Time.deltaTime * _cirleAnimationSpeed;
+                _currentColor.a = _currentAlpha;
+                pageCircleButtonList[_currentCircleIndex].buttonOutline.color = _currentColor;
+            }
+        }
     }
 
     private void LoadPageCircleButtons(DiscussionNavigator discNav)
@@ -67,6 +87,10 @@ public class PageCircleButtonsManager : MonoBehaviour
             if (i == currentPageIndex)
             {
                 pageCircleButtonList[i].buttonOutline.gameObject.SetActive(true);
+                _currentCircleIndex = i;
+                _currentAlpha = 0f;
+                _currentColor = pageCircleButtonList[i].buttonOutline.color;
+                _animatePageCircle = true;
             }
             else
             {
