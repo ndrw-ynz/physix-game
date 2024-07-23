@@ -22,9 +22,11 @@ public class ActivitySevenManager : MonoBehaviour
     [Header("Views")]
     [SerializeField] CenterOfMassView centerOfMassView;
 
+	[Header("Submission Status Displays")]
+	[SerializeField] private CenterOfMassSubmissionStatusDisplay centerOfMassSubmissionStatusDisplay;
 
 	// Given Values - Center of Mass
-    private List<MassCoordinatePair> massCoordinatePairs;
+	private List<MassCoordinatePair> massCoordinatePairs;
 
     void Start()
     {
@@ -102,6 +104,26 @@ public class ActivitySevenManager : MonoBehaviour
 		Debug.Log(isTotalMassYCorrect);
 		Debug.Log(isCenterOfMassXCorrect);
 		Debug.Log(isCenterOfMassYCorrect);
+
+		
+		if (
+			isMassTimesXCoordinatesCorrect && 
+			isMassTimesYCoordinatesCorrect &&
+			isSumOfMassTimesXCoordinatesCorrect &&
+			isSumOfMassTimesYCoordinatesCorrect &&
+			isTotalMassXCorrect &&
+			isTotalMassYCorrect &&
+			isCenterOfMassXCorrect &&
+			isCenterOfMassYCorrect
+			)
+		{
+			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, "Correct Submission");
+		} else
+		{
+			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(false, "Incorrect Submission");
+		}
+		
+		centerOfMassSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 	#endregion
 }
