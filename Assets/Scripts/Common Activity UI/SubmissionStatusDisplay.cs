@@ -1,18 +1,17 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SubmissionStatusDisplay : MonoBehaviour
 {
-    public static event Action ProceedEvent;
-
     [Header("Status Border Display")]
     [SerializeField] private Image statusBorderDisplay;
+
     [Header("Display Text")]
     [SerializeField] private TextMeshProUGUI statusDescriptionText;
+
     [Header("Buttons")]
-    [SerializeField] private Button proceedButton;
+    [SerializeField] protected Button proceedButton;
 	[SerializeField] private Button fixErrorButton;
 
 	public void SetSubmissionStatus(bool isCorrect, string descriptionText)
@@ -32,13 +31,12 @@ public class SubmissionStatusDisplay : MonoBehaviour
 		}
 	}
 
-	private void OnEnable()
+	protected virtual void OnEnable()
 	{
-		proceedButton.onClick.AddListener(() => ProceedEvent?.Invoke());
 		fixErrorButton.onClick.AddListener(() => transform.gameObject.SetActive(false));
 	}
 
-	private void OnDisable()
+	protected virtual void OnDisable()
 	{
 		proceedButton.onClick.RemoveAllListeners();
 		fixErrorButton.onClick.RemoveAllListeners();
