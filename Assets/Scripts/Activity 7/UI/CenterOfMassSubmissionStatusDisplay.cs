@@ -54,6 +54,26 @@ public class CenterOfMassSubmissionStatusDisplay : SubmissionStatusDisplay
 		centerOfMassYInfo.gameObject.SetActive(true);
 	}
 
+	public void UpdateStatusBorderDisplaysFromResult(CenterOfMassAnswerSubmissionResults results)
+	{
+		massTimesXCoordsStatusBorderDisplay.color = results.isMassTimesXCoordinatesCorrect == true ? new Color32(175, 255, 155, 255) : new Color32(200, 75, 55, 255);
+		massTimesYCoordsStatusBorderDisplay.color = results.isMassTimesYCoordinatesCorrect == true ? new Color32(175, 255, 155, 255) : new Color32(200, 75, 55, 255);
+
+		centerOfMassXCalculationStatusBorderDisplay.color = (
+			results.isSumOfMassTimesXCoordinatesCorrect == true && 
+			results.isTotalMassXCorrect == true && 
+			results.isCenterOfMassXCorrect) == true ?
+			new Color32(175, 255, 155, 255) : 
+			new Color32(200, 75, 55, 255);
+
+		centerOfMassYCalculationStatusBorderDisplay.color = (
+			results.isSumOfMassTimesYCoordinatesCorrect == true &&
+			results.isTotalMassYCorrect == true &&
+			results.isCenterOfMassYCorrect) == true ?
+			new Color32(175, 255, 155, 255) :
+			new Color32(200, 75, 55, 255);
+	}
+
 	protected override void OnEnable()
 	{
 		base.OnEnable();
