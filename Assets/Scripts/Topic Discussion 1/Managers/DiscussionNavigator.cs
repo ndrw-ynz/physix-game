@@ -67,28 +67,31 @@ public class DiscussionNavigator : MonoBehaviour
 
     public void JumpToSector(int sectorIndex) 
     {
-        CloseCurrentPage();
+        if(_currentSectorIndex != sectorIndex)
+        {
+            CloseCurrentPage();
 
-        _currentSectorIndex = sectorIndex;
-        _currentPageIndex = 0;
+            _currentSectorIndex = sectorIndex;
+            _currentPageIndex = 0;
 
-        ShowPage(_currentSectorIndex, _currentPageIndex);
+            ShowPage(_currentSectorIndex, _currentPageIndex);
 
-        PageChangeEvent?.Invoke(this);
-        SectorChangeEvent?.Invoke(this);
-        UnderstandMarkerChangeEvent?.Invoke(this);
+            PageChangeEvent?.Invoke(this);
+            SectorChangeEvent?.Invoke(this);
+            UnderstandMarkerChangeEvent?.Invoke(this);
+        }
     }
 
     public void JumpToPage(int pageIndex)
     {
-        _currentPageIndex = pageIndex;
-        ShowPage(_currentSectorIndex, _currentPageIndex);
+        if (_currentPageIndex != pageIndex)
+        {
+            _currentPageIndex = pageIndex;
+            ShowPage(_currentSectorIndex, _currentPageIndex);
 
-        Debug.Log(_currentSectorIndex + "    " + _currentPageIndex);
-        Debug.Log(GetCurrentSectorPagesCount());
-
-        PageChangeEvent?.Invoke(this);
-        UnderstandMarkerChangeEvent?.Invoke(this);
+            PageChangeEvent?.Invoke(this);
+            UnderstandMarkerChangeEvent?.Invoke(this);
+        }
     }
 
     public void ChangeSector(string action)
