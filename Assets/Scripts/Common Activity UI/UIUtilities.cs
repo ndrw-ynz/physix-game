@@ -21,6 +21,9 @@ public static class UIUtilities
 
 			// Set the child's anchored position to the center of the parent
 			childRectTransform.anchoredPosition = Vector2.zero;
+
+			// Set the child to be the first sibling of the parent
+			childRectTransform.SetAsFirstSibling();
 		}
 		else
 		{
