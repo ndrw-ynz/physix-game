@@ -133,7 +133,7 @@ public class ActivitySevenManager : MonoBehaviour
 		// Modify display border and text
 		if (results.isAllCorrect())
 		{
-			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, "Calculations correct. The power cube is now accessible.");
+			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, "Calculations correct. The power source cube is now accessible.");
 		} else
 		{
 			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
