@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AnimationManager : MonoBehaviour
 {
@@ -32,12 +33,22 @@ public class AnimationManager : MonoBehaviour
     private CanvasGroup _understandMarker;
     private bool _animateUnderstandMarker = false;
 
+    private float _progressBarButtonAnimationSpeed = 5.0f;
+    private float _targetProgressBarButtonAlpha = 1.0f;
+    private float _currentProgressBarButtonAlpha;
+    private Image _tempColor;
+    private Image _finalColor;
+    private Color _oldColor;
+    private Color _newColor;
+    private bool _animateProgressBar = false;
+
     private void OnEnable()
     {
         PageCircleButtonsManager.PageCircleStateUpdate += ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate += ActivateProgressBarButtonAnimation;
         PrevNextButtonsManager.ButtonChangeStateUpdate += ActivatePrevNextButtonAnimation;
         UnderstandMarkersManager.ComprehensionButtonStateChange += ActivateUnderstandMarkerAnimation;
+        ProgressManager.ProgressBarButtonStateUpdate += ActivateProgressBarButtonAnimation;
     }
 
     private void Update()
@@ -46,6 +57,7 @@ public class AnimationManager : MonoBehaviour
         AnimateIndicatorRect();
         AnimatePrevNextButton();
         AnimateUnderstandMarker();
+        AnimateProgressBar();
     }
 
     private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i)
@@ -76,6 +88,19 @@ public class AnimationManager : MonoBehaviour
         _currentUnderstandMarkerAlpha = 0f;
         _understandMarker = understandMarker;
         _animateUnderstandMarker = true;
+    }
+
+    private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i, Color color)
+    {
+        if(_animateProgressBar != true)
+        {
+            _currentProgressBarButtonAlpha = 0f;
+            _tempColor = manager.progressBarButtonList[i].progressBarTempColor;
+            _finalColor = manager.progressBarButtonList[i].progressBarFinalColor;
+            _oldColor = manager.progressBarButtonList[i].progressBarFinalColor.color;
+            _newColor = color;
+            _animateProgressBar = true;
+        }
     }
 
     private void AnimatePageCircle()
@@ -140,10 +165,30 @@ public class AnimationManager : MonoBehaviour
                 _currentUnderstandMarkerAlpha += Time.deltaTime * _understandMarkerAnimationSpeed;
                 _understandMarker.alpha = _currentUnderstandMarkerAlpha;
             }
+            else
+            {
+                _animateUnderstandMarker = false;
+            }
         }
-        else
+    }
+
+    private void AnimateProgressBar()
+    {
+        if (_animateProgressBar)
         {
-            _animateUnderstandMarker = false;
+            if (_currentProgressBarButtonAlpha < _targetProgressBarButtonAlpha)
+            {
+                _currentProgressBarButtonAlpha += Time.deltaTime * _progressBarButtonAnimationSpeed;
+                _newColor.a = _currentProgressBarButtonAlpha;
+            
+                _tempColor.color = _oldColor;
+                _finalColor.color = _newColor;
+            }
+            else
+            {
+                _tempColor.gameObject.SetActive(false);
+                _animateProgressBar = false;
+            }
         }
     }
 }

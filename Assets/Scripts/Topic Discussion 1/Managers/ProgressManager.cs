@@ -13,18 +13,19 @@ public class ProgressManager : MonoBehaviour
     public ProgressBarButton progressBarButtonPrefab;
     public SectorIndicatorRect sectorIndicatorRectPrefab;
 
-    private List<ProgressBarButton> progressBarButtonList = new List<ProgressBarButton>();
+    public List<ProgressBarButton> progressBarButtonList = new List<ProgressBarButton>();
     public List<SectorIndicatorRect> sectorIndicatorRectList = new List<SectorIndicatorRect>();
     private RectTransform progressAreaParent;
     private int _numButtons;
     private float _buttonSpacing = 300.0f;
 
+    public static event Action<ProgressManager, int, Color> ProgressBarButtonStateUpdate;
     public static event Action<ProgressManager, int> IndicatorRectStateUpdate;
     private void OnEnable()
     {
         DiscussionNavigator.DiscussionPageStart += LoadProgressBar;
         DiscussionNavigator.DiscussionPageStart += ActivateIndicatorRect;
-        DiscussionNavigator.DiscussionPageStart += UpdateProgressBar;
+        DiscussionNavigator.DiscussionPageStart += UpdateProgressBarStates;
         DiscussionNavigator.SectorChangeEvent += UpdateIndicatorRects;
         DiscussionNavigator.UnderstandMarkerChangeEvent += UpdateProgressBar;
     }
@@ -33,7 +34,7 @@ public class ProgressManager : MonoBehaviour
     {
         DiscussionNavigator.DiscussionPageStart -= LoadProgressBar;
         DiscussionNavigator.DiscussionPageStart -= ActivateIndicatorRect;
-        DiscussionNavigator.DiscussionPageStart -= UpdateProgressBar;
+        DiscussionNavigator.DiscussionPageStart -= UpdateProgressBarStates;
         DiscussionNavigator.SectorChangeEvent -= UpdateIndicatorRects;
         DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdateProgressBar;
     }
@@ -95,10 +96,12 @@ public class ProgressManager : MonoBehaviour
         }
     }
 
-    private void UpdateProgressBar(DiscussionNavigator discNavig)
+    private void UpdateProgressBarStates(DiscussionNavigator discNavig)
     {
         for (int i = 0; i < progressBarButtonList.Count; i++)
         {
+            progressBarButtonList[i].progressBarTempColor.gameObject.SetActive(false);
+
             double currUnderstoodPagesCount = discNavig.CountUnderstoodPages(i);
             double currSectorPagesCount = discNavig.CountTotalPages(i);
             progressBarButtonList[i].progressCountText.text = $"{currUnderstoodPagesCount}/{currSectorPagesCount}";
@@ -106,19 +109,55 @@ public class ProgressManager : MonoBehaviour
             double currProgressBarPercentage = currUnderstoodPagesCount / currSectorPagesCount * 100;
             if (currProgressBarPercentage == 100)
             {
-                progressBarButtonList[i].progressBarImage.color = new Color(0.5890471f, 1f, 0.5264151f);
+                progressBarButtonList[i].progressBarFinalColor.color = new Color(0.5890471f, 1f, 0.5264151f);
             }
             else if (currProgressBarPercentage > 50)
             {
-                progressBarButtonList[i].progressBarImage.color = new Color(0.9546386f, 1f, 0.5254902f);
+                progressBarButtonList[i].progressBarFinalColor.color = new Color(0.9546386f, 1f, 0.5254902f);
             }
             else if (currUnderstoodPagesCount > 0)
             {
-                progressBarButtonList[i].progressBarImage.color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
+                progressBarButtonList[i].progressBarFinalColor.color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
             }
             else
             {
-                progressBarButtonList[i].progressBarImage.color = Color.gray;
+                progressBarButtonList[i].progressBarFinalColor.color = Color.gray;
+            }
+        }
+    }
+
+    private void UpdateProgressBar(DiscussionNavigator discNavig)
+    {
+        for (int i = 0; i < progressBarButtonList.Count; i++)
+        {
+            if(i == discNavig.GetCurrentSectorIndex())
+            {
+                progressBarButtonList[i].progressBarTempColor.gameObject.SetActive(true);
+                double currUnderstoodPagesCount = discNavig.CountUnderstoodPages(i);
+                double currSectorPagesCount = discNavig.CountTotalPages(i);
+                progressBarButtonList[i].progressCountText.text = $"{currUnderstoodPagesCount}/{currSectorPagesCount}";
+
+                double currProgressBarPercentage = currUnderstoodPagesCount / currSectorPagesCount * 100;
+                if (currProgressBarPercentage == 100)
+                {
+                    Color color = new Color(0.5890471f, 1f, 0.5264151f);
+                    ProgressBarButtonStateUpdate?.Invoke(this, i, color);
+                }
+                else if (currProgressBarPercentage > 50)
+                {
+                    Color color = new Color(0.9546386f, 1f, 0.5254902f);
+                    ProgressBarButtonStateUpdate?.Invoke(this, i, color);
+                }
+                else if (currUnderstoodPagesCount > 0)
+                {
+                    Color color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
+                    ProgressBarButtonStateUpdate?.Invoke(this, i, color);
+                }
+                else
+                {
+                    Color color = Color.gray;
+                    ProgressBarButtonStateUpdate?.Invoke(this, i, color);
+                }
             }
         }
     }
