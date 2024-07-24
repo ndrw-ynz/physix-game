@@ -48,6 +48,7 @@ public class DiscussionNavigator : MonoBehaviour
         DiscussionPrevNextPageButton.PrevNextPageClickEvent -= ChangePage;
         DiscussionPrevNextSectorButton.PrevNextSectorClickEvent -= ChangeSector;
         ProgressBarButton.ProgressBarClickEvent -= JumpToSector;
+        PageCircleButton.OnPageCircleClick -= JumpToPage;
         UnderstoodNotUnderstoodButton.UnderstoodNotUnderstoodClickEvent -= ChangeComprehensionMark;
     }
 
