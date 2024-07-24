@@ -1452,6 +1452,7 @@ MonoBehaviour:
   discussionNavigator: {fileID: 0}
   action: next
   sectorButtonText: {fileID: 455938}
+  canvasGroup: {fileID: 0}
 --- !u!114 &316801258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2551,6 +2552,7 @@ MonoBehaviour:
   step: -1
   prevSectorTitle: {fileID: 0}
   nextSectorTitle: {fileID: 0}
+  canvasGroup: {fileID: 0}
 --- !u!114 &490920063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3423,6 +3425,7 @@ MonoBehaviour:
   discussionNavigator: {fileID: 0}
   action: previous
   sectorButtonText: {fileID: 374996392}
+  canvasGroup: {fileID: 0}
 --- !u!114 &591611970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4418,6 +4421,7 @@ GameObject:
   - component: {fileID: 788661333}
   - component: {fileID: 788661332}
   - component: {fileID: 788661331}
+  - component: {fileID: 788661335}
   - component: {fileID: 788661330}
   - component: {fileID: 788661334}
   m_Layer: 5
@@ -4462,6 +4466,7 @@ MonoBehaviour:
   discussionNavigator: {fileID: 0}
   progressManager: {fileID: 0}
   flag: 0
+  canvasGroup: {fileID: 0}
 --- !u!114 &788661331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4571,6 +4576,18 @@ MonoBehaviour:
   m_EffectColor: {r: 0.03137255, g: 0.40392157, b: 0.7372549, a: 0.5}
   m_EffectDistance: {x: 6, y: 6}
   m_UseGraphicAlpha: 0
+--- !u!225 &788661335
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788661328}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &788752227
 GameObject:
   m_ObjectHideFlags: 0
@@ -4840,6 +4857,7 @@ MonoBehaviour:
   step: 1
   prevSectorTitle: {fileID: 0}
   nextSectorTitle: {fileID: 0}
+  canvasGroup: {fileID: 0}
 --- !u!114 &796551522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6865,6 +6883,7 @@ GameObject:
   - component: {fileID: 997961745}
   - component: {fileID: 997961744}
   - component: {fileID: 997961743}
+  - component: {fileID: 997961747}
   - component: {fileID: 997961746}
   m_Layer: 5
   m_Name: Page Mark Understood Rect
@@ -7002,6 +7021,19 @@ MonoBehaviour:
   discussionNavigator: {fileID: 0}
   progressManager: {fileID: 0}
   flag: 1
+  canvasGroup: {fileID: 0}
+--- !u!225 &997961747
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997961741}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1073531523
 GameObject:
   m_ObjectHideFlags: 0

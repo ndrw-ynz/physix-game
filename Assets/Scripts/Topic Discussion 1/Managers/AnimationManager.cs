@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,24 +20,32 @@ public class AnimationManager : MonoBehaviour
     private PageCircleButton _circleButton;
     private bool _animatePageCircle = false;
 
-    private float _buttonAnimationSpeed = 2.0f;
-    private float _targetButtonAlpha = 1.0f;
-    private float _currentButtonAlpha;
+    private float _prevNextButtonAnimationSpeed = 3.0f;
+    private float _targetPrevNextButtonAlpha = 1.0f;
+    private float _currentPrevNextButtonAlpha;
     private CanvasGroup[] _buttonList;
     private bool _animateButton = false;
+
+    private float _understandMarkerAnimationSpeed = 3.0f;
+    private float _targetUnderstandMarkerAlpha = 1.0f;
+    private float _currentUnderstandMarkerAlpha;
+    private CanvasGroup _understandMarker;
+    private bool _animateUnderstandMarker = false;
 
     private void OnEnable()
     {
         PageCircleButtonsManager.PageCircleStateUpdate += ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate += ActivateProgressBarButtonAnimation;
-        PrevNextButtonsManager.ButtonChangeStateUpdate += ActivateButtonAnimation;
+        PrevNextButtonsManager.ButtonChangeStateUpdate += ActivatePrevNextButtonAnimation;
+        UnderstandMarkersManager.ComprehensionButtonStateChange += ActivateUnderstandMarkerAnimation;
     }
 
     private void Update()
     {
         AnimatePageCircle();
         AnimateIndicatorRect();
-        AnimateButton();
+        AnimatePrevNextButton();
+        AnimateUnderstandMarker();
     }
 
     private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i)
@@ -55,11 +64,18 @@ public class AnimationManager : MonoBehaviour
         _animatePageCircle = true;
     }
 
-    private void ActivateButtonAnimation(CanvasGroup[] buttonCanvasList)
+    private void ActivatePrevNextButtonAnimation(CanvasGroup[] buttonList)
     {
-        _currentButtonAlpha = 0f;
-        _buttonList = buttonCanvasList;
+        _currentPrevNextButtonAlpha = 0f;
+        _buttonList = buttonList;
         _animateButton = true;
+    }
+
+    private void ActivateUnderstandMarkerAnimation(CanvasGroup understandMarker)
+    {
+        _currentUnderstandMarkerAlpha = 0f;
+        _understandMarker = understandMarker;
+        _animateUnderstandMarker = true;
     }
 
     private void AnimatePageCircle()
@@ -96,22 +112,38 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
-    private void AnimateButton()
+    private void AnimatePrevNextButton()
     {
         if (_animateButton)
         {
-            if (_currentButtonAlpha < _targetButtonAlpha)
+            if (_currentPrevNextButtonAlpha < _targetPrevNextButtonAlpha)
             {
                 foreach (var button in _buttonList)
                 {
-                    _currentButtonAlpha += Time.deltaTime * _buttonAnimationSpeed;
-                    button.alpha = _currentButtonAlpha;
+                    _currentPrevNextButtonAlpha += Time.deltaTime * _prevNextButtonAnimationSpeed;
+                    button.alpha = _currentPrevNextButtonAlpha;
                 }
             }
             else
             {
                 _animateButton = false;
             }
+        }
+    }
+
+    private void AnimateUnderstandMarker()
+    {
+        if (_animateUnderstandMarker)
+        {
+            if(_currentUnderstandMarkerAlpha < _targetUnderstandMarkerAlpha)
+            {
+                _currentUnderstandMarkerAlpha += Time.deltaTime * _understandMarkerAnimationSpeed;
+                _understandMarker.alpha = _currentUnderstandMarkerAlpha;
+            }
+        }
+        else
+        {
+            _animateUnderstandMarker = false;
         }
     }
 }

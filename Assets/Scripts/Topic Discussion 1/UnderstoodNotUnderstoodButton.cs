@@ -11,6 +11,7 @@ public class UnderstoodNotUnderstoodButton : MonoBehaviour
     public DiscussionNavigator discussionNavigator;
     public ProgressManager progressManager;
     public bool flag;
+    public CanvasGroup canvasGroup;
 
     public static event Action<bool> UnderstoodNotUnderstoodClickEvent;
 
@@ -18,6 +19,8 @@ public class UnderstoodNotUnderstoodButton : MonoBehaviour
 
     private void OnEnable()
     {
+        canvasGroup = this.GetComponent<CanvasGroup>();
+
         _understoodNotUnderstoodButton = this.GetComponent<Button>();
         _understoodNotUnderstoodButton.onClick.AddListener(() => UnderstoodNotUnderstoodClickEvent?.Invoke(flag));
     }
