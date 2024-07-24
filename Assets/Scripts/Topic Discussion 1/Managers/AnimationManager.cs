@@ -92,15 +92,13 @@ public class AnimationManager : MonoBehaviour
 
     private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i, Color color)
     {
-        if(_animateProgressBar != true)
-        {
-            _currentProgressBarButtonAlpha = 0f;
-            _tempColor = manager.progressBarButtonList[i].progressBarTempColor;
-            _finalColor = manager.progressBarButtonList[i].progressBarFinalColor;
-            _oldColor = manager.progressBarButtonList[i].progressBarFinalColor.color;
-            _newColor = color;
-            _animateProgressBar = true;
-        }
+        _currentProgressBarButtonAlpha = 0f;
+        _tempColor = manager.progressBarButtonList[i].progressBarTempColor;
+        _finalColor = manager.progressBarButtonList[i].progressBarFinalColor;
+        _oldColor = manager.progressBarButtonList[i].progressBarFinalColor.color;
+        _newColor = color;
+        _animateProgressBar = true;
+
     }
 
     private void AnimatePageCircle()
