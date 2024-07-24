@@ -17,9 +17,15 @@ public class PowerSourceCube : IInteractableObject
 		RetrieveEvent?.Invoke();
 	}
 
+	public override string GetInteractionDescription()
+	{
+		return "Retrieve Power Source Cube";
+	}
+
 	private void Start()
 	{
 		startPos = transform.position;
+		SetInteractable(false);
 	}
 
 	void Update()

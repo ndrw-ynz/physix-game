@@ -10,4 +10,14 @@ public class InteractableControlPanel : IInteractableObject
 		inputReader.SetUI();
 		viewUI.SetActive(true);
 	}
+
+	public override string GetInteractionDescription()
+	{
+		return "Open Terminal";
+	}
+
+	private void Start()
+	{
+		SetInteractable(true);
+	}
 }

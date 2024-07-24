@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 public class PowerSourceCubeContainer : IInteractableObject
 {
@@ -7,5 +6,15 @@ public class PowerSourceCubeContainer : IInteractableObject
 	public override void Interact()
 	{
 		InteractEvent?.Invoke();
+	}
+
+	public override string GetInteractionDescription()
+	{
+		return "Place Power Source Cube";
+	}
+
+	private void Start()
+	{
+		SetInteractable(false);
 	}
 }
