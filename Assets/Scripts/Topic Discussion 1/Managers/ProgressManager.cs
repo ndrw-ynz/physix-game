@@ -14,23 +14,16 @@ public class ProgressManager : MonoBehaviour
     public SectorIndicatorRect sectorIndicatorRectPrefab;
 
     private List<ProgressBarButton> progressBarButtonList = new List<ProgressBarButton>();
-    private List<SectorIndicatorRect> sectorIndicatorRectList = new List<SectorIndicatorRect>();
+    public List<SectorIndicatorRect> sectorIndicatorRectList = new List<SectorIndicatorRect>();
     private RectTransform progressAreaParent;
     private int _numButtons;
     private float _buttonSpacing = 300.0f;
 
-    private float _indicatorAnimationSpeed = 500f;
-    private int _currentIndicatorIndex = 0;
-    private float _targetWidth = 130f;
-    private float _currentWidth;
-    private float _currentHeight;
-    private bool _animateIndicator = false;
-
-
+    public static event Action<ProgressManager, int> IndicatorRectStateUpdate;
     private void OnEnable()
     {
         DiscussionNavigator.DiscussionPageStart += LoadProgressBar;
-        DiscussionNavigator.DiscussionPageStart += LoadIndicatorRects;
+        DiscussionNavigator.DiscussionPageStart += ActivateIndicatorRect;
         DiscussionNavigator.DiscussionPageStart += UpdateProgressBar;
         DiscussionNavigator.SectorChangeEvent += UpdateIndicatorRects;
         DiscussionNavigator.UnderstandMarkerChangeEvent += UpdateProgressBar;
@@ -39,25 +32,10 @@ public class ProgressManager : MonoBehaviour
     private void OnDisable()
     {
         DiscussionNavigator.DiscussionPageStart -= LoadProgressBar;
-        DiscussionNavigator.DiscussionPageStart -= LoadIndicatorRects;
+        DiscussionNavigator.DiscussionPageStart -= ActivateIndicatorRect;
         DiscussionNavigator.DiscussionPageStart -= UpdateProgressBar;
         DiscussionNavigator.SectorChangeEvent -= UpdateIndicatorRects;
         DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdateProgressBar;
-    }
-
-    private void Update()
-    {
-        if (_animateIndicator)
-        {
-            if (_currentWidth < _targetWidth) {
-                _currentWidth += Time.deltaTime * _indicatorAnimationSpeed;
-                sectorIndicatorRectList[_currentIndicatorIndex].indicatorRectTransform.sizeDelta = new Vector2(_currentWidth, _currentHeight);
-            }
-            else
-            {
-                _animateIndicator = false;
-            }
-        }
     }
 
     private void LoadProgressBar(DiscussionNavigator discNavig)
@@ -80,22 +58,6 @@ public class ProgressManager : MonoBehaviour
         }
     }
 
-    private void LoadIndicatorRects(DiscussionNavigator discNav)
-    {
-        int currentSectorIndex = discNav.GetCurrentSectorIndex();
-        for (int i = 0; i < sectorIndicatorRectList.Count; i++)
-        {
-            if (i == currentSectorIndex)
-            {
-                sectorIndicatorRectList[i].gameObject.SetActive(true);
-            }
-            else
-            {
-                sectorIndicatorRectList[i].gameObject.SetActive(false);
-            }
-        }
-    }
-
     private void GenerateProgressBarButton(Vector2 buttonPosition, int i, string sectorTitle, string progressCount)
     {
         ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
@@ -115,6 +77,22 @@ public class ProgressManager : MonoBehaviour
         newIndicatorRect.transform.localPosition = rectPosition;
         newIndicatorRect.Initialize();
         sectorIndicatorRectList.Add(newIndicatorRect);
+    }
+
+    private void ActivateIndicatorRect(DiscussionNavigator discNav)
+    {
+        int currentSectorIndex = discNav.GetCurrentSectorIndex();
+        for (int i = 0; i < sectorIndicatorRectList.Count; i++)
+        {
+            if (i == currentSectorIndex)
+            {
+                sectorIndicatorRectList[i].gameObject.SetActive(true);
+            }
+            else
+            {
+                sectorIndicatorRectList[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     private void UpdateProgressBar(DiscussionNavigator discNavig)
@@ -153,10 +131,7 @@ public class ProgressManager : MonoBehaviour
             if (i == currentSectorIndex)
             {
                 sectorIndicatorRectList[i].gameObject.SetActive(true);
-                _currentIndicatorIndex = i;
-                _currentWidth = 0;
-                _currentHeight = sectorIndicatorRectList[i].indicatorRectTransform.rect.height;
-                _animateIndicator = true;
+                IndicatorRectStateUpdate?.Invoke(this, i);
             }
             else 
             {
