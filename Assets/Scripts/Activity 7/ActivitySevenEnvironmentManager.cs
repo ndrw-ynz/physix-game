@@ -5,8 +5,8 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
     [Header("Room One")]
     [SerializeField] private GameObject containerGlassOne;
 	[SerializeField] private GameObject containerGlassTwo;
-    [SerializeField] private GameObject powerSourceCubeOne;
-	[SerializeField] private GameObject powerSourceCubeTwo;
+    [SerializeField] private PowerSourceCube powerSourceCubeOne;
+	[SerializeField] private PowerSourceCube powerSourceCubeTwo;
     [SerializeField] private GameObject roomOneGate;
     [SerializeField] private GameObject roomOneGateBlocker;
 
@@ -26,6 +26,7 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 	#region Room One
 	private void ReleasePowerCube()
     {
+        powerSourceCubeOne.GetComponent<BoxCollider>().enabled = true;
         containerGlassOne.gameObject.SetActive(false);
     }
 
