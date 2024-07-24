@@ -9,6 +9,7 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 	[SerializeField] private PowerSourceCube powerSourceCubeTwo;
     [SerializeField] private GameObject roomOneGate;
     [SerializeField] private GameObject roomOneGateBlocker;
+    [SerializeField] private PowerSourceCubeContainer powerContainer;
 
     [Header("Gate Status Color Material")]
     [SerializeField] private Material openGateColor;
@@ -26,8 +27,9 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 	#region Room One
 	private void ReleasePowerCube()
     {
-        powerSourceCubeOne.GetComponent<BoxCollider>().enabled = true;
-        containerGlassOne.gameObject.SetActive(false);
+        powerSourceCubeOne.SetInteractable(true);
+        powerContainer.SetInteractable(true);
+		containerGlassOne.gameObject.SetActive(false);
     }
 
     private void UpdateRoomOneGateState()
@@ -46,6 +48,9 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 
             // Remove gate blocker.
             roomOneGateBlocker.gameObject.SetActive(false);
+
+            // Disable interaction on powerContainer
+            powerContainer.SetInteractable(false);
 		}
     }
     #endregion
