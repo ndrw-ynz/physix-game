@@ -1,15 +1,23 @@
+using System;
 using UnityEngine;
 
-public class PowerSourceCubeAnimate : MonoBehaviour
+public class PowerSourceCube : IInteractableObject
 {
+	public static event Action RetrieveEvent;
+
 	public float rotationSpeed = 45.0f;
 
 	public float floatAmplitude = 0.1f;
 	public float floatFrequency = 1.0f;
 
 	private Vector3 startPos;
+	public override void Interact()
+	{
+		Destroy(gameObject);
+		RetrieveEvent?.Invoke();
+	}
 
-	void Start()
+	private void Start()
 	{
 		startPos = transform.position;
 	}
