@@ -18,6 +18,7 @@ public class DiscussionNavigator : MonoBehaviour
         {
             public GameObject page;
             public bool isMarkedUnderstood;
+            public CanvasGroup canvasGroup;
         }
 
         public string sectorTitle;
