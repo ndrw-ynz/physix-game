@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,13 +22,13 @@ public class AnimationManager : MonoBehaviour
     private PageCircleButton _circleButton;
     private bool _animatePageCircle = false;
 
-    private float _prevNextButtonAnimationSpeed = 3.0f;
+    private float _prevNextButtonAnimationSpeed = 4.0f;
     private float _targetPrevNextButtonAlpha = 1.0f;
     private float _currentPrevNextButtonAlpha;
     private CanvasGroup[] _buttonList;
     private bool _animateButton = false;
 
-    private float _understandMarkerAnimationSpeed = 3.0f;
+    private float _understandMarkerAnimationSpeed = 4.0f;
     private float _targetUnderstandMarkerAlpha = 1.0f;
     private float _currentUnderstandMarkerAlpha;
     private CanvasGroup _understandMarker;
@@ -42,6 +43,12 @@ public class AnimationManager : MonoBehaviour
     private Color _newColor;
     private bool _animateProgressBar = false;
 
+    private float _pageAnimationSpeed = 4.0f;
+    private float _targetPageAlpha = 1.0f;
+    private float _currentPageAlpha;
+    private CanvasGroup _page;
+    private bool _animatePage = false;
+
     private void OnEnable()
     {
         PageCircleButtonsManager.PageCircleStateUpdate += ActivatePageCircleAnimation;
@@ -49,15 +56,27 @@ public class AnimationManager : MonoBehaviour
         PrevNextButtonsManager.ButtonChangeStateUpdate += ActivatePrevNextButtonAnimation;
         UnderstandMarkersManager.ComprehensionButtonStateChange += ActivateUnderstandMarkerAnimation;
         ProgressManager.ProgressBarButtonStateUpdate += ActivateProgressBarButtonAnimation;
+        DiscussionNavigator.PageChangeEvent += ActivatePageAnimation;
+    }
+
+    private void OnDisable()
+    {
+        PageCircleButtonsManager.PageCircleStateUpdate -= ActivatePageCircleAnimation;
+        ProgressManager.IndicatorRectStateUpdate -= ActivateProgressBarButtonAnimation;
+        PrevNextButtonsManager.ButtonChangeStateUpdate -= ActivatePrevNextButtonAnimation;
+        UnderstandMarkersManager.ComprehensionButtonStateChange -= ActivateUnderstandMarkerAnimation;
+        ProgressManager.ProgressBarButtonStateUpdate -= ActivateProgressBarButtonAnimation;
+        DiscussionNavigator.PageChangeEvent -= ActivatePageAnimation;
     }
 
     private void Update()
     {
         AnimatePageCircle();
         AnimateIndicatorRect();
-        AnimatePrevNextButton();
-        AnimateUnderstandMarker();
+        //AnimatePrevNextButton();
+        //AnimateUnderstandMarker();
         AnimateProgressBar();
+        AnimatePage();
     }
 
     private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i)
@@ -99,6 +118,13 @@ public class AnimationManager : MonoBehaviour
         _newColor = color;
         _animateProgressBar = true;
 
+    }
+
+    private void ActivatePageAnimation(DiscussionNavigator manager)
+    {
+        _currentPageAlpha = 0f;
+        _page = manager.subTopicsList[manager.GetCurrentSectorIndex()].pages[manager.GetCurrentPageIndex()].canvasGroup;
+        _animatePage = true;
     }
 
     private void AnimatePageCircle()
@@ -186,6 +212,23 @@ public class AnimationManager : MonoBehaviour
             {
                 _tempColor.gameObject.SetActive(false);
                 _animateProgressBar = false;
+            }
+        }
+    }
+
+    private void AnimatePage()
+    {
+        if (_animatePage)
+        {
+            Debug.Log("ACTIVATE");
+            if (_currentPageAlpha < _targetPageAlpha)
+            {
+                _currentPageAlpha += Time.deltaTime * _pageAnimationSpeed;
+                _page.alpha = _currentPageAlpha;
+            }
+            else
+            {
+                _animatePage = false;
             }
         }
     }
