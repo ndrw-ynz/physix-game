@@ -65,26 +65,36 @@ public class ActivitySevenManager : MonoBehaviour
     [SerializeField] CenterOfMassSubActivitySO centerOfMassLevelOne;
     private CenterOfMassSubActivitySO currentCenterOfMassLevel;
 
-    [Header("Views")]
+	[Header("Level Data - Momentum Impulse Force")]
+	[SerializeField] MomentumImpulseForceSubActivitySO momentumImpulseForceLevelOne;
+	private MomentumImpulseForceSubActivitySO currentMomentumImpulseForceLevel;
+
+	[Header("Views")]
     [SerializeField] CenterOfMassView centerOfMassView;
+	[SerializeField] MomentumImpulseForceView momentumImpulseForceView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private CenterOfMassSubmissionStatusDisplay centerOfMassSubmissionStatusDisplay;
 
 	// Given Values - Center of Mass
 	private List<MassCoordinatePair> massCoordinatePairs;
+	// Given Values - Impulse-Momentum Force
+	private Dictionary<string, float> momentumImpulseForceGivenData;
 
     void Start()
     {
         CenterOfMassView.SubmitAnswerEvent += CheckCenterOfMassAnswers;
 
         currentCenterOfMassLevel = centerOfMassLevelOne;
+		currentMomentumImpulseForceLevel = momentumImpulseForceLevelOne;
         
         // Initializing given values
         InitializeMassCoordinatePairs(currentCenterOfMassLevel);
+		InitializeMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
 
 		// Setting up views
 		centerOfMassView.SetupCenterOfMassView(massCoordinatePairs);
+		momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
     }
 
 	#region Center of Mass
@@ -144,5 +154,20 @@ public class ActivitySevenManager : MonoBehaviour
 
 		centerOfMassSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
+	#endregion
+
+	#region Impulse-Momentum
+
+	private void InitializeMomentumImpulseForceGivenData(MomentumImpulseForceSubActivitySO momentumImpulseForceSubActivitySO)
+	{
+		momentumImpulseForceGivenData = new Dictionary<string, float>
+		{
+			{ "mass", Random.Range(momentumImpulseForceSubActivitySO.massMinVal, momentumImpulseForceSubActivitySO.massMaxVal) },
+			{ "initialVelocity", Random.Range(momentumImpulseForceSubActivitySO.velocityMinVal, momentumImpulseForceSubActivitySO.velocityMaxVal)},
+			{ "finalVelocity", Random.Range(momentumImpulseForceSubActivitySO.velocityMinVal, momentumImpulseForceSubActivitySO.velocityMaxVal)},
+			{ "totalTime", Random.Range(momentumImpulseForceSubActivitySO.timeMinVal, momentumImpulseForceSubActivitySO.timeMaxVal)}
+		};
+	}
+
 	#endregion
 }
