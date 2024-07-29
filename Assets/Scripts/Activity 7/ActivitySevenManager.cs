@@ -59,14 +59,28 @@ public class CenterOfMassAnswerSubmissionResults
 	}
 }
 
+// TEMPORARILY STORE HERE. TRANSFER ENUM TO FUTURE CLASS HANDLING DIFFICULTY SELECTION
+public enum Difficulty
+{
+	Easy,
+	Medium,
+	Hard
+}
+
 public class ActivitySevenManager : MonoBehaviour
 {
+	public static Difficulty difficultyConfiguration;
+
     [Header("Level Data - Center of Mass")]
     [SerializeField] CenterOfMassSubActivitySO centerOfMassLevelOne;
-    private CenterOfMassSubActivitySO currentCenterOfMassLevel;
+	[SerializeField] CenterOfMassSubActivitySO centerOfMassLevelTwo;
+	[SerializeField] CenterOfMassSubActivitySO centerOfMassLevelThree;
+	private CenterOfMassSubActivitySO currentCenterOfMassLevel;
 
 	[Header("Level Data - Momentum Impulse Force")]
 	[SerializeField] MomentumImpulseForceSubActivitySO momentumImpulseForceLevelOne;
+	[SerializeField] MomentumImpulseForceSubActivitySO momentumImpulseForceLevelTwo;
+	[SerializeField] MomentumImpulseForceSubActivitySO momentumImpulseForceLevelThree;
 	private MomentumImpulseForceSubActivitySO currentMomentumImpulseForceLevel;
 
 	[Header("Views")]
@@ -83,11 +97,29 @@ public class ActivitySevenManager : MonoBehaviour
 
     void Start()
     {
+		// Difficulty selection
+		difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+        
+		// Setting level data
+		switch (difficultyConfiguration)
+		{
+			case Difficulty.Easy:
+				currentCenterOfMassLevel = centerOfMassLevelOne;
+				currentMomentumImpulseForceLevel = momentumImpulseForceLevelOne;
+				break;
+			case Difficulty.Medium:
+				currentCenterOfMassLevel = centerOfMassLevelTwo;
+				currentMomentumImpulseForceLevel = momentumImpulseForceLevelTwo;
+				break;
+			case Difficulty.Hard:
+				currentCenterOfMassLevel = centerOfMassLevelThree;
+				currentMomentumImpulseForceLevel = momentumImpulseForceLevelThree;
+				break;
+		}
+
+		// Subscribing to view events
         CenterOfMassView.SubmitAnswerEvent += CheckCenterOfMassAnswers;
 
-        currentCenterOfMassLevel = centerOfMassLevelOne;
-		currentMomentumImpulseForceLevel = momentumImpulseForceLevelOne;
-        
         // Initializing given values
         InitializeMassCoordinatePairs(currentCenterOfMassLevel);
 		InitializeMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
