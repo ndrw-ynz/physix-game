@@ -1,9 +1,49 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+public abstract class MomentumImpulseForceAnswerSubmission
+{
+	public float? impulse { get; set; }
+	public float? netForce { get; set; }
+	protected MomentumImpulseForceAnswerSubmission(float? impulse, float? netForce)
+	{
+		this.impulse = impulse;
+		this.netForce = netForce;
+	}
+}
+
+public class EasyMomentumImpulseForceAnswerSubmission : MomentumImpulseForceAnswerSubmission
+{
+	public float? changeInMomentum { get; set; } // mass * deltaVelocity
+
+	public EasyMomentumImpulseForceAnswerSubmission(float? impulse, float? netForce, float? changeInMomentum)
+		: base(impulse, netForce)
+	{
+		this.changeInMomentum = changeInMomentum;
+	}
+}
+
+public class MediumHardMomentumImpulseForceAnswerSubmission : MomentumImpulseForceAnswerSubmission
+{
+	public float? initialMomentum { get; set; }
+	public float? finalMomentum { get; set; }
+	public float? changeInMomentum { get; set; } // finalMomentum - initialMomentum
+
+	public MediumHardMomentumImpulseForceAnswerSubmission(float? impulse, float? netForce, float? initialMomentum, float? finalMomentum, float? changeInMomentum)
+		: base(impulse, netForce)
+	{
+		this.initialMomentum = initialMomentum;
+		this.finalMomentum = finalMomentum;
+		this.changeInMomentum = changeInMomentum;
+	}
+}
+
 public class MomentumImpulseForceView : MonoBehaviour
 {
+	public static event Action<MomentumImpulseForceAnswerSubmission> SubmitAnswerEvent;
+
 	[Header("Holders")]
 	[SerializeField] private GameObject easyGivenHolder;
 	[SerializeField] private GameObject mediumHardGivenHolder;
@@ -67,8 +107,32 @@ public class MomentumImpulseForceView : MonoBehaviour
 	}
 	#endregion
 
-	private void OnSubmitButtonClick()
+	public void OnSubmitButtonClick()
 	{
-
+		switch (ActivitySevenManager.difficultyConfiguration)
+		{
+			case Difficulty.Easy:
+				{
+					EasyMomentumImpulseForceAnswerSubmission submission = new EasyMomentumImpulseForceAnswerSubmission(
+						float.Parse(impulseResultField.text),
+						float.Parse(netForceResultField.text),
+						float.Parse(changeInMomentumResultField.text)
+						);
+					SubmitAnswerEvent?.Invoke(submission);
+				}
+				break;
+			case Difficulty.Medium: case Difficulty.Hard:
+				{
+					MediumHardMomentumImpulseForceAnswerSubmission submission = new MediumHardMomentumImpulseForceAnswerSubmission(
+						float.Parse(impulseResultField.text),
+						float.Parse(netForceResultField.text),
+						float.Parse(initialMomentumResultField.text),
+						float.Parse(finalMomentumResultField.text),
+						float.Parse(changeInMomentumResultField2.text)
+						);
+					SubmitAnswerEvent?.Invoke(submission);
+				}
+				break;
+		}
 	}
 }
