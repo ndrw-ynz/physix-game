@@ -18,7 +18,7 @@ public class QuotientEquationDisplay : MonoBehaviour
 		if (string.IsNullOrEmpty(denominator)) denominator = "0";
 
 		bool canEvaluate = ExpressionEvaluator.Evaluate($"{numerator}/{denominator}", out float result);
-		result = (float)Math.Round(result, 2);
+		result = (float)Math.Round(result, 4);
 		if (canEvaluate)
 		{
 			quotientValue = result;
