@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MassCoordinatePair
 {
@@ -59,6 +61,53 @@ public class CenterOfMassAnswerSubmissionResults
 	}
 }
 
+public abstract class MomentumImpulseForceAnswerSubmissionResults
+{
+	public bool isChangeInMomentumCorrect { get; private set; }
+	public bool isImpulseCorrect { get; private set; }
+	public bool isNetForceCorrect { get; private set; }
+
+	public MomentumImpulseForceAnswerSubmissionResults(
+		bool isChangeInMomentumCorrect,
+		bool isImpulseCorrect,
+		bool isNetForceCorrect)
+	{
+		this.isChangeInMomentumCorrect = isChangeInMomentumCorrect;
+		this.isImpulseCorrect = isImpulseCorrect;
+		this.isNetForceCorrect = isNetForceCorrect;
+	}
+}
+
+public class EasyMomentumImpulseForceAnswerSubmissionResults : MomentumImpulseForceAnswerSubmissionResults
+{
+	public EasyMomentumImpulseForceAnswerSubmissionResults(
+		bool isChangeInMomentumCorrect,
+		bool isImpulseCorrect,
+		bool isNetForceCorrect)
+		:
+		base(isChangeInMomentumCorrect, isImpulseCorrect, isNetForceCorrect)
+	{
+	}
+}
+
+public class MediumHardMomentumImpulseForceAnswerSubmissionResults : MomentumImpulseForceAnswerSubmissionResults
+{
+	public bool isInitialMomentumCorrect { get; private set; }
+	public bool isFinalMomentumCorrect { get; private set; }
+	public MediumHardMomentumImpulseForceAnswerSubmissionResults(
+		bool isInitialMomentumCorrect,
+		bool isFinalMomentumCorrect,
+		bool isChangeInMomentumCorrect,
+		bool isImpulseCorrect,
+		bool isNetForceCorrect) 
+		: 
+		base(isChangeInMomentumCorrect, isImpulseCorrect, isNetForceCorrect)
+	{
+		this.isInitialMomentumCorrect = isInitialMomentumCorrect;
+		this.isFinalMomentumCorrect = isFinalMomentumCorrect;
+	}
+}
+
 // TEMPORARILY STORE HERE. TRANSFER ENUM TO FUTURE CLASS HANDLING DIFFICULTY SELECTION
 public enum Difficulty
 {
@@ -98,7 +147,7 @@ public class ActivitySevenManager : MonoBehaviour
     void Start()
     {
 		// Difficulty selection
-		difficultyConfiguration = Difficulty.Hard; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
         
 		// Setting level data
 		switch (difficultyConfiguration)
@@ -119,6 +168,7 @@ public class ActivitySevenManager : MonoBehaviour
 
 		// Subscribing to view events
         CenterOfMassView.SubmitAnswerEvent += CheckCenterOfMassAnswers;
+		MomentumImpulseForceView.SubmitAnswerEvent += CheckMomentumImpulseForceAnswers;
 
         // Initializing given values
         InitializeMassCoordinatePairs(currentCenterOfMassLevel);
@@ -213,6 +263,88 @@ public class ActivitySevenManager : MonoBehaviour
 					{ "totalTime", Random.Range(momentumImpulseForceSubActivitySO.timeMinVal, momentumImpulseForceSubActivitySO.timeMaxVal)}
 				};
 				break;
+		}
+	}
+
+	private void CheckMomentumImpulseForceAnswers(MomentumImpulseForceAnswerSubmission momentumImpulseForceAnswer)
+	{
+		if (momentumImpulseForceAnswer is EasyMomentumImpulseForceAnswerSubmission)
+		{
+			// Easy problem verification
+			EasyMomentumImpulseForceAnswerSubmission answer = (EasyMomentumImpulseForceAnswerSubmission) momentumImpulseForceAnswer;
+
+			EasyMomentumImpulseForceAnswerSubmissionResults results = new EasyMomentumImpulseForceAnswerSubmissionResults(
+				// Change in momentum
+				ActivitySevenUtilities.ValidateMomentumImpulse(
+					answer.changeInMomentum,
+					momentumImpulseForceGivenData["mass"],
+					momentumImpulseForceGivenData["deltaVelocity"]
+					),
+				// Impulse
+				ActivitySevenUtilities.ValidateMomentumImpulse(
+					answer.impulse,
+					momentumImpulseForceGivenData["mass"],
+					momentumImpulseForceGivenData["deltaVelocity"]
+					),
+				// Net force
+				ActivitySevenUtilities.ValidateNetForce(
+					answer.netForce,
+					momentumImpulseForceGivenData["mass"],
+					momentumImpulseForceGivenData["deltaVelocity"],
+					momentumImpulseForceGivenData["totalTime"]
+					)
+				);
+
+			Debug.Log(results.isChangeInMomentumCorrect);
+			Debug.Log(results.isImpulseCorrect);
+			Debug.Log(results.isNetForceCorrect);
+
+		}
+		else if (momentumImpulseForceAnswer is MediumHardMomentumImpulseForceAnswerSubmission) {
+			// Medium-Hard problem answer verification
+			MediumHardMomentumImpulseForceAnswerSubmission answer = (MediumHardMomentumImpulseForceAnswerSubmission) momentumImpulseForceAnswer;
+			
+			float deltaVelocity = momentumImpulseForceGivenData["finalVelocity"] - momentumImpulseForceGivenData["initialVelocity"];
+			
+			MediumHardMomentumImpulseForceAnswerSubmissionResults results = new MediumHardMomentumImpulseForceAnswerSubmissionResults(
+				// Initial momentum
+				ActivitySevenUtilities.ValidateMomentumImpulse(
+					answer.initialMomentum, 
+					momentumImpulseForceGivenData["mass"],
+					momentumImpulseForceGivenData["initialVelocity"]
+					),
+				// Final momentum
+				ActivitySevenUtilities.ValidateMomentumImpulse(
+					answer.finalMomentum,
+					momentumImpulseForceGivenData["mass"],
+					momentumImpulseForceGivenData["finalVelocity"]
+					),
+				// Change in momentum
+				ActivitySevenUtilities.ValidateMomentumImpulse(
+					answer.changeInMomentum,
+					momentumImpulseForceGivenData["mass"],
+					deltaVelocity
+					),
+				// Impulse
+				ActivitySevenUtilities.ValidateMomentumImpulse(
+					answer.impulse,
+					momentumImpulseForceGivenData["mass"],
+					deltaVelocity
+					),
+				// Net force
+				ActivitySevenUtilities.ValidateNetForce(
+					answer.netForce,
+					momentumImpulseForceGivenData["mass"],
+					deltaVelocity,
+					momentumImpulseForceGivenData["totalTime"]
+					)
+				);
+
+			Debug.Log(results.isInitialMomentumCorrect);
+			Debug.Log(results.isFinalMomentumCorrect);
+			Debug.Log(results.isChangeInMomentumCorrect);
+			Debug.Log(results.isImpulseCorrect);
+			Debug.Log(results.isNetForceCorrect);
 		}
 	}
 
