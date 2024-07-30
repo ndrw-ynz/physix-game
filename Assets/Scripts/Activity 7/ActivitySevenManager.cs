@@ -76,6 +76,15 @@ public abstract class MomentumImpulseForceAnswerSubmissionResults
 		this.isImpulseCorrect = isImpulseCorrect;
 		this.isNetForceCorrect = isNetForceCorrect;
 	}
+
+	public virtual bool isAllCorrect()
+	{
+		return (
+			isChangeInMomentumCorrect &&
+			isImpulseCorrect &&
+			isNetForceCorrect
+			);
+	}
 }
 
 public class EasyMomentumImpulseForceAnswerSubmissionResults : MomentumImpulseForceAnswerSubmissionResults
@@ -105,6 +114,15 @@ public class MediumHardMomentumImpulseForceAnswerSubmissionResults : MomentumImp
 	{
 		this.isInitialMomentumCorrect = isInitialMomentumCorrect;
 		this.isFinalMomentumCorrect = isFinalMomentumCorrect;
+	}
+
+	public override bool isAllCorrect()
+	{
+		return (
+			base.isAllCorrect() &&
+			isInitialMomentumCorrect &&
+			isFinalMomentumCorrect
+			);
 	}
 }
 
@@ -138,6 +156,7 @@ public class ActivitySevenManager : MonoBehaviour
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private CenterOfMassSubmissionStatusDisplay centerOfMassSubmissionStatusDisplay;
+	[SerializeField] private MomentumImpulseForceSubmissionStatusDisplay momentumImpulseForceSubmissionStatusDisplay;
 
 	// Given Values - Center of Mass
 	private List<MassCoordinatePair> massCoordinatePairs;
@@ -299,6 +318,18 @@ public class ActivitySevenManager : MonoBehaviour
 			Debug.Log(results.isImpulseCorrect);
 			Debug.Log(results.isNetForceCorrect);
 
+			if (results.isAllCorrect())
+			{
+				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(true, "Calibration test matches calculations. Proceed.");
+			}
+			else
+			{
+				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(false, "Calibration tests found discrepancies in your calculations. Please review and fix it.");
+			}
+
+			momentumImpulseForceSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
+			momentumImpulseForceSubmissionStatusDisplay.gameObject.SetActive(true);
 		}
 		else if (momentumImpulseForceAnswer is MediumHardMomentumImpulseForceAnswerSubmission) {
 			// Medium-Hard problem answer verification
@@ -345,6 +376,19 @@ public class ActivitySevenManager : MonoBehaviour
 			Debug.Log(results.isChangeInMomentumCorrect);
 			Debug.Log(results.isImpulseCorrect);
 			Debug.Log(results.isNetForceCorrect);
+
+			if (results.isAllCorrect())
+			{
+				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(true, "Calibration test matches calculations. Proceed.");
+			}
+			else
+			{
+				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(false, "Calibration tests found discrepancies in your calculations. Please review and fix it.");
+			}
+
+			momentumImpulseForceSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
+			momentumImpulseForceSubmissionStatusDisplay.gameObject.SetActive(true);
 		}
 	}
 
