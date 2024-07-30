@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public static class ActivitySevenUtilities
 {
@@ -49,5 +50,23 @@ public static class ActivitySevenUtilities
 		return submittedCenterOfMass == expectedCenterOfMass;
 	}
 
+	#endregion
+
+	#region Momentum-Impulse and Net Force
+	public static bool ValidateMomentumImpulse(float? submittedMomentumImpulse, float mass, float velocity)
+	{
+		if (submittedMomentumImpulse == null) return false;
+		return Mathf.Abs(
+			(float)(submittedMomentumImpulse - (mass * velocity))
+			) <= 0.0001;
+	}
+
+	public static bool ValidateNetForce(float? submittedNetForce, float mass, float velocity, float totalTime)
+	{
+		if (submittedNetForce == null) return false;
+		return Mathf.Abs(
+			(float)submittedNetForce - (float)Math.Round(mass * velocity / totalTime, 4)
+			) <= 0.0001;
+	}
 	#endregion
 }
