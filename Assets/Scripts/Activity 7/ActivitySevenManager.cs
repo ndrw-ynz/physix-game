@@ -98,7 +98,7 @@ public class ActivitySevenManager : MonoBehaviour
     void Start()
     {
 		// Difficulty selection
-		difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		difficultyConfiguration = Difficulty.Hard; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
         
 		// Setting level data
 		switch (difficultyConfiguration)
@@ -192,13 +192,28 @@ public class ActivitySevenManager : MonoBehaviour
 
 	private void InitializeMomentumImpulseForceGivenData(MomentumImpulseForceSubActivitySO momentumImpulseForceSubActivitySO)
 	{
-		momentumImpulseForceGivenData = new Dictionary<string, float>
+		switch (difficultyConfiguration)
 		{
-			{ "mass", Random.Range(momentumImpulseForceSubActivitySO.massMinVal, momentumImpulseForceSubActivitySO.massMaxVal) },
-			{ "initialVelocity", Random.Range(momentumImpulseForceSubActivitySO.velocityMinVal, momentumImpulseForceSubActivitySO.velocityMaxVal)},
-			{ "finalVelocity", Random.Range(momentumImpulseForceSubActivitySO.velocityMinVal, momentumImpulseForceSubActivitySO.velocityMaxVal)},
-			{ "totalTime", Random.Range(momentumImpulseForceSubActivitySO.timeMinVal, momentumImpulseForceSubActivitySO.timeMaxVal)}
-		};
+			case Difficulty.Easy:
+				// Easy configuration
+				momentumImpulseForceGivenData = new Dictionary<string, float>
+				{
+					{ "mass", Random.Range(momentumImpulseForceSubActivitySO.massMinVal, momentumImpulseForceSubActivitySO.massMaxVal) },
+					{ "deltaVelocity", Random.Range(momentumImpulseForceSubActivitySO.velocityMinVal, momentumImpulseForceSubActivitySO.velocityMaxVal)},
+					{ "totalTime", Random.Range(momentumImpulseForceSubActivitySO.timeMinVal, momentumImpulseForceSubActivitySO.timeMaxVal)}
+				};
+				break;
+			case Difficulty.Medium: case Difficulty.Hard:
+				// Medium-hard configuration
+				momentumImpulseForceGivenData = new Dictionary<string, float>
+				{
+					{ "mass", Random.Range(momentumImpulseForceSubActivitySO.massMinVal, momentumImpulseForceSubActivitySO.massMaxVal) },
+					{ "initialVelocity", Random.Range(momentumImpulseForceSubActivitySO.velocityMinVal, momentumImpulseForceSubActivitySO.velocityMaxVal)},
+					{ "finalVelocity", Random.Range(momentumImpulseForceSubActivitySO.velocityMinVal, momentumImpulseForceSubActivitySO.velocityMaxVal)},
+					{ "totalTime", Random.Range(momentumImpulseForceSubActivitySO.timeMinVal, momentumImpulseForceSubActivitySO.timeMaxVal)}
+				};
+				break;
+		}
 	}
 
 	#endregion
