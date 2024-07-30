@@ -4,7 +4,7 @@ using UnityEngine;
 public class MomentumImpulseForceSubActivitySO : ScriptableObject
 {
     [Header("Number of Tests")]
-    [Range(3, 7)]
+    [Range(1, 3)]
     public int numberOfTests;
 	[Header("Mass Value Range")]
 	public int massMinVal;
