@@ -101,12 +101,7 @@ public class CenterOfMassView : MonoBehaviour
 	public void SetupCenterOfMassView(List<MassCoordinatePair> massCoordinatePairs)
 	{
 		// Setting up mass coordinate components for UI display of given values
-		for (int i = 0; i < massCoordinatePairs.Count; i++)
-		{
-			MassCoordinateComponentDisplay massCoordinateComponentDisplay = Instantiate(massCoordinateComponentDisplayPrefab);
-			massCoordinateComponentDisplay.SetupInputFields(massCoordinatePairs[i], i + 1);
-			massCoordinateComponentDisplay.transform.SetParent(massCoordinateComponentContainer.transform, false);
-		}
+		SetupMassCoordinateContainer(massCoordinatePairs);
 
 		// Setting up mass coordinate product displays in calculation display
 		SetupMassCoordinateProductContainers(massCoordinatePairs.Count, XMassCoordinateProductContainer);
@@ -121,14 +116,35 @@ public class CenterOfMassView : MonoBehaviour
 		SetupLeftSumEquationContainer(massCoordinatePairs.Count, YSumOfMassContainer, YSumOfMassResultField);
 
 		// Setup graph points
+		SetupGraphDisplay(massCoordinatePairs);
+	}
+
+	private void SetupMassCoordinateContainer(List<MassCoordinatePair> massCoordinatePairs)
+	{
+		// Remove all children 
+		for (int i = 0; i < massCoordinateComponentContainer.transform.childCount; i++)
+		{
+			Destroy(massCoordinateComponentContainer.transform.GetChild(i).gameObject);
+		}
+
+		// Add displays to container
 		for (int i = 0; i < massCoordinatePairs.Count; i++)
 		{
-			graphCoordinatePlotter.PlacePoint(massCoordinatePairs[i].coordinate);
+			MassCoordinateComponentDisplay massCoordinateComponentDisplay = Instantiate(massCoordinateComponentDisplayPrefab);
+			massCoordinateComponentDisplay.SetupInputFields(massCoordinatePairs[i], i + 1);
+			massCoordinateComponentDisplay.transform.SetParent(massCoordinateComponentContainer.transform, false);
 		}
 	}
 
 	private void SetupMassCoordinateProductContainers(int coordinatePairsCount, HorizontalLayoutGroup massCoordinateProductContainer)
 	{
+		// Remove all children 
+		for (int i = 0; i < massCoordinateProductContainer.transform.childCount; i++)
+		{
+			Destroy(massCoordinateProductContainer.transform.GetChild(i).gameObject);
+		}
+		
+		// Add new children
 		for (int i = 0; i < coordinatePairsCount; i++)
 		{
 			MassCoordinateProductDisplay massCoordinateProductDisplay = Instantiate(massCoordinateProductDisplayPrefab);
@@ -139,6 +155,13 @@ public class CenterOfMassView : MonoBehaviour
 
 	private void SetupLeftSumEquationContainer(int addendsCount, HorizontalLayoutGroup leftSumEquationContainer, TMP_InputField sumResultField)
 	{
+		// Remove all children 
+		for (int i = 0; i < leftSumEquationContainer.transform.childCount; i++)
+		{
+			Destroy(leftSumEquationContainer.transform.GetChild(i).gameObject);
+		}
+
+		// Add new children
 		for (int i = 0; i < addendsCount; i++)
 		{
 			TMP_InputField numberInputField = Instantiate(numberInputFieldPrefab);
@@ -152,6 +175,19 @@ public class CenterOfMassView : MonoBehaviour
 			}
 		}
 	}
+
+	private void SetupGraphDisplay(List<MassCoordinatePair> massCoordinatePairs) 
+	{
+		// Remove all points from graph
+		graphCoordinatePlotter.RemoveAllPoints();
+
+		// Add points to graph
+		for (int i = 0; i < massCoordinatePairs.Count; i++)
+		{
+			graphCoordinatePlotter.PlacePoint(massCoordinatePairs[i].coordinate);
+		}
+	}
+
 	private void UpdateSumResultField(HorizontalLayoutGroup leftSumEquationContainer, TMP_InputField sumResultField)
 	{
 		float sum = 0;
