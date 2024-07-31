@@ -173,7 +173,7 @@ public class ActivitySevenManager : MonoBehaviour
     void Start()
     {
 		// Difficulty selection
-		difficultyConfiguration = Difficulty.Hard; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		difficultyConfiguration = Difficulty.Medium; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
         
 		// Setting level data
 		switch (difficultyConfiguration)
@@ -194,6 +194,7 @@ public class ActivitySevenManager : MonoBehaviour
 
 		// Subscribing to view events
         CenterOfMassView.SubmitAnswerEvent += CheckCenterOfMassAnswers;
+		CenterOfMassSubmissionStatusDisplay.ProceedEvent += GenerateNewCenterOfMassTest;
 		MomentumImpulseForceView.SubmitAnswerEvent += CheckMomentumImpulseForceAnswers;
 
         // Initializing given values
@@ -258,20 +259,10 @@ public class ActivitySevenManager : MonoBehaviour
 		{
 			// TODO: modify here
 			currentNumCenterOfMassTests -= 1;
-			string displayText = currentNumCenterOfMassTests <= 0 ? "Calculations correct. The power source cube is now accessible." : "Calculations correct. Loading next test.";
-			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, "Calculations correct. The power source cube is now accessible.");
+			string displayText = currentNumCenterOfMassTests <= 0 ? "Calculations correct. The power source cube is now accessible." : "Calculations correct. Loaded next test.";
+			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
 
-			if (currentNumCenterOfMassTests <= 0)
-			{
-				RoomOneClearEvent?.Invoke();
-			}
-			else
-			{
-				Debug.Log("Generating new center of mass test");
-				// Generate new given values and update center of mass view
-				SetupMassCoordinatePairs(currentCenterOfMassLevel);
-				centerOfMassView.SetupCenterOfMassView(massCoordinatePairs);
-			}
+			if (currentNumCenterOfMassTests <= 0) RoomOneClearEvent?.Invoke();
 		} else
 		{
 			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
@@ -281,6 +272,13 @@ public class ActivitySevenManager : MonoBehaviour
 		centerOfMassSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
 
 		centerOfMassSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void GenerateNewCenterOfMassTest()
+	{
+		// Generate new given values and update center of mass view
+		SetupMassCoordinatePairs(currentCenterOfMassLevel);
+		centerOfMassView.SetupCenterOfMassView(massCoordinatePairs);
 	}
 	#endregion
 
@@ -413,9 +411,7 @@ public class ActivitySevenManager : MonoBehaviour
 				}
 				else
 				{
-					// Generate new given data for momentum-impulse and force subactivity, and update momentum-impulse force view
-					SetMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
-					momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
+					GenerateNewMomentumImpulseForceTest();
 				}
 				momentumImpulseForceView.UpdateCalibrationTestTextDisplay(currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests, currentMomentumImpulseForceLevel.numberOfTests);
 			}
@@ -441,9 +437,7 @@ public class ActivitySevenManager : MonoBehaviour
 				}
 				else
 				{
-					// Generate new given data for momentum-impulse and force subactivity, and update momentum-impulse force view
-					SetMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
-					momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
+					GenerateNewMomentumImpulseForceTest();
 				}
 				momentumImpulseForceView.UpdateCalibrationTestTextDisplay(currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests, currentMomentumImpulseForceLevel.numberOfTests);
 			}
@@ -455,6 +449,13 @@ public class ActivitySevenManager : MonoBehaviour
 			momentumImpulseForceSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
 			momentumImpulseForceSubmissionStatusDisplay.gameObject.SetActive(true);
 		}
+	}
+
+	private void GenerateNewMomentumImpulseForceTest()
+	{
+		// Generate new given data for momentum-impulse and force subactivity, and update momentum-impulse force view
+		SetMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
+		momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
 	}
 
 	#endregion
