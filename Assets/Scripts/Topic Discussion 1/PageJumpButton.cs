@@ -1,36 +1,27 @@
-using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PageCircleButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    Image[] images;
+    public static event Action<int> OnPageCircleClick;
+
     public Image buttonOutline;
     public Image buttonHoverOutline;
     public Image buttonColor;
-    public Vector2 startPosition;
-    public int pageIndex;
-    public static event Action<int> OnPageCircleClick;
 
+    private int _pageIndex;
+    private Vector2 _startPosition;
     private SpriteRenderer _buttonRenderer;
     private Button _pageCircleButton;
 
     public void Initialize(int index)
     {
-        images = GetComponentsInChildren<Image>();
+        _pageIndex = index;
 
-        buttonOutline = images[0];
-        buttonHoverOutline = images[1];
-        buttonColor = images[3];
-        startPosition = buttonColor.transform.position;
-        pageIndex = index;
+        _startPosition = buttonColor.transform.position;
         _buttonRenderer = GetComponentInChildren<SpriteRenderer>();
-
         _pageCircleButton = GetComponentInChildren<Button>();
         _pageCircleButton.onClick.AddListener(() => OnPageCircleButtonCLick());
     }
@@ -43,7 +34,7 @@ public class PageCircleButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
     private void OnPageCircleButtonCLick()
     {
         buttonHoverOutline.gameObject.SetActive(false);
-        OnPageCircleClick?.Invoke(pageIndex);
+        OnPageCircleClick?.Invoke(_pageIndex);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -15,7 +15,7 @@ public class AnimationManager : MonoBehaviour
     private float _targetCircleAlpha = 1.0f;
     private float _currentCircleAlpha;
     private Color _currentCircleColor;
-    private PageCircleButton _circleButton;
+    private PageJumpButton _circleButton;
     private bool _animatePageCircle = false;
 
     private float _prevNextButtonAnimationSpeed = 4.0f;

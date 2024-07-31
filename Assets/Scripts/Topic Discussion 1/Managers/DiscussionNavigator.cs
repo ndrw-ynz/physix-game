@@ -39,7 +39,7 @@ public class DiscussionNavigator : MonoBehaviour
         DiscussionPrevNextPageButton.PrevNextPageClickEvent += ChangePage;
         DiscussionPrevNextSectorButton.PrevNextSectorClickEvent += ChangeSector;
         ProgressBarButton.ProgressBarClickEvent += JumpToSector;
-        PageCircleButton.OnPageCircleClick += JumpToPage;
+        PageJumpButton.OnPageCircleClick += JumpToPage;
         UnderstoodIndicator.UnderstoodIndicatorClickEvent += ChangeComprehensionMark;
 
         DiscussionPageStart?.Invoke(this);
@@ -49,7 +49,7 @@ public class DiscussionNavigator : MonoBehaviour
         DiscussionPrevNextPageButton.PrevNextPageClickEvent -= ChangePage;
         DiscussionPrevNextSectorButton.PrevNextSectorClickEvent -= ChangeSector;
         ProgressBarButton.ProgressBarClickEvent -= JumpToSector;
-        PageCircleButton.OnPageCircleClick -= JumpToPage;
+        PageJumpButton.OnPageCircleClick -= JumpToPage;
         UnderstoodIndicator.UnderstoodIndicatorClickEvent -= ChangeComprehensionMark;
     }
 

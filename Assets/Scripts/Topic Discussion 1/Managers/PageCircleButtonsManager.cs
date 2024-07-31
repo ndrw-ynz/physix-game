@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class PageCircleButtonsManager : MonoBehaviour
 {
-    public PageCircleButton pageCircleButtonPrefab;
+    public PageJumpButton pageCircleButtonPrefab;
 
-    public List<PageCircleButton> pageCircleButtonList = new List<PageCircleButton>();
+    public List<PageJumpButton> pageCircleButtonList = new List<PageJumpButton>();
     private RectTransform pageCircleAreaParent;
     private int _numButtons;
     private float _buttonSpacing = 100.0f;
@@ -52,7 +52,7 @@ public class PageCircleButtonsManager : MonoBehaviour
 
     private void GeneratePageCircleButton(Vector2 buttonPosition, int i)
     {
-        PageCircleButton newPageCircleButton = Instantiate(pageCircleButtonPrefab);
+        PageJumpButton newPageCircleButton = Instantiate(pageCircleButtonPrefab);
         newPageCircleButton.transform.SetParent(pageCircleAreaParent, false);
         newPageCircleButton.name = $"Page Circle Button {i + 1}";
         newPageCircleButton.transform.localPosition = buttonPosition;
