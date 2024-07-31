@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class CenterOfMassSubmissionStatusDisplay : SubmissionStatusDisplay
 {
+	public static event Action ProceedEvent;
+
 	[Header("Center Of Mass Info Displays")]
 	[SerializeField] private GameObject centerOfMassXInfo;
 	[SerializeField] private GameObject centerOfMassYInfo;
@@ -75,6 +77,7 @@ public class CenterOfMassSubmissionStatusDisplay : SubmissionStatusDisplay
 	protected override void OnEnable()
 	{
 		base.OnEnable();
+		proceedButton.onClick.AddListener(() => ProceedEvent?.Invoke());
 
 		// Create references and attach to associated parents
 		massTimesXCoordsClone = Instantiate(massTimesXCoordsReference);
@@ -101,6 +104,8 @@ public class CenterOfMassSubmissionStatusDisplay : SubmissionStatusDisplay
 	protected override void OnDisable()
 	{
 		base.OnDisable();
+		proceedButton.onClick.RemoveAllListeners();
+
 		Destroy(massTimesXCoordsClone);
 		Destroy(massTimesYCoordsClone);
 		Destroy(centerOfMassXCalculationClone);
