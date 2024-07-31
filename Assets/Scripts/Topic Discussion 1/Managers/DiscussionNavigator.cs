@@ -37,7 +37,7 @@ public class DiscussionNavigator : MonoBehaviour
     private void Start()
     {
         DiscussionPrevNextPageButton.PrevNextPageClickEvent += ChangePage;
-        DiscussionPrevNextSectorButton.PrevNextSectorClickEvent += ChangeSector;
+        SectorPrevNextButton.PrevNextSectorClickEvent += ChangeSector;
         ProgressBarButton.ProgressBarClickEvent += JumpToSector;
         PageJumpButton.OnPageCircleClick += JumpToPage;
         UnderstoodIndicator.UnderstoodIndicatorClickEvent += ChangeComprehensionMark;
@@ -47,7 +47,7 @@ public class DiscussionNavigator : MonoBehaviour
     private void OnDisable()
     {
         DiscussionPrevNextPageButton.PrevNextPageClickEvent -= ChangePage;
-        DiscussionPrevNextSectorButton.PrevNextSectorClickEvent -= ChangeSector;
+        SectorPrevNextButton.PrevNextSectorClickEvent -= ChangeSector;
         ProgressBarButton.ProgressBarClickEvent -= JumpToSector;
         PageJumpButton.OnPageCircleClick -= JumpToPage;
         UnderstoodIndicator.UnderstoodIndicatorClickEvent -= ChangeComprehensionMark;
