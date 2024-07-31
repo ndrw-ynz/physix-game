@@ -13,7 +13,7 @@ public class MomentumImpulseForceSubActivitySO : ScriptableObject
 	public int velocityMinVal;
 	public int velocityMaxVal;
 	[Header("Time Value Range")]
-	[Range(0, 10)]
+	[Range(1, 10)]
 	public int timeMinVal;
 	[Range(10, 100)]
 	public int timeMaxVal;
