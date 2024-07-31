@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class PrevNextButtonsManager : MonoBehaviour
 {
-    public DiscussionPrevNextPageButton prevPageButton;
-    public DiscussionPrevNextPageButton nextPageButton;
+    public PagePrevNextButton prevPageButton;
+    public PagePrevNextButton nextPageButton;
     public SectorPrevNextButton prevSectorButton;
     public SectorPrevNextButton nextSectorButton;
 
