@@ -11,7 +11,11 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
     [SerializeField] private GameObject roomOneGateBlocker;
     [SerializeField] private PowerSourceCubeContainer powerContainer;
 
-    [Header("Gate Status Color Material")]
+    [Header("Room Two")]
+	[SerializeField] private GameObject roomTwoGate;
+	[SerializeField] private GameObject roomTwoGateBlocker;
+
+	[Header("Gate Status Color Material")]
     [SerializeField] private Material openGateColor;
 
     private bool canPlayerPlaceCube;
@@ -19,9 +23,12 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 	void Start()
     {
         // Room One Environment Events
-        CenterOfMassSubmissionStatusDisplay.ProceedEvent += ReleasePowerCube;
+        ActivitySevenManager.RoomOneClearEvent += ReleasePowerCube;
         PowerSourceCube.RetrieveEvent += () => canPlayerPlaceCube = true;
         PowerSourceCubeContainer.InteractEvent += UpdateRoomOneGateState;
+
+        // Room Two Environment Events
+        ActivitySevenManager.RoomTwoClearEvent += UpdateRoomTwoGateState;
     }
 
 	#region Room One
@@ -40,18 +47,33 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
             powerSourceCubeTwo.gameObject.SetActive(true);
             containerGlassTwo.gameObject.SetActive(true);
 
-            // Change gate color.
-            MeshRenderer roomOneGateRend = roomOneGate.GetComponent<MeshRenderer>();
-            Material[] roomOneGateMats = roomOneGateRend.materials;
-            roomOneGateMats[2] = openGateColor;
-            roomOneGateRend.materials = roomOneGateMats;
-
-            // Remove gate blocker.
-            roomOneGateBlocker.gameObject.SetActive(false);
+            // Open room one gate
+            OpenGate(roomOneGate, roomOneGateBlocker);
 
             // Disable interaction on powerContainer
             powerContainer.SetInteractable(false);
 		}
     }
-    #endregion
+	#endregion
+
+	#region Room two
+    private void UpdateRoomTwoGateState()
+    {
+        // Open room two gate
+        OpenGate(roomTwoGate, roomTwoGateBlocker);
+    }
+
+	#endregion
+
+    private void OpenGate(GameObject roomGate, GameObject roomGateBlocker)
+    {
+		// Change gate color.
+		MeshRenderer roomGateRend = roomGate.GetComponent<MeshRenderer>();
+		Material[] roomGateMats = roomGateRend.materials;
+		roomGateMats[2] = openGateColor;
+		roomGateRend.materials = roomGateMats;
+
+		// Remove gate blocker.
+		roomGateBlocker.gameObject.SetActive(false);
+	}
 }
