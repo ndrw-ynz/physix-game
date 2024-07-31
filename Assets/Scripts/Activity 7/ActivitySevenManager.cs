@@ -207,6 +207,7 @@ public class ActivitySevenManager : MonoBehaviour
 		// Setting up views
 		centerOfMassView.SetupCenterOfMassView(massCoordinatePairs);
 		momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
+		momentumImpulseForceView.UpdateCalibrationTestTextDisplay(0, currentMomentumImpulseForceLevel.numberOfTests);
     }
 
 	#region Center of Mass
@@ -416,6 +417,7 @@ public class ActivitySevenManager : MonoBehaviour
 					SetMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
 					momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
 				}
+				momentumImpulseForceView.UpdateCalibrationTestTextDisplay(currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests, currentMomentumImpulseForceLevel.numberOfTests);
 			}
 			else
 			{
@@ -443,6 +445,7 @@ public class ActivitySevenManager : MonoBehaviour
 					SetMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
 					momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
 				}
+				momentumImpulseForceView.UpdateCalibrationTestTextDisplay(currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests, currentMomentumImpulseForceLevel.numberOfTests);
 			}
 			else
 			{
