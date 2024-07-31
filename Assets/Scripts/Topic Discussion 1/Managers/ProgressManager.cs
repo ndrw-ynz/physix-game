@@ -11,10 +11,10 @@ using static UnityEngine.Rendering.VolumeComponent;
 public class ProgressManager : MonoBehaviour
 {
     public ProgressBarButton progressBarButtonPrefab;
-    public SectorIndicatorRect sectorIndicatorRectPrefab;
+    public SectorIndicator sectorIndicatorRectPrefab;
 
     public List<ProgressBarButton> progressBarButtonList = new List<ProgressBarButton>();
-    public List<SectorIndicatorRect> sectorIndicatorRectList = new List<SectorIndicatorRect>();
+    public List<SectorIndicator> sectorIndicatorRectList = new List<SectorIndicator>();
     private RectTransform progressAreaParent;
     private int _numButtons;
     private float _buttonSpacing = 300.0f;
@@ -72,7 +72,7 @@ public class ProgressManager : MonoBehaviour
 
     private void GenerateSectorIndicatorRect(Vector2 rectPosition, int i)
     {
-        SectorIndicatorRect newIndicatorRect = Instantiate(sectorIndicatorRectPrefab);
+        SectorIndicator newIndicatorRect = Instantiate(sectorIndicatorRectPrefab);
         newIndicatorRect.transform.SetParent(progressAreaParent, false);
         newIndicatorRect.name = $"Indicator Rect {i + 1}";
         newIndicatorRect.transform.localPosition = rectPosition;
