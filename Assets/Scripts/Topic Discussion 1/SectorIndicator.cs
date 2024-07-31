@@ -1,18 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SectorIndicatorRect : MonoBehaviour
+public class SectorIndicator : MonoBehaviour
 {
     public Image indicatorRectImage;
     public RectTransform indicatorRectTransform;
-    public Vector2 startPosition;
+
+    private Vector2 _startPosition;
 
     public void Initialize()
     {
         indicatorRectImage = GetComponent<Image>();
         indicatorRectTransform = GetComponent<RectTransform>();
-        startPosition = indicatorRectImage.transform.position;
+
+        _startPosition = indicatorRectImage.transform.position;
     }
 }

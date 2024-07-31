@@ -8,7 +8,7 @@ public class AnimationManager : MonoBehaviour
     private float _targetWidth = 130f;
     private float _currentWidth;
     private float _currentHeight;
-    private SectorIndicatorRect _indicatorRect;
+    private SectorIndicator _indicatorRect;
     private bool _animateIndicator = false;
 
     private float _cirleAnimationSpeed = 3.0f;
