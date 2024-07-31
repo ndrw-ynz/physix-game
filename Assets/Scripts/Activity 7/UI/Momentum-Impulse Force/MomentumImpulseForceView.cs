@@ -44,6 +44,9 @@ public class MomentumImpulseForceView : MonoBehaviour
 {
 	public static event Action<MomentumImpulseForceAnswerSubmission> SubmitAnswerEvent;
 
+	[Header("Text")]
+	[SerializeField] private TextMeshProUGUI calibrationTestText;
+
 	[Header("Holders")]
 	[SerializeField] private GameObject easyGivenHolder;
 	[SerializeField] private GameObject mediumHardGivenHolder;
@@ -105,6 +108,12 @@ public class MomentumImpulseForceView : MonoBehaviour
 		easyCalculationHolder.gameObject.SetActive(isEasy);
 		mediumHardCalculationHolder.gameObject.SetActive(!isEasy);
 	}
+
+	public void UpdateCalibrationTestTextDisplay(int testNumber, int totalTests)
+	{
+		calibrationTestText.text = $"Calibration Test: {testNumber} / {totalTests}";
+	}
+
 	#endregion
 
 	public void OnSubmitButtonClick()
