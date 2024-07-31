@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 1170568269241865550}
   - component: {fileID: 5338718623609610805}
   m_Layer: 5
-  m_Name: Temporary Color
+  m_Name: Temp Color
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -390,12 +390,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48c8334f04b97654e9dc3046b10b9e8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  progressBarTempColor: {fileID: 0}
-  progressBarFinalColor: {fileID: 0}
-  startPosition: {x: 0, y: 0}
-  sectorTitleText: {fileID: 0}
-  progressCountText: {fileID: 0}
-  sectorIndex: 0
+  progressBarTempColor: {fileID: 5338718623609610805}
+  progressBarFinalColor: {fileID: 1988681255156971846}
+  sectorTitleText: {fileID: 4295665761143043131}
+  progressCountText: {fileID: 108880633269637213}
+  _progressBarButton: {fileID: 3323787148392948300}
 --- !u!1 &8240991991934478785
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,7 +407,7 @@ GameObject:
   - component: {fileID: 7441685367775074722}
   - component: {fileID: 108880633269637213}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Counter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
