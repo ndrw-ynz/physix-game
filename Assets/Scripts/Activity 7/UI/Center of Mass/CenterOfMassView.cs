@@ -117,6 +117,9 @@ public class CenterOfMassView : MonoBehaviour
 
 		// Setup graph points
 		SetupGraphDisplay(massCoordinatePairs);
+
+		// Set default calculation view
+		OnLeftPageButtonClick();
 	}
 
 	private void SetupMassCoordinateContainer(List<MassCoordinatePair> massCoordinatePairs)
