@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -54,7 +50,7 @@ public class AnimationManager : MonoBehaviour
         PageCircleButtonsManager.PageCircleStateUpdate += ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate += ActivateProgressBarButtonAnimation;
         PrevNextButtonsManager.ButtonChangeStateUpdate += ActivatePrevNextButtonAnimation;
-        UnderstandMarkersManager.ComprehensionButtonStateChange += ActivateUnderstandMarkerAnimation;
+        UnderstoodIndicatorsManager.ComprehensionButtonStateChange += ActivateUnderstandMarkerAnimation;
         ProgressManager.ProgressBarButtonStateUpdate += ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent += ActivatePageAnimation;
     }
@@ -64,7 +60,7 @@ public class AnimationManager : MonoBehaviour
         PageCircleButtonsManager.PageCircleStateUpdate -= ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate -= ActivateProgressBarButtonAnimation;
         PrevNextButtonsManager.ButtonChangeStateUpdate -= ActivatePrevNextButtonAnimation;
-        UnderstandMarkersManager.ComprehensionButtonStateChange -= ActivateUnderstandMarkerAnimation;
+        UnderstoodIndicatorsManager.ComprehensionButtonStateChange -= ActivateUnderstandMarkerAnimation;
         ProgressManager.ProgressBarButtonStateUpdate -= ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent -= ActivatePageAnimation;
     }

@@ -3,12 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnderstandMarkersManager : MonoBehaviour
+public class UnderstoodIndicatorsManager : MonoBehaviour
 {
-    public UnderstoodNotUnderstoodButton markAsUnderstoodButton;
-    public UnderstoodNotUnderstoodButton markAsNotYetUnderstoodButton;
-
     public static event Action<CanvasGroup> ComprehensionButtonStateChange;
+
+    public UnderstoodIndicator markAsUnderstoodButton;
+    public UnderstoodIndicator markAsNotYetUnderstoodButton;
+
     private void OnEnable()
     {
         DiscussionNavigator.UnderstandMarkerChangeEvent += ChangeComprehensionButtonState;
