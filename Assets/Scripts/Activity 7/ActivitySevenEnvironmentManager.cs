@@ -10,10 +10,13 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
     [SerializeField] private GameObject roomOneGate;
     [SerializeField] private GameObject roomOneGateBlocker;
     [SerializeField] private PowerSourceCubeContainer powerContainer;
+    [SerializeField] private InteractableControlPanel roomOneControlPanel;
 
     [Header("Room Two")]
 	[SerializeField] private GameObject roomTwoGate;
 	[SerializeField] private GameObject roomTwoGateBlocker;
+	[SerializeField] private InteractableControlPanel roomTwoControlPanel;
+
 
 	[Header("Gate Status Color Material")]
     [SerializeField] private Material openGateColor;
@@ -37,6 +40,7 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
         powerSourceCubeOne.SetInteractable(true);
         powerContainer.SetInteractable(true);
 		containerGlassOne.gameObject.SetActive(false);
+        roomOneControlPanel.SetInteractable(false);
     }
 
     private void UpdateRoomOneGateState()
@@ -59,6 +63,7 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 	#region Room two
     private void UpdateRoomTwoGateState()
     {
+        roomTwoControlPanel.SetInteractable(false);
         // Open room two gate
         OpenGate(roomTwoGate, roomTwoGateBlocker);
     }
