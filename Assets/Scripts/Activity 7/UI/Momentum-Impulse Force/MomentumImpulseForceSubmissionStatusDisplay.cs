@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class MomentumImpulseForceSubmissionStatusDisplay : SubmissionStatusDisplay
 {
-	public static event Action ProceedEvent;
-
 	[Header("Momentum-Impulse Force Status Border Displays")]
 	[SerializeField] private Image momentumStatusBorderDisplay;
 	[SerializeField] private Image impulseStatusBorderDisplay;
@@ -29,13 +27,11 @@ public class MomentumImpulseForceSubmissionStatusDisplay : SubmissionStatusDispl
 	public void UpdateStatusBorderDisplaysFromResult(MomentumImpulseForceAnswerSubmissionResults results)
 	{
 		// Momentum status border update
-		if (results is EasyMomentumImpulseForceAnswerSubmissionResults)
+		if (results is EasyMomentumImpulseForceAnswerSubmissionResults easySubmissionResults)
 		{
-			EasyMomentumImpulseForceAnswerSubmissionResults easySubmissionResults = (EasyMomentumImpulseForceAnswerSubmissionResults) results;
 			momentumStatusBorderDisplay.color = easySubmissionResults.isChangeInMomentumCorrect == true ? new Color32(175, 255, 155, 255) : new Color32(200, 75, 55, 255);
-		} else if (results is MediumHardMomentumImpulseForceAnswerSubmissionResults)
+		} else if (results is MediumHardMomentumImpulseForceAnswerSubmissionResults mediumHardSubmissionResults)
 		{
-			MediumHardMomentumImpulseForceAnswerSubmissionResults mediumHardSubmissionResults = (MediumHardMomentumImpulseForceAnswerSubmissionResults) results;
 			momentumStatusBorderDisplay.color = (
 				mediumHardSubmissionResults.isInitialMomentumCorrect &&
 				mediumHardSubmissionResults.isFinalMomentumCorrect &&
@@ -53,7 +49,6 @@ public class MomentumImpulseForceSubmissionStatusDisplay : SubmissionStatusDispl
 	protected override void OnEnable()
 	{
 		base.OnEnable();
-		proceedButton.onClick.AddListener(() => ProceedEvent?.Invoke());
 
 		// Create references and attach to associated parents.
 		// Momentum
