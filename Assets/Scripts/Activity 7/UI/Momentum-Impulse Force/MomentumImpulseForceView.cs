@@ -87,7 +87,7 @@ public class MomentumImpulseForceView : MonoBehaviour
 				ShowUIForDifficulty(false);
 				break;
 			case Difficulty.Hard:
-				SetGivenFields(momentumImpulseForceGivenData, "g", "km/s", "ms", 1000, 0.0001f, 1000);
+				SetGivenFields(momentumImpulseForceGivenData, "g", "km/s", "ms", 1000, 0.001f, 1000);
 				ShowUIForDifficulty(false);
 				break;
 		}
