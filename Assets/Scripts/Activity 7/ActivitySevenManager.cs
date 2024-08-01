@@ -141,6 +141,9 @@ public class ActivitySevenManager : MonoBehaviour
 	public static event Action RoomOneClearEvent;
 	public static event Action RoomTwoClearEvent;
 
+	[Header("Input Reader")]
+	[SerializeField] InputReader inputReader;
+
     [Header("Level Data - Center of Mass")]
     [SerializeField] CenterOfMassSubActivitySO centerOfMassLevelOne;
 	[SerializeField] CenterOfMassSubActivitySO centerOfMassLevelTwo;
@@ -173,7 +176,7 @@ public class ActivitySevenManager : MonoBehaviour
     void Start()
     {
 		// Difficulty selection
-		difficultyConfiguration = Difficulty.Medium; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
         
 		// Setting level data
 		switch (difficultyConfiguration)
@@ -195,10 +198,13 @@ public class ActivitySevenManager : MonoBehaviour
 		// Subscribing to view events
         CenterOfMassView.SubmitAnswerEvent += CheckCenterOfMassAnswers;
 		CenterOfMassSubmissionStatusDisplay.ProceedEvent += GenerateNewCenterOfMassTest;
+		CenterOfMassSubmissionStatusDisplay.ProceedEvent += CloseCenterOfMassView;
 		MomentumImpulseForceView.SubmitAnswerEvent += CheckMomentumImpulseForceAnswers;
+		MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent += GenerateNewMomentumImpulseForceTest;
+		MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent += CloseMomentumImpulseForceView;
 
-        // Initializing given values
-        SetupMassCoordinatePairs(currentCenterOfMassLevel);
+		// Initializing given values
+		SetupMassCoordinatePairs(currentCenterOfMassLevel);
 		SetMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
 
 		// Setting number of problems
@@ -254,16 +260,20 @@ public class ActivitySevenManager : MonoBehaviour
 			isCenterOfMassYCorrect: ActivitySevenUtilities.ValidateCenterOfMassSubmission(centerOfMassAnswer.centerOfMassY, massValues, yCoordinateValues)
 			);
 
+		// Display answer validation results
+		DisplayCenterOfMassSubmissionResult(results);
+	}
+
+	private void DisplayCenterOfMassSubmissionResult(CenterOfMassAnswerSubmissionResults results)
+	{
 		// Modify display border and text
 		if (results.isAllCorrect())
 		{
-			// TODO: modify here
-			currentNumCenterOfMassTests -= 1;
+			currentNumCenterOfMassTests--;
 			string displayText = currentNumCenterOfMassTests <= 0 ? "Calculations correct. The power source cube is now accessible." : "Calculations correct. Loaded next test.";
 			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
-
-			if (currentNumCenterOfMassTests <= 0) RoomOneClearEvent?.Invoke();
-		} else
+		}
+		else
 		{
 			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
@@ -277,8 +287,21 @@ public class ActivitySevenManager : MonoBehaviour
 	private void GenerateNewCenterOfMassTest()
 	{
 		// Generate new given values and update center of mass view
-		SetupMassCoordinatePairs(currentCenterOfMassLevel);
-		centerOfMassView.SetupCenterOfMassView(massCoordinatePairs);
+		if (currentNumCenterOfMassTests > 0)
+		{
+			SetupMassCoordinatePairs(currentCenterOfMassLevel);
+			centerOfMassView.SetupCenterOfMassView(massCoordinatePairs);
+		}
+	}
+
+	private void CloseCenterOfMassView()
+	{
+		if (currentNumCenterOfMassTests <= 0)
+		{
+			inputReader.SetGameplay();
+			centerOfMassView.gameObject.SetActive(false);
+			RoomOneClearEvent?.Invoke();
+		}
 	}
 	#endregion
 
@@ -339,11 +362,8 @@ public class ActivitySevenManager : MonoBehaviour
 					)
 				);
 
-			Debug.Log(results.isChangeInMomentumCorrect);
-			Debug.Log(results.isImpulseCorrect);
-			Debug.Log(results.isNetForceCorrect);
-
-			UpdateMomentumImpulseForceView(results);
+			// Display answer validation results
+			DisplayMomentumImpulseForceSubmissionResult(results);
 		}
 		else if (momentumImpulseForceAnswer is MediumHardMomentumImpulseForceAnswerSubmission) {
 			// Medium-Hard problem answer verification
@@ -385,34 +405,21 @@ public class ActivitySevenManager : MonoBehaviour
 					)
 				);
 
-			Debug.Log(results.isInitialMomentumCorrect);
-			Debug.Log(results.isFinalMomentumCorrect);
-			Debug.Log(results.isChangeInMomentumCorrect);
-			Debug.Log(results.isImpulseCorrect);
-			Debug.Log(results.isNetForceCorrect);
-
-			UpdateMomentumImpulseForceView(results);
+			// Display answer validation results
+			DisplayMomentumImpulseForceSubmissionResult(results);
 		}
 	}
 
-	private void UpdateMomentumImpulseForceView(MomentumImpulseForceAnswerSubmissionResults results)// BETTER RENAME THIS TO SOMETHING BETTER. MEANING FOR  EVERHTINHHG
+	private void DisplayMomentumImpulseForceSubmissionResult(MomentumImpulseForceAnswerSubmissionResults results)
 	{
 		if (results is EasyMomentumImpulseForceAnswerSubmissionResults easyResults)
 		{
 			if (easyResults.isAllCorrect())
 			{
-				currentNumMomentumImpulseForceTests -= 1;
+				currentNumMomentumImpulseForceTests--;
 				string displayText = currentNumMomentumImpulseForceTests <= 0 ? "All calibration tests accomplished." : "Calibration test matches calculations. Loaded next test.";
 				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
 
-				if (currentNumMomentumImpulseForceTests <= 0)
-				{
-					RoomTwoClearEvent?.Invoke();
-				}
-				else
-				{
-					GenerateNewMomentumImpulseForceTest();
-				}
 				momentumImpulseForceView.UpdateCalibrationTestTextDisplay(currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests, currentMomentumImpulseForceLevel.numberOfTests);
 			}
 			else
@@ -427,18 +434,10 @@ public class ActivitySevenManager : MonoBehaviour
 		{
 			if (mediumHardResults.isAllCorrect())
 			{
-				currentNumMomentumImpulseForceTests -= 1;
-				string displayText = currentNumMomentumImpulseForceTests == 0 ? "All calibration tests accomplished." : "Calibration test matches calculations. Loaded next test.";
+				currentNumMomentumImpulseForceTests--;
+				string displayText = currentNumMomentumImpulseForceTests <= 0 ? "All calibration tests accomplished." : "Calibration test matches calculations. Loaded next test.";
 				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
 
-				if (currentNumMomentumImpulseForceTests == 0)
-				{
-					RoomTwoClearEvent?.Invoke();
-				}
-				else
-				{
-					GenerateNewMomentumImpulseForceTest();
-				}
 				momentumImpulseForceView.UpdateCalibrationTestTextDisplay(currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests, currentMomentumImpulseForceLevel.numberOfTests);
 			}
 			else
@@ -454,9 +453,21 @@ public class ActivitySevenManager : MonoBehaviour
 	private void GenerateNewMomentumImpulseForceTest()
 	{
 		// Generate new given data for momentum-impulse and force subactivity, and update momentum-impulse force view
-		SetMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
-		momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
+		if (currentNumMomentumImpulseForceTests > 0)
+		{
+			SetMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
+			momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
+		}
 	}
 
+	private void CloseMomentumImpulseForceView()
+	{
+		if (currentNumMomentumImpulseForceTests <= 0)
+		{
+			inputReader.SetGameplay();
+			momentumImpulseForceView.gameObject.SetActive(false);
+			RoomTwoClearEvent?.Invoke();
+		}
+	}
 	#endregion
 }
