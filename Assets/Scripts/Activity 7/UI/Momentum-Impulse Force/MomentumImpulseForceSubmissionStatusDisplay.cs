@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class MomentumImpulseForceSubmissionStatusDisplay : SubmissionStatusDisplay
 {
+	public static event Action ProceedEvent;
+
 	[Header("Momentum-Impulse Force Status Border Displays")]
 	[SerializeField] private Image momentumStatusBorderDisplay;
 	[SerializeField] private Image impulseStatusBorderDisplay;
@@ -49,6 +51,7 @@ public class MomentumImpulseForceSubmissionStatusDisplay : SubmissionStatusDispl
 	protected override void OnEnable()
 	{
 		base.OnEnable();
+		proceedButton.onClick.AddListener(() => ProceedEvent?.Invoke());
 
 		// Create references and attach to associated parents.
 		// Momentum
