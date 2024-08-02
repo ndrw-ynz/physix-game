@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -169,7 +168,7 @@ public class ElasticInelasticCollisionAnswerSubmissionResults
 		bool isCubeOneFinalMomentumCorrect,
 		bool isCubeTwoFinalMomentumCorrect,
 		bool isNetInitialMomentumCorrect,
-		bool isNetFinalmomentumCorrect,
+		bool isNetFinalMomentumCorrect,
 		bool isCollisionTypeCorrect
 		)
 	{
@@ -178,8 +177,21 @@ public class ElasticInelasticCollisionAnswerSubmissionResults
 		this.isCubeOneFinalMomentumCorrect = isCubeOneFinalMomentumCorrect;
 		this.isCubeTwoFinalMomentumCorrect = isCubeTwoFinalMomentumCorrect;
 		this.isNetInitialMomentumCorrect = isNetInitialMomentumCorrect;
-		this.isNetFinalMomentumCorrect = isNetFinalmomentumCorrect;
+		this.isNetFinalMomentumCorrect = isNetFinalMomentumCorrect;
 		this.isCollisionTypeCorrect = isCollisionTypeCorrect;
+	}
+
+	public bool isAllCorrect()
+	{
+		return (
+			isCubeOneInitialMomentumCorrect &&
+			isCubeTwoInitialMomentumCorrect &&
+			isCubeOneFinalMomentumCorrect &&
+			isCubeTwoFinalMomentumCorrect &&
+			isNetInitialMomentumCorrect &&
+			isNetFinalMomentumCorrect &&
+			isCollisionTypeCorrect
+			);
 	}
 }
 
@@ -197,6 +209,7 @@ public class ActivitySevenManager : MonoBehaviour
 
 	public static event Action RoomOneClearEvent;
 	public static event Action RoomTwoClearEvent;
+	public static event Action RoomThreeClearEvent;
 
 	[Header("Input Reader")]
 	[SerializeField] InputReader inputReader;
@@ -227,6 +240,7 @@ public class ActivitySevenManager : MonoBehaviour
 	[Header("Submission Status Displays")]
 	[SerializeField] private CenterOfMassSubmissionStatusDisplay centerOfMassSubmissionStatusDisplay;
 	[SerializeField] private MomentumImpulseForceSubmissionStatusDisplay momentumImpulseForceSubmissionStatusDisplay;
+	[SerializeField] private ElasticInelasticCollisionSubmissionStatusDisplay elasticInelasticCollisionSubmissionStatusDisplay;
 
 	// Given Values - Center of Mass
 	private List<MassCoordinatePair> massCoordinatePairs;
@@ -243,7 +257,7 @@ public class ActivitySevenManager : MonoBehaviour
     void Start()
     {
 		// Difficulty selection
-		difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		difficultyConfiguration = Difficulty.Medium; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
         
 		// Setting level data
 		switch (difficultyConfiguration)
@@ -273,6 +287,8 @@ public class ActivitySevenManager : MonoBehaviour
 		MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent += GenerateNewMomentumImpulseForceTest;
 		MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent += CloseMomentumImpulseForceView;
 		ElasticInelasticCollisionView.SubmitAnswerEvent += CheckElasticInelasticCollisionAnswers;
+		ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent += GenerateNewElasticInelasticCollisionTest;
+		ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent += CloseElasticInelasticCollisionView;
 
 		// Initializing given values
 		SetupMassCoordinatePairs(currentCenterOfMassLevel);
@@ -289,11 +305,12 @@ public class ActivitySevenManager : MonoBehaviour
 		momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
 		momentumImpulseForceView.UpdateCalibrationTestTextDisplay(0, currentMomentumImpulseForceLevel.numberOfTests);
 		elasticInelasticCollisionView.SetupElasicInelasticCollisionView(elasticInelasticCollisionData);
+		elasticInelasticCollisionView.UpdateCalibrationTestTextDisplay(0, currentElasticInelasticCollisionLevel.numberOfTests);
 	}
 
 	#region Center of Mass
 
-    private void SetupMassCoordinatePairs(CenterOfMassSubActivitySO centerOfMassSO)
+	private void SetupMassCoordinatePairs(CenterOfMassSubActivitySO centerOfMassSO)
     {
         massCoordinatePairs = new List<MassCoordinatePair>();
         while (massCoordinatePairs.Count < centerOfMassSO.numberOfMasses) 
@@ -576,15 +593,54 @@ public class ActivitySevenManager : MonoBehaviour
 			isCubeOneFinalMomentumCorrect: ActivitySevenUtilities.ValidateMomentumImpulse(answer.cubeOneFinalMomentum, cubeOne.mass, cubeOne.finalVelocity),
 			isCubeTwoFinalMomentumCorrect: ActivitySevenUtilities.ValidateMomentumImpulse(answer.cubeTwoFinalMomentum, cubeTwo.mass, cubeTwo.finalVelocity),
 			isNetInitialMomentumCorrect: ActivitySevenUtilities.ValidateNetMomentum(answer.netInitialMomentum, cubeOne.mass, cubeOne.initialVelocity, cubeTwo.mass, cubeTwo.initialVelocity),
-			isNetFinalmomentumCorrect: ActivitySevenUtilities.ValidateNetMomentum(answer.netFinalMomentum, cubeOne.mass, cubeOne.finalVelocity, cubeTwo.mass, cubeTwo.finalVelocity),
+			isNetFinalMomentumCorrect: ActivitySevenUtilities.ValidateNetMomentum(answer.netFinalMomentum, cubeOne.mass, cubeOne.finalVelocity, cubeTwo.mass, cubeTwo.finalVelocity),
 			isCollisionTypeCorrect: ActivitySevenUtilities.ValidateCollisionType(answer.collisionType, elasticInelasticCollisionData)
 			);
 
+		// Display answer validation results
+		DisplayElasticInelasticCollisionSubmissionResult(results);
+	}
 
-		Debug.Log(results.isCubeOneInitialMomentumCorrect && results.isCubeTwoInitialMomentumCorrect);
-		Debug.Log(results.isCubeOneFinalMomentumCorrect && results.isCubeTwoFinalMomentumCorrect);
-		Debug.Log(results.isNetInitialMomentumCorrect && results.isNetFinalMomentumCorrect);
-		Debug.Log(results.isCollisionTypeCorrect);
+	private void DisplayElasticInelasticCollisionSubmissionResult(ElasticInelasticCollisionAnswerSubmissionResults results)
+	{
+		// Modify display border and text
+		if (results.isAllCorrect())
+		{
+			currentNumElasticInelasticCollisionTests--;
+			string displayText = currentNumElasticInelasticCollisionTests <= 0 ? "Calculations correct. The data module is now accessible." : "Calculations correct. Loaded next test.";
+			elasticInelasticCollisionSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
+
+			elasticInelasticCollisionView.UpdateCalibrationTestTextDisplay(currentElasticInelasticCollisionLevel.numberOfTests - currentNumElasticInelasticCollisionTests, currentElasticInelasticCollisionLevel.numberOfTests);
+		}
+		else
+		{
+			elasticInelasticCollisionSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
+		}
+
+		// Modify status border displays from all results
+		elasticInelasticCollisionSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
+		elasticInelasticCollisionSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void GenerateNewElasticInelasticCollisionTest()
+	{
+		// Generate new given data for elastic inelastic collision subactivity, and update elastic inelastic collision view
+		if (currentNumElasticInelasticCollisionTests > 0)
+		{
+			GenerateElasticInelasticCollisionData(currentElasticInelasticCollisionLevel);
+			elasticInelasticCollisionView.SetupElasicInelasticCollisionView(elasticInelasticCollisionData);
+		}
+	}
+
+	private void CloseElasticInelasticCollisionView()
+	{
+		if (currentNumElasticInelasticCollisionTests <= 0)
+		{
+			inputReader.SetGameplay();
+			elasticInelasticCollisionView.gameObject.SetActive(false);
+			RoomThreeClearEvent?.Invoke();
+		}
 	}
 	#endregion
 }
