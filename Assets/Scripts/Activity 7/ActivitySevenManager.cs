@@ -159,8 +159,8 @@ public class ElasticInelasticCollisionAnswerSubmissionResults
 	public bool isCubeTwoInitialMomentumCorrect;
 	public bool isCubeOneFinalMomentumCorrect;
 	public bool isCubeTwoFinalMomentumCorrect;
-	public bool isInitialMomentumSumCorrect;
-	public bool isFinalMomentumSumCorrect;
+	public bool isNetInitialMomentumCorrect;
+	public bool isNetFinalMomentumCorrect;
 	public bool isCollisionTypeCorrect;
 
 	public ElasticInelasticCollisionAnswerSubmissionResults(
@@ -168,8 +168,8 @@ public class ElasticInelasticCollisionAnswerSubmissionResults
 		bool isCubeTwoInitialMomentumCorrect,
 		bool isCubeOneFinalMomentumCorrect,
 		bool isCubeTwoFinalMomentumCorrect,
-		bool isInitialMomentumSumCorrect,
-		bool isFinalMomentumSumCorrect,
+		bool isNetInitialMomentumCorrect,
+		bool isNetFinalmomentumCorrect,
 		bool isCollisionTypeCorrect
 		)
 	{
@@ -177,8 +177,8 @@ public class ElasticInelasticCollisionAnswerSubmissionResults
 		this.isCubeTwoInitialMomentumCorrect = isCubeTwoInitialMomentumCorrect;
 		this.isCubeOneFinalMomentumCorrect = isCubeOneFinalMomentumCorrect;
 		this.isCubeTwoFinalMomentumCorrect = isCubeTwoFinalMomentumCorrect;
-		this.isInitialMomentumSumCorrect = isInitialMomentumSumCorrect;
-		this.isFinalMomentumSumCorrect = isFinalMomentumSumCorrect;
+		this.isNetInitialMomentumCorrect = isNetInitialMomentumCorrect;
+		this.isNetFinalMomentumCorrect = isNetFinalmomentumCorrect;
 		this.isCollisionTypeCorrect = isCollisionTypeCorrect;
 	}
 }
@@ -575,15 +575,15 @@ public class ActivitySevenManager : MonoBehaviour
 			isCubeTwoInitialMomentumCorrect: ActivitySevenUtilities.ValidateMomentumImpulse(answer.cubeTwoInitialMomentum, cubeTwo.mass, cubeTwo.initialVelocity),
 			isCubeOneFinalMomentumCorrect: ActivitySevenUtilities.ValidateMomentumImpulse(answer.cubeOneFinalMomentum, cubeOne.mass, cubeOne.finalVelocity),
 			isCubeTwoFinalMomentumCorrect: ActivitySevenUtilities.ValidateMomentumImpulse(answer.cubeTwoFinalMomentum, cubeTwo.mass, cubeTwo.finalVelocity),
-			isInitialMomentumSumCorrect: ActivitySevenUtilities.ValidateNetMomentum(answer.initialMomentumSum, cubeOne.mass, cubeOne.initialVelocity, cubeTwo.mass, cubeTwo.initialVelocity),
-			isFinalMomentumSumCorrect: ActivitySevenUtilities.ValidateNetMomentum(answer.finalMomentumSum, cubeOne.mass, cubeOne.finalVelocity, cubeTwo.mass, cubeTwo.finalVelocity),
+			isNetInitialMomentumCorrect: ActivitySevenUtilities.ValidateNetMomentum(answer.netInitialMomentum, cubeOne.mass, cubeOne.initialVelocity, cubeTwo.mass, cubeTwo.initialVelocity),
+			isNetFinalmomentumCorrect: ActivitySevenUtilities.ValidateNetMomentum(answer.netFinalMomentum, cubeOne.mass, cubeOne.finalVelocity, cubeTwo.mass, cubeTwo.finalVelocity),
 			isCollisionTypeCorrect: ActivitySevenUtilities.ValidateCollisionType(answer.collisionType, elasticInelasticCollisionData)
 			);
 
 
 		Debug.Log(results.isCubeOneInitialMomentumCorrect && results.isCubeTwoInitialMomentumCorrect);
 		Debug.Log(results.isCubeOneFinalMomentumCorrect && results.isCubeTwoFinalMomentumCorrect);
-		Debug.Log(results.isInitialMomentumSumCorrect && results.isFinalMomentumSumCorrect);
+		Debug.Log(results.isNetInitialMomentumCorrect && results.isNetFinalMomentumCorrect);
 		Debug.Log(results.isCollisionTypeCorrect);
 	}
 	#endregion
