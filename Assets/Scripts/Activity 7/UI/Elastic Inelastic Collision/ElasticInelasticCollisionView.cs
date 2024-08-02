@@ -37,6 +37,9 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 {
 	public static event Action<ElasticInelasticCollisionAnswerSubmission> SubmitAnswerEvent;
 
+	[Header("Text")]
+	[SerializeField] private TextMeshProUGUI calibrationTestText;
+
 	[Header("Given Fields")]
 	[Header("Given Fields - Cube One")]
 	[SerializeField] private TMP_InputField givenCubeOneMass;
@@ -109,6 +112,11 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 		givenCubeTwoMass.text = $"{cubeTwo.mass * massMultiplier} {massUnit}";
 		givenCubeTwoInitialVelocity.text = $"{cubeTwo.initialVelocity * velocityMultiplier} {velocityUnit}";
 		givenCubeTwoFinalVelocity.text = $"{cubeTwo.finalVelocity * velocityMultiplier} {velocityUnit}";
+	}
+
+	public void UpdateCalibrationTestTextDisplay(int testNumber, int totalTests)
+	{
+		calibrationTestText.text = $"Calibration Test: {testNumber} / {totalTests}";
 	}
 
 	#endregion
