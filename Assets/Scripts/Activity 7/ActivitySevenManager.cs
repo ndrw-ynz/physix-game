@@ -291,7 +291,7 @@ public class ActivitySevenManager : MonoBehaviour
 		ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent += CloseElasticInelasticCollisionView;
 
 		// Initializing given values
-		SetupMassCoordinatePairs(currentCenterOfMassLevel);
+		GenerateMassCoordinatePairs(currentCenterOfMassLevel);
 		GenerateMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
 		GenerateElasticInelasticCollisionData(currentElasticInelasticCollisionLevel);
 
@@ -310,7 +310,7 @@ public class ActivitySevenManager : MonoBehaviour
 
 	#region Center of Mass
 
-	private void SetupMassCoordinatePairs(CenterOfMassSubActivitySO centerOfMassSO)
+	private void GenerateMassCoordinatePairs(CenterOfMassSubActivitySO centerOfMassSO)
     {
         massCoordinatePairs = new List<MassCoordinatePair>();
         while (massCoordinatePairs.Count < centerOfMassSO.numberOfMasses) 
@@ -380,7 +380,7 @@ public class ActivitySevenManager : MonoBehaviour
 		// Generate new given values and update center of mass view
 		if (currentNumCenterOfMassTests > 0)
 		{
-			SetupMassCoordinatePairs(currentCenterOfMassLevel);
+			GenerateMassCoordinatePairs(currentCenterOfMassLevel);
 			centerOfMassView.SetupCenterOfMassView(massCoordinatePairs);
 		}
 	}
