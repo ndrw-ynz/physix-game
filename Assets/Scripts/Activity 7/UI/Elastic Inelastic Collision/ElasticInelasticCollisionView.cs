@@ -9,8 +9,8 @@ public class ElasticInelasticCollisionAnswerSubmission
 	public float? cubeTwoInitialMomentum { get; set; }
 	public float? cubeOneFinalMomentum { get; set; }
 	public float? cubeTwoFinalMomentum {get; set;}
-	public float? initialMomentumSum { get; set; }
-	public float? finalMomentumSum { get; set; }
+	public float? netInitialMomentum { get; set; }
+	public float? netFinalMomentum { get; set; }
 	public CollisionType? collisionType { get; set; }
 
 	public ElasticInelasticCollisionAnswerSubmission(
@@ -18,8 +18,8 @@ public class ElasticInelasticCollisionAnswerSubmission
 		float? cubeTwoInitialMomentum,
 		float? cubeOneFinalMomentum,
 		float? cubeTwoFinalMomentum,
-		float? initialMomentumSum,
-		float? finalMomentumSum,
+		float? netInitialMomentum,
+		float? netFinalMomentum,
 		CollisionType? collisionType
 		)
 	{
@@ -27,8 +27,8 @@ public class ElasticInelasticCollisionAnswerSubmission
 		this.cubeTwoInitialMomentum = cubeTwoInitialMomentum;
 		this.cubeOneFinalMomentum = cubeOneFinalMomentum;
 		this.cubeTwoFinalMomentum = cubeTwoFinalMomentum;
-		this.initialMomentumSum = initialMomentumSum;
-		this.finalMomentumSum = finalMomentumSum;
+		this.netInitialMomentum = netInitialMomentum;
+		this.netFinalMomentum = netFinalMomentum;
 		this.collisionType = collisionType;
 	}
 }
@@ -58,15 +58,15 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 	[SerializeField] private TMP_InputField cubeOneFinalMomentumResultField;
 	[SerializeField] private TMP_InputField cubeTwoFinalMomentumResultField;
 
-	[Header("Result Fields - Momentum Sums")]
-	[SerializeField] private TMP_InputField sumOfInitialMomentumResultField;
-	[SerializeField] private TMP_InputField sumOfFinalMomentumResultField;
+	[Header("Result Fields - Net Momentum")]
+	[SerializeField] private TMP_InputField netInitialMomentumResultField;
+	[SerializeField] private TMP_InputField netFinalMomentumResultField;
 
 
 	[Header("Calculation Displays")]
 	[SerializeField] private GameObject initialMomentumCalculations;
 	[SerializeField] private GameObject finalMomentumCalculations;
-	[SerializeField] private GameObject momentumSumCalculations;
+	[SerializeField] private GameObject netMomentumCalculations;
 	[SerializeField] private GameObject collisionTypeChoice;
 
 
@@ -122,7 +122,7 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 		initialMomentumCalculations.gameObject.SetActive(true);
 		finalMomentumCalculations.gameObject.SetActive(true);
 
-		momentumSumCalculations.gameObject.SetActive(false);
+		netMomentumCalculations.gameObject.SetActive(false);
 		collisionTypeChoice.gameObject.SetActive(false);
 	}
 
@@ -134,7 +134,7 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 		initialMomentumCalculations.gameObject.SetActive(false);
 		finalMomentumCalculations.gameObject.SetActive(false);
 
-		momentumSumCalculations.gameObject.SetActive(true);
+		netMomentumCalculations.gameObject.SetActive(true);
 		collisionTypeChoice.gameObject.SetActive(true);
 	}
 
@@ -159,8 +159,8 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 			cubeTwoInitialMomentum: float.Parse(cubeTwoInitialMomentumResultField.text),
 			cubeOneFinalMomentum: float.Parse(cubeOneFinalMomentumResultField.text),
 			cubeTwoFinalMomentum: float.Parse(cubeTwoFinalMomentumResultField.text),
-			initialMomentumSum: float.Parse(sumOfInitialMomentumResultField.text),
-			finalMomentumSum: float.Parse(sumOfFinalMomentumResultField.text),
+			netInitialMomentum: float.Parse(netInitialMomentumResultField.text),
+			netFinalMomentum: float.Parse(netFinalMomentumResultField.text),
 			collisionType: collisionType
 			);
 
