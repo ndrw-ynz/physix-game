@@ -292,7 +292,7 @@ public class ActivitySevenManager : MonoBehaviour
 
 		// Initializing given values
 		SetupMassCoordinatePairs(currentCenterOfMassLevel);
-		SetMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
+		GenerateMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
 		GenerateElasticInelasticCollisionData(currentElasticInelasticCollisionLevel);
 
 		// Setting number of problems
@@ -398,7 +398,7 @@ public class ActivitySevenManager : MonoBehaviour
 
 	#region Impulse-Momentum
 
-	private void SetMomentumImpulseForceGivenData(MomentumImpulseForceSubActivitySO momentumImpulseForceSubActivitySO)
+	private void GenerateMomentumImpulseForceGivenData(MomentumImpulseForceSubActivitySO momentumImpulseForceSubActivitySO)
 	{
 		switch (difficultyConfiguration)
 		{
@@ -546,7 +546,7 @@ public class ActivitySevenManager : MonoBehaviour
 		// Generate new given data for momentum-impulse and force subactivity, and update momentum-impulse force view
 		if (currentNumMomentumImpulseForceTests > 0)
 		{
-			SetMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
+			GenerateMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
 			momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
 		}
 	}
