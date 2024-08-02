@@ -4789,6 +4789,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1363323026}
     m_Modifications:
+    - target: {fileID: 211531501590304941, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1774381203068240138, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -4900,6 +4904,10 @@ PrefabInstance:
     - target: {fileID: 4260109549236748235, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4400602833449798740, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5677202959261298727, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_AnchorMax.y
@@ -12252,8 +12260,8 @@ MonoBehaviour:
   givenCubeTwoMass: {fileID: 1841508229}
   givenCubeTwoInitialVelocity: {fileID: 650313547}
   givenCubeTwoFinalVelocity: {fileID: 1473064544}
-  cubeOneInitialMomentumReultField: {fileID: 316128125}
-  cubeTwoInitialMomentumReultField: {fileID: 1257579829}
+  cubeOneInitialMomentumResultField: {fileID: 316128125}
+  cubeTwoInitialMomentumResultField: {fileID: 1257579829}
   cubeOneFinalMomentumResultField: {fileID: 846937783}
   cubeTwoFinalMomentumResultField: {fileID: 485857654}
   sumOfInitialMomentumResultField: {fileID: 947668979}
@@ -14279,8 +14287,12 @@ MonoBehaviour:
   momentumImpulseForceLevelOne: {fileID: 11400000, guid: 03bfe2a591e6de44abad3ee8ecbce9c2, type: 2}
   momentumImpulseForceLevelTwo: {fileID: 11400000, guid: aee03495168f9ac4088f2467633f6aa6, type: 2}
   momentumImpulseForceLevelThree: {fileID: 11400000, guid: 061969b7abf79de43a214a66d9380a14, type: 2}
+  elasticInelasticCollisionLevelOne: {fileID: 11400000, guid: 3568a3ee4e4e91a4eb53e0fbc655a762, type: 2}
+  elasticInelasticCollisionLevelTwo: {fileID: 11400000, guid: 63f16753be32a8548a4d8373b86dfea4, type: 2}
+  elasticInelasticCollisionLevelThree: {fileID: 11400000, guid: 8e8636c1dfcfbb84b8174efddba9ecf5, type: 2}
   centerOfMassView: {fileID: 1919976341}
   momentumImpulseForceView: {fileID: 1808637250}
+  elasticInelasticCollisionView: {fileID: 513545358}
   centerOfMassSubmissionStatusDisplay: {fileID: 677741754105903356}
   momentumImpulseForceSubmissionStatusDisplay: {fileID: 1140936160}
 --- !u!1001 &600087444
@@ -18125,7 +18137,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 557.1, y: -0}
+  m_AnchoredPosition: {x: 557.1, y: 0}
   m_SizeDelta: {x: 1114.2, y: 235}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &780564220
@@ -18938,6 +18950,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5106951437514279895, guid: 903d94adb8f7d7644bb511e919fc9de6, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5106951437514279895, guid: 903d94adb8f7d7644bb511e919fc9de6, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 817187259}
@@ -18996,6 +19012,10 @@ PrefabInstance:
     - target: {fileID: 7722104299586705982, guid: 903d94adb8f7d7644bb511e919fc9de6, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8434895306495210145, guid: 903d94adb8f7d7644bb511e919fc9de6, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8434895306495210145, guid: 903d94adb8f7d7644bb511e919fc9de6, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -19347,6 +19367,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 409089408}
     m_Modifications:
+    - target: {fileID: 211531501590304941, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1774381203068240138, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -19458,6 +19482,10 @@ PrefabInstance:
     - target: {fileID: 4260109549236748235, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4400602833449798740, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5677202959261298727, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_AnchorMax.y
@@ -29108,8 +29136,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MomentumImpulseForceView, Assembly-CSharp
+      - m_Target: {fileID: 513545358}
+        m_TargetAssemblyTypeName: ElasticInelasticCollisionView, Assembly-CSharp
         m_MethodName: OnSubmitButtonClick
         m_Mode: 1
         m_Arguments:
@@ -29337,7 +29365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayText: {fileID: 224648576}
-  unitSymbol: 0
+  collisionType: 0
 --- !u!1 &1270713099
 GameObject:
   m_ObjectHideFlags: 0
@@ -36613,7 +36641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayText: {fileID: 1095345746}
-  unitSymbol: 1
+  collisionType: 1
 --- !u!1001 &1591948935
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39523,6 +39551,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 64920181}
     m_Modifications:
+    - target: {fileID: 211531501590304941, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1774381203068240138, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -39634,6 +39666,10 @@ PrefabInstance:
     - target: {fileID: 4260109549236748235, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4400602833449798740, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5677202959261298727, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_AnchorMax.y
@@ -47901,6 +47937,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1561015288}
     m_Modifications:
+    - target: {fileID: 211531501590304941, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 1774381203068240138, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1
@@ -48012,6 +48052,10 @@ PrefabInstance:
     - target: {fileID: 4260109549236748235, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4400602833449798740, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5677202959261298727, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
       propertyPath: m_AnchorMax.y
@@ -50947,6 +50991,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5106951437514279895, guid: 903d94adb8f7d7644bb511e919fc9de6, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5106951437514279895, guid: 903d94adb8f7d7644bb511e919fc9de6, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1825896273682144088}
@@ -51005,6 +51053,10 @@ PrefabInstance:
     - target: {fileID: 7722104299586705982, guid: 903d94adb8f7d7644bb511e919fc9de6, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8434895306495210145, guid: 903d94adb8f7d7644bb511e919fc9de6, type: 3}
+      propertyPath: m_CharacterLimit
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8434895306495210145, guid: 903d94adb8f7d7644bb511e919fc9de6, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
