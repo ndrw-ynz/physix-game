@@ -69,4 +69,38 @@ public static class ActivitySevenUtilities
 			) <= 0.0001;
 	}
 	#endregion
+
+	#region Elastic Inelastic Collision
+	public static bool ValidateNetMomentum(float? submittedNetMomentum, float cubeOneMass, float cubeOneVelocity, float cubeTwoMass, float cubeTwoVelocity)
+	{
+		if (submittedNetMomentum == null) return false;
+		return Mathf.Abs(
+			(float)(submittedNetMomentum) - (cubeOneMass * cubeOneVelocity + cubeTwoMass * cubeTwoVelocity)
+			) <= 0.0001;
+	}
+
+	public static bool ValidateCollisionType(CollisionType? submittedCollisionType, CollisionData collisionData)
+	{
+		if (submittedCollisionType == null) return false;
+
+		CollisionObject cubeOne = collisionData.cubeOne;
+		CollisionObject cubeTwo = collisionData.cubeTwo;
+
+		float initialMomentumSum = (cubeOne.mass * cubeOne.initialVelocity + cubeTwo.mass * cubeTwo.initialVelocity);
+		float finalMomentumSum = (cubeOne.mass * cubeOne.finalVelocity + cubeTwo.mass * cubeTwo.finalVelocity);
+
+		bool isElastic = Mathf.Abs(initialMomentumSum - finalMomentumSum) <= 0.0001;
+
+		if (
+			(isElastic == true && submittedCollisionType == CollisionType.Elastic) ||
+			(isElastic == false && submittedCollisionType == CollisionType.Inelastic)
+			)
+		{
+			return true;
+		} else
+		{
+			return false;
+		}
+	}
+	#endregion
 }
