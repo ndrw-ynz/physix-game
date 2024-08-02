@@ -16,8 +16,8 @@ public class CollisionTypeButton : MonoBehaviour
 	public static event Action UpdateClickedEvent;
 
 	[SerializeField] private TextMeshProUGUI displayText;
-	private bool isClicked;
-	public CollisionType unitSymbol;
+	public bool isClicked { get; private set; }
+	public CollisionType collisionType;
 
 	private void OnEnable()
 	{
