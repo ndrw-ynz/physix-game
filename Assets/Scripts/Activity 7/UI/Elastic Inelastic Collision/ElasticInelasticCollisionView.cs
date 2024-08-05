@@ -91,6 +91,9 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 				SetGivenFields(collisionData, "g", "km/s", 1000, 0.001f);
 				break;
 		}
+
+		// Display default view
+		OnLeftPageButtonClick();
 	}
 
 	private void SetGivenFields(
