@@ -17,6 +17,13 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 	[SerializeField] private GameObject roomTwoGateBlocker;
 	[SerializeField] private InteractableControlPanel roomTwoControlPanel;
 
+    [Header("Room Three")]
+	[SerializeField] private GameObject roomThreeGate;
+	[SerializeField] private GameObject roomThreeGateBlocker;
+	[SerializeField] private GameObject containerGlassThree;
+	[SerializeField] private DataModuleCube dataModuleCube;
+    [SerializeField] private Camera collisionVideoCamera;
+	[SerializeField] private InteractableControlPanel roomThreeControlPanel;
 
 	[Header("Gate Status Color Material")]
     [SerializeField] private Material openGateColor;
@@ -32,6 +39,10 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 
         // Room Two Environment Events
         ActivitySevenManager.RoomTwoClearEvent += UpdateRoomTwoGateState;
+
+        // Room Three Environment Events
+        ActivitySevenManager.RoomThreeClearEvent += ReleaseDataModuleCube;
+        DataModuleCube.RetrieveEvent += UpdateRoomThreeGateState;
     }
 
 	#region Room One
@@ -60,7 +71,7 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
     }
 	#endregion
 
-	#region Room two
+	#region Room Two
     private void UpdateRoomTwoGateState()
     {
         roomTwoControlPanel.SetInteractable(false);
@@ -70,7 +81,25 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 
 	#endregion
 
-    private void OpenGate(GameObject roomGate, GameObject roomGateBlocker)
+	#region Room Three
+
+    private void ReleaseDataModuleCube()
+    {
+        containerGlassThree.gameObject.SetActive(false);
+        dataModuleCube.SetInteractable(true);
+		collisionVideoCamera.gameObject.SetActive(true);
+        roomThreeControlPanel.SetInteractable(false);
+    }
+
+    private void UpdateRoomThreeGateState()
+    {
+        // Open room three gate
+        OpenGate(roomThreeGate, roomThreeGateBlocker);
+    }
+
+	#endregion
+
+	private void OpenGate(GameObject roomGate, GameObject roomGateBlocker)
     {
 		// Change gate color.
 		MeshRenderer roomGateRend = roomGate.GetComponent<MeshRenderer>();
