@@ -60,6 +60,19 @@ public class MomentumImpulseForceView : MonoBehaviour
 	[SerializeField] private TMP_InputField givenFinalVelocityField; // Medium-hard config
 	[SerializeField] private TMP_InputField givenTotalTimeField;
 
+	[Header("Input Fields")]
+	[SerializeField] private TMP_InputField initialMomentumMultiplicandField;
+	[SerializeField] private TMP_InputField initialMomentumMultiplierField;
+	[SerializeField] private TMP_InputField finalMomentumMultiplicandField;
+	[SerializeField] private TMP_InputField finalMomentumMultiplierField;
+	[SerializeField] private TMP_InputField deltaMomentumMultiplicandField; // Easy config
+	[SerializeField] private TMP_InputField deltaMomentumMultiplierField; // Easy config
+	[SerializeField] private TMP_InputField deltaMomentumMinuendField; // Medium-Hard config 
+	[SerializeField] private TMP_InputField deltaMomentumSubtrahendField; // Medium-Hard config
+	[SerializeField] private TMP_InputField impulseField;
+	[SerializeField] private TMP_InputField netForceDividendField;
+	[SerializeField] private TMP_InputField netForceDivisorField;
+
 	[Header("Result Fields")]
 	[SerializeField] private TMP_InputField changeInMomentumResultField; // Easy config (mass * net velocity)
 	[SerializeField] private TMP_InputField initialMomentumResultField; // Medium-hard config
@@ -91,6 +104,9 @@ public class MomentumImpulseForceView : MonoBehaviour
 				ShowUIForDifficulty(false);
 				break;
 		}
+
+		// Set default view
+		ClearAllInputFields();
 	}
 
 	private void SetGivenFields(Dictionary<string, float> data, string massUnit, string velocityUnit, string timeUnit, float massMultiplier = 1, float velocityMultiplier = 1, float timeMultiplier = 1)
@@ -143,5 +159,20 @@ public class MomentumImpulseForceView : MonoBehaviour
 				}
 				break;
 		}
+	}
+
+	private void ClearAllInputFields()
+	{
+		initialMomentumMultiplicandField.text = "";
+		initialMomentumMultiplierField.text = "";
+		finalMomentumMultiplicandField.text = "";
+		deltaMomentumMultiplicandField.text = "";
+		deltaMomentumMultiplierField.text = "";
+		finalMomentumMultiplierField.text = "";
+		deltaMomentumMinuendField.text = "";
+		deltaMomentumSubtrahendField.text = "";
+		impulseField.text = "";
+		netForceDividendField.text = "";
+		netForceDivisorField.text = "";
 	}
 }
