@@ -7,7 +7,7 @@ public class SectorIndicator : MonoBehaviour
     public Image indicatorRectImage;
     public RectTransform indicatorRectTransform;
 
-    // Starting position of sector indicator
+    // Start position of sector indicator
     private Vector2 _startPosition;
 
     public void Initialize()
