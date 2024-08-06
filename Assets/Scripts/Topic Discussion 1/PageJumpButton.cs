@@ -7,14 +7,19 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 {
     public static event Action<int> OnPageCircleClick;
 
+    [Header("Images")]
     public Image buttonOutline;
     public Image buttonHoverOutline;
     public Image buttonColor;
-
-    private int _pageIndex;
-    private Vector2 _startPosition;
+    [Header("Button")]
+    [SerializeField] private Button _pageCircleButton;
+    [Header("Renderer")]
     private SpriteRenderer _buttonRenderer;
-    private Button _pageCircleButton;
+
+    // Page index to be jumped after button press
+    private int _pageIndex;
+    // Start Position of page jump button
+    private Vector2 _startPosition;
 
     public void Initialize(int index)
     {
