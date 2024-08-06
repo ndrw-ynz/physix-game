@@ -261,12 +261,15 @@ public class ActivitySevenManager : MonoBehaviour
 	// Center of Mass
 	private bool isCenterOfMassCalculationFinished;
 	private int numIncorrectCenterOfMassSubmission;
+	private float centerOfMassDuration;
 	// Momentum Impulse Force
 	private bool isMomentumImpulseForceCalculationFinished;
 	private int numIncorrectMomentumImpulseForceSubmission;
+	private float momentumImpulseForceDuration;
 	// Elastic Inelastic Collision
 	private bool isElasticInelasticCollisionCalculationFinished;
 	private int numIncorrectElasticInelasticCollisionSubmission;
+	private float elasticInelasticCollisionDuration;
 
 	void Start()
     {
@@ -386,6 +389,7 @@ public class ActivitySevenManager : MonoBehaviour
 			{
 				displayText = "Calculations correct. The power source cube is now accessible.";
 				isCenterOfMassCalculationFinished = true;
+				centerOfMassDuration = gameplayTime;
 			} else {
 				displayText = "Calculations correct. Loaded next test.";
 			}
@@ -541,6 +545,7 @@ public class ActivitySevenManager : MonoBehaviour
 				{
 					displayText = "All calibration tests accomplished.";
 					isMomentumImpulseForceCalculationFinished = true;
+					momentumImpulseForceDuration = gameplayTime - centerOfMassDuration;
 				}
 				else
 				{
@@ -569,6 +574,7 @@ public class ActivitySevenManager : MonoBehaviour
 				{
 					displayText = "All calibration tests accomplished.";
 					isMomentumImpulseForceCalculationFinished = true;
+					momentumImpulseForceDuration = gameplayTime - centerOfMassDuration;
 				}
 				else
 				{
@@ -702,6 +708,7 @@ public class ActivitySevenManager : MonoBehaviour
 			{
 				displayText = "Calculations correct. The data module is now accessible.";
 				isElasticInelasticCollisionCalculationFinished = true;
+				elasticInelasticCollisionDuration = gameplayTime - momentumImpulseForceDuration;
 			} else
 			{
 				displayText = "Calculations correct. Loaded next test.";
@@ -752,17 +759,20 @@ public class ActivitySevenManager : MonoBehaviour
 
 		performanceView.SetCenterOfMassMetricsDisplay(
 			isAccomplished: isCenterOfMassCalculationFinished,
-			numIncorrectSubmission: numIncorrectCenterOfMassSubmission
+			numIncorrectSubmission: numIncorrectCenterOfMassSubmission,
+			duration: centerOfMassDuration
 			);
 
 		performanceView.SetMomentumImpulseForceMetricsDisplay(
 			isAccomplished: isMomentumImpulseForceCalculationFinished,
-			numIncorrectSubmission: numIncorrectMomentumImpulseForceSubmission
+			numIncorrectSubmission: numIncorrectMomentumImpulseForceSubmission,
+			duration: momentumImpulseForceDuration
 			);
 
 		performanceView.SetElasticInelasticCollisionMetricsDisplay(
 			isAccomplished: isElasticInelasticCollisionCalculationFinished,
-			numIncorrectSubmission: numIncorrectElasticInelasticCollisionSubmission
+			numIncorrectSubmission: numIncorrectElasticInelasticCollisionSubmission,
+			duration: elasticInelasticCollisionDuration
 			);
 	}
 }
