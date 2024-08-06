@@ -14,7 +14,7 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [Header("Button")]
     [SerializeField] private Button _pageCircleButton;
     [Header("Renderer")]
-    private SpriteRenderer _buttonRenderer;
+    [SerializeField] private SpriteRenderer _buttonRenderer;
 
     // Page index to be jumped after button press
     private int _pageIndex;
