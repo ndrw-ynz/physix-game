@@ -71,6 +71,13 @@ public class CenterOfMassView : MonoBehaviour
 	[SerializeField] private HorizontalLayoutGroup XSumOfMassContainer;
 	[SerializeField] private HorizontalLayoutGroup YSumOfMassContainer;
 
+	[Header("Input Fields")]
+	[SerializeField] private TMP_InputField xCenterOfMassDividendField;
+	[SerializeField] private TMP_InputField xCenterOfMassDivisorField;
+	[SerializeField] private TMP_InputField yCenterOfMassDividendField;
+	[SerializeField] private TMP_InputField yCenterOfMassDivisorField;
+
+
 	[Header("Sum Result Fields")]
 	[SerializeField] private TMP_InputField XMassCoordinateProductSumResultField;
 	[SerializeField] private TMP_InputField YMassCoordinateProductSumResultField;
@@ -120,6 +127,7 @@ public class CenterOfMassView : MonoBehaviour
 
 		// Set default calculation view
 		OnLeftPageButtonClick();
+		ClearAllInputFields();
 	}
 
 	private void SetupMassCoordinateContainer(List<MassCoordinatePair> massCoordinatePairs)
@@ -256,4 +264,12 @@ public class CenterOfMassView : MonoBehaviour
 		SubmitAnswerEvent?.Invoke(centerOfMassAnswerSubmission);
 	}
 	#endregion
+
+	private void ClearAllInputFields()
+	{
+		xCenterOfMassDividendField.text = "";
+		xCenterOfMassDivisorField.text = "";
+		yCenterOfMassDividendField.text = "";
+		yCenterOfMassDivisorField.text = "";
+	}
 }
