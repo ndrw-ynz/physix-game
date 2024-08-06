@@ -8,7 +8,7 @@ public class PagePrevNextButton : MonoBehaviour
 
     public CanvasGroup canvasGroup;
 
-    [Header("Direction of Page Button")]
+    [Header("Direction of Page")]
     [SerializeField] private int step;
     [Header("Page Button")]
     [SerializeField] private Button _prevNextPageButton;

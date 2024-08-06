@@ -8,9 +8,9 @@ public class UnderstoodIndicator : MonoBehaviour
 
     [Header("Object Group for Animation")]
     public CanvasGroup understoodIndicatorCanvasGroup;
-    [Header("Flag")]
+    [Header("Flag To Use For Changing States")]
     [SerializeField] private bool flag;
-    [Header("Button")]
+    [Header("Understood Indicator Button")]
     [SerializeField] private Button _understoodIndicatorButton;
 
     private void OnEnable()

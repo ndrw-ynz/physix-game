@@ -10,9 +10,9 @@ public class SectorPrevNextButton : MonoBehaviour
     [Header("Subtopic Name Text Holder")]
     public TextMeshProUGUI sectorButtonText;
     public CanvasGroup canvasGroup;
-    [Header("Direction of Sector Button")]
+    [Header("Direction of Sector")]
     public string action;
-    [Header("Button Component")]
+    [Header("Sector Button")]
     [SerializeField] private Button _prevNextSectorButton;
 
     private void OnEnable()
