@@ -6,10 +6,12 @@ public class PagePrevNextButton : MonoBehaviour
 {
     public static event Action<int> PrevNextPageClickEvent;
 
-    public int step;
     public CanvasGroup canvasGroup;
 
-    private Button _prevNextPageButton;
+    [Header("Direction of Page Button")]
+    [SerializeField] private int step;
+    [Header("Page Button")]
+    [SerializeField] private Button _prevNextPageButton;
 
     private void OnEnable()
     {
