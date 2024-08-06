@@ -19,8 +19,6 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 	[SerializeField] private InteractableControlPanel roomTwoControlPanel;
 
     [Header("Room Three")]
-	[SerializeField] private GameObject roomThreeGate;
-	[SerializeField] private GameObject roomThreeGateBlocker;
 	[SerializeField] private GameObject containerGlassThree;
 	[SerializeField] private DataModuleCube dataModuleCube;
     [SerializeField] private Camera collisionVideoCamera;
@@ -43,7 +41,6 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 
         // Room Three Environment Events
         ActivitySevenManager.RoomThreeClearEvent += ReleaseDataModuleCube;
-        DataModuleCube.RetrieveEvent += UpdateRoomThreeGateState;
     }
 
 	#region Room One
@@ -91,12 +88,6 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
         dataModuleCube.SetInteractable(true);
 		collisionVideoCamera.gameObject.SetActive(true);
         roomThreeControlPanel.SetInteractable(false);
-    }
-
-    private void UpdateRoomThreeGateState()
-    {
-        // Open room three gate
-        OpenGate(roomThreeGate, roomThreeGateBlocker);
     }
 
 	#endregion
