@@ -12,7 +12,7 @@ public class SectorPrevNextButton : MonoBehaviour
     public CanvasGroup canvasGroup;
     [Header("Direction of Sector Button")]
     public string action;
-    [Header("Button")]
+    [Header("Button Component")]
     [SerializeField] private Button _prevNextSectorButton;
 
     private void OnEnable()
