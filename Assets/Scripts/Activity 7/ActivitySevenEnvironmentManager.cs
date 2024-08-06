@@ -15,6 +15,7 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
     [Header("Room Two")]
 	[SerializeField] private GameObject roomTwoGate;
 	[SerializeField] private GameObject roomTwoGateBlocker;
+    [SerializeField] private CubePusher cubePusher;
 	[SerializeField] private InteractableControlPanel roomTwoControlPanel;
 
     [Header("Room Three")]
@@ -77,6 +78,7 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
         roomTwoControlPanel.SetInteractable(false);
         // Open room two gate
         OpenGate(roomTwoGate, roomTwoGateBlocker);
+        cubePusher.SetWorkState(true);
     }
 
 	#endregion
