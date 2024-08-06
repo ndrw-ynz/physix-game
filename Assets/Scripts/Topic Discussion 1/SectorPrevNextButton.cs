@@ -7,10 +7,13 @@ public class SectorPrevNextButton : MonoBehaviour
 {
     public static event Action<string> PrevNextSectorClickEvent;
 
-    public string action;
+    [Header("Subtopic Name Text Holder")]
     public TextMeshProUGUI sectorButtonText;
     public CanvasGroup canvasGroup;
+    [Header("Direction of Sector Button")]
+    public string action;
 
+    // Button Component for Previous and Next Sector Button
     private Button _prevNextSectorButton;
 
     private void OnEnable()
