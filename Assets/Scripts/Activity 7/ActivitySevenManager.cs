@@ -254,10 +254,23 @@ public class ActivitySevenManager : MonoBehaviour
 	private int currentNumMomentumImpulseForceTests;
 	private int currentNumElasticInelasticCollisionTests;
 
-    void Start()
+	// Gameplay performance metrics variables
+	// Gameplay Time
+	private float gameplayTime;
+	// Center of Mass
+	private bool isCenterOfMassCalculationFinished;
+	private int numIncorrectCenterOfMassSubmission;
+	// Momentum Impulse Force
+	private bool isMomentumImpulseForceCalculationFinished;
+	private int numIncorrectMomentumImpulseForceSubmission;
+	// Elastic Inelastic Collision
+	private bool isElasticInelasticCollisionCalculationFinished;
+	private int numIncorrectElasticInelasticCollisionSubmission;
+
+	void Start()
     {
 		// Difficulty selection
-		difficultyConfiguration = Difficulty.Medium; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
         
 		// Setting level data
 		switch (difficultyConfiguration)
@@ -306,6 +319,11 @@ public class ActivitySevenManager : MonoBehaviour
 		momentumImpulseForceView.UpdateCalibrationTestTextDisplay(0, currentMomentumImpulseForceLevel.numberOfTests);
 		elasticInelasticCollisionView.SetupElasicInelasticCollisionView(elasticInelasticCollisionData);
 		elasticInelasticCollisionView.UpdateCalibrationTestTextDisplay(0, currentElasticInelasticCollisionLevel.numberOfTests);
+	}
+
+	private void Update()
+	{
+		gameplayTime += Time.deltaTime;
 	}
 
 	#region Center of Mass
@@ -361,11 +379,19 @@ public class ActivitySevenManager : MonoBehaviour
 		if (results.isAllCorrect())
 		{
 			currentNumCenterOfMassTests--;
-			string displayText = currentNumCenterOfMassTests <= 0 ? "Calculations correct. The power source cube is now accessible." : "Calculations correct. Loaded next test.";
+			string displayText;
+			if (currentNumCenterOfMassTests <= 0)
+			{
+				displayText = "Calculations correct. The power source cube is now accessible.";
+				isCenterOfMassCalculationFinished = true;
+			} else {
+				displayText = "Calculations correct. Loaded next test.";
+			}
 			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
 		}
 		else
 		{
+			numIncorrectCenterOfMassSubmission++;
 			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
 
@@ -508,13 +534,23 @@ public class ActivitySevenManager : MonoBehaviour
 			if (easyResults.isAllCorrect())
 			{
 				currentNumMomentumImpulseForceTests--;
-				string displayText = currentNumMomentumImpulseForceTests <= 0 ? "All calibration tests accomplished." : "Calibration test matches calculations. Loaded next test.";
+				string displayText;
+				if (currentNumMomentumImpulseForceTests <= 0)
+				{
+					displayText = "All calibration tests accomplished.";
+					isMomentumImpulseForceCalculationFinished = true;
+				}
+				else
+				{
+					displayText = "Calibration test matches calculations. Loaded next test.";
+				}
 				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
 
 				momentumImpulseForceView.UpdateCalibrationTestTextDisplay(currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests, currentMomentumImpulseForceLevel.numberOfTests);
 			}
 			else
 			{
+				numIncorrectMomentumImpulseForceSubmission++;
 				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(false, "Calibration tests found discrepancies in your calculations. Please review and fix it.");
 			}
 
@@ -526,13 +562,23 @@ public class ActivitySevenManager : MonoBehaviour
 			if (mediumHardResults.isAllCorrect())
 			{
 				currentNumMomentumImpulseForceTests--;
-				string displayText = currentNumMomentumImpulseForceTests <= 0 ? "All calibration tests accomplished." : "Calibration test matches calculations. Loaded next test.";
+				string displayText;
+				if (currentNumMomentumImpulseForceTests <= 0)
+				{
+					displayText = "All calibration tests accomplished.";
+					isMomentumImpulseForceCalculationFinished = true;
+				}
+				else
+				{
+					displayText = "Calibration test matches calculations. Loaded next test.";
+				}
 				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
 
 				momentumImpulseForceView.UpdateCalibrationTestTextDisplay(currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests, currentMomentumImpulseForceLevel.numberOfTests);
 			}
 			else
 			{
+				numIncorrectMomentumImpulseForceSubmission++;
 				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(false, "Calibration tests found discrepancies in your calculations. Please review and fix it.");
 			}
 
@@ -649,13 +695,22 @@ public class ActivitySevenManager : MonoBehaviour
 		if (results.isAllCorrect())
 		{
 			currentNumElasticInelasticCollisionTests--;
-			string displayText = currentNumElasticInelasticCollisionTests <= 0 ? "Calculations correct. The data module is now accessible." : "Calculations correct. Loaded next test.";
+			string displayText;
+			if (currentNumElasticInelasticCollisionTests <= 0)
+			{
+				displayText = "Calculations correct. The data module is now accessible.";
+				isElasticInelasticCollisionCalculationFinished = true;
+			} else
+			{
+				displayText = "Calculations correct. Loaded next test.";
+			}
 			elasticInelasticCollisionSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
 
 			elasticInelasticCollisionView.UpdateCalibrationTestTextDisplay(currentElasticInelasticCollisionLevel.numberOfTests - currentNumElasticInelasticCollisionTests, currentElasticInelasticCollisionLevel.numberOfTests);
 		}
 		else
 		{
+			numIncorrectElasticInelasticCollisionSubmission++;
 			elasticInelasticCollisionSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
 
