@@ -12,4 +12,7 @@ public class ElasticInelasticCollisionSubActivitySO : ScriptableObject
 	[Header("Velocity Value Range")]
 	public int velocityMinVal;
 	public int velocityMaxVal;
+	[Header("Net Momentum Value Range")]
+	public int momentumMinVal;
+	public int momentumMaxVal;
 }
