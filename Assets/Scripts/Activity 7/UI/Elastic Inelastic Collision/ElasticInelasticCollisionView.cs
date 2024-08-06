@@ -40,6 +40,7 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
 
+
 	[Header("Given Fields")]
 	[Header("Given Fields - Cube One")]
 	[SerializeField] private TMP_InputField givenCubeOneMass;
@@ -50,6 +51,26 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 	[SerializeField] private TMP_InputField givenCubeTwoMass;
 	[SerializeField] private TMP_InputField givenCubeTwoInitialVelocity;
 	[SerializeField] private TMP_InputField givenCubeTwoFinalVelocity;
+
+
+	[Header("Input Fields")]
+	[Header("Input Fields - Cube's Initial Momentum")]
+	[SerializeField] private TMP_InputField cubeOneInitialMomentumMultiplicand;
+	[SerializeField] private TMP_InputField cubeOneInitialMomentumMultiplicator;
+	[SerializeField] private TMP_InputField cubeTwoInitialMomentumMultiplicand;
+	[SerializeField] private TMP_InputField cubeTwoInitialMomentumMultiplicator;
+
+	[Header("Input Fields - Cube's Final Momentum")]
+	[SerializeField] private TMP_InputField cubeOneFinalMomentumMultiplicand;
+	[SerializeField] private TMP_InputField cubeOneFinalMomentumMultiplicator;
+	[SerializeField] private TMP_InputField cubeTwoFinalMomentumMultiplicand;
+	[SerializeField] private TMP_InputField cubeTwoFinalMomentumMultiplicator;
+
+	[Header("Input Fields - Net Momentum")]
+	[SerializeField] private TMP_InputField netInitialMomentumAddendOne;
+	[SerializeField] private TMP_InputField netInitialMomentumAddendTwo;
+	[SerializeField] private TMP_InputField netFinalMomentumAddendOne;
+	[SerializeField] private TMP_InputField netFinalMomentumAddendTwo;
 
 
 	[Header("Result Fields")]
@@ -94,6 +115,7 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 
 		// Display default view
 		OnLeftPageButtonClick();
+		ClearAllInputFields();
 	}
 
 	private void SetGivenFields(
@@ -178,4 +200,22 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 		SubmitAnswerEvent?.Invoke(submission);
 	}
 	#endregion
+
+	private void ClearAllInputFields()
+	{
+		cubeOneInitialMomentumMultiplicand.text = "";
+		cubeOneInitialMomentumMultiplicator.text = "";
+		cubeTwoInitialMomentumMultiplicand.text = "";
+		cubeTwoInitialMomentumMultiplicator.text = "";
+
+		cubeOneFinalMomentumMultiplicand.text = "";
+		cubeOneFinalMomentumMultiplicator.text = "";
+		cubeTwoFinalMomentumMultiplicand.text = "";
+		cubeTwoFinalMomentumMultiplicator.text = "";
+
+		netInitialMomentumAddendOne.text = "";
+		netInitialMomentumAddendTwo.text = "";
+		netFinalMomentumAddendOne.text = "";
+		netFinalMomentumAddendTwo.text = "";
+	}
 }
