@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class ActivitySevenUtilities
@@ -71,6 +72,26 @@ public static class ActivitySevenUtilities
 	#endregion
 
 	#region Elastic Inelastic Collision
+
+	public static int FindGCD(int a, int b)
+	{
+		if (b > a)
+		{
+			int temp = a;
+			a = b;
+			b = temp;
+		}
+
+		while (b > 0)
+		{
+			int remainder = a % b;
+			a = b;
+			b = remainder;
+		}
+
+		return a;
+	}
+
 	public static bool ValidateNetMomentum(float? submittedNetMomentum, float cubeOneMass, float cubeOneVelocity, float cubeTwoMass, float cubeTwoVelocity)
 	{
 		if (submittedNetMomentum == null) return false;
