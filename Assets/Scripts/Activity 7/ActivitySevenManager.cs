@@ -565,15 +565,57 @@ public class ActivitySevenManager : MonoBehaviour
 	#region Elastic Inelastic Collision
 	private void GenerateElasticInelasticCollisionData(ElasticInelasticCollisionSubActivitySO elasticInelasticCollisionSubActivitySO)
 	{
-		// Mass variables
-		float m1 = Random.Range(elasticInelasticCollisionSubActivitySO.massMinVal, elasticInelasticCollisionSubActivitySO.massMaxVal);
-		float m2 = Random.Range(elasticInelasticCollisionSubActivitySO.massMinVal, elasticInelasticCollisionSubActivitySO.massMaxVal);
-		// Generate initial velocity values
-		float u1 = Random.Range(elasticInelasticCollisionSubActivitySO.velocityMinVal, elasticInelasticCollisionSubActivitySO.velocityMaxVal);
-		float u2 = Random.Range(elasticInelasticCollisionSubActivitySO.velocityMinVal, elasticInelasticCollisionSubActivitySO.velocityMaxVal);
-		// Generate final velocity values
-		float v1 = Random.Range(elasticInelasticCollisionSubActivitySO.velocityMinVal, elasticInelasticCollisionSubActivitySO.velocityMaxVal);
-		float v2 = Random.Range(elasticInelasticCollisionSubActivitySO.velocityMinVal, elasticInelasticCollisionSubActivitySO.velocityMaxVal);
+		bool isElastic = Random.Range(0, 2) == 0;
+
+		// Variables for collision
+		int m1, m2;
+		int u1, u2;
+		int v1, v2;
+
+		if (isElastic)
+		{
+			// Elastic Collision
+
+			// Setting values for elastic collision
+
+			int netInitialMomentum, netFinalMomentum;
+			netInitialMomentum = netFinalMomentum = Random.Range(elasticInelasticCollisionSubActivitySO.momentumMinVal, elasticInelasticCollisionSubActivitySO.momentumMaxVal);
+
+			// rand generate netInitialMomentum
+			int nim1, nim2; // nim1 > nim2
+			nim1 = Random.Range(netInitialMomentum / 2, netInitialMomentum);
+			nim2 = (int) Math.Abs(nim1 - netInitialMomentum);
+
+			// rand generate netFinalMomentum
+			int nfm1, nfm2; // nfm2 > nfm1
+			nfm2 = Random.Range(netFinalMomentum / 2, netFinalMomentum);
+			nfm1 = (int)Math.Abs(nfm2 - netFinalMomentum);
+
+			// randomly generate cube one mass, u1, and v1 using nim1 and nfm1
+			m1 = ActivitySevenUtilities.FindGCD(nim1, nfm1);
+			u1 = nim1 / m1;
+			v1 = nfm1 / m1;
+
+			// randomly generate cube two mass, u2, and v2 using nim2 and nfm2
+			m2 = ActivitySevenUtilities.FindGCD(nim2, nfm2);
+			u2 = nim2 / m2;
+			v2 = nfm2 / m2;
+		} else
+		{
+			// Inelastic Collision
+
+			// Setting values for inelastic collision
+
+			// Mass variables
+			m1 = Random.Range(elasticInelasticCollisionSubActivitySO.massMinVal, elasticInelasticCollisionSubActivitySO.massMaxVal);
+			m2 = Random.Range(elasticInelasticCollisionSubActivitySO.massMinVal, elasticInelasticCollisionSubActivitySO.massMaxVal);
+			// Generate initial velocity values
+			u1 = Random.Range(elasticInelasticCollisionSubActivitySO.velocityMinVal, elasticInelasticCollisionSubActivitySO.velocityMaxVal);
+			u2 = Random.Range(elasticInelasticCollisionSubActivitySO.velocityMinVal, elasticInelasticCollisionSubActivitySO.velocityMaxVal);
+			// Generate final velocity values
+			v1 = Random.Range(elasticInelasticCollisionSubActivitySO.velocityMinVal, elasticInelasticCollisionSubActivitySO.velocityMaxVal);
+			v2 = Random.Range(elasticInelasticCollisionSubActivitySO.velocityMinVal, elasticInelasticCollisionSubActivitySO.velocityMaxVal);
+		}
 
 		// Store data in CollisionObjects
 		CollisionObject cubeOne = new CollisionObject(m1, u1, v1);
