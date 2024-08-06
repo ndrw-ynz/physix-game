@@ -24,10 +24,7 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void Initialize(int index)
     {
         _pageIndex = index;
-
         _startPosition = buttonColor.transform.position;
-        _buttonRenderer = GetComponentInChildren<SpriteRenderer>();
-        _pageCircleButton = GetComponentInChildren<Button>();
         _pageCircleButton.onClick.AddListener(() => OnPageCircleButtonCLick());
     }
 
