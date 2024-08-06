@@ -26,14 +26,14 @@ public class UnderstoodIndicatorsManager : MonoBehaviour
             markAsUnderstoodButton.gameObject.SetActive(true);
             markAsNotYetUnderstoodButton.gameObject.SetActive(false);
 
-            ComprehensionButtonStateChange?.Invoke(markAsUnderstoodButton.canvasGroup);
+            ComprehensionButtonStateChange?.Invoke(markAsUnderstoodButton.understoodIndicatorCanvasGroup);
         }
         else
         {
             markAsUnderstoodButton.gameObject.SetActive(false);
             markAsNotYetUnderstoodButton.gameObject.SetActive(true);
 
-            ComprehensionButtonStateChange?.Invoke(markAsNotYetUnderstoodButton.canvasGroup);
+            ComprehensionButtonStateChange?.Invoke(markAsNotYetUnderstoodButton.understoodIndicatorCanvasGroup);
         }
     }
 }
