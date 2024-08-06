@@ -236,6 +236,7 @@ public class ActivitySevenManager : MonoBehaviour
     [SerializeField] CenterOfMassView centerOfMassView;
 	[SerializeField] MomentumImpulseForceView momentumImpulseForceView;
 	[SerializeField] ElasticInelasticCollisionView elasticInelasticCollisionView;
+	[SerializeField] ActivitySevenPerformanceView performanceView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private CenterOfMassSubmissionStatusDisplay centerOfMassSubmissionStatusDisplay;
@@ -302,6 +303,7 @@ public class ActivitySevenManager : MonoBehaviour
 		ElasticInelasticCollisionView.SubmitAnswerEvent += CheckElasticInelasticCollisionAnswers;
 		ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent += GenerateNewElasticInelasticCollisionTest;
 		ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent += CloseElasticInelasticCollisionView;
+		DataModuleCube.RetrieveEvent += DisplayPerformanceView;
 
 		// Initializing given values
 		GenerateMassCoordinatePairs(currentCenterOfMassLevel);
@@ -740,4 +742,27 @@ public class ActivitySevenManager : MonoBehaviour
 		}
 	}
 	#endregion
+
+	private void DisplayPerformanceView()
+	{
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
+
+		performanceView.SetTotalTimeDisplay(gameplayTime);
+
+		performanceView.SetCenterOfMassMetricsDisplay(
+			isAccomplished: isCenterOfMassCalculationFinished,
+			numIncorrectSubmission: numIncorrectCenterOfMassSubmission
+			);
+
+		performanceView.SetMomentumImpulseForceMetricsDisplay(
+			isAccomplished: isMomentumImpulseForceCalculationFinished,
+			numIncorrectSubmission: numIncorrectMomentumImpulseForceSubmission
+			);
+
+		performanceView.SetElasticInelasticCollisionMetricsDisplay(
+			isAccomplished: isElasticInelasticCollisionCalculationFinished,
+			numIncorrectSubmission: numIncorrectElasticInelasticCollisionSubmission
+			);
+	}
 }
