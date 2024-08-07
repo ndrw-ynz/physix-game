@@ -7,8 +7,8 @@ public class PrevNextButtonsManager : MonoBehaviour
 {
     public DiscussionPrevNextPageButton prevPageButton;
     public DiscussionPrevNextPageButton nextPageButton;
-    public DiscussionPrevNextSectorButton prevSectorButton;
-    public DiscussionPrevNextSectorButton nextSectorButton;
+    public SectorPrevNextButton prevSectorButton;
+    public SectorPrevNextButton nextSectorButton;
 
     public static event Action<CanvasGroup[]> ButtonChangeStateUpdate;
 
