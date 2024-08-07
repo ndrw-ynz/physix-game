@@ -18,14 +18,6 @@ public class AnimationManager : MonoBehaviour
     private PageJumpButton _circleButton;
     private bool _animatePageCircle = false;
 
-    private float _prevNextButtonAnimationSpeed = 4.0f;
-    private float _targetPrevNextButtonAlpha = 1.0f;
-    private float _currentPrevNextButtonAlpha;
-    private CanvasGroup[] _buttonList;
-    private bool _animateButton = false;
-
-
-
     private float _progressBarButtonAnimationSpeed = 5.0f;
     private float _targetProgressBarButtonAlpha = 1.0f;
     private float _currentProgressBarButtonAlpha;
@@ -45,7 +37,6 @@ public class AnimationManager : MonoBehaviour
     {
         PageCircleButtonsManager.PageCircleStateUpdate += ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate += ActivateProgressBarButtonAnimation;
-        PrevNextButtonsManager.ButtonChangeStateUpdate += ActivatePrevNextButtonAnimation;
         ProgressManager.ProgressBarButtonStateUpdate += ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent += ActivatePageAnimation;
     }
@@ -54,7 +45,6 @@ public class AnimationManager : MonoBehaviour
     {
         PageCircleButtonsManager.PageCircleStateUpdate -= ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate -= ActivateProgressBarButtonAnimation;
-        PrevNextButtonsManager.ButtonChangeStateUpdate -= ActivatePrevNextButtonAnimation;
         ProgressManager.ProgressBarButtonStateUpdate -= ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent -= ActivatePageAnimation;
     }
@@ -63,8 +53,6 @@ public class AnimationManager : MonoBehaviour
     {
         AnimatePageCircle();
         AnimateIndicatorRect();
-        //AnimatePrevNextButton();
-        //AnimateUnderstandMarker();
         AnimateProgressBar();
         AnimatePage();
     }
@@ -84,14 +72,6 @@ public class AnimationManager : MonoBehaviour
         _circleButton = manager.pageCircleButtonList[i];
         _animatePageCircle = true;
     }
-
-    private void ActivatePrevNextButtonAnimation(CanvasGroup[] buttonList)
-    {
-        _currentPrevNextButtonAlpha = 0f;
-        _buttonList = buttonList;
-        _animateButton = true;
-    }
-
 
     private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i, Color color)
     {
@@ -144,26 +124,6 @@ public class AnimationManager : MonoBehaviour
             }
         }
     }
-
-    private void AnimatePrevNextButton()
-    {
-        if (_animateButton)
-        {
-            if (_currentPrevNextButtonAlpha < _targetPrevNextButtonAlpha)
-            {
-                foreach (var button in _buttonList)
-                {
-                    _currentPrevNextButtonAlpha += Time.deltaTime * _prevNextButtonAnimationSpeed;
-                    button.alpha = _currentPrevNextButtonAlpha;
-                }
-            }
-            else
-            {
-                _animateButton = false;
-            }
-        }
-    }
-
 
     private void AnimateProgressBar()
     {
