@@ -708,7 +708,7 @@ public class ActivitySevenManager : MonoBehaviour
 			{
 				displayText = "Calculations correct. The data module is now accessible.";
 				isElasticInelasticCollisionCalculationFinished = true;
-				elasticInelasticCollisionDuration = gameplayTime - momentumImpulseForceDuration;
+				elasticInelasticCollisionDuration = gameplayTime - momentumImpulseForceDuration - centerOfMassDuration;
 			} else
 			{
 				displayText = "Calculations correct. Loaded next test.";
