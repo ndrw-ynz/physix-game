@@ -26,6 +26,7 @@ public class DiscussionNavigator : MonoBehaviour
 
     public List<Sector> subTopicsList;
     public static event Action<DiscussionNavigator> PageChangeEvent;
+    public static event Action<DiscussionNavigator> SectorChangeEvent;
     public static event Action<DiscussionNavigator> UnderstandMarkerChangeEvent;
     public static event Action<DiscussionNavigator> DiscussionPageStart;
 
@@ -73,6 +74,7 @@ public class DiscussionNavigator : MonoBehaviour
         ShowPage(_currentSectorIndex, _currentPageIndex);
 
         PageChangeEvent?.Invoke(this);
+        SectorChangeEvent?.Invoke(this);
         UnderstandMarkerChangeEvent?.Invoke(this);
     }
 
@@ -89,6 +91,7 @@ public class DiscussionNavigator : MonoBehaviour
             ShowPage(_currentSectorIndex,_currentPageIndex);
 
             PageChangeEvent?.Invoke(this);
+            SectorChangeEvent?.Invoke(this);
             UnderstandMarkerChangeEvent?.Invoke(this);
         }
         if (action == "previous")
@@ -102,6 +105,7 @@ public class DiscussionNavigator : MonoBehaviour
             ShowPage(_currentSectorIndex, _currentPageIndex);
 
             PageChangeEvent?.Invoke(this);
+            SectorChangeEvent?.Invoke(this);
             UnderstandMarkerChangeEvent?.Invoke(this);
         }
     }

@@ -6,11 +6,13 @@ using UnityEngine.UI;
 public class SectorCircleIndicator : MonoBehaviour
 {
     public Image circleIndicatorImage;
+    public RectTransform circleIndicatorRectTransform;
     public Vector2 startPosition;
 
     public void Initialize()
     {
         circleIndicatorImage = GetComponent<Image>();
+        circleIndicatorRectTransform = GetComponent<RectTransform>();
         startPosition = circleIndicatorImage.transform.position;
     }
 }
