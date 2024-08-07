@@ -12,23 +12,31 @@ public class AnimationManager : MonoBehaviour
     private SectorIndicatorRect _indicatorRect;
     private bool _animateIndicator = false;
 
-    private float _cirleAnimationSpeed = 3f;
-    private float _targetAlpha = 1.0f;
-    private float _currentAlpha;
-    private Color _currentColor;
+    private float _cirleAnimationSpeed = 3.0f;
+    private float _targetCircleAlpha = 1.0f;
+    private float _currentCircleAlpha;
+    private Color _currentCircleColor;
     private PageCircleButton _circleButton;
     private bool _animatePageCircle = false;
+
+    private float _buttonAnimationSpeed = 2.0f;
+    private float _targetButtonAlpha = 1.0f;
+    private float _currentButtonAlpha;
+    private CanvasGroup[] _buttonList;
+    private bool _animateButton = false;
 
     private void OnEnable()
     {
         PageCircleButtonsManager.PageCircleStateUpdate += ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate += ActivateProgressBarButtonAnimation;
+        PrevNextButtonsManager.ButtonChangeStateUpdate += ActivateButtonAnimation;
     }
 
     private void Update()
     {
         AnimatePageCircle();
         AnimateIndicatorRect();
+        AnimateButton();
     }
 
     private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i)
@@ -41,21 +49,28 @@ public class AnimationManager : MonoBehaviour
 
     private void ActivatePageCircleAnimation(PageCircleButtonsManager manager, int i)
     {
-        _currentAlpha = 0f;
-        _currentColor = manager.pageCircleButtonList[i].buttonOutline.color;
+        _currentCircleAlpha = 0f;
+        _currentCircleColor = manager.pageCircleButtonList[i].buttonOutline.color;
         _circleButton = manager.pageCircleButtonList[i];
         _animatePageCircle = true;
+    }
+
+    private void ActivateButtonAnimation(CanvasGroup[] buttonCanvasList)
+    {
+        _currentButtonAlpha = 0f;
+        _buttonList = buttonCanvasList;
+        _animateButton = true;
     }
 
     private void AnimatePageCircle()
     {
         if (_animatePageCircle)
         {
-            if (_currentAlpha < _targetAlpha)
+            if (_currentCircleAlpha < _targetCircleAlpha)
             {
-                _currentAlpha += Time.deltaTime * _cirleAnimationSpeed;
-                _currentColor.a = _currentAlpha;
-                _circleButton.buttonOutline.color = _currentColor;
+                _currentCircleAlpha += Time.deltaTime * _cirleAnimationSpeed;
+                _currentCircleColor.a = _currentCircleAlpha;
+                _circleButton.buttonOutline.color = _currentCircleColor;
             }
             else
             {
@@ -77,6 +92,25 @@ public class AnimationManager : MonoBehaviour
             else
             {
                 _animateIndicator = false;
+            }
+        }
+    }
+
+    private void AnimateButton()
+    {
+        if (_animateButton)
+        {
+            if (_currentButtonAlpha < _targetButtonAlpha)
+            {
+                foreach (var button in _buttonList)
+                {
+                    _currentButtonAlpha += Time.deltaTime * _buttonAnimationSpeed;
+                    button.alpha = _currentButtonAlpha;
+                }
+            }
+            else
+            {
+                _animateButton = false;
             }
         }
     }

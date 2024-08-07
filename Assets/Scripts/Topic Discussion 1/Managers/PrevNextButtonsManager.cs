@@ -10,6 +10,8 @@ public class PrevNextButtonsManager : MonoBehaviour
     public DiscussionPrevNextSectorButton prevSectorButton;
     public DiscussionPrevNextSectorButton nextSectorButton;
 
+    public static event Action<CanvasGroup[]> ButtonChangeStateUpdate;
+
     private void OnEnable()
     {
         DiscussionNavigator.PageChangeEvent += ChangeButtonState;
@@ -40,14 +42,19 @@ public class PrevNextButtonsManager : MonoBehaviour
             prevSectorButton.gameObject.SetActive(false);
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
+
+            ButtonChangeStateUpdate?.Invoke(new CanvasGroup[] { nextSectorButton.canvasGroup });
         }
         else if (isFirstSectorFirstPage)
         {
-            // DEACTIVATE Both Previous Buttons
+            // DEACTIVATE Both Previous Buttons and Next Sector Button
+            nextPageButton.gameObject.SetActive(true);
+
             prevPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
-            nextPageButton.gameObject.SetActive(true);
             nextSectorButton.gameObject.SetActive(false);
+
+            ButtonChangeStateUpdate?.Invoke(new CanvasGroup[] { nextPageButton.canvasGroup });
         }
         else if (isOnlySinglePageInSector)
         {
@@ -60,6 +67,8 @@ public class PrevNextButtonsManager : MonoBehaviour
 
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
+
+            ButtonChangeStateUpdate?.Invoke(new CanvasGroup[] { prevSectorButton.canvasGroup, nextSectorButton.canvasGroup });
         }
         else if (isNotFirstSectorFirstPage)
         {
@@ -71,6 +80,8 @@ public class PrevNextButtonsManager : MonoBehaviour
 
             prevPageButton.gameObject.SetActive(false);
             nextSectorButton.gameObject.SetActive(false);
+
+            ButtonChangeStateUpdate?.Invoke(new CanvasGroup[] { prevSectorButton.canvasGroup, nextPageButton.canvasGroup });
         }
         else if (isNotLastSectorLastPage)
         {
@@ -82,6 +93,8 @@ public class PrevNextButtonsManager : MonoBehaviour
 
             nextPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
+
+            ButtonChangeStateUpdate?.Invoke(new CanvasGroup[] { prevPageButton.canvasGroup, nextSectorButton.canvasGroup });
         }
         else if (isOnlySinglePageInLastSector)
         {
@@ -93,14 +106,19 @@ public class PrevNextButtonsManager : MonoBehaviour
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
             nextSectorButton.gameObject.SetActive(false);
+
+            ButtonChangeStateUpdate?.Invoke(new CanvasGroup[] { prevSectorButton.canvasGroup});
         }
         else if (isLastSectorLastPage)
         {
             // DEACTIVATE Both Next Buttons
             prevPageButton.gameObject.SetActive(true);
+
             prevSectorButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
             nextSectorButton.gameObject.SetActive(false);
+
+            ButtonChangeStateUpdate?.Invoke(new CanvasGroup[] { prevPageButton.canvasGroup });
         }
         else
         {
@@ -110,6 +128,8 @@ public class PrevNextButtonsManager : MonoBehaviour
 
             nextSectorButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
+
+            ButtonChangeStateUpdate?.Invoke(new CanvasGroup[] { prevPageButton.canvasGroup, nextPageButton.canvasGroup });
         }
     }
 

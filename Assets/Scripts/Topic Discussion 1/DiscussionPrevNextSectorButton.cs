@@ -9,12 +9,15 @@ public class DiscussionPrevNextSectorButton : MonoBehaviour
 {
     public string action;
     public TextMeshProUGUI sectorButtonText;
+    public CanvasGroup canvasGroup;
 
     public static event Action<string> PrevNextSectorClickEvent;
     private Button _prevNextSectorButton;
 
     private void OnEnable()
     {
+        canvasGroup = this.GetComponent<CanvasGroup>();
+
         _prevNextSectorButton = this.GetComponent<Button>();
         _prevNextSectorButton.onClick.AddListener(() => PrevNextSectorClickEvent.Invoke(action));
     }

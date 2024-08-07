@@ -1407,8 +1407,8 @@ GameObject:
   - component: {fileID: 316801260}
   - component: {fileID: 316801259}
   - component: {fileID: 316801258}
-  - component: {fileID: 316801257}
   - component: {fileID: 316801261}
+  - component: {fileID: 316801257}
   m_Layer: 5
   m_Name: Next Sector Button
   m_TagString: Untagged
@@ -1546,21 +1546,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 316801255}
   m_CullTransparentMesh: 1
---- !u!114 &316801261
-MonoBehaviour:
+--- !u!225 &316801261
+CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 316801255}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &325872513
 GameObject:
   m_ObjectHideFlags: 0
@@ -2509,6 +2506,7 @@ GameObject:
   - component: {fileID: 490920065}
   - component: {fileID: 490920064}
   - component: {fileID: 490920063}
+  - component: {fileID: 490920066}
   - component: {fileID: 490920062}
   m_Layer: 5
   m_Name: Prev Page Button
@@ -2647,6 +2645,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 490920060}
   m_CullTransparentMesh: 1
+--- !u!225 &490920066
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 490920060}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &504919719
 GameObject:
   m_ObjectHideFlags: 0
@@ -3368,6 +3378,7 @@ GameObject:
   - component: {fileID: 591611972}
   - component: {fileID: 591611971}
   - component: {fileID: 591611970}
+  - component: {fileID: 591611973}
   - component: {fileID: 591611969}
   m_Layer: 5
   m_Name: Prev Sector Button
@@ -3506,6 +3517,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591611967}
   m_CullTransparentMesh: 1
+--- !u!225 &591611973
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591611967}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &592321631
 GameObject:
   m_ObjectHideFlags: 0
@@ -4772,8 +4795,8 @@ GameObject:
   - component: {fileID: 796551524}
   - component: {fileID: 796551523}
   - component: {fileID: 796551522}
-  - component: {fileID: 796551521}
   - component: {fileID: 796551525}
+  - component: {fileID: 796551521}
   m_Layer: 5
   m_Name: Next Page Button
   m_TagString: Untagged
@@ -4911,21 +4934,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 796551519}
   m_CullTransparentMesh: 1
---- !u!114 &796551525
-MonoBehaviour:
+--- !u!225 &796551525
+CanvasGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 796551519}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
-  m_EffectDistance: {x: 1, y: -1}
-  m_UseGraphicAlpha: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &800340617
 GameObject:
   m_ObjectHideFlags: 0
