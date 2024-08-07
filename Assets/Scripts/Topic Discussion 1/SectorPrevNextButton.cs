@@ -1,24 +1,23 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DiscussionPrevNextSectorButton : MonoBehaviour
+public class SectorPrevNextButton : MonoBehaviour
 {
-    public string action;
+    public static event Action<string> PrevNextSectorClickEvent;
+
+    [Header("Subtopic Name Text Holder")]
     public TextMeshProUGUI sectorButtonText;
     public CanvasGroup canvasGroup;
-
-    public static event Action<string> PrevNextSectorClickEvent;
-    private Button _prevNextSectorButton;
+    [Header("Direction of Sector")]
+    public string action;
+    [Header("Sector Button")]
+    [SerializeField] private Button _prevNextSectorButton;
 
     private void OnEnable()
     {
-        canvasGroup = this.GetComponent<CanvasGroup>();
-
-        _prevNextSectorButton = this.GetComponent<Button>();
+        canvasGroup = GetComponent<CanvasGroup>();
         _prevNextSectorButton.onClick.AddListener(() => PrevNextSectorClickEvent.Invoke(action));
     }
 
