@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class UnderstoodIndicatorsManager : MonoBehaviour
 {
-    public static event Action<CanvasGroup> ComprehensionButtonStateChange;
-
     public UnderstoodIndicator markAsUnderstoodButton;
     public UnderstoodIndicator markAsNotYetUnderstoodButton;
 
@@ -25,15 +23,11 @@ public class UnderstoodIndicatorsManager : MonoBehaviour
         {
             markAsUnderstoodButton.gameObject.SetActive(true);
             markAsNotYetUnderstoodButton.gameObject.SetActive(false);
-
-            ComprehensionButtonStateChange?.Invoke(markAsUnderstoodButton.understoodIndicatorCanvasGroup);
         }
         else
         {
             markAsUnderstoodButton.gameObject.SetActive(false);
             markAsNotYetUnderstoodButton.gameObject.SetActive(true);
-
-            ComprehensionButtonStateChange?.Invoke(markAsNotYetUnderstoodButton.understoodIndicatorCanvasGroup);
         }
     }
 }

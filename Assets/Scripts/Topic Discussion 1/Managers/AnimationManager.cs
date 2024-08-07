@@ -24,11 +24,7 @@ public class AnimationManager : MonoBehaviour
     private CanvasGroup[] _buttonList;
     private bool _animateButton = false;
 
-    private float _understandMarkerAnimationSpeed = 4.0f;
-    private float _targetUnderstandMarkerAlpha = 1.0f;
-    private float _currentUnderstandMarkerAlpha;
-    private CanvasGroup _understandMarker;
-    private bool _animateUnderstandMarker = false;
+
 
     private float _progressBarButtonAnimationSpeed = 5.0f;
     private float _targetProgressBarButtonAlpha = 1.0f;
@@ -50,7 +46,6 @@ public class AnimationManager : MonoBehaviour
         PageCircleButtonsManager.PageCircleStateUpdate += ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate += ActivateProgressBarButtonAnimation;
         PrevNextButtonsManager.ButtonChangeStateUpdate += ActivatePrevNextButtonAnimation;
-        UnderstoodIndicatorsManager.ComprehensionButtonStateChange += ActivateUnderstandMarkerAnimation;
         ProgressManager.ProgressBarButtonStateUpdate += ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent += ActivatePageAnimation;
     }
@@ -60,7 +55,6 @@ public class AnimationManager : MonoBehaviour
         PageCircleButtonsManager.PageCircleStateUpdate -= ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate -= ActivateProgressBarButtonAnimation;
         PrevNextButtonsManager.ButtonChangeStateUpdate -= ActivatePrevNextButtonAnimation;
-        UnderstoodIndicatorsManager.ComprehensionButtonStateChange -= ActivateUnderstandMarkerAnimation;
         ProgressManager.ProgressBarButtonStateUpdate -= ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent -= ActivatePageAnimation;
     }
@@ -98,12 +92,6 @@ public class AnimationManager : MonoBehaviour
         _animateButton = true;
     }
 
-    private void ActivateUnderstandMarkerAnimation(CanvasGroup understandMarker)
-    {
-        _currentUnderstandMarkerAlpha = 0f;
-        _understandMarker = understandMarker;
-        _animateUnderstandMarker = true;
-    }
 
     private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i, Color color)
     {
@@ -176,21 +164,6 @@ public class AnimationManager : MonoBehaviour
         }
     }
 
-    private void AnimateUnderstandMarker()
-    {
-        if (_animateUnderstandMarker)
-        {
-            if(_currentUnderstandMarkerAlpha < _targetUnderstandMarkerAlpha)
-            {
-                _currentUnderstandMarkerAlpha += Time.deltaTime * _understandMarkerAnimationSpeed;
-                _understandMarker.alpha = _currentUnderstandMarkerAlpha;
-            }
-            else
-            {
-                _animateUnderstandMarker = false;
-            }
-        }
-    }
 
     private void AnimateProgressBar()
     {
