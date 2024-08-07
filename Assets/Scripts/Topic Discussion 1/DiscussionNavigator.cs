@@ -34,12 +34,19 @@ public class DiscussionNavigator : MonoBehaviour
 
     private void Start()
     {
-            DiscussionPrevNextPageButton.PrevNextPageClickEvent += ChangePage;
-            DiscussionPrevNextSectorButton.PrevNextSectorClickEvent += ChangeSector;
-            ProgressBarButton.ProgressBarClickEvent += JumpToSector;
-            UnderstoodNotUnderstoodButton.UnderstoodNotUnderstoodClickEvent += ChangeComprehensionMark;
+        DiscussionPrevNextPageButton.PrevNextPageClickEvent += ChangePage;
+        DiscussionPrevNextSectorButton.PrevNextSectorClickEvent += ChangeSector;
+        ProgressBarButton.ProgressBarClickEvent += JumpToSector;
+        UnderstoodNotUnderstoodButton.UnderstoodNotUnderstoodClickEvent += ChangeComprehensionMark;
 
-            DiscussionPageStart?.Invoke(this);
+        DiscussionPageStart?.Invoke(this);
+    }
+    private void OnDisable()
+    {
+        DiscussionPrevNextPageButton.PrevNextPageClickEvent -= ChangePage;
+        DiscussionPrevNextSectorButton.PrevNextSectorClickEvent -= ChangeSector;
+        ProgressBarButton.ProgressBarClickEvent -= JumpToSector;
+        UnderstoodNotUnderstoodButton.UnderstoodNotUnderstoodClickEvent -= ChangeComprehensionMark;
     }
 
     // Changing of sector and pages related functions

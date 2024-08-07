@@ -14,6 +14,10 @@ public class PrevNextButtonsManager : MonoBehaviour
     {
         DiscussionNavigator.PageChangeEvent += ChangeButtonState;
     }
+    private void OnDisable()
+    {
+        DiscussionNavigator.PageChangeEvent -= ChangeButtonState;
+    }
 
     private void ChangeButtonState(DiscussionNavigator discNav)
     {

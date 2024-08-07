@@ -11,6 +11,10 @@ public class UnderstandMarkersManager : MonoBehaviour
     {
         DiscussionNavigator.UnderstandMarkerChangeEvent += ChangeComprehensionButtonState;
     }
+    private void OnDisable()
+    {
+        DiscussionNavigator.UnderstandMarkerChangeEvent -= ChangeComprehensionButtonState;
+    }
 
     public void ChangeComprehensionButtonState(DiscussionNavigator discNav)
     {
