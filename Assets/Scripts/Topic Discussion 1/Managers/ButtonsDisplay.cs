@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PrevNextButtonsManager : MonoBehaviour
+public class ButtonsDisplay : MonoBehaviour
 {
     public PagePrevNextButton prevPageButton;
     public PagePrevNextButton nextPageButton;
