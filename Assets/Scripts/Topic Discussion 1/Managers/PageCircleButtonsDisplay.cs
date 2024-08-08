@@ -1,103 +1,148 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PageCircleButtonsDisplay : MonoBehaviour
 {
-    public PageJumpButton pageCircleButtonPrefab;
+    [Header("Page Circle Buttons Properties")]
+    [SerializeField] private PageJumpButton pageCircleButtonPrefab;
+    [SerializeField] private HorizontalLayoutGroup pageCircleButtonGroup;
 
-    public List<PageJumpButton> pageCircleButtonList = new List<PageJumpButton>();
-    private RectTransform pageCircleAreaParent;
+    // Number of buttons to create
     private int _numButtons;
-    private float _buttonSpacing = 100.0f;
 
-    public static event Action<PageCircleButtonsDisplay, int> PageCircleStateUpdate;
+    // Page circle outline animation properties
+    private PageJumpButton _pageJumpButton;
+    private Color _currentOutlineColor;
+    private float _currentOutlineAlpha;
+    private float _buttonOutlineAnimationDuration = 0.3f; // Duration of animation in seconds
+    private bool _animateButton = false;
+    private float _animationStartTime;
+
     private void OnEnable()
     {
-        DiscussionNavigator.DiscussionPageStart += LoadPageCircleButtons;
-        DiscussionNavigator.DiscussionPageStart += UpdatePageCircleButtonStates;
-        DiscussionNavigator.SectorChangeEvent += LoadPageCircleButtons;
-        DiscussionNavigator.SectorChangeEvent += UpdatePageCircleButtonStates;
-        DiscussionNavigator.PageChangeEvent += UpdatePageCircleButtonStates;
-        DiscussionNavigator.UnderstandMarkerChangeEvent += UpdatePageCircleButtonColors;
+        // Add Listeners
+        DiscussionNavigator.DiscussionPageStart += LoadPageJumpButtons;
+        DiscussionNavigator.SectorChangeEvent += LoadPageJumpButtons;
+        DiscussionNavigator.PageChangeEvent += UpdatePageJumpButtonOutline;
+        DiscussionNavigator.UnderstandMarkerChangeEvent += UpdatePageJumpButtonColors;
     }
 
     private void OnDisable()
     {
-        DiscussionNavigator.DiscussionPageStart -= LoadPageCircleButtons;
-        DiscussionNavigator.DiscussionPageStart -= UpdatePageCircleButtonStates;
-        DiscussionNavigator.SectorChangeEvent -= LoadPageCircleButtons;
-        DiscussionNavigator.SectorChangeEvent -= UpdatePageCircleButtonStates;
-        DiscussionNavigator.PageChangeEvent -= UpdatePageCircleButtonStates;
-        DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdatePageCircleButtonColors;
+        // Remove Listeners
+        DiscussionNavigator.DiscussionPageStart -= LoadPageJumpButtons;
+        DiscussionNavigator.SectorChangeEvent -= LoadPageJumpButtons;
+        DiscussionNavigator.PageChangeEvent -= UpdatePageJumpButtonOutline;
+        DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdatePageJumpButtonColors;
     }
 
-    private void LoadPageCircleButtons(DiscussionNavigator discNav)
+    private void Update()
     {
-        if (pageCircleButtonList.Count > 0) { RemoveAllButtons(); }
+        AnimatePageCircle();
+    }
 
-        pageCircleAreaParent = GameObject.Find("BUTTONS").transform.Find("Page Circle Buttons").GetComponent<RectTransform>();
+    #region Page Circle Creation and Outline/Color Updates
+    private void LoadPageJumpButtons(DiscussionNavigator discNav)
+    {
+        PageJumpButton[] pageJumpButtons = pageCircleButtonGroup.GetComponentsInChildren<PageJumpButton>();
+
+        // Remove all buttons if there are existing buttons
+        if (pageJumpButtons.Length > 0) 
+        {
+            for (int i = 0; i < pageJumpButtons.Length; ++i)
+            {
+                DestroyImmediate(pageJumpButtons[i].gameObject);
+            }
+        }
+
+        // Create buttons for the new sector
         _numButtons = discNav.GetCurrentSectorPagesCount();
-
-        float totalWidth = (_numButtons - 1) * _buttonSpacing;
-        float startX = -totalWidth / 2f;
-
         for (int i = 0; i < _numButtons; i++)
         {
-            Vector2 buttonPosition = new Vector2(startX + i * _buttonSpacing, 0f);
-            GeneratePageCircleButton(buttonPosition, i);
+            GeneratePageCircleButton(i);
         }
+
+        // Update the page circle button outlines and properly set the active outline
+        UpdatePageJumpButtonOutline(discNav);
     }
 
-    private void GeneratePageCircleButton(Vector2 buttonPosition, int i)
+    private void UpdatePageJumpButtonOutline(DiscussionNavigator discNav)
     {
-        PageJumpButton newPageCircleButton = Instantiate(pageCircleButtonPrefab);
-        newPageCircleButton.transform.SetParent(pageCircleAreaParent, false);
-        newPageCircleButton.name = $"Page Circle Button {i + 1}";
-        newPageCircleButton.transform.localPosition = buttonPosition;
-        newPageCircleButton.Initialize(i);
-        pageCircleButtonList.Add(newPageCircleButton);
-    }
+        PageJumpButton[] pageJumpButtons = pageCircleButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
-    private void UpdatePageCircleButtonStates(DiscussionNavigator discNav)
-    {
-        int currentPageIndex = discNav.GetCurrentPageIndex();
-        for (int i =0; i < pageCircleButtonList.Count; i++)
+        // Loop through the button list and activate only the current page index's button outline
+        for (int i =0; i < pageJumpButtons.Length; i++)
         {
-            if (i == currentPageIndex)
+            if (i == discNav.GetCurrentPageIndex())
             {
-                pageCircleButtonList[i].buttonOutline.gameObject.SetActive(true);
-                PageCircleStateUpdate?.Invoke(this, i);
+                pageJumpButtons[i].buttonOutline.gameObject.SetActive(true);
+                ActivatePageCircleAnimation(pageJumpButtons[i]);
             }
             else
             {
-                pageCircleButtonList[i].buttonOutline.gameObject.SetActive(false);
+                pageJumpButtons[i].buttonOutline.gameObject.SetActive(false);
             }
         }
     }
 
-    private void UpdatePageCircleButtonColors(DiscussionNavigator discNav)
+    private void UpdatePageJumpButtonColors(DiscussionNavigator discNav)
     {
-        for (int i = 0; i < pageCircleButtonList.Count; i++)
+        PageJumpButton[] pageJumpButtons = pageCircleButtonGroup.GetComponentsInChildren<PageJumpButton>();
+
+        // Loop through the button list and change their colors to green if page is marked as understood
+        for (int i = 0; i < pageJumpButtons.Length; i++)
         {
             if (discNav.IsPageMarkedUnderstood(i))
             {
-                pageCircleButtonList[i].buttonColor.color = new Color(0.51f, 1, 0.22f);
+                pageJumpButtons[i].buttonColor.color = new Color(0.51f, 1, 0.22f); // Darker green color
             }
             else
             {
-                pageCircleButtonList[i].buttonColor.color = Color.white;
+                pageJumpButtons[i].buttonColor.color = Color.white;
             }
         }
     }
 
-    private void RemoveAllButtons()
+    private void GeneratePageCircleButton(int buttonIndex)
     {
-        for (int i = 0; i < pageCircleButtonList.Count; ++i)
-        {
-            Destroy(pageCircleButtonList[i].gameObject);
-        }
-        pageCircleButtonList.Clear();
+        // Instantiate and set parent of new page circle button to the horizontal group layout
+        PageJumpButton newPageCircleButton = Instantiate(pageCircleButtonPrefab);
+        newPageCircleButton.transform.SetParent(pageCircleButtonGroup.transform, false);
+        newPageCircleButton.name = $"Page Circle Button {buttonIndex + 1}";
+
+        // Initialize index for jumping directly to its page upon button press
+        newPageCircleButton.Initialize(buttonIndex);
     }
+    #endregion
+
+    #region Page Circle Outline Animation
+    private void ActivatePageCircleAnimation(PageJumpButton currPageCircleButton)
+    {
+        _pageJumpButton = currPageCircleButton;
+        _currentOutlineColor = Color.black;
+        _currentOutlineAlpha = 0f; // Set back to zero
+        _animateButton = true;
+        _animationStartTime = Time.time;
+    }
+
+    private void AnimatePageCircle()
+    {
+        if (_animateButton)
+        {
+            // Calculate elapsed time
+            float elapsedTime = Time.time - _animationStartTime;
+            if (elapsedTime < _buttonOutlineAnimationDuration)
+            {
+                // Manually change alpha value of current outline color
+                _currentOutlineAlpha = Mathf.Lerp(0f, 1.0f, elapsedTime / _buttonOutlineAnimationDuration);
+                _currentOutlineColor.a = _currentOutlineAlpha;
+                _pageJumpButton.buttonOutline.color = _currentOutlineColor;
+            }
+            else
+            {
+                _animateButton = false;
+            }
+        }
+    }
+    #endregion
 }

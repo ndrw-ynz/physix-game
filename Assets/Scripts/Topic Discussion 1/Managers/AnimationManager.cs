@@ -11,13 +11,6 @@ public class AnimationManager : MonoBehaviour
     private SectorIndicator _indicatorRect;
     private bool _animateIndicator = false;
 
-    private float _cirleAnimationSpeed = 3.0f;
-    private float _targetCircleAlpha = 1.0f;
-    private float _currentCircleAlpha;
-    private Color _currentCircleColor;
-    private PageJumpButton _circleButton;
-    private bool _animatePageCircle = false;
-
     private float _progressBarButtonAnimationSpeed = 5.0f;
     private float _targetProgressBarButtonAlpha = 1.0f;
     private float _currentProgressBarButtonAlpha;
@@ -35,7 +28,6 @@ public class AnimationManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PageCircleButtonsDisplay.PageCircleStateUpdate += ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate += ActivateProgressBarButtonAnimation;
         ProgressManager.ProgressBarButtonStateUpdate += ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent += ActivatePageAnimation;
@@ -43,7 +35,6 @@ public class AnimationManager : MonoBehaviour
 
     private void OnDisable()
     {
-        PageCircleButtonsDisplay.PageCircleStateUpdate -= ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate -= ActivateProgressBarButtonAnimation;
         ProgressManager.ProgressBarButtonStateUpdate -= ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent -= ActivatePageAnimation;
@@ -51,7 +42,6 @@ public class AnimationManager : MonoBehaviour
 
     private void Update()
     {
-        AnimatePageCircle();
         AnimateIndicatorRect();
         AnimateProgressBar();
         AnimatePage();
@@ -63,14 +53,6 @@ public class AnimationManager : MonoBehaviour
         _currentHeight = manager.sectorIndicatorRectList[i].indicatorRectTransform.rect.height;
         _indicatorRect = manager.sectorIndicatorRectList[i];
         _animateIndicator = true;
-    }
-
-    private void ActivatePageCircleAnimation(PageCircleButtonsDisplay manager, int i)
-    {
-        _currentCircleAlpha = 0f;
-        _currentCircleColor = manager.pageCircleButtonList[i].buttonOutline.color;
-        _circleButton = manager.pageCircleButtonList[i];
-        _animatePageCircle = true;
     }
 
     private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i, Color color)
@@ -91,23 +73,6 @@ public class AnimationManager : MonoBehaviour
         _animatePage = true;
     }
 
-    private void AnimatePageCircle()
-    {
-        if (_animatePageCircle)
-        {
-            if (_currentCircleAlpha < _targetCircleAlpha)
-            {
-                _currentCircleAlpha += Time.deltaTime * _cirleAnimationSpeed;
-                _currentCircleColor.a = _currentCircleAlpha;
-                _circleButton.buttonOutline.color = _currentCircleColor;
-            }
-            else
-            {
-                _animatePageCircle = false;
-            }
-            
-        }
-    }
 
     private void AnimateIndicatorRect()
     {
@@ -149,7 +114,6 @@ public class AnimationManager : MonoBehaviour
     {
         if (_animatePage)
         {
-            Debug.Log("ACTIVATE");
             if (_currentPageAlpha < _targetPageAlpha)
             {
                 _currentPageAlpha += Time.deltaTime * _pageAnimationSpeed;

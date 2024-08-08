@@ -1769,8 +1769,9 @@ GameObject:
   - component: {fileID: 360887881}
   - component: {fileID: 360887883}
   - component: {fileID: 360887882}
+  - component: {fileID: 360887884}
   m_Layer: 5
-  m_Name: Page Circle Buttons
+  m_Name: Page Jump Buttons
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1833,6 +1834,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 360887880}
   m_CullTransparentMesh: 1
+--- !u!114 &360887884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360887880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 70
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &374996391
 GameObject:
   m_ObjectHideFlags: 0
@@ -8825,7 +8852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pageCircleButtonPrefab: {fileID: -1301098713533080915, guid: fffc3054d6815ef42a27daa890e18345, type: 3}
-  pageCircleButtonList: []
+  pageCircleButtonGroup: {fileID: 360887884}
 --- !u!1 &1386843073
 GameObject:
   m_ObjectHideFlags: 0
