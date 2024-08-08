@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnderstoodIndicatorsManager : MonoBehaviour
+public class UnderstoodIndicatorDisplay : MonoBehaviour
 {
     public UnderstoodIndicator markAsUnderstoodButton;
     public UnderstoodIndicator markAsNotYetUnderstoodButton;
