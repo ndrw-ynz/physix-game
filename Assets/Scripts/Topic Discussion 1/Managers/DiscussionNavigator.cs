@@ -40,7 +40,7 @@ public class DiscussionNavigator : MonoBehaviour
         SectorPrevNextButton.PrevNextSectorClickEvent += ChangeSector;
         ProgressBarButton.ProgressBarClickEvent += JumpToSector;
         PageJumpButton.OnPageCircleClick += JumpToPage;
-        UnderstoodIndicator.UnderstoodIndicatorClickEvent += ChangeComprehensionMark;
+        UnderstoodIndicatorButton.UnderstoodIndicatorClickEvent += ChangeComprehensionMark;
 
         DiscussionPageStart?.Invoke(this);
     }
@@ -50,7 +50,7 @@ public class DiscussionNavigator : MonoBehaviour
         SectorPrevNextButton.PrevNextSectorClickEvent -= ChangeSector;
         ProgressBarButton.ProgressBarClickEvent -= JumpToSector;
         PageJumpButton.OnPageCircleClick -= JumpToPage;
-        UnderstoodIndicator.UnderstoodIndicatorClickEvent -= ChangeComprehensionMark;
+        UnderstoodIndicatorButton.UnderstoodIndicatorClickEvent -= ChangeComprehensionMark;
     }
 
     // Changing of sector and pages related functions

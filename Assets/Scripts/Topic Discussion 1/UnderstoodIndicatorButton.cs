@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnderstoodIndicator : MonoBehaviour
+public class UnderstoodIndicatorButton : MonoBehaviour
 {
     public static event Action<bool> UnderstoodIndicatorClickEvent;
 
