@@ -28,15 +28,15 @@ public class AnimationManager : MonoBehaviour
 
     private void OnEnable()
     {
-        ProgressManager.IndicatorRectStateUpdate += ActivateProgressBarButtonAnimation;
-        ProgressManager.ProgressBarButtonStateUpdate += ActivateProgressBarButtonAnimation;
+        ProgressDisplay.IndicatorRectStateUpdate += ActivateProgressBarButtonAnimation;
+        ProgressDisplay.ProgressBarButtonStateUpdate += ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent += ActivatePageAnimation;
     }
 
     private void OnDisable()
     {
-        ProgressManager.IndicatorRectStateUpdate -= ActivateProgressBarButtonAnimation;
-        ProgressManager.ProgressBarButtonStateUpdate -= ActivateProgressBarButtonAnimation;
+        ProgressDisplay.IndicatorRectStateUpdate -= ActivateProgressBarButtonAnimation;
+        ProgressDisplay.ProgressBarButtonStateUpdate -= ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent -= ActivatePageAnimation;
     }
 
@@ -47,7 +47,7 @@ public class AnimationManager : MonoBehaviour
         AnimatePage();
     }
 
-    private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i)
+    private void ActivateProgressBarButtonAnimation(ProgressDisplay manager, int i)
     {
         _currentWidth = 0;
         _currentHeight = manager.sectorIndicatorRectList[i].indicatorRectTransform.rect.height;
@@ -55,7 +55,7 @@ public class AnimationManager : MonoBehaviour
         _animateIndicator = true;
     }
 
-    private void ActivateProgressBarButtonAnimation(ProgressManager manager, int i, Color color)
+    private void ActivateProgressBarButtonAnimation(ProgressDisplay manager, int i, Color color)
     {
         _currentProgressBarButtonAlpha = 0f;
         _tempColor = manager.progressBarButtonList[i].progressBarTempColor;

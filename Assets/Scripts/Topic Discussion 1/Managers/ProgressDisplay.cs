@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Rendering.VolumeComponent;
 
-public class ProgressManager : MonoBehaviour
+public class ProgressDisplay : MonoBehaviour
 {
     public ProgressBarButton progressBarButtonPrefab;
     public SectorIndicator sectorIndicatorRectPrefab;
@@ -19,8 +19,8 @@ public class ProgressManager : MonoBehaviour
     private int _numButtons;
     private float _buttonSpacing = 300.0f;
 
-    public static event Action<ProgressManager, int, Color> ProgressBarButtonStateUpdate;
-    public static event Action<ProgressManager, int> IndicatorRectStateUpdate;
+    public static event Action<ProgressDisplay, int, Color> ProgressBarButtonStateUpdate;
+    public static event Action<ProgressDisplay, int> IndicatorRectStateUpdate;
     private void OnEnable()
     {
         DiscussionNavigator.DiscussionPageStart += LoadProgressBar;
