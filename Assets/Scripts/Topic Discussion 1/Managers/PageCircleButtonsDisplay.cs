@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PageCircleButtonsManager : MonoBehaviour
+public class PageCircleButtonsDisplay : MonoBehaviour
 {
     public PageJumpButton pageCircleButtonPrefab;
 
@@ -12,7 +12,7 @@ public class PageCircleButtonsManager : MonoBehaviour
     private int _numButtons;
     private float _buttonSpacing = 100.0f;
 
-    public static event Action<PageCircleButtonsManager, int> PageCircleStateUpdate;
+    public static event Action<PageCircleButtonsDisplay, int> PageCircleStateUpdate;
     private void OnEnable()
     {
         DiscussionNavigator.DiscussionPageStart += LoadPageCircleButtons;

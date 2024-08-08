@@ -35,7 +35,7 @@ public class AnimationManager : MonoBehaviour
 
     private void OnEnable()
     {
-        PageCircleButtonsManager.PageCircleStateUpdate += ActivatePageCircleAnimation;
+        PageCircleButtonsDisplay.PageCircleStateUpdate += ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate += ActivateProgressBarButtonAnimation;
         ProgressManager.ProgressBarButtonStateUpdate += ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent += ActivatePageAnimation;
@@ -43,7 +43,7 @@ public class AnimationManager : MonoBehaviour
 
     private void OnDisable()
     {
-        PageCircleButtonsManager.PageCircleStateUpdate -= ActivatePageCircleAnimation;
+        PageCircleButtonsDisplay.PageCircleStateUpdate -= ActivatePageCircleAnimation;
         ProgressManager.IndicatorRectStateUpdate -= ActivateProgressBarButtonAnimation;
         ProgressManager.ProgressBarButtonStateUpdate -= ActivateProgressBarButtonAnimation;
         DiscussionNavigator.PageChangeEvent -= ActivatePageAnimation;
@@ -65,7 +65,7 @@ public class AnimationManager : MonoBehaviour
         _animateIndicator = true;
     }
 
-    private void ActivatePageCircleAnimation(PageCircleButtonsManager manager, int i)
+    private void ActivatePageCircleAnimation(PageCircleButtonsDisplay manager, int i)
     {
         _currentCircleAlpha = 0f;
         _currentCircleColor = manager.pageCircleButtonList[i].buttonOutline.color;
