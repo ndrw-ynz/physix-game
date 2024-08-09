@@ -613,7 +613,7 @@ GameObject:
   - component: {fileID: 102516262}
   - component: {fileID: 102516263}
   m_Layer: 5
-  m_Name: Page 14 - Activity Briefing 5
+  m_Name: Page 5 - Activity Briefing 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1479,7 +1479,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sectorButtonText: {fileID: 455938}
   canvasGroup: {fileID: 0}
-  action: next
+  direction: 3
   _prevNextSectorButton: {fileID: 316801258}
 --- !u!114 &316801258
 MonoBehaviour:
@@ -1599,7 +1599,7 @@ GameObject:
   - component: {fileID: 325872515}
   - component: {fileID: 325872516}
   m_Layer: 5
-  m_Name: Page 10 - Activity Briefing 1
+  m_Name: Page 1 - Activity Briefing 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2631,8 +2631,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 0}
-  step: -1
-  _prevNextPageButton: {fileID: 0}
+  direction: 0
+  _prevNextPageButton: {fileID: 490920063}
 --- !u!114 &490920063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2787,7 +2787,7 @@ GameObject:
   - component: {fileID: 518830491}
   - component: {fileID: 518830492}
   m_Layer: 5
-  m_Name: Page 13 - Activity Briefing 4
+  m_Name: Page 4 - Activity Briefing 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3532,7 +3532,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sectorButtonText: {fileID: 374996392}
   canvasGroup: {fileID: 0}
-  action: previous
+  direction: 2
   _prevNextSectorButton: {fileID: 591611970}
 --- !u!114 &591611970
 MonoBehaviour:
@@ -3702,7 +3702,7 @@ GameObject:
   - component: {fileID: 592681882}
   - component: {fileID: 592681883}
   m_Layer: 5
-  m_Name: Page 6 - Variance
+  m_Name: Page 1 - Variance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3765,7 +3765,7 @@ GameObject:
   m_Component:
   - component: {fileID: 642439548}
   m_Layer: 5
-  m_Name: Variance
+  m_Name: Sector 3 - Variance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3805,7 +3805,7 @@ GameObject:
   - component: {fileID: 643608877}
   - component: {fileID: 643608878}
   m_Layer: 5
-  m_Name: Page 12 - Activity Briefing 3
+  m_Name: Page 3 - Activity Briefing 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3947,7 +3947,7 @@ GameObject:
   - component: {fileID: 681832308}
   - component: {fileID: 681832309}
   m_Layer: 5
-  m_Name: Page 7 - Variance
+  m_Name: Page 2 - Variance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4339,6 +4339,7 @@ MonoBehaviour:
     - {fileID: 643608878}
     - {fileID: 518830492}
     - {fileID: 102516263}
+  _pageAnimationDuration: 0.2
 --- !u!1 &778196570
 GameObject:
   m_ObjectHideFlags: 0
@@ -4628,7 +4629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   understoodIndicatorCanvasGroup: {fileID: 0}
-  flag: 0
+  state: 1
   _understoodIndicatorButton: {fileID: 788661331}
 --- !u!114 &788661331
 MonoBehaviour:
@@ -5017,8 +5018,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasGroup: {fileID: 0}
-  step: 1
-  _prevNextPageButton: {fileID: 0}
+  direction: 1
+  _prevNextPageButton: {fileID: 796551522}
 --- !u!114 &796551522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5542,7 +5543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 808037030}
   m_Layer: 5
-  m_Name: Errors
+  m_Name: Sector 4 - Errors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5580,7 +5581,7 @@ GameObject:
   - component: {fileID: 817936489}
   - component: {fileID: 817936490}
   m_Layer: 5
-  m_Name: Page 8 - Variance
+  m_Name: Page 3 - Variance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5979,7 +5980,7 @@ GameObject:
   m_Component:
   - component: {fileID: 885797727}
   m_Layer: 5
-  m_Name: Activity Briefing
+  m_Name: Sector 5 - Activity Briefing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7209,7 +7210,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   understoodIndicatorCanvasGroup: {fileID: 0}
-  flag: 1
+  state: 0
   _understoodIndicatorButton: {fileID: 997961743}
 --- !u!225 &997961747
 CanvasGroup:
@@ -7642,7 +7643,7 @@ GameObject:
   - component: {fileID: 1191547435}
   - component: {fileID: 1191547436}
   m_Layer: 5
-  m_Name: Page 9 - Errors
+  m_Name: Page 1 - Errors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7708,7 +7709,7 @@ GameObject:
   - component: {fileID: 1210896643}
   - component: {fileID: 1210896644}
   m_Layer: 5
-  m_Name: Page 5 - Accuracy and Precision
+  m_Name: Page 2 - Accuracy and Precision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7809,7 +7810,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1229833297}
   m_Layer: 5
-  m_Name: Scientific Notation
+  m_Name: Sector 1 - Scientific Notation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9461,7 +9462,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1472253635}
   m_Layer: 5
-  m_Name: Accuracy and Precision
+  m_Name: Sector 2 -Accuracy and Precision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9728,7 +9729,7 @@ GameObject:
   - component: {fileID: 1517252839}
   - component: {fileID: 1517252840}
   m_Layer: 5
-  m_Name: Page 11 - Activity Briefing 2
+  m_Name: Page 2 - Activity Briefing 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12600,7 +12601,7 @@ GameObject:
   - component: {fileID: 2098875365}
   - component: {fileID: 2098875366}
   m_Layer: 5
-  m_Name: Page 4 - Accuracy and Precision
+  m_Name: Page 1 - Accuracy and Precision
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12882,7 +12883,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2116948116
 RectTransform:
   m_ObjectHideFlags: 0

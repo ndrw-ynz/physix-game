@@ -4,12 +4,12 @@ using UnityEngine.UI;
 
 public class PagePrevNextButton : MonoBehaviour
 {
-    public static event Action<int> PrevNextPageClickEvent;
+    public static event Action<Direction> PagePrevNextClickEvent;
 
     public CanvasGroup canvasGroup;
 
     [Header("Direction of Page")]
-    [SerializeField] private int step;
+    [SerializeField] private Direction direction;
     [Header("Page Button")]
     [SerializeField] private Button _prevNextPageButton;
 
@@ -18,7 +18,7 @@ public class PagePrevNextButton : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
 
         _prevNextPageButton = GetComponent<Button>();
-        _prevNextPageButton.onClick.AddListener(() => PrevNextPageClickEvent?.Invoke(step));
+        _prevNextPageButton.onClick.AddListener(() => PagePrevNextClickEvent?.Invoke(direction));
     }
     private void OnDisable()
     {

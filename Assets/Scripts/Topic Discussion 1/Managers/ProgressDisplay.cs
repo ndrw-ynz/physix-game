@@ -65,7 +65,6 @@ public class ProgressDisplay : MonoBehaviour
         // Load the indicator line for the current sector being viewed
         LoadIndicatorLine(discNavig);
     }
-
     private void UpdateProgressBar(DiscussionNavigator discNavig)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
@@ -121,7 +120,6 @@ public class ProgressDisplay : MonoBehaviour
             ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
     }
-
     private void UpdateIndicatorLine(DiscussionNavigator discNav)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
@@ -154,7 +152,6 @@ public class ProgressDisplay : MonoBehaviour
         newButton.name = $"Progress Button {i + 1}";
         newButton.Initialize(sectorTitle, progressCount, i);
     }
-
     private void LoadProgressBarsColors(DiscussionNavigator discNavig)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
@@ -189,7 +186,6 @@ public class ProgressDisplay : MonoBehaviour
             }
         }
     }
-
     private void LoadIndicatorLine(DiscussionNavigator discNav)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
@@ -222,7 +218,6 @@ public class ProgressDisplay : MonoBehaviour
         _animateProgressBarButton = true;
         _progressBarAnimationStartTime = Time.time;
     }
-
     private void ActivateProgressBarButtonAnimation(ProgressBarButton indicatorLine, float currentHeight)
     {
         // Setup the indicator line to be animated and activates animation sequence
@@ -231,7 +226,6 @@ public class ProgressDisplay : MonoBehaviour
         _animateIndicatorLine = true;
         _indicatorAnimationStartTime = Time.time;
     }
-
     private void AnimateProgressBar()
     {
         if (_animateProgressBarButton)
@@ -254,7 +248,6 @@ public class ProgressDisplay : MonoBehaviour
             }
         }
     }
-
     private void AnimateIndicatorLine()
     {
         float elapsedTime = Time.time - _indicatorAnimationStartTime;

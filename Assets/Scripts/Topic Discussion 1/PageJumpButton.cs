@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public static event Action<int> OnPageCircleClick;
+    public static event Action<int> PageCircleClick;
 
     [Header("Page Jump Image Properties")]
     public Image buttonOutline;
@@ -36,7 +36,7 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private void OnPageCircleButtonCLick()
     {
         buttonHoverOutline.gameObject.SetActive(false);
-        OnPageCircleClick?.Invoke(_pageIndex);
+        PageCircleClick?.Invoke(_pageIndex);
     }
 
     public void OnPointerEnter(PointerEventData eventData)

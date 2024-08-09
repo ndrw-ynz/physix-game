@@ -37,7 +37,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
 
     private void Update()
     {
-        AnimatePageJump();
+        AnimatePageJumpButton();
     }
 
     #region Page Circle Creation and Outline/Color Updates
@@ -64,7 +64,6 @@ public class PageJumpButtonsDisplay : MonoBehaviour
         // Update the page circle button outlines and properly set the active outline
         UpdatePageJumpButtonOutline(discNav);
     }
-
     private void UpdatePageJumpButtonOutline(DiscussionNavigator discNav)
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
@@ -83,7 +82,6 @@ public class PageJumpButtonsDisplay : MonoBehaviour
             }
         }
     }
-
     private void UpdatePageJumpButtonColors(DiscussionNavigator discNav)
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
@@ -101,8 +99,6 @@ public class PageJumpButtonsDisplay : MonoBehaviour
             }
         }
     }
-
-    // Page jump button generator
     private void GeneratePageJumpButton(int buttonIndex)
     {
         // Instantiate and set parent of new page circle button to the horizontal group layout
@@ -124,8 +120,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
         _animatePageJumpButton = true;
         _pageJumpButtonAnimationStartTime = Time.time;
     }
-
-    private void AnimatePageJump()
+    private void AnimatePageJumpButton()
     {
         if (_animatePageJumpButton)
         {
