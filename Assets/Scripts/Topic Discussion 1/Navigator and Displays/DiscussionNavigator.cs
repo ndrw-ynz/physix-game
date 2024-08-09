@@ -15,13 +15,6 @@ public enum UnderstoodState
 }
 public class DiscussionNavigator : MonoBehaviour
 {
-    [System.Serializable]
-    public class Sector
-    {
-        public string sectorTitle;
-        public List<Page> pages;
-    }
-
     public static event Action<DiscussionNavigator> PageChangeEvent;
     public static event Action<DiscussionNavigator> SectorChangeEvent;
     public static event Action<DiscussionNavigator> UnderstandMarkerChangeEvent;
