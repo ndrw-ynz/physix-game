@@ -1,181 +1,277 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using Unity.PlasticSCM.Editor.WebApi;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.VolumeComponent;
 
 public class ProgressDisplay : MonoBehaviour
 {
-    public ProgressBarButton progressBarButtonPrefab;
-    public SectorIndicator sectorIndicatorRectPrefab;
+    [Header("Progress Bar Button Properties")]
+    [SerializeField] private ProgressBarButton progressBarButtonPrefab;
+    [SerializeField] private HorizontalLayoutGroup progressBarButtonGroup;
 
-    public List<ProgressBarButton> progressBarButtonList = new List<ProgressBarButton>();
-    public List<SectorIndicator> sectorIndicatorRectList = new List<SectorIndicator>();
-    private RectTransform progressAreaParent;
-    private int _numButtons;
-    private float _buttonSpacing = 300.0f;
+    // Progress bar animation properties
+    private Image _temporaryImage;
+    private Image _finalImage;
+    private Color _oldColor;
+    private Color _newColor;
+    private float _buttonAnimationDuration = 0.15f;     // Animation speed in seconds
+    private bool _animateProgressBarButton = false;
+    private float _progressBarAnimationStartTime;       // Start time of progress bar animation
 
-    public static event Action<ProgressDisplay, int, Color> ProgressBarButtonStateUpdate;
-    public static event Action<ProgressDisplay, int> IndicatorRectStateUpdate;
+    // Indicator line animation properties
+    private ProgressBarButton _indicatorLine;
+    private float _targetWidth = 130f;                  // Constant target width
+    private float _currentHeight;
+    private float _indicatorAnimationDuration = 0.25f;  // Animation speed in seconds
+    private bool _animateIndicatorLine = false;
+    private float _indicatorAnimationStartTime;         // Start time of indicator line animation
+
     private void OnEnable()
     {
-        DiscussionNavigator.DiscussionPageStart += LoadProgressBar;
-        DiscussionNavigator.DiscussionPageStart += ActivateIndicatorRect;
-        DiscussionNavigator.DiscussionPageStart += UpdateProgressBarStates;
-        DiscussionNavigator.SectorChangeEvent += UpdateIndicatorRects;
+        // Add listeners
+        DiscussionNavigator.DiscussionPageStart += LoadProgressBars;
+        DiscussionNavigator.SectorChangeEvent += UpdateIndicatorLine;
         DiscussionNavigator.UnderstandMarkerChangeEvent += UpdateProgressBar;
     }
 
     private void OnDisable()
     {
-        DiscussionNavigator.DiscussionPageStart -= LoadProgressBar;
-        DiscussionNavigator.DiscussionPageStart -= ActivateIndicatorRect;
-        DiscussionNavigator.DiscussionPageStart -= UpdateProgressBarStates;
-        DiscussionNavigator.SectorChangeEvent -= UpdateIndicatorRects;
+        // Remove listeners
+        DiscussionNavigator.DiscussionPageStart -= LoadProgressBars;
+        DiscussionNavigator.SectorChangeEvent -= UpdateIndicatorLine;
         DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdateProgressBar;
     }
 
-    private void LoadProgressBar(DiscussionNavigator discNavig)
+    private void Update()
     {
-        progressAreaParent = GameObject.Find("BUTTONS").transform.Find("Progress Bar Buttons").GetComponent<RectTransform>();
-        _numButtons = discNavig.GetSubTopicListCount();
+        AnimateProgressBar();
+        AnimateIndicatorLine();
+    }
 
-        float totalWidth = (_numButtons - 1) * _buttonSpacing;
-        float startX = -totalWidth / 2f;
+    #region Loading/Updating of Progress Bar Colors, Progress Count Text, and Indicator Lines
+    private void LoadProgressBars(DiscussionNavigator discNavig)
+    {
+        // Get the amount of buttons to be created
+        float subtopicsCount = discNavig.GetSubTopicListCount();
 
-        for (int i = 0; i < _numButtons; i++)
+        // Create buttons with corresponding titles and progress count
+        for (int i = 0; i < subtopicsCount; i++)
         {
-            Vector2 buttonPosition = new Vector2(startX + i * _buttonSpacing, 0f);
             string sectorTitle = discNavig.GetSectorTitle(i);
             string progressCount = $"{discNavig.CountUnderstoodPages(i).ToString()}/{discNavig.CountTotalPages(i).ToString()}";
-            GenerateProgressBarButton(buttonPosition, i, sectorTitle, progressCount);
-
-            Vector2 rectPosition = new Vector2(buttonPosition.x, buttonPosition.y - 46);
-            GenerateSectorIndicatorRect(rectPosition, i);
+            GenerateProgressBarButton(i, sectorTitle, progressCount);
         }
-    }
 
-    private void GenerateProgressBarButton(Vector2 buttonPosition, int i, string sectorTitle, string progressCount)
-    {
-        ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
-        newButton.transform.SetParent(progressAreaParent, false);
-        newButton.name = $"Progress Button {i + 1}";
-        newButton.transform.localPosition = buttonPosition;
-        newButton.Initialize(sectorTitle, progressCount, i);
-        progressBarButtonList.Add(newButton);
-
-    }
-
-    private void GenerateSectorIndicatorRect(Vector2 rectPosition, int i)
-    {
-        SectorIndicator newIndicatorRect = Instantiate(sectorIndicatorRectPrefab);
-        newIndicatorRect.transform.SetParent(progressAreaParent, false);
-        newIndicatorRect.name = $"Indicator Rect {i + 1}";
-        newIndicatorRect.transform.localPosition = rectPosition;
-        newIndicatorRect.Initialize();
-        sectorIndicatorRectList.Add(newIndicatorRect);
-    }
-
-    private void ActivateIndicatorRect(DiscussionNavigator discNav)
-    {
-        int currentSectorIndex = discNav.GetCurrentSectorIndex();
-        for (int i = 0; i < sectorIndicatorRectList.Count; i++)
-        {
-            if (i == currentSectorIndex)
-            {
-                sectorIndicatorRectList[i].gameObject.SetActive(true);
-            }
-            else
-            {
-                sectorIndicatorRectList[i].gameObject.SetActive(false);
-            }
-        }
-    }
-
-    private void UpdateProgressBarStates(DiscussionNavigator discNavig)
-    {
-        for (int i = 0; i < progressBarButtonList.Count; i++)
-        {
-            progressBarButtonList[i].progressBarTempColor.gameObject.SetActive(false);
-
-            double currUnderstoodPagesCount = discNavig.CountUnderstoodPages(i);
-            double currSectorPagesCount = discNavig.CountTotalPages(i);
-            progressBarButtonList[i].progressCountText.text = $"{currUnderstoodPagesCount}/{currSectorPagesCount}";
-
-            double currProgressBarPercentage = currUnderstoodPagesCount / currSectorPagesCount * 100;
-            if (currProgressBarPercentage == 100)
-            {
-                progressBarButtonList[i].progressBarFinalColor.color = new Color(0.5890471f, 1f, 0.5264151f);
-            }
-            else if (currProgressBarPercentage > 50)
-            {
-                progressBarButtonList[i].progressBarFinalColor.color = new Color(0.9546386f, 1f, 0.5254902f);
-            }
-            else if (currUnderstoodPagesCount > 0)
-            {
-                progressBarButtonList[i].progressBarFinalColor.color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
-            }
-            else
-            {
-                progressBarButtonList[i].progressBarFinalColor.color = Color.gray;
-            }
-        }
+        // Load the colors based on the amount of understood pages for each progress bar
+        LoadProgressBarsColors(discNavig);
+        // Load the indicator line for the current sector being viewed
+        LoadIndicatorLine(discNavig);
     }
 
     private void UpdateProgressBar(DiscussionNavigator discNavig)
     {
-        for (int i = 0; i < progressBarButtonList.Count; i++)
-        {
-            if(i == discNavig.GetCurrentSectorIndex())
-            {
-                progressBarButtonList[i].progressBarTempColor.gameObject.SetActive(true);
-                double currUnderstoodPagesCount = discNavig.CountUnderstoodPages(i);
-                double currSectorPagesCount = discNavig.CountTotalPages(i);
-                progressBarButtonList[i].progressCountText.text = $"{currUnderstoodPagesCount}/{currSectorPagesCount}";
+        ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
 
-                double currProgressBarPercentage = currUnderstoodPagesCount / currSectorPagesCount * 100;
-                if (currProgressBarPercentage == 100)
-                {
-                    Color color = new Color(0.5890471f, 1f, 0.5264151f);
-                    ProgressBarButtonStateUpdate?.Invoke(this, i, color);
-                }
-                else if (currProgressBarPercentage > 50)
-                {
-                    Color color = new Color(0.9546386f, 1f, 0.5254902f);
-                    ProgressBarButtonStateUpdate?.Invoke(this, i, color);
-                }
-                else if (currUnderstoodPagesCount > 0)
-                {
-                    Color color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
-                    ProgressBarButtonStateUpdate?.Invoke(this, i, color);
-                }
-                else
-                {
-                    Color color = Color.gray;
-                    ProgressBarButtonStateUpdate?.Invoke(this, i, color);
-                }
-            }
+        int i = discNavig.GetCurrentSectorIndex();
+
+        // Activate the temporary background color of the progress bar to give way for the color transition
+        progressBarButtons[i].progressBarTempColor.gameObject.SetActive(true);
+
+        // Get the values for understood pages and total pages
+        double currUnderstoodPagesCount = discNavig.CountUnderstoodPages(i);
+        double currSectorPagesCount = discNavig.CountTotalPages(i);
+        // Assign text value for understood pages and total pages to the progress bar
+        progressBarButtons[i].progressCountText.text = $"{currUnderstoodPagesCount}/{currSectorPagesCount}";
+
+        // Calculate the percentage of understood pages
+        double currProgressBarPercentage = currUnderstoodPagesCount / currSectorPagesCount * 100;
+
+        if (currProgressBarPercentage == 100)
+        {
+            // Transition progress bar color to light color green
+            Image temporaryImage = progressBarButtons[i].progressBarTempColor;
+            Image finalImage = progressBarButtons[i].progressBarFinalColor;
+            Color oldColor = progressBarButtons[i].progressBarFinalColor.color;
+            Color newColor = new Color(0.5890471f, 1f, 0.5264151f);
+            ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
+        }
+        else if (currProgressBarPercentage > 50)
+        {
+            // Transition progress bar color to light color yellow
+            Image temporaryImage = progressBarButtons[i].progressBarTempColor;
+            Image finalImage = progressBarButtons[i].progressBarFinalColor;
+            Color oldColor = progressBarButtons[i].progressBarFinalColor.color;
+            Color newColor = new Color(0.9546386f, 1f, 0.5254902f);
+            ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
+        }
+        else if (currUnderstoodPagesCount > 0)
+        {
+            // Transition progress bar color to light color gray
+            Image temporaryImage = progressBarButtons[i].progressBarTempColor;
+            Image finalImage = progressBarButtons[i].progressBarFinalColor;
+            Color oldColor = progressBarButtons[i].progressBarFinalColor.color;
+            Color newColor = new Color(0.8339623f, 0.8339623f, 0.8339623f);
+            ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
+        }
+        else
+        {
+            // Transition progress bar color to gray
+            Image temporaryImage = progressBarButtons[i].progressBarTempColor;
+            Image finalImage = progressBarButtons[i].progressBarFinalColor;
+            Color oldColor = progressBarButtons[i].progressBarFinalColor.color;
+            Color newColor = Color.gray;
+            ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
     }
 
-    private void UpdateIndicatorRects(DiscussionNavigator discNav)
+    private void UpdateIndicatorLine(DiscussionNavigator discNav)
     {
-        int currentSectorIndex = discNav.GetCurrentSectorIndex();
-        for (int i = 0; i < sectorIndicatorRectList.Count; i++)
+        ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
+
+        // Check all indicator lines
+        for (int i = 0; i < progressBarButtons.Length; i++)
         {
-            if (i == currentSectorIndex)
+            if (i == discNav.GetCurrentSectorIndex())
             {
-                sectorIndicatorRectList[i].gameObject.SetActive(true);
-                IndicatorRectStateUpdate?.Invoke(this, i);
+                // Activate sector indicator for the current viewed sector
+                progressBarButtons[i].progressBarIndicator.gameObject.SetActive(true);
+
+                float currentHeight = progressBarButtons[i].progressBarIndicator.rectTransform.rect.height;
+                ActivateProgressBarButtonAnimation(progressBarButtons[i], currentHeight);
             }
             else 
             {
-                sectorIndicatorRectList[i].gameObject.SetActive(false);
+                // Ensure other sector indicators and deactivated
+                progressBarButtons[i].progressBarIndicator.gameObject.SetActive(false);
             }
         }
     }
+
+    // Progress bar generators and one time loader functions with no animation
+    private void GenerateProgressBarButton(int i, string sectorTitle, string progressCount)
+    {
+        // Generate progress bar button with proper title and progress count
+        ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
+        newButton.transform.SetParent(progressBarButtonGroup.transform, false);
+        newButton.name = $"Progress Button {i + 1}";
+        newButton.Initialize(sectorTitle, progressCount, i);
+    }
+
+    private void LoadProgressBarsColors(DiscussionNavigator discNavig)
+    {
+        ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
+
+        // Check all progress bars
+        for (int i = 0; i < progressBarButtons.Length; i++)
+        {
+            // Deactivate the temporary background color
+            progressBarButtons[i].progressBarTempColor.gameObject.SetActive(false);
+
+            // Calculate progress percentage
+            double currProgressBarPercentage = discNavig.CountUnderstoodPages(i) / discNavig.CountTotalPages(i) * 100;
+            if (currProgressBarPercentage == 100)
+            {
+                // Set progress bar color to light color green
+                progressBarButtons[i].progressBarFinalColor.color = new Color(0.5890471f, 1f, 0.5264151f);
+            }
+            else if (currProgressBarPercentage > 50)
+            {
+                // Set progress bar color to light color yellow
+                progressBarButtons[i].progressBarFinalColor.color = new Color(0.9546386f, 1f, 0.5254902f);
+            }
+            else if (discNavig.CountUnderstoodPages(i) > 0)
+            {
+                // Set progress bar color to light color gray
+                progressBarButtons[i].progressBarFinalColor.color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
+            }
+            else
+            {
+                // Set progress bar color to light color gray
+                progressBarButtons[i].progressBarFinalColor.color = Color.gray;
+            }
+        }
+    }
+
+    private void LoadIndicatorLine(DiscussionNavigator discNav)
+    {
+        ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
+
+        // Check all indicator lines
+        for (int i = 0; i < progressBarButtons.Length; i++)
+        {
+            if (i == discNav.GetCurrentSectorIndex())
+            {
+                // Activate sector indicator for the current viewed sector
+                progressBarButtons[i].progressBarIndicator.gameObject.SetActive(true);
+            }
+            else
+            {
+                // Ensure other sector indicators and deactivated 
+                progressBarButtons[i].progressBarIndicator.gameObject.SetActive(false);
+            }
+        }
+    }
+    #endregion
+
+    #region Progress Bar and Indicator Line Animations
+    private void ActivateProgressBarButtonAnimation(Image temporaryImage, Image finalImage, Color oldColor, Color newColor)
+    {
+        // Setup the progress bar button color to be animated and activates animation sequence
+        _temporaryImage = temporaryImage;
+        _finalImage = finalImage;
+        _oldColor = oldColor;
+        _newColor = newColor;
+        _animateProgressBarButton = true;
+        _progressBarAnimationStartTime = Time.time;
+    }
+
+    private void ActivateProgressBarButtonAnimation(ProgressBarButton indicatorLine, float currentHeight)
+    {
+        // Setup the indicator line to be animated and activates animation sequence
+        _indicatorLine = indicatorLine;
+        _currentHeight = currentHeight;
+        _animateIndicatorLine = true;
+        _indicatorAnimationStartTime = Time.time;
+    }
+
+    private void AnimateProgressBar()
+    {
+        if (_animateProgressBarButton)
+        {
+            float elapsedTime = Time.time - _progressBarAnimationStartTime;
+            if (elapsedTime < _buttonAnimationDuration)
+            {
+                // Animates the progress bar color with the given animation duration
+                float currentButtonAlpha = Mathf.Lerp(0f, 1.0f, elapsedTime / _buttonAnimationDuration);
+                _newColor.a = currentButtonAlpha;
+
+                _temporaryImage.color = _oldColor;
+                _finalImage.color = _newColor;
+            }
+            else
+            {
+                // After animation, set animation mode and the temporary image to false
+                _temporaryImage.gameObject.SetActive(false);
+                _animateProgressBarButton = false;
+            }
+        }
+    }
+
+    private void AnimateIndicatorLine()
+    {
+        float elapsedTime = Time.time - _indicatorAnimationStartTime;
+        if (_animateIndicatorLine)
+        {
+            if (elapsedTime < _indicatorAnimationDuration)
+            {
+                // Animates the indicator line width with the given animation duration
+                float currentWidth = Mathf.Lerp(0f, _targetWidth, elapsedTime / _indicatorAnimationDuration);
+                _indicatorLine.progressBarRectTransform.sizeDelta = new Vector2(currentWidth, _currentHeight);
+            }
+            else
+            {
+                // After animation, set animation mode to false
+                _animateIndicatorLine = false;
+            }
+        }
+    }
+    #endregion
 }

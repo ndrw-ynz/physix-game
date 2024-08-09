@@ -1163,7 +1163,7 @@ GameObject:
   - component: {fileID: 223529376}
   - component: {fileID: 223529375}
   m_Layer: 5
-  m_Name: Lesson Number Rect
+  m_Name: Lesson Number
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1272,9 +1272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressBarButtonPrefab: {fileID: -7053905164636787354, guid: 44c24964f2e279b41acc83ea7aca15ea, type: 3}
-  sectorIndicatorRectPrefab: {fileID: 3020911999005828770, guid: 63ddf6a400f5156428fbf1712f0ac43f, type: 3}
-  progressBarButtonList: []
-  sectorIndicatorRectList: []
+  progressBarButtonGroup: {fileID: 781234014}
 --- !u!1 &294967130
 GameObject:
   m_ObjectHideFlags: 0
@@ -2742,7 +2740,6 @@ Transform:
   - {fileID: 293811973}
   - {fileID: 592321632}
   - {fileID: 1385563557}
-  - {fileID: 756982383}
   - {fileID: 1132223411}
   m_Father: {fileID: 409958540}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4177,52 +4174,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 729971527}
   m_CullTransparentMesh: 1
---- !u!1 &756982382
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 756982383}
-  - component: {fileID: 756982384}
-  m_Layer: 0
-  m_Name: Understand Markers Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &756982383
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 756982382}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 504919720}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &756982384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 756982382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a02bf3933c2dc8a4ea0d54d1464e5286, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  markAsUnderstoodButton: {fileID: 997961746}
-  markAsNotYetUnderstoodButton: {fileID: 788661330}
 --- !u!1 &758523136
 GameObject:
   m_ObjectHideFlags: 0
@@ -4366,6 +4317,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 781234013}
+  - component: {fileID: 781234014}
   m_Layer: 5
   m_Name: Progress Bar Buttons
   m_TagString: Untagged
@@ -4392,6 +4344,32 @@ RectTransform:
   m_AnchoredPosition: {x: -0.5, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &781234014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781234012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 4
+  m_Spacing: 30
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &783983803
 GameObject:
   m_ObjectHideFlags: 0
@@ -6308,7 +6286,7 @@ GameObject:
   - component: {fileID: 908259380}
   - component: {fileID: 908259379}
   m_Layer: 5
-  m_Name: Pages' Contents Holder Rect
+  m_Name: Pages' Contents Holder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
