@@ -145,7 +145,7 @@ public class ProgressDisplay : MonoBehaviour
         }
     }
 
-    // Progress bar generators and one time loader functions with no animation
+    // Progress bar generator and one time loader functions with no animation
     private void GenerateProgressBarButton(int i, string sectorTitle, string progressCount)
     {
         // Generate progress bar button with proper title and progress count

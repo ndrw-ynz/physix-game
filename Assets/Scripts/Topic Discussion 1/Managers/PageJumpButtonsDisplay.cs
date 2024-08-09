@@ -102,6 +102,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
         }
     }
 
+    // Page jump button generator
     private void GeneratePageJumpButton(int buttonIndex)
     {
         // Instantiate and set parent of new page circle button to the horizontal group layout
