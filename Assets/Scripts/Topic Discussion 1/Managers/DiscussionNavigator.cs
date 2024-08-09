@@ -1,26 +1,12 @@
-using JetBrains.Annotations;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Net;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.VersionControl.Asset;
 
 public class DiscussionNavigator : MonoBehaviour
 {
     [System.Serializable]
     public class Sector
     {
-        [System.Serializable]
-        public class Page
-        {
-            public GameObject page;
-            public bool isMarkedUnderstood;
-            public CanvasGroup canvasGroup;
-        }
-
         public string sectorTitle;
         public List<Page> pages;
     }
