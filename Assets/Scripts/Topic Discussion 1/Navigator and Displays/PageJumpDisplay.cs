@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PageJumpButtonsDisplay : MonoBehaviour
+public class PageJumpDisplay : MonoBehaviour
 {
     [Header("Page Circle Buttons Properties")]
     [SerializeField] private PageJumpButton pageJumpButtonPrefab;
