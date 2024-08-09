@@ -240,8 +240,8 @@ public class ProgressDisplay : MonoBehaviour
             if (elapsedTime < _buttonAnimationDuration)
             {
                 // Animates the progress bar color with the given animation duration
-                float currentButtonAlpha = Mathf.Lerp(0f, 1.0f, elapsedTime / _buttonAnimationDuration);
-                _newColor.a = currentButtonAlpha;
+                float newButtonAlpha = Mathf.Lerp(0f, 1.0f, elapsedTime / _buttonAnimationDuration);
+                _newColor.a = newButtonAlpha;
 
                 _temporaryImage.color = _oldColor;
                 _finalImage.color = _newColor;

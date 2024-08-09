@@ -4,19 +4,18 @@ using UnityEngine.UI;
 public class PageJumpButtonsDisplay : MonoBehaviour
 {
     [Header("Page Circle Buttons Properties")]
-    [SerializeField] private PageJumpButton pageCircleButtonPrefab;
-    [SerializeField] private HorizontalLayoutGroup pageCircleButtonGroup;
+    [SerializeField] private PageJumpButton pageJumpButtonPrefab;
+    [SerializeField] private HorizontalLayoutGroup pageJumpButtonGroup;
 
     // Number of buttons to create
     private int _numButtons;
 
     // Page circle outline animation properties
     private PageJumpButton _pageJumpButton;
-    private Color _currentOutlineColor;
-    private float _currentOutlineAlpha;
+    private Color _outlineColor;
     private float _buttonOutlineAnimationDuration = 0.3f; // Duration of animation in seconds
-    private bool _animateButton = false;
-    private float _animationStartTime;
+    private bool _animatePageJumpButton = false;
+    private float _pageJumpButtonAnimationStartTime;
 
     private void OnEnable()
     {
@@ -38,13 +37,13 @@ public class PageJumpButtonsDisplay : MonoBehaviour
 
     private void Update()
     {
-        AnimatePageCircle();
+        AnimatePageJump();
     }
 
     #region Page Circle Creation and Outline/Color Updates
     private void LoadPageJumpButtons(DiscussionNavigator discNav)
     {
-        PageJumpButton[] pageJumpButtons = pageCircleButtonGroup.GetComponentsInChildren<PageJumpButton>();
+        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
         // Remove all buttons if there are existing buttons
         if (pageJumpButtons.Length > 0) 
@@ -59,7 +58,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
         _numButtons = discNav.GetCurrentSectorPagesCount();
         for (int i = 0; i < _numButtons; i++)
         {
-            GeneratePageCircleButton(i);
+            GeneratePageJumpButton(i);
         }
 
         // Update the page circle button outlines and properly set the active outline
@@ -68,7 +67,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
 
     private void UpdatePageJumpButtonOutline(DiscussionNavigator discNav)
     {
-        PageJumpButton[] pageJumpButtons = pageCircleButtonGroup.GetComponentsInChildren<PageJumpButton>();
+        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
         // Loop through the button list and activate only the current page index's button outline
         for (int i =0; i < pageJumpButtons.Length; i++)
@@ -76,7 +75,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
             if (i == discNav.GetCurrentPageIndex())
             {
                 pageJumpButtons[i].buttonOutline.gameObject.SetActive(true);
-                ActivatePageCircleAnimation(pageJumpButtons[i]);
+                ActivatePageJumpAnimation(pageJumpButtons[i]);
             }
             else
             {
@@ -87,7 +86,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
 
     private void UpdatePageJumpButtonColors(DiscussionNavigator discNav)
     {
-        PageJumpButton[] pageJumpButtons = pageCircleButtonGroup.GetComponentsInChildren<PageJumpButton>();
+        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
         // Loop through the button list and change their colors to green if page is marked as understood
         for (int i = 0; i < pageJumpButtons.Length; i++)
@@ -103,44 +102,45 @@ public class PageJumpButtonsDisplay : MonoBehaviour
         }
     }
 
-    private void GeneratePageCircleButton(int buttonIndex)
+    private void GeneratePageJumpButton(int buttonIndex)
     {
         // Instantiate and set parent of new page circle button to the horizontal group layout
-        PageJumpButton newPageCircleButton = Instantiate(pageCircleButtonPrefab);
-        newPageCircleButton.transform.SetParent(pageCircleButtonGroup.transform, false);
-        newPageCircleButton.name = $"Page Circle Button {buttonIndex + 1}";
+        PageJumpButton newPageJumpButton = Instantiate(pageJumpButtonPrefab);
+        newPageJumpButton.transform.SetParent(pageJumpButtonGroup.transform, false);
+        newPageJumpButton.name = $"Page Circle Button {buttonIndex + 1}";
 
         // Initialize index for jumping directly to its page upon button press
-        newPageCircleButton.Initialize(buttonIndex);
+        newPageJumpButton.Initialize(buttonIndex);
     }
     #endregion
 
     #region Page Circle Outline Animation
-    private void ActivatePageCircleAnimation(PageJumpButton currPageCircleButton)
+    private void ActivatePageJumpAnimation(PageJumpButton currPageJumpButton)
     {
-        _pageJumpButton = currPageCircleButton;
-        _currentOutlineColor = Color.black;
-        _currentOutlineAlpha = 0f; // Set back to zero
-        _animateButton = true;
-        _animationStartTime = Time.time;
+        // Setup the page jump outline to be animated and activates animation sequence
+        _pageJumpButton = currPageJumpButton;
+        _outlineColor = Color.black;
+        _animatePageJumpButton = true;
+        _pageJumpButtonAnimationStartTime = Time.time;
     }
 
-    private void AnimatePageCircle()
+    private void AnimatePageJump()
     {
-        if (_animateButton)
+        if (_animatePageJumpButton)
         {
             // Calculate elapsed time
-            float elapsedTime = Time.time - _animationStartTime;
+            float elapsedTime = Time.time - _pageJumpButtonAnimationStartTime;
             if (elapsedTime < _buttonOutlineAnimationDuration)
             {
                 // Manually change alpha value of current outline color
-                _currentOutlineAlpha = Mathf.Lerp(0f, 1.0f, elapsedTime / _buttonOutlineAnimationDuration);
-                _currentOutlineColor.a = _currentOutlineAlpha;
-                _pageJumpButton.buttonOutline.color = _currentOutlineColor;
+                float newOutlineAlpha = Mathf.Lerp(0f, 1.0f, elapsedTime / _buttonOutlineAnimationDuration);
+                _outlineColor.a = newOutlineAlpha;
+                _pageJumpButton.buttonOutline.color = _outlineColor;
             }
             else
             {
-                _animateButton = false;
+                // After animation, set animation mode to false
+                _animatePageJumpButton = false;
             }
         }
     }
