@@ -6,8 +6,6 @@ public class PagePrevNextButton : MonoBehaviour
 {
     public static event Action<Direction> PagePrevNextClickEvent;
 
-    public CanvasGroup canvasGroup;
-
     [Header("Direction of Page")]
     [SerializeField] private Direction direction;
     [Header("Page Button")]
@@ -15,9 +13,6 @@ public class PagePrevNextButton : MonoBehaviour
 
     private void OnEnable()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
-
-        _prevNextPageButton = GetComponent<Button>();
         _prevNextPageButton.onClick.AddListener(() => PagePrevNextClickEvent?.Invoke(direction));
     }
     private void OnDisable()

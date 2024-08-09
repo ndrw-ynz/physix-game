@@ -9,7 +9,6 @@ public class SectorPrevNextButton : MonoBehaviour
 
     [Header("Subtopic Name Text Holder")]
     public TextMeshProUGUI sectorButtonText;
-    public CanvasGroup canvasGroup;
     [Header("Direction of Sector")]
     [SerializeField] private Direction direction;
     [Header("Sector Button")]
@@ -17,7 +16,6 @@ public class SectorPrevNextButton : MonoBehaviour
 
     private void OnEnable()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
         _prevNextSectorButton.onClick.AddListener(() => SectorPrevNextClickEvent.Invoke(direction));
     }
 
