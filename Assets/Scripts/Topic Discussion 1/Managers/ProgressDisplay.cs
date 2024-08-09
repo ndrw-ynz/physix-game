@@ -12,7 +12,7 @@ public class ProgressDisplay : MonoBehaviour
     private Image _finalImage;
     private Color _oldColor;
     private Color _newColor;
-    private float _buttonAnimationDuration = 0.15f;     // Animation speed in seconds
+    private float _buttonAnimationDuration = 0.2f;     // Animation speed in seconds
     private bool _animateProgressBarButton = false;
     private float _progressBarAnimationStartTime;       // Start time of progress bar animation
 
