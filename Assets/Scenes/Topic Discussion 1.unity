@@ -3760,6 +3760,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 642439548}
+  - component: {fileID: 642439549}
   m_Layer: 5
   m_Name: Sector 3 - Variance
   m_TagString: Untagged
@@ -3789,6 +3790,23 @@ RectTransform:
   m_AnchoredPosition: {x: -0.0011597, y: -0.0017853}
   m_SizeDelta: {x: 1298.2, y: 688.68}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &642439549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642439547}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e7ff31b87b306b4d9f988065b292a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sectorTitle: Variance
+  pages:
+  - {fileID: 592681883}
+  - {fileID: 681832309}
+  - {fileID: 817936490}
 --- !u!1 &643608875
 GameObject:
   m_ObjectHideFlags: 0
@@ -4311,30 +4329,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   subTopicsList:
-  - sectorTitle: Scientific Notation
-    pages:
-    - {fileID: 2116948118}
-    - {fileID: 1073531526}
-    - {fileID: 1261294759}
-  - sectorTitle: Accuracy and Precision
-    pages:
-    - {fileID: 2098875366}
-    - {fileID: 1210896644}
-  - sectorTitle: Variance
-    pages:
-    - {fileID: 592681883}
-    - {fileID: 681832309}
-    - {fileID: 817936490}
-  - sectorTitle: Errors
-    pages:
-    - {fileID: 1191547436}
-  - sectorTitle: Activity Briefing
-    pages:
-    - {fileID: 325872516}
-    - {fileID: 1517252840}
-    - {fileID: 643608878}
-    - {fileID: 518830492}
-    - {fileID: 102516263}
+  - {fileID: 1229833298}
+  - {fileID: 1472253636}
+  - {fileID: 642439549}
+  - {fileID: 808037031}
+  - {fileID: 885797728}
 --- !u!1 &778196570
 GameObject:
   m_ObjectHideFlags: 0
@@ -5535,6 +5534,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 808037030}
+  - component: {fileID: 808037031}
   m_Layer: 5
   m_Name: Sector 4 - Errors
   m_TagString: Untagged
@@ -5562,6 +5562,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0.0012207, y: 0.0078278}
   m_SizeDelta: {x: 1298.2, y: 688.66}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &808037031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808037029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e7ff31b87b306b4d9f988065b292a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sectorTitle: Errors
+  pages:
+  - {fileID: 1191547436}
 --- !u!1 &817936487
 GameObject:
   m_ObjectHideFlags: 0
@@ -5972,6 +5987,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 885797727}
+  - component: {fileID: 885797728}
   m_Layer: 5
   m_Name: Sector 5 - Activity Briefing
   m_TagString: Untagged
@@ -6003,6 +6019,25 @@ RectTransform:
   m_AnchoredPosition: {x: 0.0037231, y: -0.001297}
   m_SizeDelta: {x: 1298.2, y: 688.68}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &885797728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885797726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e7ff31b87b306b4d9f988065b292a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sectorTitle: Activity Briefing
+  pages:
+  - {fileID: 325872516}
+  - {fileID: 1517252840}
+  - {fileID: 643608878}
+  - {fileID: 518830492}
+  - {fileID: 102516263}
 --- !u!1 &889841208
 GameObject:
   m_ObjectHideFlags: 0
@@ -7757,6 +7792,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1229833297}
+  - component: {fileID: 1229833298}
   m_Layer: 5
   m_Name: Sector 1 - Scientific Notation
   m_TagString: Untagged
@@ -7786,6 +7822,23 @@ RectTransform:
   m_AnchoredPosition: {x: 0.0019378657, y: 0.000061035156}
   m_SizeDelta: {x: 1298.2, y: 688.66}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1229833298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229833296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e7ff31b87b306b4d9f988065b292a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sectorTitle: Scientific Notation
+  pages:
+  - {fileID: 2116948118}
+  - {fileID: 1073531526}
+  - {fileID: 1261294759}
 --- !u!1 &1261294756
 GameObject:
   m_ObjectHideFlags: 0
@@ -9409,6 +9462,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1472253635}
+  - component: {fileID: 1472253636}
   m_Layer: 5
   m_Name: Sector 2 -Accuracy and Precision
   m_TagString: Untagged
@@ -9437,6 +9491,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0.0023804, y: 0.0056763}
   m_SizeDelta: {x: 1298.2, y: 688.66}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1472253636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1472253634}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e7ff31b87b306b4d9f988065b292a43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sectorTitle: Accuracy and Precision
+  pages:
+  - {fileID: 2098875366}
+  - {fileID: 1210896644}
 --- !u!1 &1488228788
 GameObject:
   m_ObjectHideFlags: 0
