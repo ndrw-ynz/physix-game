@@ -62,15 +62,13 @@ public class ProgressDisplay : MonoBehaviour
 
         // Load the colors based on the amount of understood pages for each progress bar
         LoadProgressBarsColors(discNavig);
-        // Load the indicator line for the current sector being viewed
-        LoadIndicatorLine(discNavig);
     }
     private void UpdateProgressBar(DiscussionNavigator discNavig)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
 
         int i = discNavig.GetCurrentSectorIndex();
-
+        
         // Activate the temporary background color of the progress bar to give way for the color transition
         progressBarButtons[i].progressBarTempColor.gameObject.SetActive(true);
 
@@ -183,25 +181,6 @@ public class ProgressDisplay : MonoBehaviour
             {
                 // Set progress bar color to light color gray
                 progressBarButtons[i].progressBarFinalColor.color = Color.gray;
-            }
-        }
-    }
-    private void LoadIndicatorLine(DiscussionNavigator discNav)
-    {
-        ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
-
-        // Check all indicator lines
-        for (int i = 0; i < progressBarButtons.Length; i++)
-        {
-            if (i == discNav.GetCurrentSectorIndex())
-            {
-                // Activate sector indicator for the current viewed sector
-                progressBarButtons[i].progressBarIndicator.gameObject.SetActive(true);
-            }
-            else
-            {
-                // Ensure other sector indicators and deactivated 
-                progressBarButtons[i].progressBarIndicator.gameObject.SetActive(false);
             }
         }
     }
