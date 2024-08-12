@@ -75,18 +75,7 @@ public class MomentOfInertiaFormulaDisplay : MonoBehaviour
 		}
 
 		string equationText = $"1/12 * ({massInputField.text}) * ({lengthInputField.text})^2";
-
-		bool canEvaluate = ExpressionEvaluator.Evaluate(equationText, out float result);
-		if (canEvaluate)
-		{
-			resultValue = (float)Math.Round(result, 4);
-			resultField.text = $"{result}";
-		}
-		else
-		{
-			resultValue = null;
-			resultField.text = "N/A";
-		}
+		EvaluateEquationText(equationText);
 	}
 
 	/// <summary>
@@ -108,18 +97,7 @@ public class MomentOfInertiaFormulaDisplay : MonoBehaviour
 		}
 
 		string equationText = $"1/3 * ({massInputField.text}) * ({lengthInputField.text})^2";
-
-		bool canEvaluate = ExpressionEvaluator.Evaluate(equationText, out float result);
-		if (canEvaluate)
-		{
-			resultValue = (float)Math.Round(result, 4);
-			resultField.text = $"{result}";
-		}
-		else
-		{
-			resultValue = null;
-			resultField.text = "N/A";
-		}
+		EvaluateEquationText(equationText);
 	}
 
 	/// <summary>
@@ -142,18 +120,7 @@ public class MomentOfInertiaFormulaDisplay : MonoBehaviour
 		}
 
 		string equationText = $"1/2 * {massInputField.text} * ({plateLengthAInputField.text}^2 + {plateLengthBInputField.text}^2)";
-
-		bool canEvaluate = ExpressionEvaluator.Evaluate(equationText, out float result);
-		if (canEvaluate)
-		{
-			resultValue = (float)Math.Round(result, 4);
-			resultField.text = $"{result}";
-		}
-		else
-		{
-			resultValue = null;
-			resultField.text = "N/A";
-		}
+		EvaluateEquationText(equationText);
 	}
 
 	/// <summary>
@@ -175,18 +142,7 @@ public class MomentOfInertiaFormulaDisplay : MonoBehaviour
 		}
 
 		string equationText = $"1/3 * {massInputField.text} * {plateLengthAInputField.text}^2";
-
-		bool canEvaluate = ExpressionEvaluator.Evaluate(equationText, out float result);
-		if (canEvaluate)
-		{
-			resultValue = (float)Math.Round(result, 4);
-			resultField.text = $"{result}";
-		}
-		else
-		{
-			resultValue = null;
-			resultField.text = "N/A";
-		}
+		EvaluateEquationText(equationText);
 	}
 
 	/// <summary>
@@ -209,18 +165,7 @@ public class MomentOfInertiaFormulaDisplay : MonoBehaviour
 		}
 
 		string equationText = $"1/2 * {massInputField.text} * ({innerRadiusInputField.text} + {outerRadiusInputField.text})";
-
-		bool canEvaluate = ExpressionEvaluator.Evaluate(equationText, out float result);
-		if (canEvaluate)
-		{
-			resultValue = (float)Math.Round(result, 4);
-			resultField.text = $"{result}";
-		}
-		else
-		{
-			resultValue = null;
-			resultField.text = "N/A";
-		}
+		EvaluateEquationText(equationText);
 	}
 
 	private void EvaluateSolidCylinderEquation()
@@ -246,5 +191,20 @@ public class MomentOfInertiaFormulaDisplay : MonoBehaviour
 	private void EvaluateSolidDiskEquation()
 	{
 
+	}
+
+	private void EvaluateEquationText(string equationText)
+	{
+		bool canEvaluate = ExpressionEvaluator.Evaluate(equationText, out float result);
+		if (canEvaluate)
+		{
+			resultValue = (float)Math.Round(result, 4);
+			resultField.text = $"{result}";
+		}
+		else
+		{
+			resultValue = null;
+			resultField.text = "N/A";
+		}
 	}
 }
