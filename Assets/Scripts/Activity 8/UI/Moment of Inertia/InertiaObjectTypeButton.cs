@@ -18,6 +18,7 @@ public enum InertiaObjectType
 
 public class InertiaObjectTypeButton : MonoBehaviour
 {
+	public static event Action<InertiaObjectType> UpdateInertiaObjectTypeEvent;
 	public static event Action UpdateClickedEvent;
 
 	[SerializeField] private TextMeshProUGUI displayText;
@@ -48,5 +49,8 @@ public class InertiaObjectTypeButton : MonoBehaviour
 		// Afterwards, this portion is only implemented on clicked instance.
 		isClicked = true;
 		displayText.color = new Color32(175, 255, 155, 255);
+
+		// Invoke action in updating inertia object type.
+		UpdateInertiaObjectTypeEvent?.Invoke(inertiaObjectType);
 	}
 }
