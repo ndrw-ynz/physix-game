@@ -168,9 +168,26 @@ public class MomentOfInertiaFormulaDisplay : MonoBehaviour
 		EvaluateEquationText(equationText);
 	}
 
+	/// <summary>
+	/// Evaluates Moment of Inertia Equation for Inertia Object of type <c>SolidCylinder</c>.
+	/// <br/>
+	/// Equation: <c>I = 1/12 MR^2</c>
+	/// </summary>
 	private void EvaluateSolidCylinderEquation()
 	{
+		// Empty/Null inputs, resulting to N/A
+		if (
+			string.IsNullOrEmpty(massInputField.text) ||
+			string.IsNullOrEmpty(radiusInputField.text)
+			)
+		{
+			resultField.text = "N/A";
+			resultValue = null;
+			return;
+		}
 
+		string equationText = $"1/12 * {massInputField.text} * {radiusInputField.text}^2";
+		EvaluateEquationText(equationText);
 	}
 
 	private void EvaluateThinWalledHollowCylinderEquation()
