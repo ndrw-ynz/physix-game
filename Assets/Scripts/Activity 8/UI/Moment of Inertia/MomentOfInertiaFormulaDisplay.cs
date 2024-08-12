@@ -19,7 +19,7 @@ public class MomentOfInertiaFormulaDisplay : MonoBehaviour
 
 	public float? resultValue { get; private set; }
 
-    public void OnValueChange()
+	public void OnValueChange()
     {
         switch (inertiaObjectType)
         {
@@ -291,5 +291,24 @@ public class MomentOfInertiaFormulaDisplay : MonoBehaviour
 			resultValue = null;
 			resultField.text = "N/A";
 		}
+	}
+
+	/// <summary>
+	/// Resets all fields and values of <c>MomentOfInertiaFormulaDisplay</c>.
+	/// </summary>
+	public void ResetState()
+	{
+		// Clear all number input fields.
+		if (massInputField) massInputField.text = "0";
+		if (lengthInputField) lengthInputField.text = "0";
+		if (plateLengthAInputField) plateLengthAInputField.text = "0";
+		if (plateLengthBInputField) plateLengthBInputField.text = "0";
+		if (radiusInputField) radiusInputField.text = "0";
+		if (innerRadiusInputField) innerRadiusInputField.text = "0";
+		if (outerRadiusInputField) outerRadiusInputField.text = "0";
+		// Clear result field
+		resultField.text = "";
+		// Set result val to null.
+		resultValue = null;
 	}
 }
