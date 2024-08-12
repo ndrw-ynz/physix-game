@@ -156,9 +156,37 @@ public class MomentOfInertiaFormulaDisplay : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Evaluates Moment of Inertia Equation for Inertia Object of type <c>RectangularPlateEdge</c>.
+	/// <br/>
+	/// Equation: <c>I = 1/3 Ma^2</c>
+	/// </summary>
 	private void EvaluateRectangularPlateEdgeEquation()
 	{
+		// Empty/Null inputs, resulting to N/A
+		if (
+			string.IsNullOrEmpty(massInputField.text) ||
+			string.IsNullOrEmpty(plateLengthAInputField.text)
+			)
+		{
+			resultField.text = "N/A";
+			resultValue = null;
+			return;
+		}
 
+		string equationText = $"1/3 * {massInputField.text} * {plateLengthAInputField.text}^2";
+
+		bool canEvaluate = ExpressionEvaluator.Evaluate(equationText, out float result);
+		if (canEvaluate)
+		{
+			resultValue = (float)Math.Round(result, 4);
+			resultField.text = $"{result}";
+		}
+		else
+		{
+			resultValue = null;
+			resultField.text = "N/A";
+		}
 	}
 
 	private void EvaluateHollowCylinderEquation()
