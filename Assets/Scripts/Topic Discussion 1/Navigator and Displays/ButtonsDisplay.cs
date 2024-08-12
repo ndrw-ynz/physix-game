@@ -70,6 +70,17 @@ public class ButtonsDisplay : MonoBehaviour
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
         }
+        else if (isOnlySinglePageInLastSector)
+        {
+            // Activate only previous sector button and attach previous subtopic title to the button
+            prevSectorButton.gameObject.SetActive(true);
+
+            SetPrevSectorText(discNav.GetPreviousSectorTitle());
+
+            prevPageButton.gameObject.SetActive(false);
+            nextPageButton.gameObject.SetActive(false);
+            nextSectorButton.gameObject.SetActive(false);
+        }
         else if (isNotFirstSectorFirstPage)
         {
             // Activate previous sector and next page button and attach previous subtopic title to the button
@@ -91,17 +102,6 @@ public class ButtonsDisplay : MonoBehaviour
 
             nextPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
-        }
-        else if (isOnlySinglePageInLastSector)
-        {
-            // Activate only previous sector button and attach previous subtopic title to the button
-            prevSectorButton.gameObject.SetActive(true);
-
-            SetPrevSectorText(discNav.GetPreviousSectorTitle());
-
-            prevPageButton.gameObject.SetActive(false);
-            nextPageButton.gameObject.SetActive(false);
-            nextSectorButton.gameObject.SetActive(false);
         }
         else if (isLastSectorLastPage)
         {
