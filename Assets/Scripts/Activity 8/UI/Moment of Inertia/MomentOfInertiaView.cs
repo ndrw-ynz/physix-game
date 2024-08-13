@@ -1,10 +1,28 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class MomentOfInertiaAnswerSubmission
+{
+	public InertiaObjectType? inertiaObjectType { get; private set; }
+	public float? momentOfInertia { get; private set; }
+
+	public MomentOfInertiaAnswerSubmission(
+		InertiaObjectType? inertiaObjectType,
+		float? momentOfInertia
+		)
+	{
+		this.inertiaObjectType = inertiaObjectType;
+		this.momentOfInertia = momentOfInertia;
+	}
+}
+
 public class MomentOfInertiaView : MonoBehaviour
 {
+	public static event Action<MomentOfInertiaAnswerSubmission> SubmitAnswerEvent; 
+
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
 	[SerializeField] private TextMeshProUGUI objectTypeText;
@@ -20,6 +38,8 @@ public class MomentOfInertiaView : MonoBehaviour
 
 	[Header("Formula Display List")]
 	[SerializeField] private List<MomentOfInertiaFormulaDisplay> formulaDisplays;
+
+	private InertiaObjectType? selectedInertiaObjectType;
 
 	private void Start()
 	{
@@ -88,9 +108,10 @@ public class MomentOfInertiaView : MonoBehaviour
 	/// <param name="inertiaObjectType"></param>
 	public void UpdateFormulaDisplay(InertiaObjectType inertiaObjectType)
 	{
+		selectedInertiaObjectType = inertiaObjectType;
 		foreach (MomentOfInertiaFormulaDisplay formulaDisplay in formulaDisplays)
 		{
-			if (formulaDisplay.inertiaObjectType == inertiaObjectType)
+			if (formulaDisplay.inertiaObjectType == selectedInertiaObjectType)
 			{
 				formulaDisplay.gameObject.SetActive(true);
 				formulaDisplay.ResetState();
@@ -101,8 +122,46 @@ public class MomentOfInertiaView : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Updates the content of Calibration Test Text display, used in updating current test number and total tests.
+	/// </summary>
+	/// <param name="testNumber"></param>
+	/// <param name="totalTests"></param>
 	public void UpdateCalibrationTestTextDisplay(int testNumber, int totalTests)
 	{
 		calibrationTestText.text = $"Calibration Test: {testNumber} / {totalTests}";
+	}
+
+	/// <summary>
+	/// Button event click action for submission of answer in <c>MomentOfInertiaView</c>.
+	/// </summary>
+	public void OnSubmitButtonClick()
+	{
+		MomentOfInertiaFormulaDisplay formulaDisplay = GetFormulaDisplay(selectedInertiaObjectType);
+		var resultValue = formulaDisplay == null ? null : formulaDisplay.resultValue;
+
+		MomentOfInertiaAnswerSubmission submission = new MomentOfInertiaAnswerSubmission(
+			inertiaObjectType: selectedInertiaObjectType,
+			momentOfInertia: resultValue
+			);
+
+		SubmitAnswerEvent?.Invoke(submission);
+	}
+
+	/// <summary>
+	/// Fetches the <c>MomentOfInertiaFormulaDisplay</c> associated with a given <c>InertiaObjectType</c> in <c>MomentOfInertiaView</c>.
+	/// </summary>
+	/// <param name="inertiaObjectType"></param>
+	/// <returns></returns>
+	private MomentOfInertiaFormulaDisplay GetFormulaDisplay(InertiaObjectType? inertiaObjectType)
+	{
+		foreach (MomentOfInertiaFormulaDisplay formulaDisplay in formulaDisplays)
+		{
+			if (formulaDisplay.inertiaObjectType == inertiaObjectType)
+			{
+				return formulaDisplay;
+			}
+		}
+		return null;
 	}
 }
