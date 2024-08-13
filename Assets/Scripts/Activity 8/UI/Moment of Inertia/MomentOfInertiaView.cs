@@ -54,8 +54,8 @@ public class MomentOfInertiaView : MonoBehaviour
 				GivenVariableDisplay plateLengthADisplay = Instantiate(givenVariableDisplayPrefab, givenVariablesContainer.transform, false);
 				plateLengthADisplay.SetupGivenVariableDisplay("Length A: ", $"{data.plateLengthA} m");
 
-				// Add plate length B display, only for Rectangular Plate Edge
-				if (data.inertiaObjectType == InertiaObjectType.RectangularPlateEdge)
+				// Add plate length B display, only for Rectangular Plate Center
+				if (data.inertiaObjectType == InertiaObjectType.RectangularPlateCenter)
 				{
 					GivenVariableDisplay plateLengthBDisplay = Instantiate(givenVariableDisplayPrefab, givenVariablesContainer.transform, false);
 					plateLengthBDisplay.SetupGivenVariableDisplay("Length B: ", $"{data.plateLengthB} m");
