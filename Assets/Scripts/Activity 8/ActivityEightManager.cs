@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class MomentOfInertiaData
 {
@@ -40,6 +42,8 @@ public class MomentOfInertiaAnswerSubmissionResults
 public class ActivityEightManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
+
+	public static event Action GeneratorRoomClearEvent;
 
 	[Header("Input Reader")]
 	[SerializeField] InputReader inputReader;
@@ -220,7 +224,10 @@ public class ActivityEightManager : MonoBehaviour
 		momentOfInertiaSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
-
+	/// <summary>
+	/// Generates new given data for Moment of Inertia, and sets up <c>MomentOfInertiaView</c>
+	/// for display of newly generated given data.
+	/// </summary>
 	private void GenerateNewMomentOfInertiaTest()
 	{
 		if (currentNumMomentOfInertiaTests > 0)
@@ -230,13 +237,16 @@ public class ActivityEightManager : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Closes <c>MomentOfInertiaView</c>.
+	/// </summary>
 	private void CloseMomentOfInertiaView()
 	{
 		if (currentNumMomentOfInertiaTests <= 0)
 		{
 			inputReader.SetGameplay();
 			momentOfInertiaView.gameObject.SetActive(false);
-			// insert invoking of event here
+			GeneratorRoomClearEvent?.Invoke();
 		}
 	}
 
