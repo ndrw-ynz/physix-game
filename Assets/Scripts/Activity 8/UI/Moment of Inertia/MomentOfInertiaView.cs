@@ -55,6 +55,9 @@ public class MomentOfInertiaView : MonoBehaviour
 		// Update object type text
 		objectTypeText.text = $"{data.inertiaObjectType}"; // CHANGE IN THE FUTURE TO MORE PROPER DISPLAY TEXT.
 
+		// Clears contents of given variables container.
+		ClearGivenVariablesContainer();
+
 		// Add mass display
 		GivenVariableDisplay massDisplay = Instantiate(givenVariableDisplayPrefab, givenVariablesContainer.transform, false);
 		massDisplay.SetupGivenVariableDisplay("Mass: ", $"{data.mass} kg");
@@ -163,5 +166,16 @@ public class MomentOfInertiaView : MonoBehaviour
 			}
 		}
 		return null;
+	}
+
+	/// <summary>
+	/// Destroys every single child component in given variables container.
+	/// </summary>
+	private void ClearGivenVariablesContainer()
+	{
+		foreach(Transform child in givenVariablesContainer.transform)
+		{
+			Destroy(child.gameObject);
+		}
 	}
 }
