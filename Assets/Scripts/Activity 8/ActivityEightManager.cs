@@ -13,6 +13,25 @@ public class MomentOfInertiaData
 	public int? outerRadius;
 }
 
+/// <summary>
+/// A class for storing the validation results from submitted answers
+/// for Moment of Inertia.
+/// </summary>
+public class MomentOfInertiaAnswerSubmissionResults
+{
+	public bool isInertiaObjectTypeCorrect;
+	public bool isMomentOfInertiaCorrect;
+
+	public MomentOfInertiaAnswerSubmissionResults(
+		bool isInertiaObjectTypeCorrect,
+		bool isMomentOfInertiaCorrect
+		)
+	{
+		this.isInertiaObjectTypeCorrect = isInertiaObjectTypeCorrect;
+		this.isMomentOfInertiaCorrect = isMomentOfInertiaCorrect;
+	}
+}
+
 public class ActivityEightManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
@@ -60,8 +79,10 @@ public class ActivityEightManager : MonoBehaviour
 		}
 
 		// Moment of Inertia setup
+		MomentOfInertiaView.SubmitAnswerEvent += CheckMomentOfInertiaAnswers;
 		GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
 		momentOfInertiaView.SetupMomentOfInertiaView(momentOfInertiaGivenData);
+		momentOfInertiaView.UpdateCalibrationTestTextDisplay(0, currentMomentOfInertiaLevel.numberOfTests);
 
 	}
 
@@ -130,6 +151,20 @@ public class ActivityEightManager : MonoBehaviour
 		momentOfInertiaGivenData = data;
 	}
 
-	#endregion
+	/// <summary>
+	/// Checks the submitted Moment of Inertia answer from <c>MomentOfInertiaView</c>
+	/// </summary>
+	/// <param name="answer"></param>
+	private void CheckMomentOfInertiaAnswers(MomentOfInertiaAnswerSubmission answer)
+	{
+		MomentOfInertiaAnswerSubmissionResults results = new MomentOfInertiaAnswerSubmissionResults(
+			isInertiaObjectTypeCorrect: answer.inertiaObjectType == momentOfInertiaGivenData.inertiaObjectType,
+			isMomentOfInertiaCorrect: ActivityEightUtilities.ValidateMomentOfInertiaSubmission(answer.momentOfInertia, momentOfInertiaGivenData)
+			);
 
+		Debug.Log(results.isInertiaObjectTypeCorrect);
+		Debug.Log(results.isMomentOfInertiaCorrect);
+	}
+
+	#endregion
 }
