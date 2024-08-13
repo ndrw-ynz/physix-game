@@ -30,11 +30,19 @@ public class MomentOfInertiaAnswerSubmissionResults
 		this.isInertiaObjectTypeCorrect = isInertiaObjectTypeCorrect;
 		this.isMomentOfInertiaCorrect = isMomentOfInertiaCorrect;
 	}
+
+	public bool isAllCorrect()
+	{
+		return isInertiaObjectTypeCorrect == true && isMomentOfInertiaCorrect == true;
+	}
 }
 
 public class ActivityEightManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
+
+	[Header("Input Reader")]
+	[SerializeField] InputReader inputReader;
 
 	[Header("Level Data - Moment of Inertia")]
 	[SerializeField] private MomentOfInertiaSubActivitySO momentOfInertiaLevelOne;
@@ -42,11 +50,17 @@ public class ActivityEightManager : MonoBehaviour
 	[SerializeField] private MomentOfInertiaSubActivitySO momentOfInertiaLevelThree;
 	private MomentOfInertiaSubActivitySO currentMomentOfInertiaLevel;
 
-
 	[Header("Views")]
     [SerializeField] private MomentOfInertiaView momentOfInertiaView;
 
+	[Header("Submission Status Displays")]
+	[SerializeField] private MomentOfInertiaSubmissionStatusDisplay momentOfInertiaSubmissionStatusDisplay;
+
+	// Given Data - Moment of Inertia
     private MomentOfInertiaData momentOfInertiaGivenData;
+
+	// Variables for keeping track of current number of tests
+	private int currentNumMomentOfInertiaTests;
 
     void Start()
     {
@@ -78,12 +92,20 @@ public class ActivityEightManager : MonoBehaviour
 				break;
 		}
 
-		// Moment of Inertia setup
+		// Subscribing to view events
 		MomentOfInertiaView.SubmitAnswerEvent += CheckMomentOfInertiaAnswers;
+		MomentOfInertiaSubmissionStatusDisplay.ProceedEvent += GenerateNewMomentOfInertiaTest;
+		MomentOfInertiaSubmissionStatusDisplay.ProceedEvent += CloseMomentOfInertiaView;
+
+		// Initializing given values
 		GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
+
+		// Setting number of tests
+		currentNumMomentOfInertiaTests = currentMomentOfInertiaLevel.numberOfTests;
+
+		// Setting up views
 		momentOfInertiaView.SetupMomentOfInertiaView(momentOfInertiaGivenData);
 		momentOfInertiaView.UpdateCalibrationTestTextDisplay(0, currentMomentOfInertiaLevel.numberOfTests);
-
 	}
 
 	#region Moment of Inertia
@@ -162,8 +184,60 @@ public class ActivityEightManager : MonoBehaviour
 			isMomentOfInertiaCorrect: ActivityEightUtilities.ValidateMomentOfInertiaSubmission(answer.momentOfInertia, momentOfInertiaGivenData)
 			);
 
-		Debug.Log(results.isInertiaObjectTypeCorrect);
-		Debug.Log(results.isMomentOfInertiaCorrect);
+		// Display moment of inertia submission results
+		DisplayMomentOfInertiaSubmissionResults(results);
+	}
+
+	/// <summary>
+	/// Displays the validation results of submitted Moment of Inertia answer stored in <c>MomentOfInertiaAnswerSubmissionResults</c>.
+	/// </summary>
+	/// <param name="results"></param>
+	private void DisplayMomentOfInertiaSubmissionResults(MomentOfInertiaAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			currentNumMomentOfInertiaTests--;
+			string displayText;
+			if (currentNumMomentOfInertiaTests <= 0)
+			{
+				displayText = "Calculations correct. The Moment of Inertia Calculation module is now calibrated.";
+			}
+			else
+			{
+				displayText = "Calculations correct. Loaded next test.";
+			}
+			momentOfInertiaSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
+
+			momentOfInertiaView.UpdateCalibrationTestTextDisplay(currentMomentOfInertiaLevel.numberOfTests - currentNumMomentOfInertiaTests, currentMomentOfInertiaLevel.numberOfTests);
+		} else
+		{
+			momentOfInertiaSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
+		}
+
+		// Update status border displays from result
+		momentOfInertiaSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
+		momentOfInertiaSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+
+	private void GenerateNewMomentOfInertiaTest()
+	{
+		if (currentNumMomentOfInertiaTests > 0)
+		{
+			GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
+			momentOfInertiaView.SetupMomentOfInertiaView(momentOfInertiaGivenData);
+		}
+	}
+
+	private void CloseMomentOfInertiaView()
+	{
+		if (currentNumMomentOfInertiaTests <= 0)
+		{
+			inputReader.SetGameplay();
+			momentOfInertiaView.gameObject.SetActive(false);
+			// insert invoking of event here
+		}
 	}
 
 	#endregion
