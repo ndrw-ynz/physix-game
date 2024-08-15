@@ -87,7 +87,24 @@ public class ActivityEightManager : MonoBehaviour
 		// Set level data based from difficulty configuration.
 		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
-		// Moment of Inertia 
+		// Subscribing to view events
+		MomentOfInertiaView.SubmitAnswerEvent += CheckMomentOfInertiaAnswers;
+		MomentOfInertiaSubmissionStatusDisplay.ProceedEvent += GenerateNewMomentOfInertiaTest;
+		MomentOfInertiaSubmissionStatusDisplay.ProceedEvent += CloseMomentOfInertiaView;
+
+		// Initializing given values
+		GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
+		GenerateTorqueGivenData(currentTorqueLevel);
+
+		// Setting number of tests
+		currentNumMomentOfInertiaTests = currentMomentOfInertiaLevel.numberOfTests;
+		currentNumOfTorqueTests = currentTorqueLevel.numberOfTests;
+
+		// Setting up views
+		momentOfInertiaView.SetupMomentOfInertiaView(momentOfInertiaGivenData);
+		momentOfInertiaView.UpdateCalibrationTestTextDisplay(0, currentMomentOfInertiaLevel.numberOfTests);
+		torqueView.SetupTorqueView(torqueGivenData);
+		torqueView.UpdateCalibrationTestTextDisplay(0, currentTorqueLevel.numberOfTests);
 	}
 
 	/// <summary>
@@ -114,25 +131,6 @@ public class ActivityEightManager : MonoBehaviour
 				currentTorqueLevel = torqueLevelThree;
 				break;
 		}
-
-		// Subscribing to view events
-		MomentOfInertiaView.SubmitAnswerEvent += CheckMomentOfInertiaAnswers;
-		MomentOfInertiaSubmissionStatusDisplay.ProceedEvent += GenerateNewMomentOfInertiaTest;
-		MomentOfInertiaSubmissionStatusDisplay.ProceedEvent += CloseMomentOfInertiaView;
-
-		// Initializing given values
-		GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
-		GenerateTorqueGivenData(currentTorqueLevel);
-
-		// Setting number of tests
-		currentNumMomentOfInertiaTests = currentMomentOfInertiaLevel.numberOfTests;
-		currentNumOfTorqueTests = currentTorqueLevel.numberOfTests;
-
-		// Setting up views
-		momentOfInertiaView.SetupMomentOfInertiaView(momentOfInertiaGivenData);
-		momentOfInertiaView.UpdateCalibrationTestTextDisplay(0, currentMomentOfInertiaLevel.numberOfTests);
-		torqueView.SetupTorqueView(torqueGivenData);
-		torqueView.UpdateCalibrationTestTextDisplay(0, currentTorqueLevel.numberOfTests);
 	}
 
 	#region Moment of Inertia
