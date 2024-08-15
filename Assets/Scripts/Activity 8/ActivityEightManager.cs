@@ -15,6 +15,13 @@ public class MomentOfInertiaData
 	public int? outerRadius;
 }
 
+public class TorqueData
+{
+	public int force;
+	public int distanceVector;
+	public TorqueDirection torqueDirection;
+}
+
 /// <summary>
 /// A class for storing the validation results from submitted answers
 /// for Moment of Inertia.
@@ -54,17 +61,26 @@ public class ActivityEightManager : MonoBehaviour
 	[SerializeField] private MomentOfInertiaSubActivitySO momentOfInertiaLevelThree;
 	private MomentOfInertiaSubActivitySO currentMomentOfInertiaLevel;
 
+	[Header("Level Data - Torque")]
+	[SerializeField] private TorqueSubActivitySO torqueLevelOne;
+	[SerializeField] private TorqueSubActivitySO torqueLevelTwo;
+	[SerializeField] private TorqueSubActivitySO torqueLevelThree;
+	private TorqueSubActivitySO currentTorqueLevel;
+
 	[Header("Views")]
     [SerializeField] private MomentOfInertiaView momentOfInertiaView;
+	[SerializeField] private TorqueView torqueView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private MomentOfInertiaSubmissionStatusDisplay momentOfInertiaSubmissionStatusDisplay;
 
 	// Given Data - Moment of Inertia
     private MomentOfInertiaData momentOfInertiaGivenData;
+	private List<TorqueData> torqueGivenData;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumMomentOfInertiaTests;
+	private int currentNumOfTorqueTests;
 
     void Start()
     {
@@ -87,12 +103,15 @@ public class ActivityEightManager : MonoBehaviour
 		{
 			case Difficulty.Easy:
 				currentMomentOfInertiaLevel = momentOfInertiaLevelOne;
+				currentTorqueLevel = torqueLevelOne;
 				break;
 			case Difficulty.Medium:
 				currentMomentOfInertiaLevel = momentOfInertiaLevelTwo;
+				currentTorqueLevel = torqueLevelTwo;
 				break;
 			case Difficulty.Hard:
 				currentMomentOfInertiaLevel = momentOfInertiaLevelThree;
+				currentTorqueLevel = torqueLevelThree;
 				break;
 		}
 
@@ -103,13 +122,17 @@ public class ActivityEightManager : MonoBehaviour
 
 		// Initializing given values
 		GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
+		GenerateTorqueGivenData(currentTorqueLevel);
 
 		// Setting number of tests
 		currentNumMomentOfInertiaTests = currentMomentOfInertiaLevel.numberOfTests;
+		currentNumOfTorqueTests = currentTorqueLevel.numberOfTests;
 
 		// Setting up views
 		momentOfInertiaView.SetupMomentOfInertiaView(momentOfInertiaGivenData);
 		momentOfInertiaView.UpdateCalibrationTestTextDisplay(0, currentMomentOfInertiaLevel.numberOfTests);
+		torqueView.SetupTorqueView(torqueGivenData);
+		torqueView.UpdateCalibrationTestTextDisplay(0, currentTorqueLevel.numberOfTests);
 	}
 
 	#region Moment of Inertia
@@ -250,5 +273,27 @@ public class ActivityEightManager : MonoBehaviour
 		}
 	}
 
+	#endregion
+
+	#region Torque
+	/// <summary>
+	/// Generates the given data for Torque from level data based on <c>TorqueSubActivitySO</c>.
+	/// </summary>
+	/// <param name="torqueSubActivitySO"></param>
+	private void GenerateTorqueGivenData(TorqueSubActivitySO torqueSubActivitySO)
+	{
+		torqueGivenData = new List<TorqueData>();
+
+		for (int i = 0; i < 3; i++)
+		{
+			TorqueData data = new TorqueData();
+			data.force = Random.Range(torqueSubActivitySO.forceMinVal, torqueSubActivitySO.forceMaxVal);
+			data.distanceVector = Random.Range(torqueSubActivitySO.distanceVectorMinVal, torqueSubActivitySO.distanceVectorMaxVal);
+			List<TorqueDirection> directions = new List<TorqueDirection> { TorqueDirection.Upward, TorqueDirection.Downward};
+			data.torqueDirection = directions[Random.Range(0, 2)];
+
+			torqueGivenData.Add(data);
+		}
+	}
 	#endregion
 }
