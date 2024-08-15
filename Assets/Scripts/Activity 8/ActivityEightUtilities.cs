@@ -59,4 +59,20 @@ public static class ActivityEightUtilities
 		}
 		return false;
 	}
+
+	/// <summary>
+	/// Validates submitted Torque magnitude value based from <c>TorqueData</c>.
+	/// </summary>
+	/// <param name="submittedTorqueMagnitude"></param>
+	/// <param name="torqueData"></param>
+	/// <returns></returns>
+	public static bool ValidateTorqueMagnitudeSubmission(float? submittedTorqueMagnitude, TorqueData torqueData)
+	{
+		if (submittedTorqueMagnitude == null) return false;
+
+		// Formula: F * r
+		float computationResult = torqueData.force * torqueData.distanceVector;
+
+		return Mathf.Abs((float)submittedTorqueMagnitude - computationResult) <= 0.0001;
+	}
 }
