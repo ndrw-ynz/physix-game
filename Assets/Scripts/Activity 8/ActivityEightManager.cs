@@ -46,6 +46,30 @@ public class MomentOfInertiaAnswerSubmissionResults
 	}
 }
 
+/// <summary>
+/// A class for storing the validation results from submitted answers
+/// for Torque.
+/// </summary>
+public class TorqueAnswerSubmissionResults
+{
+	public bool isTorqueMagnitudeCorrect;
+	public bool isTorqueDirectionCorrect;
+
+	public TorqueAnswerSubmissionResults(
+		bool isTorqueMagnitudeCorrect,
+		bool isTorqueDirectionCorrect
+		)
+	{
+		this.isTorqueMagnitudeCorrect = isTorqueMagnitudeCorrect;
+		this.isTorqueDirectionCorrect = isTorqueDirectionCorrect;
+	}
+
+	public bool isAllCorrect()
+	{
+		return isTorqueMagnitudeCorrect == true && isTorqueDirectionCorrect == true;
+	}
+}
+
 public class ActivityEightManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
@@ -73,9 +97,10 @@ public class ActivityEightManager : MonoBehaviour
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private MomentOfInertiaSubmissionStatusDisplay momentOfInertiaSubmissionStatusDisplay;
+	[SerializeField] private TorqueSubmissionStatusDisplay torqueSubmissionStatusDisplay;
 
 	// Given Data - Moment of Inertia
-    private MomentOfInertiaData momentOfInertiaGivenData;
+	private MomentOfInertiaData momentOfInertiaGivenData;
 	private List<TorqueData> torqueGivenData;
 
 	// Variables for keeping track of current number of tests
@@ -91,6 +116,9 @@ public class ActivityEightManager : MonoBehaviour
 		MomentOfInertiaView.SubmitAnswerEvent += CheckMomentOfInertiaAnswers;
 		MomentOfInertiaSubmissionStatusDisplay.ProceedEvent += GenerateNewMomentOfInertiaTest;
 		MomentOfInertiaSubmissionStatusDisplay.ProceedEvent += CloseMomentOfInertiaView;
+		TorqueView.SubmitAnswerEvent += CheckTorqueAnswers;
+		TorqueSubmissionStatusDisplay.ProceedEvent += GenerateNewTorqueTest;
+		TorqueSubmissionStatusDisplay.ProceedEvent += CloseTorqueView;
 
 		// Initializing given values
 		GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
@@ -291,6 +319,95 @@ public class ActivityEightManager : MonoBehaviour
 			data.torqueDirection = directions[Random.Range(0, 2)];
 
 			torqueGivenData.Add(data);
+		}
+	}
+
+	/// <summary>
+	/// Checks the submitted Torque answer from <c>List</c> containing <c>TorqueAnswerSubmission</c>.
+	/// </summary>
+	/// <param name="answer"></param>
+	private void CheckTorqueAnswers(List<TorqueAnswerSubmission> answer)
+	{
+		bool isTorqueMagnitudeCorrect = true;
+		bool isTorqueDirectionCorrect = true;
+		for (int i = 0; i < 3; i++)
+		{
+			// Check Torque Magnitude
+			if (isTorqueMagnitudeCorrect == true)
+			{
+				isTorqueMagnitudeCorrect = ActivityEightUtilities.ValidateTorqueMagnitudeSubmission(answer[i].torqueMagnitude, torqueGivenData[i]);
+			}
+
+			// Check Torque Direction
+			if (isTorqueDirectionCorrect == true)
+			{
+				isTorqueDirectionCorrect = answer[i].torqueDirection == torqueGivenData[i].torqueDirection;
+			}
+		}
+
+		TorqueAnswerSubmissionResults results = new TorqueAnswerSubmissionResults(
+			isTorqueMagnitudeCorrect: isTorqueMagnitudeCorrect,
+			isTorqueDirectionCorrect: isTorqueDirectionCorrect
+			);
+
+		DisplayTorqueSubmissionResults(results);
+	}
+
+	/// <summary>
+	/// Displays the validation results of submitted Torque answer stored in <c>TorqueAnswerSubmissionResults</c>.
+	/// </summary>
+	/// <param name="results"></param>
+	private void DisplayTorqueSubmissionResults(TorqueAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			currentNumOfTorqueTests--;
+			string displayText;
+			if (currentNumOfTorqueTests <= 0)
+			{
+				displayText = "Calculations correct. The Torque Calculation module is now calibrated.";
+			}
+			else
+			{
+				displayText = "Calculations correct. Loaded next test.";
+			}
+			torqueSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
+
+			torqueView.UpdateCalibrationTestTextDisplay(currentTorqueLevel.numberOfTests - currentNumOfTorqueTests, currentTorqueLevel.numberOfTests);
+		} else
+		{
+			torqueSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
+		}
+
+		// Update status border displays from result
+		torqueSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
+		torqueSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	/// <summary>
+	/// Generates new given data for Torque, and sets up <c>TorqueView</c>
+	/// for display of newly generated given data.
+	/// </summary>
+	private void GenerateNewTorqueTest()
+	{
+		if (currentNumOfTorqueTests > 0)
+		{
+			GenerateTorqueGivenData(currentTorqueLevel);
+			torqueView.SetupTorqueView(torqueGivenData);
+		}
+	}
+
+	/// <summary>
+	/// Closes <c>TorqueView</c>.
+	/// </summary>
+	private void CloseTorqueView()
+	{
+		if (currentNumOfTorqueTests <= 0)
+		{
+			inputReader.SetGameplay();
+			torqueView.gameObject.SetActive(false);
+			// some event action here for altering environment...
 		}
 	}
 	#endregion
