@@ -1296,8 +1296,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ab3e8970094ec0418e78d4a60a25063, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputReader: {fileID: 11400000, guid: 814afce522f247f4f91d4ca5f861c36a, type: 2}
+  player: {fileID: 343719820}
+  generatorCamera: {fileID: 882269659}
+  weighingScaleCamera: {fileID: 1262388510}
+  generatorControlPanel: {fileID: 2046394057}
   weighingScaleRoomGate: {fileID: 1191228373}
   weighingScaleRoomGateBlocker: {fileID: 1422661174}
+  weighingScaleControlPanel: {fileID: 1922010936}
+  rebootRoomGate: {fileID: 1811477281}
+  rebootRoomGateBlocker: {fileID: 515367198}
   openGateColor: {fileID: 2100000, guid: fca5137d69433b34384d90276be08d8c, type: 2}
 --- !u!4 &122064713
 Transform:
@@ -4652,6 +4660,7 @@ Transform:
   - {fileID: 1924752671}
   - {fileID: 903079196}
   - {fileID: 1046934569}
+  - {fileID: 882269658}
   m_Father: {fileID: 1360385912}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &393130150
@@ -5964,7 +5973,7 @@ GameObject:
   - component: {fileID: 515367201}
   - component: {fileID: 515367200}
   m_Layer: 0
-  m_Name: CLOSED_DOOR
+  m_Name: RebootRoomGateBlocker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10379,6 +10388,89 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4260109549236748235, guid: 16f0b8faf6847b44b9331828a42f5496, type: 3}
   m_PrefabInstance: {fileID: 880487577}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &882269657
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 882269658}
+  - component: {fileID: 882269659}
+  m_Layer: 0
+  m_Name: GeneratorCamera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &882269658
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882269657}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.9238796, z: -0, w: -0.38268325}
+  m_LocalPosition: {x: -11, y: 2, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 388496074}
+  m_LocalEulerAnglesHint: {x: 0, y: 225, z: 0}
+--- !u!20 &882269659
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 882269657}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1001 &885704104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11058,6 +11150,7 @@ Transform:
   - {fileID: 1758867440}
   - {fileID: 151818614}
   - {fileID: 1800802104}
+  - {fileID: 1262388509}
   m_Father: {fileID: 1567655004}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &932377567
@@ -12681,7 +12774,6 @@ GameObject:
   - component: {fileID: 1063876682}
   - component: {fileID: 1063876681}
   - component: {fileID: 1063876680}
-  - component: {fileID: 1063876679}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -12709,20 +12801,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 1, y: 1}
---- !u!114 &1063876679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1063876677}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b76cca2280c95d447b1c8862f7ecb06c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _inputReader: {fileID: 11400000, guid: 814afce522f247f4f91d4ca5f861c36a, type: 2}
-  view: {fileID: 1286272745}
 --- !u!114 &1063876680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12766,7 +12844,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1063876681}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1286272749}
+        m_TargetAssemblyTypeName: TorqueView, Assembly-CSharp
+        m_MethodName: OnQuitButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1063876681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13004,7 +13094,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1209289012338266, guid: e6037065a7ca30841ba445cefd3ad5f8, type: 3}
       propertyPath: m_Name
-      value: GateSmallFrameC
+      value: RebootRoomGate
       objectReference: {fileID: 0}
     - target: {fileID: 4900555179083176, guid: e6037065a7ca30841ba445cefd3ad5f8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14909,6 +14999,89 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4803463093519170, guid: 0150c0006494bd84198ac13cd4d0d7f5, type: 3}
   m_PrefabInstance: {fileID: 1259066742}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1262388508
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1262388509}
+  - component: {fileID: 1262388510}
+  m_Layer: 0
+  m_Name: WeighingScaleCamera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1262388509
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262388508}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -3.7000008, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 926628522}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!20 &1262388510
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1262388508}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: -1
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1 &1271109309
 GameObject:
   m_ObjectHideFlags: 0
@@ -20802,7 +20975,6 @@ GameObject:
   - component: {fileID: 1765682878}
   - component: {fileID: 1765682877}
   - component: {fileID: 1765682876}
-  - component: {fileID: 1765682875}
   m_Layer: 5
   m_Name: QuitButton
   m_TagString: Untagged
@@ -20830,20 +21002,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 75, y: 75}
   m_Pivot: {x: 1, y: 1}
---- !u!114 &1765682875
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1765682873}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b76cca2280c95d447b1c8862f7ecb06c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _inputReader: {fileID: 11400000, guid: 814afce522f247f4f91d4ca5f861c36a, type: 2}
-  view: {fileID: 1186192446}
 --- !u!114 &1765682876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20887,7 +21045,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1765682877}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1186192450}
+        m_TargetAssemblyTypeName: MomentOfInertiaView, Assembly-CSharp
+        m_MethodName: OnQuitButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1765682877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21819,6 +21989,11 @@ Transform:
   - {fileID: 1567655004}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1811477281 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1209289012338266, guid: e6037065a7ca30841ba445cefd3ad5f8, type: 3}
+  m_PrefabInstance: {fileID: 1077042508}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1818708052
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23329,7 +23504,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4071454634996603655, guid: c307df270aadc074992821aa7848cf1a, type: 3}
       propertyPath: m_Name
-      value: ControlPanel
+      value: WeighingScaleControlPanel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -23391,6 +23566,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: 814afce522f247f4f91d4ca5f861c36a, type: 2}
   viewUI: {fileID: 1286272745}
+  targetCamera: {fileID: 1262388510}
 --- !u!1001 &1924752670
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24633,7 +24809,7 @@ GameObject:
   - component: {fileID: 2046394058}
   - component: {fileID: 2046394057}
   m_Layer: 0
-  m_Name: ControlPanel
+  m_Name: GeneratorControlPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24669,6 +24845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: 814afce522f247f4f91d4ca5f861c36a, type: 2}
   viewUI: {fileID: 1186192446}
+  targetCamera: {fileID: 882269659}
 --- !u!65 &2046394058
 BoxCollider:
   m_ObjectHideFlags: 0

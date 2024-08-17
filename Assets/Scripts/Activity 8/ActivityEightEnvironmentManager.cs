@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -6,16 +7,61 @@ using UnityEngine;
 /// </summary>
 public class ActivityEightEnvironmentManager : MonoBehaviour
 {
-    [Header("Weighing Scale Room")]
+	[Header("Input Reader")]
+	[SerializeField] private InputReader inputReader;
+
+
+	[Header("Player")]
+	[SerializeField] private GameObject player;
+
+
+	[Header("Cameras")]
+	[SerializeField] private Camera generatorCamera;
+	[SerializeField] private Camera weighingScaleCamera;
+
+
+	[Header("Generator Room")]
+	[SerializeField] private InteractableControlPanel generatorControlPanel;
+
+
+	[Header("Weighing Scale Room")]
 	[SerializeField] private GameObject weighingScaleRoomGate;
 	[SerializeField] private GameObject weighingScaleRoomGateBlocker;
+	[SerializeField] private InteractableControlPanel weighingScaleControlPanel;
+
+
+	[Header("Reboot Room")]
+	[SerializeField] private GameObject rebootRoomGate;
+	[SerializeField] private GameObject rebootRoomGateBlocker;
+
 
 	[Header("Gate Status Color Material")]
 	[SerializeField] private Material openGateColor;
 
 	private void Start()
 	{
-		ActivityEightManager.GeneratorRoomClearEvent += () => OpenGate(weighingScaleRoomGate, weighingScaleRoomGateBlocker);
+		ActivityEightManager.GeneratorRoomClearEvent += UpdateGeneratorRoomState;
+		ActivityEightManager.WeighingScaleRoomClearEvent += UpdateWeighingScaleRoomState;
+
+		ActivityEightManager.GeneratorRoomClearEvent += () => SwitchCameraToPlayerCamera(generatorCamera);
+		ActivityEightManager.WeighingScaleRoomClearEvent += () => SwitchCameraToPlayerCamera(weighingScaleCamera);
+
+		InteractableControlPanel.SwitchToTargetCameraEvent += SwitchCameraToTargetCamera;
+
+		MomentOfInertiaView.QuitViewEvent += () => SwitchCameraToPlayerCamera(generatorCamera);
+		TorqueView.QuitViewEvent += () => SwitchCameraToPlayerCamera(weighingScaleCamera);
+	}
+
+	private void UpdateGeneratorRoomState()
+	{
+		generatorControlPanel.SetInteractable(false);
+		OpenGate(weighingScaleRoomGate, weighingScaleRoomGateBlocker);
+	}
+
+	private void UpdateWeighingScaleRoomState()
+	{
+		weighingScaleControlPanel.SetInteractable(false);
+		OpenGate(rebootRoomGate, rebootRoomGateBlocker);
 	}
 
 	/// <summary>
@@ -33,5 +79,25 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 
 		// Remove gate blocker.
 		roomGateBlocker.gameObject.SetActive(false);
+	}
+
+	private void SwitchCameraToTargetCamera(Camera targetCamera)
+	{
+		if (player != null && targetCamera != null)
+		{
+			player.gameObject.SetActive(false);
+			targetCamera.gameObject.SetActive(true);
+		}
+		inputReader.SetUI();
+	}
+
+	public void SwitchCameraToPlayerCamera(Camera targetCamera)
+	{
+		if (player != null && targetCamera != null)
+		{
+			player.gameObject.SetActive(true);
+			targetCamera.gameObject.SetActive(false);
+		}
+		inputReader.SetGameplay();
 	}
 }
