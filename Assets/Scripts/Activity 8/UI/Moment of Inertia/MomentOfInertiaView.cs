@@ -21,6 +21,7 @@ public class MomentOfInertiaAnswerSubmission
 
 public class MomentOfInertiaView : MonoBehaviour
 {
+	public static event Action QuitViewEvent;
 	public static event Action<MomentOfInertiaAnswerSubmission> SubmitAnswerEvent; 
 
 	[Header("Text")]
@@ -149,6 +150,15 @@ public class MomentOfInertiaView : MonoBehaviour
 			);
 
 		SubmitAnswerEvent?.Invoke(submission);
+	}
+
+	/// <summary>
+	/// Quit button click event action for quitting <c>MomentOfInertiaView</c>.
+	/// </summary>
+	public void OnQuitButtonClick()
+	{
+		gameObject.SetActive(false);
+		QuitViewEvent?.Invoke();
 	}
 
 	/// <summary>

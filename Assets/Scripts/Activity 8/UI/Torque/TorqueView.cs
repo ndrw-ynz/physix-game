@@ -25,6 +25,7 @@ public class TorqueAnswerSubmission
 /// </summary>
 public class TorqueView : MonoBehaviour
 {
+	public static event Action QuitViewEvent;
 	public static event Action<List<TorqueAnswerSubmission>> SubmitAnswerEvent;
 
 	[Header("Text")]
@@ -76,7 +77,7 @@ public class TorqueView : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Button event click action for submission of answer in <c>MomentOfInertiaView</c>.
+	/// Button event click action for submission of answer in <c>TorqueView</c>.
 	/// </summary>
 	public void OnSubmitButtonClick()
 	{
@@ -96,6 +97,15 @@ public class TorqueView : MonoBehaviour
 		}
 
 		SubmitAnswerEvent?.Invoke(submission);
+	}
+
+	/// <summary>
+	/// Quit button click event action for quitting <c>TorqueView</c>.
+	/// </summary>
+	public void OnQuitButtonClick()
+	{
+		gameObject.SetActive(false);
+		QuitViewEvent?.Invoke();
 	}
 
 	/// <summary>
