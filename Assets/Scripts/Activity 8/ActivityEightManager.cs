@@ -75,6 +75,7 @@ public class ActivityEightManager : MonoBehaviour
 	public static Difficulty difficultyConfiguration;
 
 	public static event Action GeneratorRoomClearEvent;
+	public static event Action WeighingScaleRoomClearEvent;
 
 	[Header("Input Reader")]
 	[SerializeField] InputReader inputReader;
@@ -407,7 +408,7 @@ public class ActivityEightManager : MonoBehaviour
 		{
 			inputReader.SetGameplay();
 			torqueView.gameObject.SetActive(false);
-			// some event action here for altering environment...
+			WeighingScaleRoomClearEvent?.Invoke();
 		}
 	}
 	#endregion
