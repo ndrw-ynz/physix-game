@@ -22,7 +22,8 @@ public class MomentOfInertiaAnswerSubmission
 public class MomentOfInertiaView : MonoBehaviour
 {
 	public static event Action QuitViewEvent;
-	public static event Action<MomentOfInertiaAnswerSubmission> SubmitAnswerEvent; 
+	public static event Action<MomentOfInertiaAnswerSubmission> SubmitAnswerEvent;
+	public static event Action<InertiaObjectType> UpdateObjectDisplayEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
@@ -104,6 +105,9 @@ public class MomentOfInertiaView : MonoBehaviour
 				radiusDisplay.SetupGivenVariableDisplay("Radius: ", $"{data.radius} m");
 				break;
 		}
+
+		// Signal that object display in Moment of Inertia View must be updated.
+		UpdateObjectDisplayEvent?.Invoke(data.inertiaObjectType);
 	}
 
 	/// <summary>

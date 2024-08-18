@@ -24,6 +24,16 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 	[SerializeField] private InteractableControlPanel generatorControlPanel;
 
 
+	[Header("Moment of Inertia Objects")]
+	[SerializeField] private GameObject slenderRodCenter;
+	[SerializeField] private GameObject slenderRodEnd;
+	[SerializeField] private GameObject rectangularPlateCenter;
+	[SerializeField] private GameObject rectangularPlateEdge;
+	[SerializeField] private GameObject cylinder;
+	[SerializeField] private GameObject sphere;
+	[SerializeField] private GameObject disk;
+
+
 	[Header("Weighing Scale Room")]
 	[SerializeField] private GameObject weighingScaleRoomGate;
 	[SerializeField] private GameObject weighingScaleRoomGateBlocker;
@@ -49,6 +59,7 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 		InteractableControlPanel.SwitchToTargetCameraEvent += SwitchCameraToTargetCamera;
 
 		MomentOfInertiaView.QuitViewEvent += () => SwitchCameraToPlayerCamera(generatorCamera);
+		MomentOfInertiaView.UpdateObjectDisplayEvent += UpdateDisplayedMomentOfInertiaObject;
 		TorqueView.QuitViewEvent += () => SwitchCameraToPlayerCamera(weighingScaleCamera);
 	}
 
@@ -62,6 +73,57 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 	{
 		weighingScaleControlPanel.SetInteractable(false);
 		OpenGate(rebootRoomGate, rebootRoomGateBlocker);
+	}
+
+	/// <summary>
+	/// Updates the currently displayed Moment of Inertia Object for view.
+	/// </summary>
+	/// <param name="inertiaObjectType"></param>
+	private void UpdateDisplayedMomentOfInertiaObject(InertiaObjectType inertiaObjectType)
+	{
+		DeactivateMomentOfInertiaObjects();
+
+		switch (inertiaObjectType)
+		{
+			case InertiaObjectType.SlenderRodCenter:
+				slenderRodCenter.SetActive(true);
+				break;
+			case InertiaObjectType.SlenderRodEnd:
+				slenderRodEnd.SetActive(true);
+				break;
+			case InertiaObjectType.RectangularPlateCenter:
+				rectangularPlateCenter.SetActive(true);
+				break;
+			case InertiaObjectType.RectangularPlateEdge:
+				rectangularPlateEdge.SetActive(true);
+				break;
+			case InertiaObjectType.HollowCylinder:
+			case InertiaObjectType.SolidCylinder:
+			case InertiaObjectType.ThinWalledHollowCylinder:
+				cylinder.SetActive(true);
+				break;
+			case InertiaObjectType.SolidSphere:
+			case InertiaObjectType.ThinWalledHollowSphere:
+				sphere.SetActive(true);
+				break;
+			case InertiaObjectType.SolidDisk:
+				disk.SetActive(true);
+				break;
+		}
+	}
+
+	/// <summary>
+	/// Deactivates all Moment of Inertia objects.
+	/// </summary>
+	private void DeactivateMomentOfInertiaObjects()
+	{
+		slenderRodCenter.SetActive(false);
+		slenderRodEnd.SetActive(false);
+		rectangularPlateCenter.SetActive(false);
+		rectangularPlateEdge.SetActive(false);
+		cylinder.SetActive(false);
+		sphere.SetActive(false);
+		disk.SetActive(false);
 	}
 
 	/// <summary>
