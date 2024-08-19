@@ -44,6 +44,9 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 	[Header("Reboot Room")]
 	[SerializeField] private GameObject rebootRoomGate;
 	[SerializeField] private GameObject rebootRoomGateBlocker;
+	[SerializeField] private InteractableControlPanel equilibriumControlPanel;
+	[SerializeField] private RebootButton rebootButton;
+	[SerializeField] private GameObject rebootButtonGlassCover;
 
 
 	[Header("Gate Status Color Material")]
@@ -53,9 +56,11 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 	{
 		ActivityEightManager.GeneratorRoomClearEvent += UpdateGeneratorRoomState;
 		ActivityEightManager.WeighingScaleRoomClearEvent += UpdateWeighingScaleRoomState;
+		ActivityEightManager.RebootRoomClearEvent += UpdateRebootRoomState;
 
 		ActivityEightManager.GeneratorRoomClearEvent += () => SwitchCameraToPlayerCamera(generatorCamera);
 		ActivityEightManager.WeighingScaleRoomClearEvent += () => SwitchCameraToPlayerCamera(fulcrumCamera);
+		ActivityEightManager.RebootRoomClearEvent += () => SwitchCameraToPlayerCamera(weighingScaleCamera);
 
 		InteractableControlPanel.SwitchToTargetCameraEvent += SwitchCameraToTargetCamera;
 
@@ -75,6 +80,13 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 	{
 		weighingScaleControlPanel.SetInteractable(false);
 		OpenGate(rebootRoomGate, rebootRoomGateBlocker);
+	}
+
+	private void UpdateRebootRoomState()
+	{
+		equilibriumControlPanel.SetInteractable(false);
+		rebootButton.SetInteractable(true);
+		rebootButtonGlassCover.SetActive(false);
 	}
 
 	/// <summary>
