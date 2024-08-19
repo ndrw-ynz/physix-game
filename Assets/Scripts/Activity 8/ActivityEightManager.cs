@@ -80,6 +80,50 @@ public class TorqueAnswerSubmissionResults
 	}
 }
 
+/// <summary>
+/// A class for storing the validation results from submitted answers
+/// for Equilibrium.
+/// </summary>
+public class EquilibriumAnswerSubmissionResults
+{
+	public bool isSummationOfDownwardForcesCorrect;
+	public bool isUpwardForceCorrect;
+	public bool isSummationOfTotalForcesCorrect;
+	public bool isCounterclockwiseTorqueCorrect;
+	public bool isClockwiseTorqueCorrect;
+	public bool isEquilibriumTypeCorrect;
+
+	public EquilibriumAnswerSubmissionResults(
+		bool isSummationOfDownwardForcesCorrect,
+		bool isUpwardForceCorrect,
+		bool isSummationOfTotalForcesCorrect,
+		bool isCounterclockwiseTorqueCorrect,
+		bool isClockwiseTorqueCorrect,
+		bool isEquilibriumTypeCorrect
+		)
+	{
+		this.isSummationOfDownwardForcesCorrect = isSummationOfDownwardForcesCorrect;
+		this.isUpwardForceCorrect = isUpwardForceCorrect;
+		this.isSummationOfTotalForcesCorrect = isSummationOfTotalForcesCorrect;
+		this.isCounterclockwiseTorqueCorrect = isCounterclockwiseTorqueCorrect;
+		this.isClockwiseTorqueCorrect = isClockwiseTorqueCorrect;
+		this.isEquilibriumTypeCorrect = isEquilibriumTypeCorrect;
+	}
+
+	public bool isAllCorrect()
+	{
+		return (
+			isSummationOfDownwardForcesCorrect == true &&
+			isUpwardForceCorrect == true &&
+			isSummationOfTotalForcesCorrect == true &&
+			isCounterclockwiseTorqueCorrect == true &&
+			isClockwiseTorqueCorrect == true &&
+			isEquilibriumTypeCorrect == true
+			);
+	}
+
+}
+
 public class ActivityEightManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
@@ -119,6 +163,7 @@ public class ActivityEightManager : MonoBehaviour
 	[Header("Submission Status Displays")]
 	[SerializeField] private MomentOfInertiaSubmissionStatusDisplay momentOfInertiaSubmissionStatusDisplay;
 	[SerializeField] private TorqueSubmissionStatusDisplay torqueSubmissionStatusDisplay;
+	[SerializeField] private EquilibriumSubmissionStatusDisplay equilibriumSubmissionStatusDisplay;
 
 	// Given Data - Moment of Inertia
 	private MomentOfInertiaData momentOfInertiaGivenData;
@@ -142,6 +187,9 @@ public class ActivityEightManager : MonoBehaviour
 		TorqueView.SubmitAnswerEvent += CheckTorqueAnswers;
 		TorqueSubmissionStatusDisplay.ProceedEvent += GenerateNewTorqueTest;
 		TorqueSubmissionStatusDisplay.ProceedEvent += CloseTorqueView;
+		EquilibriumView.SubmitAnswerEvent += CheckEquilibriumAnswers;
+		EquilibriumSubmissionStatusDisplay.ProceedEvent += GenerateNewEquilibriumTest;
+		EquilibriumSubmissionStatusDisplay.ProceedEvent += CloseEquilibriumView;
 
 		// Initializing given values
 		GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
@@ -380,6 +428,7 @@ public class ActivityEightManager : MonoBehaviour
 			isTorqueDirectionCorrect: isTorqueDirectionCorrect
 			);
 
+		// Display torque submission results
 		DisplayTorqueSubmissionResults(results);
 	}
 
@@ -443,6 +492,11 @@ public class ActivityEightManager : MonoBehaviour
 	#endregion
 
 	#region Equilibrium
+
+	/// <summary>
+	/// Generates the given data for Equilibrium from level data based on <c>EquilibriumSubActivitySO</c>.
+	/// </summary>
+	/// <param name="equilibriumSubActivitySO"></param>
 	private void GenerateEquilibriumGivenData(EquilibriumSubActivitySO equilibriumSubActivitySO)
 	{
 		EquilibriumData data = new EquilibriumData();
@@ -455,6 +509,91 @@ public class ActivityEightManager : MonoBehaviour
 		data.fulcrumForce = data.weighingApparatusWeight + data.redBoxWeight + data.blueBoxWeight;
 
 		equilibriumGivenData = data;
+	}
+
+	/// <summary>
+	/// Checks the submitted Equilibrium answer from <c>EquilibriumView</c>.
+	/// </summary>
+	/// <param name="answer"></param>
+	private void CheckEquilibriumAnswers(EquilibriumAnswerSubmission answer)
+	{
+		// Store counterclockwise and clockwise torque data in TorqueData instances
+		TorqueData counterclockwiseTorqueData = new TorqueData();
+		counterclockwiseTorqueData.force = equilibriumGivenData.redBoxWeight;
+		counterclockwiseTorqueData.distanceVector = equilibriumGivenData.redBoxDistance;
+
+		TorqueData clockwiseTorqueData = new TorqueData();
+		clockwiseTorqueData.force = equilibriumGivenData.blueBoxWeight;
+		clockwiseTorqueData.distanceVector = equilibriumGivenData.blueBoxDistance;
+
+		EquilibriumAnswerSubmissionResults results = new EquilibriumAnswerSubmissionResults(
+			isSummationOfDownwardForcesCorrect: ActivityEightUtilities.ValidateSummationOfDownwardForcesSubmission(answer.summationOfDownwardForces, equilibriumGivenData),
+			isUpwardForceCorrect: ActivityEightUtilities.ValidateUpwardForceSubmission(answer.upwardForce, equilibriumGivenData),
+			isSummationOfTotalForcesCorrect: ActivityEightUtilities.ValidateSummationOfTotalForcesSubmission(answer.summationOfTotalForces, equilibriumGivenData),
+			isCounterclockwiseTorqueCorrect: ActivityEightUtilities.ValidateTorqueMagnitudeSubmission(answer.counterclockwiseTorque, counterclockwiseTorqueData),
+			isClockwiseTorqueCorrect: ActivityEightUtilities.ValidateTorqueMagnitudeSubmission(answer.clockwiseTorque, clockwiseTorqueData),
+			isEquilibriumTypeCorrect: ActivityEightUtilities.ValidateEquilibriumTypeSubmission(answer.equilibriumType, equilibriumGivenData)
+			);
+
+		// Display equilibrium submission results
+		DisplayEquilibriumSubmissionResults(results);
+	}
+
+	/// <summary>
+	/// Displays the validation results of submitted Equilibrium answer stored in <c>EquilibriumAnswerSubmissionResults</c>.
+	/// </summary>
+	/// <param name="results"></param>
+	private void DisplayEquilibriumSubmissionResults(EquilibriumAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			currentNumOfEquilibriumTests--;
+			string displayText;
+			if (currentNumOfEquilibriumTests <= 0)
+			{
+				displayText = "Calculations correct. The Equilibium Calculation module is now calibrated.";
+			} else
+			{
+				displayText = "Calculations correct. Loaded next test.";
+			}
+			equilibriumSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
+
+			equilibriumView.UpdateCalibrationTestTextDisplay(currentEquilibriumLevel.numberOfTests - currentNumOfEquilibriumTests, currentEquilibriumLevel.numberOfTests);
+		} else
+		{
+			equilibriumSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
+		}
+
+		// Update status border displays from result
+		equilibriumSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
+		equilibriumSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	/// <summary>
+	/// Generates new given data for Equilibrium, and sets up <c>EquilibriumView</c>
+	/// for display of newly generated given data.
+	/// </summary>
+	private void GenerateNewEquilibriumTest()
+	{
+		if (currentNumOfEquilibriumTests > 0)
+		{
+			GenerateEquilibriumGivenData(currentEquilibriumLevel);
+			equilibriumView.SetupEquilibriumView(equilibriumGivenData);
+		}
+	}
+
+	/// <summary>
+	/// Closes <c>EquilibriumView</c>.
+	/// </summary>
+	private void CloseEquilibriumView()
+	{
+		if (currentNumOfEquilibriumTests <= 0)
+		{
+			inputReader.SetGameplay();
+			equilibriumView.gameObject.SetActive(false);
+			// insert clear event action invoke...
+		}
 	}
 	#endregion
 }
