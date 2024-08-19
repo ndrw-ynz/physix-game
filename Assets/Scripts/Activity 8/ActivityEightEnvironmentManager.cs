@@ -17,6 +17,7 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 
 	[Header("Cameras")]
 	[SerializeField] private Camera generatorCamera;
+	[SerializeField] private Camera fulcrumCamera;
 	[SerializeField] private Camera weighingScaleCamera;
 
 
@@ -54,13 +55,14 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 		ActivityEightManager.WeighingScaleRoomClearEvent += UpdateWeighingScaleRoomState;
 
 		ActivityEightManager.GeneratorRoomClearEvent += () => SwitchCameraToPlayerCamera(generatorCamera);
-		ActivityEightManager.WeighingScaleRoomClearEvent += () => SwitchCameraToPlayerCamera(weighingScaleCamera);
+		ActivityEightManager.WeighingScaleRoomClearEvent += () => SwitchCameraToPlayerCamera(fulcrumCamera);
 
 		InteractableControlPanel.SwitchToTargetCameraEvent += SwitchCameraToTargetCamera;
 
 		MomentOfInertiaView.QuitViewEvent += () => SwitchCameraToPlayerCamera(generatorCamera);
 		MomentOfInertiaView.UpdateObjectDisplayEvent += UpdateDisplayedMomentOfInertiaObject;
-		TorqueView.QuitViewEvent += () => SwitchCameraToPlayerCamera(weighingScaleCamera);
+		TorqueView.QuitViewEvent += () => SwitchCameraToPlayerCamera(fulcrumCamera);
+		EquilibriumView.QuitViewEvent += () => SwitchCameraToPlayerCamera(weighingScaleCamera);
 	}
 
 	private void UpdateGeneratorRoomState()
