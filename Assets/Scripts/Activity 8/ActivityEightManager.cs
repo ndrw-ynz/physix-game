@@ -22,6 +22,16 @@ public class TorqueData
 	public TorqueDirection torqueDirection;
 }
 
+public class EquilibriumData
+{
+	public int weighingApparatusWeight;
+	public int redBoxWeight;
+	public int redBoxDistance;
+	public int blueBoxWeight;
+	public int blueBoxDistance;
+	public int fulcrumForce;
+}
+
 /// <summary>
 /// A class for storing the validation results from submitted answers
 /// for Moment of Inertia.
@@ -80,6 +90,7 @@ public class ActivityEightManager : MonoBehaviour
 	[Header("Input Reader")]
 	[SerializeField] InputReader inputReader;
 
+
 	[Header("Level Data - Moment of Inertia")]
 	[SerializeField] private MomentOfInertiaSubActivitySO momentOfInertiaLevelOne;
 	[SerializeField] private MomentOfInertiaSubActivitySO momentOfInertiaLevelTwo;
@@ -92,9 +103,18 @@ public class ActivityEightManager : MonoBehaviour
 	[SerializeField] private TorqueSubActivitySO torqueLevelThree;
 	private TorqueSubActivitySO currentTorqueLevel;
 
+	[Header("Level Data - Equilibrium")]
+	[SerializeField] private EquilibriumSubActivitySO equilibriumLevelOne;
+	[SerializeField] private EquilibriumSubActivitySO equilibriumLevelTwo;
+	[SerializeField] private EquilibriumSubActivitySO equilibriumLevelThree;
+	private EquilibriumSubActivitySO currentEquilibriumLevel;
+
+
 	[Header("Views")]
     [SerializeField] private MomentOfInertiaView momentOfInertiaView;
 	[SerializeField] private TorqueView torqueView;
+	[SerializeField] private EquilibriumView equilibriumView;
+
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private MomentOfInertiaSubmissionStatusDisplay momentOfInertiaSubmissionStatusDisplay;
@@ -103,12 +123,14 @@ public class ActivityEightManager : MonoBehaviour
 	// Given Data - Moment of Inertia
 	private MomentOfInertiaData momentOfInertiaGivenData;
 	private List<TorqueData> torqueGivenData;
+	private EquilibriumData equilibriumGivenData;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumMomentOfInertiaTests;
 	private int currentNumOfTorqueTests;
+	private int currentNumOfEquilibriumTests;
 
-    void Start()
+	void Start()
     {
 		// Set level data based from difficulty configuration.
 		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
@@ -124,16 +146,20 @@ public class ActivityEightManager : MonoBehaviour
 		// Initializing given values
 		GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
 		GenerateTorqueGivenData(currentTorqueLevel);
+		GenerateEquilibriumGivenData(currentEquilibriumLevel);
 
 		// Setting number of tests
 		currentNumMomentOfInertiaTests = currentMomentOfInertiaLevel.numberOfTests;
 		currentNumOfTorqueTests = currentTorqueLevel.numberOfTests;
+		currentNumOfEquilibriumTests = currentEquilibriumLevel.numberOfTests;
 
 		// Setting up views
 		momentOfInertiaView.SetupMomentOfInertiaView(momentOfInertiaGivenData);
 		momentOfInertiaView.UpdateCalibrationTestTextDisplay(0, currentMomentOfInertiaLevel.numberOfTests);
 		torqueView.SetupTorqueView(torqueGivenData);
 		torqueView.UpdateCalibrationTestTextDisplay(0, currentTorqueLevel.numberOfTests);
+		equilibriumView.SetupEquilibriumView(equilibriumGivenData);
+		equilibriumView.UpdateCalibrationTestTextDisplay(0, currentEquilibriumLevel.numberOfTests);
 	}
 
 	/// <summary>
@@ -150,14 +176,17 @@ public class ActivityEightManager : MonoBehaviour
 			case Difficulty.Easy:
 				currentMomentOfInertiaLevel = momentOfInertiaLevelOne;
 				currentTorqueLevel = torqueLevelOne;
+				currentEquilibriumLevel = equilibriumLevelOne;
 				break;
 			case Difficulty.Medium:
 				currentMomentOfInertiaLevel = momentOfInertiaLevelTwo;
 				currentTorqueLevel = torqueLevelTwo;
+				currentEquilibriumLevel = equilibriumLevelTwo;
 				break;
 			case Difficulty.Hard:
 				currentMomentOfInertiaLevel = momentOfInertiaLevelThree;
 				currentTorqueLevel = torqueLevelThree;
+				currentEquilibriumLevel = equilibriumLevelThree;
 				break;
 		}
 	}
@@ -410,6 +439,22 @@ public class ActivityEightManager : MonoBehaviour
 			torqueView.gameObject.SetActive(false);
 			WeighingScaleRoomClearEvent?.Invoke();
 		}
+	}
+	#endregion
+
+	#region Equilibrium
+	private void GenerateEquilibriumGivenData(EquilibriumSubActivitySO equilibriumSubActivitySO)
+	{
+		EquilibriumData data = new EquilibriumData();
+
+		data.weighingApparatusWeight = Random.Range(equilibriumSubActivitySO.weightMinVal, equilibriumSubActivitySO.weightMaxVal);
+		data.redBoxWeight = Random.Range(equilibriumSubActivitySO.weightMinVal, equilibriumSubActivitySO.weightMaxVal);
+		data.redBoxDistance = Random.Range(equilibriumSubActivitySO.distanceMinVal, equilibriumSubActivitySO.distanceMaxVal);
+		data.blueBoxWeight = Random.Range(equilibriumSubActivitySO.weightMinVal, equilibriumSubActivitySO.weightMaxVal);
+		data.blueBoxDistance = Random.Range(equilibriumSubActivitySO.distanceMinVal, equilibriumSubActivitySO.distanceMaxVal);
+		data.fulcrumForce = data.weighingApparatusWeight + data.redBoxWeight + data.blueBoxWeight;
+
+		equilibriumGivenData = data;
 	}
 	#endregion
 }
