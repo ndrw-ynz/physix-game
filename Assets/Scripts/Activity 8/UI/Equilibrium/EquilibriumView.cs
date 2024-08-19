@@ -3,6 +3,33 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class EquilibriumAnswerSubmission
+{
+	public float? summationOfDownwardForces { get; private set; }
+	public float? upwardForce { get; private set; }
+	public float? summationOfTotalForces { get; private set; }
+	public float? counterclockwiseTorque {get; private set;}
+	public float? clockwiseTorque { get; private set; }
+	public EquilibriumType? equilibriumType { get; private set; }
+
+	public EquilibriumAnswerSubmission(
+		float? summationOfDownwardForces,
+		float? upwardForce,
+		float? summationOfTotalForces,
+		float? counterclockwiseTorque,
+		float? clockwiseTorque,
+		EquilibriumType? equilibriumType
+		)
+	{
+		this.summationOfDownwardForces = summationOfDownwardForces;
+		this.upwardForce = upwardForce;
+		this.summationOfTotalForces = summationOfTotalForces;
+		this.counterclockwiseTorque = counterclockwiseTorque;
+		this.clockwiseTorque = clockwiseTorque;
+		this.equilibriumType = equilibriumType;
+	}
+}
+
 /// <summary>
 /// This class contains the components for displaying the
 /// information related to the Equilibrium subactivity for Activity Eight.
@@ -10,6 +37,7 @@ using UnityEngine.UI;
 public class EquilibriumView : MonoBehaviour
 {
 	public static event Action QuitViewEvent;
+	public static event Action<EquilibriumAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
@@ -143,6 +171,36 @@ public class EquilibriumView : MonoBehaviour
 		torqueEquilibriumCalculations.gameObject.SetActive(true);
 		equilibriumTypeSelection.gameObject.SetActive(true);
 	}
+
+	public void OnSubmitButtonClick()
+	{
+		// Checking equilibriumType
+		EquilibriumType? equilibriumType;
+		if (inEquilibriumButton.isClicked == true && notInEquilibriumButton.isClicked == false)
+		{
+			equilibriumType = inEquilibriumButton.equilibriumType;
+		}
+		else if (inEquilibriumButton.isClicked == false && notInEquilibriumButton.isClicked == true)
+		{
+			equilibriumType = notInEquilibriumButton.equilibriumType;
+		}
+		else
+		{
+			equilibriumType = null;
+		}
+
+		EquilibriumAnswerSubmission submission = new EquilibriumAnswerSubmission(
+			summationOfDownwardForces: float.Parse(summationDownwardForcesResultField.text),
+			upwardForce: float.Parse(upwardForceResultField.text),
+			summationOfTotalForces: float.Parse(summationForcesResultField.text),
+			counterclockwiseTorque: float.Parse(torqueCounterclockwiseResultField.text),
+			clockwiseTorque: float.Parse(torqueClockwiseResultField.text),
+			equilibriumType: equilibriumType
+			);
+
+		SubmitAnswerEvent?.Invoke(submission);
+	}
+
 	/// <summary>
 	/// Quit button click event action for quitting <c>TorqueView</c>.
 	/// </summary>
@@ -156,22 +214,22 @@ public class EquilibriumView : MonoBehaviour
 	private void ClearAllFields()
 	{
 		// Clear all Input Fields
-		summationDownwardForceAddendOne.text = "";
-		summationDownwardForceAddendTwo.text = "";
-		summationDownwardForceAddendThree.text = "";
-		summationTotalForceAddendOne.text = "";
-		summationTotalForceAddendTwo.text = "";
+		summationDownwardForceAddendOne.text = "0";
+		summationDownwardForceAddendTwo.text = "0";
+		summationDownwardForceAddendThree.text = "0";
+		summationTotalForceAddendOne.text = "0";
+		summationTotalForceAddendTwo.text = "0";
 
-		torqueCounterclockwiseMultiplicand.text = "";
-		torqueCounterclockwiseMultiplicator.text = "";
-		torqueClockwiseMultiplicand.text = "";
-		torqueClockwiseMultiplicator.text = "";
+		torqueCounterclockwiseMultiplicand.text = "0";
+		torqueCounterclockwiseMultiplicator.text = "0";
+		torqueClockwiseMultiplicand.text = "0";
+		torqueClockwiseMultiplicator.text = "0";
 
 		// Clear all Result Fields
-		summationDownwardForcesResultField.text = "";
-		upwardForceResultField.text = "";
-		summationForcesResultField.text = "";
-		torqueCounterclockwiseResultField.text = "";
-		torqueClockwiseResultField.text = "";
+		summationDownwardForcesResultField.text = "0";
+		upwardForceResultField.text = "0";
+		summationForcesResultField.text = "0";
+		torqueCounterclockwiseResultField.text = "0";
+		torqueClockwiseResultField.text = "0";
 	}
 }
