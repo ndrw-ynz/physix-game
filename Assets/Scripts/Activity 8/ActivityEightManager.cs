@@ -130,6 +130,7 @@ public class ActivityEightManager : MonoBehaviour
 
 	public static event Action GeneratorRoomClearEvent;
 	public static event Action WeighingScaleRoomClearEvent;
+	public static event Action RebootRoomClearEvent;
 
 	[Header("Input Reader")]
 	[SerializeField] InputReader inputReader;
@@ -158,6 +159,7 @@ public class ActivityEightManager : MonoBehaviour
     [SerializeField] private MomentOfInertiaView momentOfInertiaView;
 	[SerializeField] private TorqueView torqueView;
 	[SerializeField] private EquilibriumView equilibriumView;
+	[SerializeField] private ActivityEightPerformanceView performanceView;
 
 
 	[Header("Submission Status Displays")]
@@ -175,6 +177,22 @@ public class ActivityEightManager : MonoBehaviour
 	private int currentNumOfTorqueTests;
 	private int currentNumOfEquilibriumTests;
 
+	// Gameplay performance metrics variables
+	// Gameplay Time
+	private float gameplayTime;
+	// Moment of Inertia
+	private bool isMomentOfInertiaCalculationFinished;
+	private int numIncorrectMomentOfInertiaSubmission;
+	private float momentOfInertiaDuration;
+	// Torque
+	private bool isTorqueCalculationFinished;
+	private int numIncorrectTorqueSubmission;
+	private float torqueDuration;
+	// Equilibrium
+	private bool isEquilibriumCalculationFinished;
+	private int numIncorrectEquilibriumSubmission;
+	private float equilibriumDuration;
+
 	void Start()
     {
 		// Set level data based from difficulty configuration.
@@ -190,6 +208,7 @@ public class ActivityEightManager : MonoBehaviour
 		EquilibriumView.SubmitAnswerEvent += CheckEquilibriumAnswers;
 		EquilibriumSubmissionStatusDisplay.ProceedEvent += GenerateNewEquilibriumTest;
 		EquilibriumSubmissionStatusDisplay.ProceedEvent += CloseEquilibriumView;
+		RebootButton.PressRebootButtonEvent += DisplayPerformanceView;
 
 		// Initializing given values
 		GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
@@ -208,6 +227,11 @@ public class ActivityEightManager : MonoBehaviour
 		torqueView.UpdateCalibrationTestTextDisplay(0, currentTorqueLevel.numberOfTests);
 		equilibriumView.SetupEquilibriumView(equilibriumGivenData);
 		equilibriumView.UpdateCalibrationTestTextDisplay(0, currentEquilibriumLevel.numberOfTests);
+	}
+
+	private void Update()
+	{
+		gameplayTime += Time.deltaTime;
 	}
 
 	/// <summary>
@@ -332,6 +356,8 @@ public class ActivityEightManager : MonoBehaviour
 			if (currentNumMomentOfInertiaTests <= 0)
 			{
 				displayText = "Calculations correct. The Moment of Inertia Calculation module is now calibrated.";
+				isMomentOfInertiaCalculationFinished = true;
+				momentOfInertiaDuration = gameplayTime;
 			}
 			else
 			{
@@ -342,6 +368,7 @@ public class ActivityEightManager : MonoBehaviour
 			momentOfInertiaView.UpdateCalibrationTestTextDisplay(currentMomentOfInertiaLevel.numberOfTests - currentNumMomentOfInertiaTests, currentMomentOfInertiaLevel.numberOfTests);
 		} else
 		{
+			numIncorrectMomentOfInertiaSubmission++;
 			momentOfInertiaSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
 
@@ -445,6 +472,8 @@ public class ActivityEightManager : MonoBehaviour
 			if (currentNumOfTorqueTests <= 0)
 			{
 				displayText = "Calculations correct. The Torque Calculation module is now calibrated.";
+				isTorqueCalculationFinished = true;
+				torqueDuration = gameplayTime - momentOfInertiaDuration;
 			}
 			else
 			{
@@ -455,6 +484,7 @@ public class ActivityEightManager : MonoBehaviour
 			torqueView.UpdateCalibrationTestTextDisplay(currentTorqueLevel.numberOfTests - currentNumOfTorqueTests, currentTorqueLevel.numberOfTests);
 		} else
 		{
+			numIncorrectTorqueSubmission++;
 			torqueSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
 
@@ -552,6 +582,8 @@ public class ActivityEightManager : MonoBehaviour
 			if (currentNumOfEquilibriumTests <= 0)
 			{
 				displayText = "Calculations correct. The Equilibium Calculation module is now calibrated.";
+				isEquilibriumCalculationFinished = true;
+				equilibriumDuration = gameplayTime - torqueDuration - momentOfInertiaDuration;
 			} else
 			{
 				displayText = "Calculations correct. Loaded next test.";
@@ -561,6 +593,7 @@ public class ActivityEightManager : MonoBehaviour
 			equilibriumView.UpdateCalibrationTestTextDisplay(currentEquilibriumLevel.numberOfTests - currentNumOfEquilibriumTests, currentEquilibriumLevel.numberOfTests);
 		} else
 		{
+			numIncorrectEquilibriumSubmission++;
 			equilibriumSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
 
@@ -592,8 +625,34 @@ public class ActivityEightManager : MonoBehaviour
 		{
 			inputReader.SetGameplay();
 			equilibriumView.gameObject.SetActive(false);
-			// insert clear event action invoke...
+			RebootRoomClearEvent?.Invoke();
 		}
 	}
 	#endregion
+
+	private void DisplayPerformanceView()
+	{
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
+
+		performanceView.SetTotalTimeDisplay(gameplayTime);
+
+		performanceView.SetMomentOfInertiaMetricsDisplay(
+			isAccomplished: isMomentOfInertiaCalculationFinished,
+			numIncorrectSubmission: numIncorrectMomentOfInertiaSubmission,
+			duration: momentOfInertiaDuration
+			);
+
+		performanceView.SetTorqueMetricsDisplay(
+			isAccomplished: isTorqueCalculationFinished,
+			numIncorrectSubmission: numIncorrectTorqueSubmission,
+			duration: torqueDuration
+			);
+
+		performanceView.SetEquilibriumMetricsDisplay(
+			isAccomplished: isEquilibriumCalculationFinished,
+			numIncorrectSubmission: numIncorrectEquilibriumSubmission,
+			duration: equilibriumDuration
+			);
+	}
 }
