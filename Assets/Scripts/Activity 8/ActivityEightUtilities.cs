@@ -75,4 +75,87 @@ public static class ActivityEightUtilities
 
 		return Mathf.Abs((float)submittedTorqueMagnitude - computationResult) <= 0.0001;
 	}
+
+	/// <summary>
+	/// Validates submitted Summation of Downward Forces value based from <c>EquilibriumData</c>.
+	/// </summary>
+	/// <param name="submittedSummationOfDownwardForces"></param>
+	/// <param name="equilibriumData"></param>
+	/// <returns></returns>
+	public static bool ValidateSummationOfDownwardForcesSubmission(float? submittedSummationOfDownwardForces, EquilibriumData equilibriumData)
+	{
+		if (submittedSummationOfDownwardForces == null) return false;
+
+		// Formula: -redBoxWeight + -blueBoxWeight + -weighingApparatusWeight
+		float computationResult = -equilibriumData.redBoxWeight + -equilibriumData.blueBoxWeight + -equilibriumData.weighingApparatusWeight;
+
+		return Mathf.Abs((float)submittedSummationOfDownwardForces - computationResult) <= 0.0001;
+	}
+
+	/// <summary>
+	/// Validates submitted Upward Force value based from <c>EquilibriumData</c>.
+	/// </summary>
+	/// <param name="submittedUpwardForce"></param>
+	/// <param name="equilibriumData"></param>
+	/// <returns></returns>
+	public static bool ValidateUpwardForceSubmission(float? submittedUpwardForce, EquilibriumData equilibriumData)
+	{
+		if (submittedUpwardForce == null) return false;
+
+		// submittedUpwardForce should be equal to fulcrumForce.
+		return Mathf.Abs((float)submittedUpwardForce - equilibriumData.fulcrumForce) <= 0.0001;
+	}
+
+	/// <summary>
+	/// Validates submitted Summation of Total Forces value based from <c>EquilibriumData</c>.
+	/// </summary>
+	/// <param name="submittedSummationOfTotalForces"></param>
+	/// <param name="equilibriumData"></param>
+	/// <returns></returns>
+	public static bool ValidateSummationOfTotalForcesSubmission(float? submittedSummationOfTotalForces, EquilibriumData equilibriumData)
+	{
+		if (submittedSummationOfTotalForces == null) return false;
+
+		// Formula: -redBoxWeight + -blueBoxWeight + -weighingApparatusWeight + fulcrumForce
+		float computedSummationDownwardForces = -equilibriumData.redBoxWeight + -equilibriumData.blueBoxWeight + -equilibriumData.weighingApparatusWeight;
+		float upwardForce = equilibriumData.fulcrumForce;
+
+		float computationResult = computedSummationDownwardForces + upwardForce;
+
+		return Mathf.Abs((float)submittedSummationOfTotalForces - computationResult) <= 0.0001;
+	}
+
+	/// <summary>
+	/// Validates submitted <c>EquilibriumType</c> based from <c>EquilibriumData</c>.
+	/// </summary>
+	/// <param name="submittedEquilibriumType"></param>
+	/// <param name="equilibriumData"></param>
+	/// <returns></returns>
+	public static bool ValidateEquilibriumTypeSubmission(EquilibriumType? submittedEquilibriumType, EquilibriumData equilibriumData)
+	{
+		if (submittedEquilibriumType == null) return false;
+
+		// Condition 1: Summation of Total Forces = 0
+		float summationOfTotalForces = -equilibriumData.redBoxWeight + -equilibriumData.blueBoxWeight + -equilibriumData.weighingApparatusWeight + equilibriumData.fulcrumForce;
+		bool isTotalForceOnEquilibrium = Mathf.Abs(summationOfTotalForces) <= 0.001;
+
+		// Condition 2: counterClockwiseTorque = clockwiseTorque
+		float counterclockwiseTorque = equilibriumData.redBoxWeight * equilibriumData.redBoxDistance;
+		float clockwiseTorque = equilibriumData.blueBoxWeight * equilibriumData.blueBoxDistance;
+		bool isTorqueOnEquilibrium = Mathf.Abs(counterclockwiseTorque - clockwiseTorque) <= 0.001;
+
+		bool computedEquilibriumResult = isTotalForceOnEquilibrium && isTorqueOnEquilibrium;
+
+		if (
+			(computedEquilibriumResult == true && submittedEquilibriumType == EquilibriumType.InEquilibrium) ||
+			(computedEquilibriumResult == false && submittedEquilibriumType == EquilibriumType.NotInEquilibrium)
+			)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 }
