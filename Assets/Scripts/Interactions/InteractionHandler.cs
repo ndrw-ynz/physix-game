@@ -23,8 +23,6 @@ public class InteractionHandler : MonoBehaviour
 	public GameObject interactionUI;
 	public TextMeshProUGUI interactionText;
 
-	private IInteractable _selectedInteractable;
-
 	void Start()
 	{
 		_input.InteractEvent += HandleInteract;
@@ -49,7 +47,7 @@ public class InteractionHandler : MonoBehaviour
 			}
 		}
 
-		interactionUI.gameObject.SetActive(hitInteractableObject);
+		interactionUI.SetActive(hitInteractableObject);
 	}
 
 	private void HandleInteract()
@@ -60,7 +58,10 @@ public class InteractionHandler : MonoBehaviour
 		{
 			if (hit.collider.gameObject.TryGetComponent(out IInteractableObject interactObj))
 			{
-				if (interactObj.isInteractable == true) interactObj.Interact();
+				if (interactObj.isInteractable == true) {
+					interactionUI.SetActive(false);
+					interactObj.Interact(); 
+				}
 			}
 		}
 	}
