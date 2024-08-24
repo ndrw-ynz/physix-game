@@ -6906,8 +6906,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: EquilibriumView, Assembly-CSharp
+      - m_Target: {fileID: 827610062}
+        m_TargetAssemblyTypeName: GravityView, Assembly-CSharp
         m_MethodName: OnSubmitButtonClick
         m_Mode: 1
         m_Arguments:
@@ -15045,7 +15045,6 @@ GameObject:
   - component: {fileID: 1198062265}
   - component: {fileID: 1198062268}
   - component: {fileID: 1198062267}
-  - component: {fileID: 1198062266}
   m_Layer: 5
   m_Name: GravitationalPEEquation
   m_TagString: Untagged
@@ -15079,23 +15078,6 @@ RectTransform:
   m_AnchoredPosition: {x: 575, y: -112.29}
   m_SizeDelta: {x: 1150, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1198062266
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1198062264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 237d7cefa14daf94487e2aee03a61b2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numberInputFields:
-  - {fileID: 1761673868}
-  - {fileID: 1585327843}
-  - {fileID: 0}
-  resultField: {fileID: 261631686}
 --- !u!114 &1198062267
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16331,7 +16313,6 @@ GameObject:
   - component: {fileID: 1293028196}
   - component: {fileID: 1293028199}
   - component: {fileID: 1293028198}
-  - component: {fileID: 1293028197}
   m_Layer: 5
   m_Name: GravitationalForceEquation
   m_TagString: Untagged
@@ -16365,23 +16346,6 @@ RectTransform:
   m_AnchoredPosition: {x: 550, y: -112.29}
   m_SizeDelta: {x: 1100, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1293028197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1293028195}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 237d7cefa14daf94487e2aee03a61b2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numberInputFields:
-  - {fileID: 1891024334}
-  - {fileID: 2054333367}
-  - {fileID: 0}
-  resultField: {fileID: 1328191237}
 --- !u!114 &1293028198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19743,14 +19707,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e127d26e0cf0ac428faa9627e800d55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravitationConstantCoefficient: {fileID: 1891024334}
-  gravitationConstantExponent: {fileID: 2054333367}
-  massOneCoefficient: {fileID: 667663139}
-  massOneExponent: {fileID: 685805808}
-  massTwoCoefficient: {fileID: 774843898}
-  massTwoExponent: {fileID: 1747174931}
-  distanceCoefficient: {fileID: 850895465}
-  distanceExponent: {fileID: 113250626}
+  gravitationConstantCoefficientInputField: {fileID: 1891024334}
+  gravitationConstantExponentInputField: {fileID: 2054333367}
+  massOneCoefficientInputField: {fileID: 667663139}
+  massOneExponentInputField: {fileID: 685805808}
+  massTwoCoefficientInputField: {fileID: 774843898}
+  massTwoExponentInputField: {fileID: 1747174931}
+  distanceCoefficientnputField: {fileID: 850895465}
+  distanceExponentInputField: {fileID: 113250626}
   resultField: {fileID: 1328191237}
   gravityFormulaType: 0
 --- !u!1001 &1704090462
@@ -24613,14 +24577,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e127d26e0cf0ac428faa9627e800d55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravitationConstantCoefficient: {fileID: 1761673868}
-  gravitationConstantExponent: {fileID: 1585327843}
-  massOneCoefficient: {fileID: 1825733605}
-  massOneExponent: {fileID: 2110600607}
-  massTwoCoefficient: {fileID: 938642500}
-  massTwoExponent: {fileID: 586327882}
-  distanceCoefficient: {fileID: 698811708}
-  distanceExponent: {fileID: 376666405}
+  gravitationConstantCoefficientInputField: {fileID: 1761673868}
+  gravitationConstantExponentInputField: {fileID: 1585327843}
+  massOneCoefficientInputField: {fileID: 1825733605}
+  massOneExponentInputField: {fileID: 2110600607}
+  massTwoCoefficientInputField: {fileID: 938642500}
+  massTwoExponentInputField: {fileID: 586327882}
+  distanceCoefficientnputField: {fileID: 698811708}
+  distanceExponentInputField: {fileID: 376666405}
   resultField: {fileID: 261631686}
   gravityFormulaType: 1
 --- !u!1001 &2110600606
