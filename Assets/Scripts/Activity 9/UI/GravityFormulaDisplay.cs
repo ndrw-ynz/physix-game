@@ -12,17 +12,17 @@ public class GravityFormulaDisplay : MonoBehaviour
 {
 	[Header("Input Fields")]
 	[Header("Gravitation Constant Input Fields")]
-	[SerializeField] private TMP_InputField gravitationConstantCoefficient;
-	[SerializeField] private TMP_InputField gravitationConstantExponent;
+	[SerializeField] private TMP_InputField gravitationConstantCoefficientInputField;
+	[SerializeField] private TMP_InputField gravitationConstantExponentInputField;
 	[Header("Mass One Input Fields")]
-	[SerializeField] private TMP_InputField massOneCoefficient;
-	[SerializeField] private TMP_InputField massOneExponent;
+	[SerializeField] private TMP_InputField massOneCoefficientInputField;
+	[SerializeField] private TMP_InputField massOneExponentInputField;
 	[Header("Mass Two Input Fields")]
-	[SerializeField] private TMP_InputField massTwoCoefficient;
-	[SerializeField] private TMP_InputField massTwoExponent;
+	[SerializeField] private TMP_InputField massTwoCoefficientInputField;
+	[SerializeField] private TMP_InputField massTwoExponentInputField;
 	[Header("Distance Input Fields")]
-	[SerializeField] private TMP_InputField distanceCoefficient;
-	[SerializeField] private TMP_InputField distanceExponent;
+	[SerializeField] private TMP_InputField distanceCoefficientnputField;
+	[SerializeField] private TMP_InputField distanceExponentInputField;
 	[Header("Result Field")]
 	[SerializeField] private TMP_InputField resultField;
 	[Header("Gravity Formula Type")]
@@ -34,14 +34,14 @@ public class GravityFormulaDisplay : MonoBehaviour
 	{
 		// Check for empty or null input
 		if (
-			string.IsNullOrEmpty(gravitationConstantCoefficient.text) ||
-			string.IsNullOrEmpty(gravitationConstantExponent.text) ||
-			string.IsNullOrEmpty(massOneCoefficient.text) ||
-			string.IsNullOrEmpty(massOneExponent.text) ||
-			string.IsNullOrEmpty(massTwoCoefficient.text) ||
-			string.IsNullOrEmpty(massTwoExponent.text) ||
-			string.IsNullOrEmpty(distanceCoefficient.text) ||
-			string.IsNullOrEmpty(distanceExponent.text)
+			!float.TryParse(gravitationConstantCoefficientInputField.text, out float gravitationConstantCoefficient) ||
+			!int.TryParse(gravitationConstantExponentInputField.text, out int gravitationConstantExponent) ||
+			!float.TryParse(massOneCoefficientInputField.text, out float massOneCoefficient) ||
+			!int.TryParse(massOneExponentInputField.text, out int massOneExponent) ||
+			!float.TryParse(massTwoCoefficientInputField.text, out float massTwoCoefficient) ||
+			!int.TryParse(massTwoExponentInputField.text, out int massTwoExponent) ||
+			!float.TryParse(distanceCoefficientnputField.text, out float distanceCoefficient) ||
+			!int.TryParse(distanceExponentInputField.text, out int distanceExponent)
 			)
 		{
 			resultField.text = "N/A";
@@ -50,10 +50,10 @@ public class GravityFormulaDisplay : MonoBehaviour
 		}
 
 		// Compute value from scientific notation
-		double gravitationConstantValue = ActivityNineUtilities.EvaluateScientificNotation(float.Parse(gravitationConstantCoefficient.text), int.Parse(gravitationConstantExponent.text));
-		double massOneValue = ActivityNineUtilities.EvaluateScientificNotation(float.Parse(massOneCoefficient.text), int.Parse(massOneExponent.text));
-		double massTwoValue = ActivityNineUtilities.EvaluateScientificNotation(float.Parse(massTwoCoefficient.text), int.Parse(massTwoExponent.text));
-		double distanceValue = ActivityNineUtilities.EvaluateScientificNotation(float.Parse(distanceCoefficient.text), int.Parse(distanceExponent.text));
+		double gravitationConstantValue = ActivityNineUtilities.EvaluateScientificNotation(gravitationConstantCoefficient, gravitationConstantExponent);
+		double massOneValue = ActivityNineUtilities.EvaluateScientificNotation(massOneCoefficient, massOneExponent);
+		double massTwoValue = ActivityNineUtilities.EvaluateScientificNotation(massTwoCoefficient, massTwoExponent);
+		double distanceValue = ActivityNineUtilities.EvaluateScientificNotation(distanceCoefficient, distanceExponent);
 
 		// Calculate result based on formula type.
 		double result = 0;
@@ -64,8 +64,8 @@ public class GravityFormulaDisplay : MonoBehaviour
 				result = gravitationConstantValue * massOneValue * massTwoValue / Math.Pow(distanceValue, 2);
 				break;
 			case GravityFormulaType.GravitationalPotentialEnergy:
-				// Formula: gravitationConstant * ( (massOne * massTwo) / distance )
-				result = gravitationConstantValue * massOneValue * massTwoValue / distanceValue;
+				// Formula: - gravitationConstant * ( (massOne * massTwo) / distance )
+				result = - gravitationConstantValue * massOneValue * massTwoValue / distanceValue;
 				break;
 		}
 
@@ -85,14 +85,14 @@ public class GravityFormulaDisplay : MonoBehaviour
 	public void ResetState()
 	{
 		// Set to default values.
-		gravitationConstantCoefficient.text = "0";
-		gravitationConstantExponent.text = "0";
-		massOneCoefficient.text = "0";
-		massOneExponent.text = "0";
-		massTwoCoefficient.text = "0";
-		massTwoExponent.text = "0";
-		distanceCoefficient.text = "0";
-		distanceExponent.text = "0";
+		gravitationConstantCoefficientInputField.text = "0";
+		gravitationConstantExponentInputField.text = "0";
+		massOneCoefficientInputField.text = "0";
+		massOneExponentInputField.text = "0";
+		massTwoCoefficientInputField.text = "0";
+		massTwoExponentInputField.text = "0";
+		distanceCoefficientnputField.text = "0";
+		distanceExponentInputField.text = "0";
 		// Clear result field
 		resultField.text = "0";
 		// Set result val to null.
