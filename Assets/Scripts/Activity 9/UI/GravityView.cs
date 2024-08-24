@@ -10,11 +10,11 @@ public class GravityAnswerSubmission
 
 	public GravityAnswerSubmission(
 		double? gravitationalForce,
-		double? gravitationalPotentialEnergy
+		double? GPE
 		)
 	{
 		this.gravitationalForce = gravitationalForce;
-		this.GPE = gravitationalPotentialEnergy;
+		this.GPE = GPE;
 	}
 }
 
@@ -90,7 +90,7 @@ public class GravityView : MonoBehaviour
 	{
 		GravityAnswerSubmission submission = new GravityAnswerSubmission(
 			gravitationalForce: gravitationalForceFormulaDisplay.resultValue,
-			gravitationalPotentialEnergy: GPEFormulaDisplay.resultValue
+			GPE: GPEFormulaDisplay.resultValue
 			);
 
 		SubmitAnswerEvent?.Invoke(submission);
