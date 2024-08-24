@@ -3,9 +3,25 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class GravityAnswerSubmission
+{
+	public double? gravitationalForce { get; private set; }
+	public double? GPE { get; private set; }
+
+	public GravityAnswerSubmission(
+		double? gravitationalForce,
+		double? gravitationalPotentialEnergy
+		)
+	{
+		this.gravitationalForce = gravitationalForce;
+		this.GPE = gravitationalPotentialEnergy;
+	}
+}
+
 public class GravityView : MonoBehaviour
 {
 	public static event Action QuitViewEvent;
+	public static event Action<GravityAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
@@ -31,9 +47,9 @@ public class GravityView : MonoBehaviour
 	{
 		ClearAllFields();
 
-		planetMassDisplay.SetupGivenVariableDisplay("Planet Mass: ", $"{data.planetMassSNCoefficient} x 10 ^ {data.planetMassSNExponent} kg");
-		orbittingObjectMassDisplay.SetupGivenVariableDisplay("Orbitting Object Mass: ", $"{data.orbittingObjectMassSNCoefficient} x 10 ^ {data.orbittingObjectMassSNExponent} kg");
-		centerPointDistanceDisplay.SetupGivenVariableDisplay("Center Point Distance: ", $"{data.distanceBetweenObjects} km");
+		planetMassDisplay.SetupGivenVariableDisplay("Planet Mass: ", $"{Math.Round(data.planetMassSNCoefficient, 4)} x 10 ^ {data.planetMassSNExponent} kg");
+		orbittingObjectMassDisplay.SetupGivenVariableDisplay("Orbitting Object Mass: ", $"{Math.Round(data.orbittingObjectMassSNCoefficient, 4)} x 10 ^ {data.orbittingObjectMassSNExponent} kg");
+		centerPointDistanceDisplay.SetupGivenVariableDisplay("Center Point Distance: ", $"{Math.Round(data.distanceBetweenObjects, 4)} km");
 
 		// Display default view
 		OnLeftPageButtonClick();
@@ -72,7 +88,12 @@ public class GravityView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		GravityAnswerSubmission submission = new GravityAnswerSubmission(
+			gravitationalForce: gravitationalForceFormulaDisplay.resultValue,
+			gravitationalPotentialEnergy: GPEFormulaDisplay.resultValue
+			);
 
+		SubmitAnswerEvent?.Invoke(submission);
 	}
 
 	/// <summary>
