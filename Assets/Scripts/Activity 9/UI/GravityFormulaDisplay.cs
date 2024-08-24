@@ -50,10 +50,10 @@ public class GravityFormulaDisplay : MonoBehaviour
 		}
 
 		// Compute value from scientific notation
-		double gravitationConstantValue = EvaluateScientificNotation(gravitationConstantCoefficient.text, gravitationConstantExponent.text);
-		double massOneValue = EvaluateScientificNotation(massOneCoefficient.text, massOneExponent.text);
-		double massTwoValue = EvaluateScientificNotation(massTwoCoefficient.text, massTwoExponent.text);
-		double distanceValue = EvaluateScientificNotation(distanceCoefficient.text, distanceExponent.text);
+		double gravitationConstantValue = ActivityNineUtilities.EvaluateScientificNotation(float.Parse(gravitationConstantCoefficient.text), int.Parse(gravitationConstantExponent.text));
+		double massOneValue = ActivityNineUtilities.EvaluateScientificNotation(float.Parse(massOneCoefficient.text), int.Parse(massOneExponent.text));
+		double massTwoValue = ActivityNineUtilities.EvaluateScientificNotation(float.Parse(massTwoCoefficient.text), int.Parse(massTwoExponent.text));
+		double distanceValue = ActivityNineUtilities.EvaluateScientificNotation(float.Parse(distanceCoefficient.text), int.Parse(distanceExponent.text));
 
 		// Calculate result based on formula type.
 		double result = 0;
@@ -80,13 +80,6 @@ public class GravityFormulaDisplay : MonoBehaviour
 			resultField.text = "N/A";
 			resultValue = null;
 		}
-	}
-
-	private double EvaluateScientificNotation(string coefficient, string exponent)
-	{
-		ExpressionEvaluator.Evaluate($"{coefficient} * (10 ^ ({exponent}))", out double result);
-		Debug.Log(result);
-		return result;
 	}
 
 	public void ResetState()
