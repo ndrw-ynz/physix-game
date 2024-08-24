@@ -22,9 +22,15 @@ public class GravityView : MonoBehaviour
 {
 	public static event Action QuitViewEvent;
 	public static event Action<GravityAnswerSubmission> SubmitAnswerEvent;
+	public static event Action<OrbittingObjectType> UpdateDisplayedOrbittingObjectEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
+
+	[Header("Orbitting Object Render Raw Images")]
+	[SerializeField] private RawImage spaceshipRenderImage;
+	[SerializeField] private RawImage satelliteOneRenderImage;
+	[SerializeField] private RawImage satelliteTwoRenderImage;
 
 	[Header("Given Variable Displays")]
 	[SerializeField] private GivenVariableDisplay planetMassDisplay;
@@ -47,12 +53,38 @@ public class GravityView : MonoBehaviour
 	{
 		ClearAllFields();
 
+		UpdateDisplayedObjectRenderImage(data.orbittingObjectType);
+
 		planetMassDisplay.SetupGivenVariableDisplay("Planet Mass: ", $"{Math.Round(data.planetMassSNCoefficient, 4)} x 10 ^ {data.planetMassSNExponent} kg");
 		orbittingObjectMassDisplay.SetupGivenVariableDisplay("Orbitting Object Mass: ", $"{Math.Round(data.orbittingObjectMassSNCoefficient, 4)} x 10 ^ {data.orbittingObjectMassSNExponent} kg");
 		centerPointDistanceDisplay.SetupGivenVariableDisplay("Center Point Distance: ", $"{Math.Round(data.distanceBetweenObjects, 4)} km");
 
 		// Display default view
 		OnLeftPageButtonClick();
+	}
+
+	private void UpdateDisplayedObjectRenderImage(OrbittingObjectType orbittingObjectType)
+	{
+		// Disable all.
+		spaceshipRenderImage.gameObject.SetActive(false);
+		satelliteOneRenderImage.gameObject.SetActive(false);
+		satelliteTwoRenderImage.gameObject.SetActive(false);
+
+		// Only activate specific orbitting object type
+		switch(orbittingObjectType)
+		{
+			case OrbittingObjectType.Spaceship:
+				spaceshipRenderImage.gameObject.SetActive(true);
+				break;
+			case OrbittingObjectType.SatelliteOne:
+				satelliteOneRenderImage.gameObject.SetActive(true);
+				break;
+			case OrbittingObjectType.SatelliteTwo:
+				satelliteTwoRenderImage.gameObject.SetActive(true);
+				break;
+		}
+
+		UpdateDisplayedOrbittingObjectEvent?.Invoke(orbittingObjectType);
 	}
 
 	/// <summary>
@@ -62,7 +94,7 @@ public class GravityView : MonoBehaviour
 	/// <param name="totalTests"></param>
 	public void UpdateCalibrationTestTextDisplay(int testNumber, int totalTests)
 	{
-		calibrationTestText.text = $"Calibration Test: {testNumber} / {totalTests}";
+		calibrationTestText.text = $"Calculation Test: {testNumber} / {totalTests}";
 	}
 
 	#region Buttons
