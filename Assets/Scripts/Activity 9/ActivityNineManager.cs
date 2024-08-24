@@ -48,6 +48,9 @@ public class ActivityNineManager : MonoBehaviour
 	[Header("View")]
 	[SerializeField] private GravityView gravityView;
 
+	[Header("Submission Status Display")]
+	[SerializeField] private GravitySubmissionStatusDisplay gravitySubmissionStatusDisplay;
+
 	// Given Data - Gravity
 	private GravityData gravityGivenData;
 
@@ -61,6 +64,8 @@ public class ActivityNineManager : MonoBehaviour
 
 		// Subscribe to view events
 		GravityView.SubmitAnswerEvent += CheckGravityAnswers;
+		GravitySubmissionStatusDisplay.ProceedEvent += GenerateNewGravityTest;
+		GravitySubmissionStatusDisplay.ProceedEvent += CloseGravityView;
 
 		GenerateGravityGivenData(currentGravityLevel);
 
@@ -141,7 +146,52 @@ public class ActivityNineManager : MonoBehaviour
 			isGPECorrect: ActivityNineUtilities.ValidateGPESubmission(answer.GPE, gravityGivenData)
 			);
 
-		Debug.Log($"gforce correct: {results.isGravitationalForceCorrect}");
-		Debug.Log($"gpe correct: {results.isGPECorrect}");
+		// Display gravity answer submission results
+		DisplayGravitySubmissionResults(results);
+	}
+
+	private void DisplayGravitySubmissionResults(GravityAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			currentNumGravityTests--;
+			string displayText;
+			if (currentNumGravityTests <= 0)
+			{
+				displayText = "Calculations correct. The Moment of Inertia Calculation module is now calibrated.";
+			}
+			else
+			{
+				displayText = "Calculations correct. Loaded next test.";
+			}
+			gravitySubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
+
+			gravityView.UpdateCalibrationTestTextDisplay(currentGravityLevel.numberOfTests - currentNumGravityTests, currentGravityLevel.numberOfTests);
+		} else
+		{
+			gravitySubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
+		}
+
+		// Update status border displays from result.
+		gravitySubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
+		gravitySubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void GenerateNewGravityTest()
+	{
+		if (currentNumGravityTests > 0)
+		{
+			GenerateGravityGivenData(currentGravityLevel);
+			gravityView.SetupGravityView(gravityGivenData);
+		}
+	}
+
+	private void CloseGravityView()
+	{
+		if (currentNumGravityTests <= 0)
+		{
+			gravityView.gameObject.SetActive(false);
+		}
 	}
 }
