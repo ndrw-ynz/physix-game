@@ -1,9 +1,19 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public enum OrbittingObjectType
+{
+	Spaceship,
+	SatelliteOne,
+	SatelliteTwo
+}
+
 public class GravityData
 {
+	public OrbittingObjectType orbittingObjectType;
+
 	public double planetMass;
 	public float planetMassSNCoefficient;
 	public int planetMassSNExponent;
@@ -60,7 +70,7 @@ public class ActivityNineManager : MonoBehaviour
 	private void Start()
 	{
 		// Set level data based from difficulty configuration.
-		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		ConfigureLevelData(Difficulty.Hard); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
 		// Subscribe to view events
 		GravityView.SubmitAnswerEvent += CheckGravityAnswers;
@@ -101,6 +111,22 @@ public class ActivityNineManager : MonoBehaviour
 	private void GenerateGravityGivenData(GravitySubActivitySO gravitySubActivitySO)
 	{
 		GravityData data = new GravityData();
+
+		// Determine orbitting object type based on number of solved tests
+		List<OrbittingObjectType> orbittingObjectTypes = new List<OrbittingObjectType> {
+			OrbittingObjectType.Spaceship,
+			OrbittingObjectType.SatelliteOne,
+			OrbittingObjectType.SatelliteTwo
+		};
+
+		if (currentNumGravityTests >= orbittingObjectTypes.Count)
+		{
+			data.orbittingObjectType = OrbittingObjectType.SatelliteTwo;
+		}
+		else
+		{
+			data.orbittingObjectType = orbittingObjectTypes[currentNumGravityTests];
+		}
 
 		// Generate planet mass related data
 		data.planetMassSNCoefficient = (float) Math.Round(Random.Range(
