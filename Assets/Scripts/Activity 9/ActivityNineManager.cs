@@ -49,6 +49,9 @@ public class ActivityNineManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
 
+	[Header("Input Reader")]
+	[SerializeField] InputReader inputReader;
+
 	[Header("Level Data - Gravity")]
 	[SerializeField] private GravitySubActivitySO gravityLevelOne;
 	[SerializeField] private GravitySubActivitySO gravityLevelTwo;
@@ -57,6 +60,7 @@ public class ActivityNineManager : MonoBehaviour
 
 	[Header("View")]
 	[SerializeField] private GravityView gravityView;
+	[SerializeField] private ActivityNinePerformanceView performanceView;
 
 	[Header("Submission Status Display")]
 	[SerializeField] private GravitySubmissionStatusDisplay gravitySubmissionStatusDisplay;
@@ -67,10 +71,17 @@ public class ActivityNineManager : MonoBehaviour
 	// Variable for keeping track of current number of tests.
 	private int currentNumGravityTests;
 
+	// Gameplay performance metrics variables
+	// Gameplay Time
+	private float gameplayTime;
+	// Gravity subactivity
+	private bool isGravityCalculationFinished;
+	private int numIncorrectGravitySubmission;
+
 	private void Start()
 	{
 		// Set level data based from difficulty configuration.
-		ConfigureLevelData(Difficulty.Hard); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
 		// Subscribe to view events
 		GravityView.SubmitAnswerEvent += CheckGravityAnswers;
@@ -83,6 +94,11 @@ public class ActivityNineManager : MonoBehaviour
 
 		gravityView.SetupGravityView(gravityGivenData);
 		gravityView.UpdateCalibrationTestTextDisplay(0, currentGravityLevel.numberOfTests);
+	}
+
+	private void Update()
+	{
+		gameplayTime += Time.deltaTime;
 	}
 
 	/// <summary>
@@ -185,6 +201,7 @@ public class ActivityNineManager : MonoBehaviour
 			if (currentNumGravityTests <= 0)
 			{
 				displayText = "Calculations correct. The Moment of Inertia Calculation module is now calibrated.";
+				isGravityCalculationFinished = true;
 			}
 			else
 			{
@@ -195,6 +212,7 @@ public class ActivityNineManager : MonoBehaviour
 			gravityView.UpdateCalibrationTestTextDisplay(currentGravityLevel.numberOfTests - currentNumGravityTests, currentGravityLevel.numberOfTests);
 		} else
 		{
+			numIncorrectGravitySubmission++;
 			gravitySubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
 
@@ -218,6 +236,21 @@ public class ActivityNineManager : MonoBehaviour
 		if (currentNumGravityTests <= 0)
 		{
 			gravityView.gameObject.SetActive(false);
+			DisplayPerformanceView();
 		}
+	}
+
+	private void DisplayPerformanceView()
+	{
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
+
+		performanceView.SetTotalTimeDisplay(gameplayTime);
+
+		performanceView.SetGravityMetricsDisplay(
+			isAccomplished: isGravityCalculationFinished,
+			numIncorrectSubmission: numIncorrectGravitySubmission,
+			duration: gameplayTime
+			);
 	}
 }
