@@ -15,6 +15,26 @@ public class GravityData
 	public double distanceBetweenObjects;
 }
 
+public class GravityAnswerSubmissionResults
+{
+	public bool isGravitationalForceCorrect { get; private set; }
+	public bool isGPECorrect { get; private set; }
+
+	public GravityAnswerSubmissionResults(
+		bool isGravitationalForceCorrect,
+		bool isGPECorrect
+		)
+	{
+		this.isGravitationalForceCorrect = isGravitationalForceCorrect;
+		this.isGPECorrect = isGPECorrect;
+	}
+
+	public bool isAllCorrect()
+	{
+		return isGravitationalForceCorrect && isGPECorrect;
+	}
+}
+
 public class ActivityNineManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
@@ -38,6 +58,9 @@ public class ActivityNineManager : MonoBehaviour
 	{
 		// Set level data based from difficulty configuration.
 		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+
+		// Subscribe to view events
+		GravityView.SubmitAnswerEvent += CheckGravityAnswers;
 
 		GenerateGravityGivenData(currentGravityLevel);
 
@@ -109,5 +132,16 @@ public class ActivityNineManager : MonoBehaviour
 			), 2);
 
 		gravityGivenData = data;
+	}
+
+	private void CheckGravityAnswers(GravityAnswerSubmission answer)
+	{
+		GravityAnswerSubmissionResults results = new GravityAnswerSubmissionResults(
+			isGravitationalForceCorrect: ActivityNineUtilities.ValidateGravitationalForceSubmission(answer.gravitationalForce, gravityGivenData),
+			isGPECorrect: ActivityNineUtilities.ValidateGPESubmission(answer.GPE, gravityGivenData)
+			);
+
+		Debug.Log($"gforce correct: {results.isGravitationalForceCorrect}");
+		Debug.Log($"gpe correct: {results.isGPECorrect}");
 	}
 }
