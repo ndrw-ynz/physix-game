@@ -2499,6 +2499,7 @@ MonoBehaviour:
   inputReader: {fileID: 11400000, guid: 814afce522f247f4f91d4ca5f861c36a, type: 2}
   player: {fileID: 950148098}
   appleTreeCamera: {fileID: 864880160}
+  motionApple: {fileID: 1094688596}
 --- !u!4 &339558598
 Transform:
   m_ObjectHideFlags: 0
@@ -17560,6 +17561,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Apple_LP
       objectReference: {fileID: 0}
+    - target: {fileID: 8292600945184373571, guid: cd71e48862ae6264dbb53424a2f74026, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8673629637147369977, guid: cd71e48862ae6264dbb53424a2f74026, type: 3}
       propertyPath: m_LocalScale.x
       value: 5
@@ -17578,7 +17583,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8673629637147369977, guid: cd71e48862ae6264dbb53424a2f74026, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3.84
+      value: 4.5
       objectReference: {fileID: 0}
     - target: {fileID: 8673629637147369977, guid: cd71e48862ae6264dbb53424a2f74026, type: 3}
       propertyPath: m_LocalPosition.z
@@ -17615,7 +17620,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8292600945184373571, guid: cd71e48862ae6264dbb53424a2f74026, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1094688596}
   m_SourcePrefab: {fileID: 100100000, guid: cd71e48862ae6264dbb53424a2f74026, type: 3}
 --- !u!4 &1006267566 stripped
 Transform:
@@ -18592,6 +18600,25 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46ca9bca5d4d6824c9973375d741a3df, type: 3}
+--- !u!1 &1094688593 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8292600945184373571, guid: cd71e48862ae6264dbb53424a2f74026, type: 3}
+  m_PrefabInstance: {fileID: 1006267565}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1094688596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094688593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f7e5d887fd3f944db937f038eecc945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDistance: 4
+  speed: 3
 --- !u!4 &1095974168 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8407946972163067645, guid: 92101ed146e7f434cb43a3680c518e75, type: 3}
