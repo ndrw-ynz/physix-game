@@ -43,6 +43,13 @@ public class ActivityFiveManager : MonoBehaviour
 	[Header("Input Reader")]
 	[SerializeField] InputReader inputReader;
 
+	[Header("Views")]
+	[SerializeField] private AppleMotionView appleMotionView;
+
+	[Header("Submission Status Displays")]
+	[Header("Force Type Submission Status Displays")]
+	[SerializeField] private AppleForceTypeSubmissionStatusDisplay appleForceTypeSubmissionStatusDisplay;
+
 	private void Start()
 	{
 		AppleMotionView.SubmitForceTypesAnswerEvent += CheckForceTypeAnswers;
@@ -54,8 +61,23 @@ public class ActivityFiveManager : MonoBehaviour
 		// DO SWITCH CASES TO UPDATE GAMEPLAY METRICS VARIABLES BASED ON ENUM/TYPE
 		ForceTypeAnswerSubmissionResults results = ActivityFiveUtilities.ValidateForceTypeSubmission(answer);
 
-		Debug.Log(results.isAllCorrect());
+		DisplayForceTypeSubmissionResults(answer, results);
 
 	}
 
+	private void DisplayForceTypeSubmissionResults(ForceTypeAnswerSubmission answer, ForceTypeAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			appleForceTypeSubmissionStatusDisplay.SetSubmissionStatus(true, "correct");
+		}
+		else
+		{
+			appleForceTypeSubmissionStatusDisplay.SetSubmissionStatus(false, "wrong");
+		}
+
+		appleForceTypeSubmissionStatusDisplay.UpdateForceDiagramDisplay(answer, results);
+
+		appleForceTypeSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
 }
