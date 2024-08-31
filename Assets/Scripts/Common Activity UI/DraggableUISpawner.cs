@@ -12,6 +12,7 @@ public abstract class DraggableUISpawner<T> : MonoBehaviour, IBeginDragHandler, 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
 		currentDraggableObject = Instantiate(draggableUIPrefab, canvas.transform, false);
+		currentDraggableObject.canvas = canvas;
 		Initialize();
 
 		if (currentDraggableObject != null)
