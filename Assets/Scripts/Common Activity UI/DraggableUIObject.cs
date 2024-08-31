@@ -1,21 +1,30 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public abstract class DraggableUIObject<T> : MonoBehaviour, IDragHandler, IEndDragHandler where T : DraggableUIObject<T>
+public abstract class DraggableUIObject<T> : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler where T : DraggableUIObject<T>
 {
+	public Canvas canvas;
+
+	public void OnBeginDrag(PointerEventData eventData)
+	{
+		transform.SetParent(canvas.transform, false);
+	}
+
 	public void OnDrag(PointerEventData eventData)
 	{
 		transform.position = eventData.position;
 	}
 
-	public void OnEndDrag(PointerEventData eventData)
+	public virtual void OnEndDrag(PointerEventData eventData)
 	{
 		DraggableUIContainer<T> container = GetContainerUnderMouse(eventData);
 		if (container != null)
 		{
 			container.HandleDraggableObject((T)this);
+		} else
+		{
+			Destroy(gameObject); // Destroy after processing
 		}
-		Destroy(gameObject); // Destroy after processing
 	}
 
 	private DraggableUIContainer<T> GetContainerUnderMouse(PointerEventData eventData)
