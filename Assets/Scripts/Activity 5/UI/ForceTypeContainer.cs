@@ -15,6 +15,7 @@ public class ForceTypeContainer: DraggableUIContainer<ForceTypeDraggableUI>
 		if (currentForceTypeUI != null)
 		{
 			Destroy(currentForceTypeUI.gameObject);
+			currentForceTypeUI = null;
 		}
 		currentForceTypeUI = forceTypeUI;
 
