@@ -1,11 +1,29 @@
-using UnityEngine;
+public enum ForceDirection
+{
+	Up,
+	Down,
+	Left,
+	Right
+}
 
 public class ForceTypeContainer: DraggableUIContainer<ForceTypeDraggableUI>
 {
-	public ForceType contactForceType { get; private set; }
-	public override void HandleDraggableObject(ForceTypeDraggableUI draggableObject)
+	public ForceDirection forceDirection;
+	private ForceTypeDraggableUI currentForceTypeUI;
+	public override void HandleDraggableObject(ForceTypeDraggableUI forceTypeUI)
 	{
-		contactForceType = draggableObject.contactForceType;
-		Debug.Log($"this is now holding type: {draggableObject.contactForceType}");
+		if (currentForceTypeUI != null)
+		{
+			Destroy(currentForceTypeUI.gameObject);
+		}
+		currentForceTypeUI = forceTypeUI;
+
+		UIUtilities.CenterChildInParent(forceTypeUI.gameObject, gameObject);
+	}
+
+	public ForceType? GetCurrentForceType()
+	{
+		if (currentForceTypeUI == null) return null;
+		return currentForceTypeUI.contactForceType;
 	}
 }
