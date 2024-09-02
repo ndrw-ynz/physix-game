@@ -9,28 +9,15 @@ public abstract class ActivityEnvironmentManager : MonoBehaviour
 	[Header("Player")]
 	[SerializeField] private GameObject player;
 
-	public virtual void Start()
+	public void SetPlayerActivityState(bool isActive)
 	{
-		InteractableViewOpenerObject.SwitchToTargetCameraEvent += SwitchCameraToTargetCamera;
-	}
-
-	private void SwitchCameraToTargetCamera(Camera targetCamera)
-	{
-		if (player != null && targetCamera != null)
+		player.gameObject.SetActive(isActive);
+		if (isActive)
 		{
-			player.gameObject.SetActive(false);
-			targetCamera.gameObject.SetActive(true);
-		}
-		inputReader.SetUI();
-	}
-
-	public void SwitchCameraToPlayerCamera(Camera targetCamera)
-	{
-		if (player != null && targetCamera != null)
+			inputReader.SetGameplay();
+		} else
 		{
-			player.gameObject.SetActive(true);
-			targetCamera.gameObject.SetActive(false);
+			inputReader.SetUI();
 		}
-		inputReader.SetGameplay();
 	}
 }
