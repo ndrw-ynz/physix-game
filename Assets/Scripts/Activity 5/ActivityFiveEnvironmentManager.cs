@@ -2,23 +2,52 @@ using UnityEngine;
 
 public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 {
-	[Header("Cameras")]
+	[Header("Environment Cameras")]
+	[SerializeField] private Camera appleCamera;
 	[SerializeField] private Camera appleTreeCamera;
 
-	[Header("Motion - Apple Tree")]
-	[SerializeField] private AppleFallMotionAnimate motionApple;
+	[Header("Apple Tree Area Game Objects")]
+	[SerializeField] private GameObject appleOnBranch;
+	[SerializeField] private AppleFallMotionAnimate fallingApple;
+	[SerializeField] private GameObject appleTreeAreaIndicatorEffect;
+	[SerializeField] private InteractableViewOpenerObject interactableApples;
 
-	public override void Start()
+	private AppleMotionEnvironmentStateMachine appleMotionEnvironmentStateMachine;
+	private AppleMotionEnvironmentState currentAppleMotionEnvironmentState;
+	public void Start()
 	{
-		base.Start();
-
-		AppleMotionView.OpenViewEvent += () => DisplayAppleMotion(true);
-		AppleMotionView.QuitViewEvent += () => SwitchCameraToPlayerCamera(appleTreeCamera);
-		AppleMotionView.QuitViewEvent += () => DisplayAppleMotion(false);
+		AppleMotionView.OpenViewEvent += () => appleMotionEnvironmentStateMachine.TransitionToState(currentAppleMotionEnvironmentState);
+		AppleMotionView.QuitViewEvent += () => appleMotionEnvironmentStateMachine.TransitionToState(AppleMotionEnvironmentState.None);
+		AppleForceTypeSubmissionStatusDisplay.UpdateAppleEnvionmentStateEvent += UpdateAppleEnvironmentStateMachine;
+		
+		// Initialize values for apple tree environment state machine
+		appleMotionEnvironmentStateMachine = new AppleMotionEnvironmentStateMachine(this);
+		appleMotionEnvironmentStateMachine.Initialize(AppleMotionEnvironmentState.None);
+		currentAppleMotionEnvironmentState = AppleMotionEnvironmentState.OnBranch;
 	}
 
-	private void DisplayAppleMotion(bool display)
+	public void SetAppleOnBranchState(bool isActive)
 	{
-		motionApple.gameObject.SetActive(display);
+		appleCamera.gameObject.SetActive(isActive);
+		appleOnBranch.gameObject.SetActive(isActive);
+	}
+
+	public void SetAppleFallingState(bool isActive)
+	{
+		appleTreeCamera.gameObject.SetActive(isActive);
+		fallingApple.gameObject.SetActive(isActive);
+	}
+
+	private void UpdateAppleEnvironmentStateMachine(ForceObjectMotionType clearedForceObjectMotionType)
+	{
+		switch (clearedForceObjectMotionType)
+		{
+			case ForceObjectMotionType.Apple_OnBranch:
+				currentAppleMotionEnvironmentState = AppleMotionEnvironmentState.Falling;
+				break;
+			case ForceObjectMotionType.Apple_Falling:
+				break;
+		}
+		appleMotionEnvironmentStateMachine.TransitionToState(currentAppleMotionEnvironmentState);
 	}
 }
