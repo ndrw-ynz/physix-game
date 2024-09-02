@@ -3,13 +3,16 @@ using UnityEngine;
 public abstract class ForceTypeSubmissionStatusDisplay : SubmissionStatusDisplay
 {
 	[Header("Force Type Answer Displays")]
-	[SerializeField] ForceTypeAnswerDisplay upForceTypeAnswerDisplay;
-	[SerializeField] ForceTypeAnswerDisplay downForceTypeAnswerDisplay;
-	[SerializeField] ForceTypeAnswerDisplay leftForceTypeAnswerDisplay;
-	[SerializeField] ForceTypeAnswerDisplay rightForceTypeAnswerDisplay;
+	[SerializeField] private ForceTypeAnswerDisplay upForceTypeAnswerDisplay;
+	[SerializeField] private ForceTypeAnswerDisplay downForceTypeAnswerDisplay;
+	[SerializeField] private ForceTypeAnswerDisplay leftForceTypeAnswerDisplay;
+	[SerializeField] private ForceTypeAnswerDisplay rightForceTypeAnswerDisplay;
+
+	public ForceObjectMotionType displayedForceObjectMotionType { get; private set; }
 
 	public void UpdateForceDiagramDisplay(ForceTypeAnswerSubmission answer, ForceTypeAnswerSubmissionResults results)
     {
+		displayedForceObjectMotionType = answer.forceObjectMotionType;
         UpdateForceDiagramText(answer);
         UpdateForceDiagramStatusColors(results);
     }
