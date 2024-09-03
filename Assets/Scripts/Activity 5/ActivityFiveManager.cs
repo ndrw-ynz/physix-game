@@ -69,7 +69,7 @@ public class ActivityFiveManager : MonoBehaviour
 	[Header("Submission Status Displays")]
 	[Header("Apple Force Submission Status Displays")]
 	[SerializeField] private AppleForceSubmissionStatusDisplay appleForceSubmissionStatusDisplay;
-	[SerializeField] private AppleForceDiagramSubmissionStatusDisplay appleForceTypeSubmissionStatusDisplay;
+	[SerializeField] private ForceDiagramSubmissionStatusDisplay appleForceDiagramSubmissionStatusDisplay;
 
 	// queue for apple motion
 	private ForceMotionViewStateMachine appleForceMotionSubActivityStateMachine;
@@ -87,7 +87,7 @@ public class ActivityFiveManager : MonoBehaviour
 		appleMotionView.SubmitForceAnswerEvent += CheckAppleForceAnswer;
 		appleMotionView.SubmitForceTypesAnswerEvent += CheckAppleForceTypeAnswers;
 		AppleForceSubmissionStatusDisplay.ProceedEvent += UpdateAppleSubActivityStateQueue;
-		AppleForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateAppleForceDiagramStateQueue;
+		appleForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateAppleForceDiagramStateQueue;
 
 		// Initialize sub activity state queues
 		InitializeSubActivityStateQueues();
@@ -172,7 +172,7 @@ public class ActivityFiveManager : MonoBehaviour
 	{
 		ForceTypeAnswerSubmissionResults results = ActivityFiveUtilities.ValidateForceTypeSubmission(appleForceDiagramMotionTypeQueue.Peek(), answer);
 		// add metrics alter
-		DisplayForceTypeSubmissionResults(answer, results, appleForceTypeSubmissionStatusDisplay);
+		DisplayForceTypeSubmissionResults(answer, results, appleForceDiagramSubmissionStatusDisplay);
 	}
 
 	private void DisplayForceTypeSubmissionResults(ForceTypeAnswerSubmission answer, ForceTypeAnswerSubmissionResults results, ForceDiagramSubmissionStatusDisplay forceTypeSubmissionStatusDisplay)

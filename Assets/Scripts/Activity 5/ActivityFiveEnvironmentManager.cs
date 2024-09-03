@@ -6,6 +6,10 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 	[Header("Views")]
 	[SerializeField] private ForceMotionView appleMotionView;
 
+	[Header("Submission Status Displays")]
+	[Header("Apple Force Submission Status Displays")]
+	[SerializeField] private ForceDiagramSubmissionStatusDisplay appleForceDiagramSubmissionStatusDisplay;
+
 	[Header("Environment Cameras")]
 	[SerializeField] private Camera appleCamera;
 	[SerializeField] private Camera appleTreeCamera;
@@ -24,7 +28,7 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 		appleMotionView.OpenViewEvent += UpdateAppleEnvironmentStateMachine;
 		appleMotionView.QuitViewEvent += () => appleMotionEnvironmentStateMachine.TransitionToState(AppleMotionEnvironmentState.None);
 		AppleForceSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
-		AppleForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
+		appleForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
 		
 		// Initialize environment state queues
 		InitializeEnvironmentStateQueues();
