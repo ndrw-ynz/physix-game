@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 {
+	[Header("Views")]
+	[SerializeField] private ForceMotionView appleMotionView;
+
 	[Header("Environment Cameras")]
 	[SerializeField] private Camera appleCamera;
 	[SerializeField] private Camera appleTreeCamera;
@@ -18,8 +21,8 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 
 	public void Start()
 	{
-		AppleMotionView.OpenViewEvent += UpdateAppleEnvironmentStateMachine;
-		AppleMotionView.QuitViewEvent += () => appleMotionEnvironmentStateMachine.TransitionToState(AppleMotionEnvironmentState.None);
+		appleMotionView.OpenViewEvent += UpdateAppleEnvironmentStateMachine;
+		appleMotionView.QuitViewEvent += () => appleMotionEnvironmentStateMachine.TransitionToState(AppleMotionEnvironmentState.None);
 		AppleForceSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
 		AppleForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
 		
