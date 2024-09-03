@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
@@ -13,17 +14,42 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private InteractableViewOpenerObject interactableApples;
 
 	private AppleMotionEnvironmentStateMachine appleMotionEnvironmentStateMachine;
-	private AppleMotionEnvironmentState currentAppleMotionEnvironmentState;
+	private Queue<AppleMotionEnvironmentState> appleMotionEnvironmentStateQueue;
+
 	public void Start()
 	{
-		AppleMotionView.OpenViewEvent += () => appleMotionEnvironmentStateMachine.TransitionToState(currentAppleMotionEnvironmentState);
+		AppleMotionView.OpenViewEvent += UpdateAppleEnvironmentStateMachine;
 		AppleMotionView.QuitViewEvent += () => appleMotionEnvironmentStateMachine.TransitionToState(AppleMotionEnvironmentState.None);
-		AppleForceTypeSubmissionStatusDisplay.UpdateAppleEnvionmentStateEvent += UpdateAppleEnvironmentStateMachine;
+		AppleForceSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
+		AppleForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
 		
+		// Initialize environment state queues
+		InitializeEnvironmentStateQueues();
+
 		// Initialize values for apple tree environment state machine
 		appleMotionEnvironmentStateMachine = new AppleMotionEnvironmentStateMachine(this);
 		appleMotionEnvironmentStateMachine.Initialize(AppleMotionEnvironmentState.None);
-		currentAppleMotionEnvironmentState = AppleMotionEnvironmentState.OnBranch;
+	}
+
+	private void InitializeEnvironmentStateQueues()
+	{
+		// Initialize and enqueue default content of each environment state queues
+		appleMotionEnvironmentStateQueue = new Queue<AppleMotionEnvironmentState>();
+		appleMotionEnvironmentStateQueue.Enqueue(AppleMotionEnvironmentState.OnBranch);
+		appleMotionEnvironmentStateQueue.Enqueue(AppleMotionEnvironmentState.Falling);
+		appleMotionEnvironmentStateQueue.Enqueue(AppleMotionEnvironmentState.Falling);
+
+		// Enqueue addition environment states based on difficulty configuration
+		switch (ActivityFiveManager.difficultyConfiguration)
+		{
+			case Difficulty.Medium:
+				appleMotionEnvironmentStateQueue.Enqueue(AppleMotionEnvironmentState.Falling);
+				break;
+			case Difficulty.Hard:
+				appleMotionEnvironmentStateQueue.Enqueue(AppleMotionEnvironmentState.Falling);
+				appleMotionEnvironmentStateQueue.Enqueue(AppleMotionEnvironmentState.Falling);
+				break;
+		}
 	}
 
 	public void SetAppleOnBranchState(bool isActive)
@@ -38,16 +64,25 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 		fallingApple.gameObject.SetActive(isActive);
 	}
 
-	private void UpdateAppleEnvironmentStateMachine(ForceObjectMotionType clearedForceObjectMotionType)
+	private void DequeueAppleEnvironmentStateQueue()
 	{
-		switch (clearedForceObjectMotionType)
+		appleMotionEnvironmentStateQueue.Dequeue();
+		UpdateAppleEnvironmentStateMachine();
+	}
+
+	private void UpdateAppleEnvironmentStateMachine()
+	{
+		if (appleMotionEnvironmentStateQueue.Count == 0)
 		{
-			case ForceObjectMotionType.Apple_OnBranch:
-				currentAppleMotionEnvironmentState = AppleMotionEnvironmentState.Falling;
-				break;
-			case ForceObjectMotionType.Apple_Falling:
-				break;
+			// Deactivate area effect and interactable apples
+			appleTreeAreaIndicatorEffect.gameObject.SetActive(false);
+			interactableApples.SetInteractable(false);
+
+			appleMotionEnvironmentStateMachine.TransitionToState(AppleMotionEnvironmentState.None);
 		}
-		appleMotionEnvironmentStateMachine.TransitionToState(currentAppleMotionEnvironmentState);
+		else
+		{
+			appleMotionEnvironmentStateMachine.TransitionToState(appleMotionEnvironmentStateQueue.Peek());
+		}
 	}
 }
