@@ -1,7 +1,10 @@
 using UnityEngine;
+using System;
 
-public abstract class ForceDiagramSubmissionStatusDisplay : SubmissionStatusDisplay
+public class ForceDiagramSubmissionStatusDisplay : SubmissionStatusDisplay
 {
+	public event Action ProceedEvent;
+
 	[Header("Force Type Answer Displays")]
 	[SerializeField] private ForceTypeAnswerDisplay upForceTypeAnswerDisplay;
 	[SerializeField] private ForceTypeAnswerDisplay downForceTypeAnswerDisplay;
@@ -28,5 +31,17 @@ public abstract class ForceDiagramSubmissionStatusDisplay : SubmissionStatusDisp
 		downForceTypeAnswerDisplay.UpdateStatusBorderDisplay(results.isDownForceTypeCorrect);
 		leftForceTypeAnswerDisplay.UpdateStatusBorderDisplay(results.isLeftForceTypeCorrect);
 		rightForceTypeAnswerDisplay.UpdateStatusBorderDisplay(results.isRightForceTypeCorrect);
+	}
+
+	protected override void OnEnable()
+	{
+		base.OnEnable();
+		proceedButton.onClick.AddListener(() => ProceedEvent?.Invoke());
+	}
+
+	protected override void OnDisable()
+	{
+		base.OnDisable();
+		proceedButton.onClick.RemoveAllListeners();
 	}
 }
