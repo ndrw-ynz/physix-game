@@ -3176,6 +3176,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: 814afce522f247f4f91d4ca5f861c36a, type: 2}
   player: {fileID: 950148098}
+  appleMotionView: {fileID: 2099505144}
+  appleForceSubmissionStatusDisplay: {fileID: 1000110612}
+  appleForceDiagramSubmissionStatusDisplay: {fileID: 1307384447}
   appleCamera: {fileID: 443709632}
   appleTreeCamera: {fileID: 864880160}
   appleOnBranch: {fileID: 278668059}
@@ -18082,7 +18085,7 @@ MonoBehaviour:
   forceLevelThree: {fileID: 11400000, guid: b1430d342e924ef4da02f0ea18259db0, type: 2}
   appleMotionView: {fileID: 2099505144}
   appleForceSubmissionStatusDisplay: {fileID: 1000110612}
-  appleForceTypeSubmissionStatusDisplay: {fileID: 1307384444}
+  appleForceDiagramSubmissionStatusDisplay: {fileID: 1307384447}
 --- !u!1001 &934756717
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18897,7 +18900,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7358259794541007753, guid: 0ec7f2b42d8e4b34f87a158bc7c97c92, type: 3}
       propertyPath: m_Name
-      value: AppleForceTypeSubmissionStatusDisplay
+      value: AppleForceDiagramSubmissionStatusDisplay
       objectReference: {fileID: 0}
     - target: {fileID: 7358259794541007753, guid: 0ec7f2b42d8e4b34f87a158bc7c97c92, type: 3}
       propertyPath: m_IsActive
@@ -18931,7 +18934,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7358259794541007753, guid: 0ec7f2b42d8e4b34f87a158bc7c97c92, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1307384444}
+      addedObject: {fileID: 1307384447}
   m_SourcePrefab: {fileID: 100100000, guid: 0ec7f2b42d8e4b34f87a158bc7c97c92, type: 3}
 --- !u!224 &975508982 stripped
 RectTransform:
@@ -22953,7 +22956,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7358259794541007753, guid: 0ec7f2b42d8e4b34f87a158bc7c97c92, type: 3}
   m_PrefabInstance: {fileID: 975508981}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1307384444
+--- !u!114 &1307384447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22962,7 +22965,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1307384441}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ea12ad6817c50c418843e84896d5e69, type: 3}
+  m_Script: {fileID: 11500000, guid: 162404c111c16844cbb5c226c7ac40c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   statusBorderDisplay: {fileID: 1787134615}
@@ -40026,7 +40029,7 @@ GameObject:
   - component: {fileID: 2099505142}
   - component: {fileID: 2099505144}
   m_Layer: 5
-  m_Name: AppleMotionView
+  m_Name: AppleForceMotionView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
