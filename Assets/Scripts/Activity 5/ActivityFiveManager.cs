@@ -64,7 +64,7 @@ public class ActivityFiveManager : MonoBehaviour
 	private ForceSubActivitySO currentForceLevel;
 
 	[Header("Views")]
-	[SerializeField] private AppleMotionView appleMotionView;
+	[SerializeField] private ForceMotionView appleMotionView;
 
 	[Header("Submission Status Displays")]
 	[Header("Apple Force Submission Status Displays")]
@@ -72,8 +72,8 @@ public class ActivityFiveManager : MonoBehaviour
 	[SerializeField] private AppleForceDiagramSubmissionStatusDisplay appleForceTypeSubmissionStatusDisplay;
 
 	// queue for apple motion
-	private AppleMotionViewStateMachine appleMotionSubActivityStateMachine;
-	private Queue<ActivityFiveSubActivityState> appleMotionSubActivityStateQueue;
+	private ForceMotionViewStateMachine appleForceMotionSubActivityStateMachine;
+	private Queue<ActivityFiveSubActivityState> appleForceMotionSubActivityStateQueue;
 
 	// given data - force
 	private ForceData appleForceGivenData;
@@ -83,9 +83,9 @@ public class ActivityFiveManager : MonoBehaviour
 	{
 		ConfigureLevelData(Difficulty.Easy);
 
-		AppleMotionView.OpenViewEvent += UpdateAppleSubActivityStateMachine;
-		AppleMotionView.SubmitForceAnswerEvent += CheckAppleForceAnswer;
-		AppleMotionView.SubmitForceTypesAnswerEvent += CheckAppleForceTypeAnswers;
+		appleMotionView.OpenViewEvent += UpdateAppleSubActivityStateMachine;
+		appleMotionView.SubmitForceAnswerEvent += CheckAppleForceAnswer;
+		appleMotionView.SubmitForceTypesAnswerEvent += CheckAppleForceTypeAnswers;
 		AppleForceSubmissionStatusDisplay.ProceedEvent += UpdateAppleSubActivityStateQueue;
 		AppleForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateAppleForceDiagramStateQueue;
 
@@ -96,8 +96,8 @@ public class ActivityFiveManager : MonoBehaviour
 		InitializeAppleForceDiagramMotionTypeQueue();
 
 		// Initialize values for apple motion sub activity state machine
-		appleMotionSubActivityStateMachine = new AppleMotionViewStateMachine(appleMotionView);
-		appleMotionSubActivityStateMachine.Initialize(appleMotionSubActivityStateQueue.Peek());
+		appleForceMotionSubActivityStateMachine = new ForceMotionViewStateMachine(appleMotionView);
+		appleForceMotionSubActivityStateMachine.Initialize(appleForceMotionSubActivityStateQueue.Peek());
 
 		// Update state machine
 		UpdateAppleSubActivityStateMachine();
@@ -124,20 +124,20 @@ public class ActivityFiveManager : MonoBehaviour
 	private void InitializeSubActivityStateQueues()
 	{
 		// First initialize default content of queues
-		appleMotionSubActivityStateQueue = new Queue<ActivityFiveSubActivityState>();
-		appleMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceDiagram);
-		appleMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceDiagram);
-		appleMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
+		appleForceMotionSubActivityStateQueue = new Queue<ActivityFiveSubActivityState>();
+		appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceDiagram);
+		appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceDiagram);
+		appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
 
 		// Enqueue additional force calculations based from difficulty configuration
 		switch (difficultyConfiguration)
 		{
 			case Difficulty.Medium:
-				appleMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
+				appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
 				break;
 			case Difficulty.Hard:
-				appleMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
-				appleMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
+				appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
+				appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
 				break;
 		}
 	}
@@ -212,18 +212,18 @@ public class ActivityFiveManager : MonoBehaviour
 
 	private void UpdateAppleSubActivityStateQueue()
 	{
-		appleMotionSubActivityStateQueue.Dequeue();
+		appleForceMotionSubActivityStateQueue.Dequeue();
 		UpdateAppleSubActivityStateMachine();
 	}
 
 	private void UpdateAppleSubActivityStateMachine()
 	{
-		if (appleMotionSubActivityStateQueue.Count == 0)
+		if (appleForceMotionSubActivityStateQueue.Count == 0)
 		{
-			appleMotionSubActivityStateMachine.TransitionToState(ActivityFiveSubActivityState.None);
+			appleForceMotionSubActivityStateMachine.TransitionToState(ActivityFiveSubActivityState.None);
 		} else
 		{
-			ActivityFiveSubActivityState queueSubActivityHead = appleMotionSubActivityStateQueue.Peek();
+			ActivityFiveSubActivityState queueSubActivityHead = appleForceMotionSubActivityStateQueue.Peek();
 
 			// Do manager handling stuff
 			switch (queueSubActivityHead)
@@ -237,7 +237,7 @@ public class ActivityFiveManager : MonoBehaviour
 					break;
 			}
 
-			appleMotionSubActivityStateMachine.TransitionToState(queueSubActivityHead);
+			appleForceMotionSubActivityStateMachine.TransitionToState(queueSubActivityHead);
 		}
 	}
 	#endregion
