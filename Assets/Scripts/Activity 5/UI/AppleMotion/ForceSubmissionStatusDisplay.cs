@@ -2,9 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class AppleForceSubmissionStatusDisplay : SubmissionStatusDisplay
+public class ForceSubmissionStatusDisplay : SubmissionStatusDisplay
 {
-	public static event Action ProceedEvent;
+	public event Action ProceedEvent;
 
 	[Header("Apple Force Status Border Display")]
 	[SerializeField] private Image appleForceStatusBorderDisplay;
