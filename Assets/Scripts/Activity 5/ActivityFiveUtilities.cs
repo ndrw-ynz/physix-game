@@ -1,3 +1,5 @@
+using System;
+
 public class ForceTypeAnswerSubmissionResults
 {
 	public bool isUpForceTypeCorrect;
@@ -18,10 +20,10 @@ public class ForceTypeAnswerSubmissionResults
 
 public static class ActivityFiveUtilities
 {
-    public static ForceTypeAnswerSubmissionResults ValidateForceTypeSubmission(ForceTypeAnswerSubmission submission)
+    public static ForceTypeAnswerSubmissionResults ValidateForceTypeSubmission(ForceObjectMotionType forceObjectMotionType, ForceTypeAnswerSubmission submission)
     {
 		ForceTypeAnswerSubmissionResults results = new ForceTypeAnswerSubmissionResults();
-		switch (submission.forceObjectMotionType)
+		switch (forceObjectMotionType)
 		{
 			case ForceObjectMotionType.Apple_OnBranch:
 				results.isUpForceTypeCorrect = submission.upForceType == ForceType.TensionForce;
@@ -29,7 +31,20 @@ public static class ActivityFiveUtilities
 				results.isLeftForceTypeCorrect = submission.leftForceType == null;
 				results.isRightForceTypeCorrect = submission.rightForceType == null;
 				break;
+			case ForceObjectMotionType.Apple_Falling:
+				results.isUpForceTypeCorrect = submission.upForceType == null;
+				results.isDownForceTypeCorrect = submission.downForceType == ForceType.GravitationalForce;
+				results.isLeftForceTypeCorrect = submission.leftForceType == null;
+				results.isRightForceTypeCorrect = submission.rightForceType == null;
+				break;
 		}
 		return results;
+	}
+
+	public static bool ValidateForceSubmission(float? submittedForce, ForceData forceData) 
+	{
+		if (submittedForce == null) return false;
+		// Formula: Force = mass * acceleration
+		return Math.Abs((float)submittedForce - (forceData.mass * forceData.acceleration)) <= 0.0001;
 	}
 }
