@@ -2,12 +2,12 @@ using System;
 using TMPro;
 using UnityEngine;
 
-public class AppleMotionView : MonoBehaviour
+public class ForceMotionView : MonoBehaviour
 {
-	public static event Action OpenViewEvent;
-	public static event Action QuitViewEvent;
-	public static event Action<float?> SubmitForceAnswerEvent;
-	public static event Action<ForceTypeAnswerSubmission> SubmitForceTypesAnswerEvent;
+	public event Action OpenViewEvent;
+	public event Action QuitViewEvent;
+	public event Action<float?> SubmitForceAnswerEvent;
+	public event Action<ForceTypeAnswerSubmission> SubmitForceTypesAnswerEvent;
 
 	[Header("Displays")]
 	[SerializeField] private GameObject forceDiagramSelectionDisplay;
