@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class ForceTypeSubmissionStatusDisplay : SubmissionStatusDisplay
+public abstract class ForceDiagramSubmissionStatusDisplay : SubmissionStatusDisplay
 {
 	[Header("Force Type Answer Displays")]
 	[SerializeField] private ForceTypeAnswerDisplay upForceTypeAnswerDisplay;
@@ -8,11 +8,8 @@ public abstract class ForceTypeSubmissionStatusDisplay : SubmissionStatusDisplay
 	[SerializeField] private ForceTypeAnswerDisplay leftForceTypeAnswerDisplay;
 	[SerializeField] private ForceTypeAnswerDisplay rightForceTypeAnswerDisplay;
 
-	public ForceObjectMotionType displayedForceObjectMotionType { get; private set; }
-
 	public void UpdateForceDiagramDisplay(ForceTypeAnswerSubmission answer, ForceTypeAnswerSubmissionResults results)
     {
-		displayedForceObjectMotionType = answer.forceObjectMotionType;
         UpdateForceDiagramText(answer);
         UpdateForceDiagramStatusColors(results);
     }
