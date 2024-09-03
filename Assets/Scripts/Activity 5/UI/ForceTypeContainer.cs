@@ -12,11 +12,7 @@ public class ForceTypeContainer: DraggableUIContainer<ForceTypeDraggableUI>
 	private ForceTypeDraggableUI currentForceTypeUI;
 	public override void HandleDraggableObject(ForceTypeDraggableUI forceTypeUI)
 	{
-		if (currentForceTypeUI != null)
-		{
-			Destroy(currentForceTypeUI.gameObject);
-			currentForceTypeUI = null;
-		}
+		ClearContainer();
 		currentForceTypeUI = forceTypeUI;
 
 		UIUtilities.CenterChildInParent(forceTypeUI.gameObject, gameObject);
@@ -26,5 +22,12 @@ public class ForceTypeContainer: DraggableUIContainer<ForceTypeDraggableUI>
 	{
 		if (currentForceTypeUI == null) return null;
 		return currentForceTypeUI.contactForceType;
+	}
+
+	public void ClearContainer()
+	{
+		if (currentForceTypeUI == null) return;
+		Destroy(currentForceTypeUI.gameObject);
+		currentForceTypeUI = null;
 	}
 }
