@@ -6,13 +6,13 @@ public class ForceSubmissionStatusDisplay : SubmissionStatusDisplay
 {
 	public event Action ProceedEvent;
 
-	[Header("Apple Force Status Border Display")]
-	[SerializeField] private Image appleForceStatusBorderDisplay;
+	[Header("Force Status Border Display")]
+	[SerializeField] private Image forceStatusBorderDisplay;
 
-	[Header("Apple Calculation Display Reference")]
-	[SerializeField] private GameObject appleForceCalculationReference;
+	[Header("Force Calculation Display Reference")]
+	[SerializeField] private GameObject forceCalculationReference;
 
-	private GameObject appleForceCalculationClone;
+	private GameObject forceCalculationClone;
 
 	protected override void OnEnable()
 	{
@@ -20,9 +20,9 @@ public class ForceSubmissionStatusDisplay : SubmissionStatusDisplay
 		proceedButton.onClick.AddListener(() => ProceedEvent?.Invoke());
 
 		// Create references and attach to associated parents
-		appleForceCalculationClone = Instantiate(appleForceCalculationReference);
-		appleForceCalculationClone.gameObject.SetActive(true);
-		UIUtilities.CenterChildInParent(appleForceCalculationClone, appleForceStatusBorderDisplay.gameObject);
+		forceCalculationClone = Instantiate(forceCalculationReference);
+		forceCalculationClone.gameObject.SetActive(true);
+		UIUtilities.CenterChildInParent(forceCalculationClone, forceStatusBorderDisplay.gameObject);
 	}
 
 	protected override void OnDisable()
@@ -30,6 +30,6 @@ public class ForceSubmissionStatusDisplay : SubmissionStatusDisplay
 		base.OnDisable();
 		proceedButton.onClick.RemoveAllListeners();
 
-		Destroy(appleForceCalculationClone);
+		Destroy(forceCalculationClone);
 	}
 }
