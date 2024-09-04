@@ -6,7 +6,9 @@ public class FlyingRockAnimate : MonoBehaviour
 	private Vector3 startingPosition;
 	private Rigidbody rb;
 	public float forceMagnitude = 500f;
-	public float duration = 1f;
+	public float resetDelay = 1f;
+
+	private float timer;
 
 	void Start()
 	{
@@ -17,20 +19,26 @@ public class FlyingRockAnimate : MonoBehaviour
 		{
 			rb = gameObject.AddComponent<Rigidbody>();
 		}
-
-		StartCoroutine(ApplyUpwardForceAndResetLoop());
 	}
 
-	IEnumerator ApplyUpwardForceAndResetLoop()
+	private void Update()
 	{
-		while (true)
+		if (timer <= 0f)
 		{
 			rb.AddForce(Vector3.right * forceMagnitude, ForceMode.Impulse);
+			timer = resetDelay; // Reset the timer
+		}
 
-			yield return new WaitForSeconds(duration);
+		// Count down the timer
+		timer -= Time.deltaTime;
 
+		// Reset the position and physics properties after delay
+		if (timer <= 0f)
+		{
+			rb.useGravity = false;
 			rb.velocity = Vector3.zero;
 			transform.position = startingPosition;
+			rb.useGravity = true;
 		}
 	}
 }
