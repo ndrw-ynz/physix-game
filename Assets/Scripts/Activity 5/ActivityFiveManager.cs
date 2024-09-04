@@ -65,19 +65,31 @@ public class ActivityFiveManager : MonoBehaviour
 
 	[Header("Views")]
 	[SerializeField] private ForceMotionView appleMotionView;
+	[SerializeField] private ForceMotionView rockMotionView;
+
 
 	[Header("Submission Status Displays")]
 	[Header("Apple Force Submission Status Displays")]
 	[SerializeField] private ForceSubmissionStatusDisplay appleForceSubmissionStatusDisplay;
 	[SerializeField] private ForceDiagramSubmissionStatusDisplay appleForceDiagramSubmissionStatusDisplay;
+	[Header("Rock Force Submission Status Displays")]
+	[SerializeField] private ForceSubmissionStatusDisplay rockForceSubmissionStatusDisplay;
+	[SerializeField] private ForceDiagramSubmissionStatusDisplay rockForceDiagramSubmissionStatusDisplay;
 
 	// queue for apple motion
 	private ForceMotionViewStateMachine appleForceMotionSubActivityStateMachine;
 	private Queue<ActivityFiveSubActivityState> appleForceMotionSubActivityStateQueue;
+	// queue for rock motion
+	private ForceMotionViewStateMachine rockForceMotionSubActivityStateMachine;
+	private Queue<ActivityFiveSubActivityState> rockForceMotionSubActivityStateQueue;
 
-	// given data - force
+
+	// given data - force apple
 	private ForceData appleForceGivenData;
 	private Queue<ForceObjectMotionType> appleForceDiagramMotionTypeQueue;
+	// given data - force rock
+	private ForceData rockForceGivenData;
+	private Queue<ForceObjectMotionType> rockForceDiagramMotionTypeQueue;
 
 	private void Start()
 	{
@@ -89,18 +101,27 @@ public class ActivityFiveManager : MonoBehaviour
 		appleForceSubmissionStatusDisplay.ProceedEvent += UpdateAppleSubActivityStateQueue;
 		appleForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateAppleForceDiagramStateQueue;
 
+		rockMotionView.OpenViewEvent += UpdateRockSubActivityStateMachine;
+		rockMotionView.SubmitForceAnswerEvent += CheckRockForceAnswer;
+		rockMotionView.SubmitForceTypesAnswerEvent += CheckRockForceTypeAnswers;
+		rockForceSubmissionStatusDisplay.ProceedEvent += UpdateRockSubActivityStateQueue;
+		rockForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateRockForceDiagramStateQueue;
+
 		// Initialize sub activity state queues
 		InitializeSubActivityStateQueues();
 
 		// Initialize force diagram motion type queues
-		InitializeAppleForceDiagramMotionTypeQueue();
+		InitializeForceDiagramMotionTypeQueues();
 
-		// Initialize values for apple motion sub activity state machine
+		// Initialize values for force motion sub activity state machines
 		appleForceMotionSubActivityStateMachine = new ForceMotionViewStateMachine(appleMotionView);
 		appleForceMotionSubActivityStateMachine.Initialize(appleForceMotionSubActivityStateQueue.Peek());
+		rockForceMotionSubActivityStateMachine = new ForceMotionViewStateMachine(rockMotionView);
+		rockForceMotionSubActivityStateMachine.Initialize(rockForceMotionSubActivityStateQueue.Peek());
 
 		// Update state machine
 		UpdateAppleSubActivityStateMachine();
+		UpdateRockSubActivityStateMachine();
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -129,26 +150,49 @@ public class ActivityFiveManager : MonoBehaviour
 		appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceDiagram);
 		appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
 
+		rockForceMotionSubActivityStateQueue = new Queue<ActivityFiveSubActivityState>();
+		rockForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceDiagram);
+		rockForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceDiagram);
+		rockForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
+		rockForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceDiagram);
+		rockForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceDiagram);
+		rockForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
+
+
 		// Enqueue additional force calculations based from difficulty configuration
 		switch (difficultyConfiguration)
 		{
 			case Difficulty.Medium:
 				appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
+
+				rockForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
 				break;
 			case Difficulty.Hard:
 				appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
 				appleForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
+
+				rockForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
+				rockForceMotionSubActivityStateQueue.Enqueue(ActivityFiveSubActivityState.SolveForceCalculation);
 				break;
 		}
 	}
 
-	#region Apple Motion
-	private void InitializeAppleForceDiagramMotionTypeQueue()
+	private void InitializeForceDiagramMotionTypeQueues()
 	{
+		// Initialize queue for apple force
 		appleForceDiagramMotionTypeQueue = new Queue<ForceObjectMotionType>();
 
 		appleForceDiagramMotionTypeQueue.Enqueue(ForceObjectMotionType.Apple_OnBranch);
 		appleForceDiagramMotionTypeQueue.Enqueue(ForceObjectMotionType.Apple_Falling);
+
+
+		// Initialize queue for rock force
+		rockForceDiagramMotionTypeQueue = new Queue<ForceObjectMotionType>();
+
+		rockForceDiagramMotionTypeQueue.Enqueue(ForceObjectMotionType.Rock_Stationary);
+		rockForceDiagramMotionTypeQueue.Enqueue(ForceObjectMotionType.Rock_RollingRight);
+		rockForceDiagramMotionTypeQueue.Enqueue(ForceObjectMotionType.Rock_Bouncing);
+		rockForceDiagramMotionTypeQueue.Enqueue(ForceObjectMotionType.Rock_Flying);
 	}
 
 	private ForceData GenerateNewForceGivenData(ForceSubActivitySO forceSO)
@@ -159,20 +203,6 @@ public class ActivityFiveManager : MonoBehaviour
 		forceData.mass = (float) Math.Round(Random.Range(forceSO.massMinVal, forceSO.massMaxVal), 3);
 
 		return forceData;
-	}
-
-	private void CheckAppleForceAnswer(float? answer)
-	{
-		bool result = ActivityFiveUtilities.ValidateForceSubmission(answer, appleForceGivenData);
-		// add metrics alter
-		DisplayForceSubmissionResults(result, appleForceSubmissionStatusDisplay);
-	}
-
-	private void CheckAppleForceTypeAnswers(ForceTypeAnswerSubmission answer)
-	{
-		ForceTypeAnswerSubmissionResults results = ActivityFiveUtilities.ValidateForceTypeSubmission(appleForceDiagramMotionTypeQueue.Peek(), answer);
-		// add metrics alter
-		DisplayForceTypeSubmissionResults(answer, results, appleForceDiagramSubmissionStatusDisplay);
 	}
 
 	private void DisplayForceTypeSubmissionResults(ForceTypeAnswerSubmission answer, ForceTypeAnswerSubmissionResults results, ForceDiagramSubmissionStatusDisplay forceTypeSubmissionStatusDisplay)
@@ -202,6 +232,21 @@ public class ActivityFiveManager : MonoBehaviour
 		}
 
 		submissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	#region Apple Motion
+	private void CheckAppleForceAnswer(float? answer)
+	{
+		bool result = ActivityFiveUtilities.ValidateForceSubmission(answer, appleForceGivenData);
+		// add metrics alter
+		DisplayForceSubmissionResults(result, appleForceSubmissionStatusDisplay);
+	}
+
+	private void CheckAppleForceTypeAnswers(ForceTypeAnswerSubmission answer)
+	{
+		ForceTypeAnswerSubmissionResults results = ActivityFiveUtilities.ValidateForceTypeSubmission(appleForceDiagramMotionTypeQueue.Peek(), answer);
+		// add metrics alter
+		DisplayForceTypeSubmissionResults(answer, results, appleForceDiagramSubmissionStatusDisplay);
 	}
 
 	private void UpdateAppleForceDiagramStateQueue()
@@ -238,6 +283,60 @@ public class ActivityFiveManager : MonoBehaviour
 			}
 
 			appleForceMotionSubActivityStateMachine.TransitionToState(queueSubActivityHead);
+		}
+	}
+	#endregion
+
+	#region Rock Motion
+	private void CheckRockForceAnswer(float? answer)
+	{
+		bool result = ActivityFiveUtilities.ValidateForceSubmission(answer, rockForceGivenData);
+		// add metrics alter
+		DisplayForceSubmissionResults(result, rockForceSubmissionStatusDisplay);
+	}
+
+	private void CheckRockForceTypeAnswers(ForceTypeAnswerSubmission answer)
+	{
+		ForceTypeAnswerSubmissionResults results = ActivityFiveUtilities.ValidateForceTypeSubmission(rockForceDiagramMotionTypeQueue.Peek(), answer);
+		// add metrics alter
+		DisplayForceTypeSubmissionResults(answer, results, rockForceDiagramSubmissionStatusDisplay);
+	}
+
+	private void UpdateRockForceDiagramStateQueue()
+	{
+		rockForceDiagramMotionTypeQueue.Dequeue();
+		UpdateRockSubActivityStateQueue();
+	}
+
+	private void UpdateRockSubActivityStateQueue()
+	{
+		rockForceMotionSubActivityStateQueue.Dequeue();
+		UpdateRockSubActivityStateMachine();
+	}
+
+	private void UpdateRockSubActivityStateMachine()
+	{
+		if (rockForceMotionSubActivityStateQueue.Count == 0)
+		{
+			rockForceMotionSubActivityStateMachine.TransitionToState(ActivityFiveSubActivityState.None);
+		}
+		else
+		{
+			ActivityFiveSubActivityState queueSubActivityHead = rockForceMotionSubActivityStateQueue.Peek();
+
+			// Do manager handling stuff
+			switch (queueSubActivityHead)
+			{
+				case ActivityFiveSubActivityState.SolveForceDiagram:
+					rockMotionView.ResetForceDiagram();
+					break;
+				case ActivityFiveSubActivityState.SolveForceCalculation:
+					rockForceGivenData = GenerateNewForceGivenData(currentForceLevel);
+					rockMotionView.SetupForceCalculationDisplay(rockForceGivenData);
+					break;
+			}
+
+			rockForceMotionSubActivityStateMachine.TransitionToState(queueSubActivityHead);
 		}
 	}
 	#endregion
