@@ -95,46 +95,8 @@ public class ActivityFiveManager : MonoBehaviour
 	{
 		ConfigureLevelData(Difficulty.Easy);
 
-		appleMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
-			appleForceMotionSubActivityStateMachine,
-			appleForceMotionSubActivityStateQueue,
-			appleMotionView,
-			ref appleForceGivenData
-			);
-		appleMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
-			answer,
-			appleForceGivenData,
-			appleForceSubmissionStatusDisplay
-			);
-		appleMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
-			answer,
-			appleForceDiagramStateQueue,
-			appleForceDiagramSubmissionStatusDisplay
-			);
-		appleForceSubmissionStatusDisplay.ProceedEvent += UpdateAppleSubActivityStateQueue;
-		appleForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateAppleForceDiagramStateQueue;
-
-
-		rockMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
-			rockForceMotionSubActivityStateMachine,
-			rockForceMotionSubActivityStateQueue,
-			rockMotionView,
-			ref rockForceGivenData
-			);
-		rockMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
-			answer,
-			rockForceGivenData,
-			rockForceSubmissionStatusDisplay
-			);
-		rockMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
-			answer,
-			rockForceDiagramStateQueue,
-			rockForceDiagramSubmissionStatusDisplay
-			);
-		rockForceSubmissionStatusDisplay.ProceedEvent += UpdateRockSubActivityStateQueue;
-		rockForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateRockForceDiagramStateQueue;
-
-
+		SubscribeForceMotionEvents();
+	
 		// Initialize sub activity state queues
 		InitializeSubActivityStateQueues();
 
@@ -178,6 +140,49 @@ public class ActivityFiveManager : MonoBehaviour
 				currentForceLevel = forceLevelThree;
 				break;
 		}
+	}
+
+	private void SubscribeForceMotionEvents()
+	{
+		// Apple Force Motion related events
+		appleMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
+			appleForceMotionSubActivityStateMachine,
+			appleForceMotionSubActivityStateQueue,
+			appleMotionView,
+			ref appleForceGivenData
+			);
+		appleMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
+			answer,
+			appleForceGivenData,
+			appleForceSubmissionStatusDisplay
+			);
+		appleMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
+			answer,
+			appleForceDiagramStateQueue,
+			appleForceDiagramSubmissionStatusDisplay
+			);
+		appleForceSubmissionStatusDisplay.ProceedEvent += UpdateAppleSubActivityStateQueue;
+		appleForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateAppleForceDiagramStateQueue;
+
+		// Rock Force Motion related events
+		rockMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
+			rockForceMotionSubActivityStateMachine,
+			rockForceMotionSubActivityStateQueue,
+			rockMotionView,
+			ref rockForceGivenData
+			);
+		rockMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
+			answer,
+			rockForceGivenData,
+			rockForceSubmissionStatusDisplay
+			);
+		rockMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
+			answer,
+			rockForceDiagramStateQueue,
+			rockForceDiagramSubmissionStatusDisplay
+			);
+		rockForceSubmissionStatusDisplay.ProceedEvent += UpdateRockSubActivityStateQueue;
+		rockForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateRockForceDiagramStateQueue;
 	}
 
 	private void InitializeSubActivityStateQueues()
