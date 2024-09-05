@@ -1,6 +1,6 @@
-public class ForceMotionViewStateMachine : ViewStateMachine<ActivityFiveSubActivityState, ForceMotionView>
+public class ForceMotionSubActivityStateMachine : ViewStateMachine<ActivityFiveSubActivityState, ForceMotionView>
 {
-	public ForceMotionViewStateMachine(ForceMotionView view) : base(view)
+	public ForceMotionSubActivityStateMachine(ForceMotionView view) : base(view)
 	{
 	}
 

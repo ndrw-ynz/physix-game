@@ -77,10 +77,10 @@ public class ActivityFiveManager : MonoBehaviour
 	[SerializeField] private ForceDiagramSubmissionStatusDisplay rockForceDiagramSubmissionStatusDisplay;
 
 	// queue for apple motion
-	private ForceMotionViewStateMachine appleForceMotionSubActivityStateMachine;
+	private ForceMotionSubActivityStateMachine appleForceMotionSubActivityStateMachine;
 	private Queue<ActivityFiveSubActivityState> appleForceMotionSubActivityStateQueue;
 	// queue for rock motion
-	private ForceMotionViewStateMachine rockForceMotionSubActivityStateMachine;
+	private ForceMotionSubActivityStateMachine rockForceMotionSubActivityStateMachine;
 	private Queue<ActivityFiveSubActivityState> rockForceMotionSubActivityStateQueue;
 
 
@@ -142,9 +142,9 @@ public class ActivityFiveManager : MonoBehaviour
 		InitializeForceDiagramStateQueues();
 
 		// Initialize values for force motion sub activity state machines
-		appleForceMotionSubActivityStateMachine = new ForceMotionViewStateMachine(appleMotionView);
+		appleForceMotionSubActivityStateMachine = new ForceMotionSubActivityStateMachine(appleMotionView);
 		appleForceMotionSubActivityStateMachine.Initialize(appleForceMotionSubActivityStateQueue.Peek());
-		rockForceMotionSubActivityStateMachine = new ForceMotionViewStateMachine(rockMotionView);
+		rockForceMotionSubActivityStateMachine = new ForceMotionSubActivityStateMachine(rockMotionView);
 		rockForceMotionSubActivityStateMachine.Initialize(rockForceMotionSubActivityStateQueue.Peek());
 
 		// Update state machines
@@ -288,7 +288,7 @@ public class ActivityFiveManager : MonoBehaviour
 	}
 
 	private void UpdateSubActivityStateMachine(
-		ForceMotionViewStateMachine forceSubActivityStateMachine,
+		ForceMotionSubActivityStateMachine forceSubActivityStateMachine,
 		Queue<ActivityFiveSubActivityState> subactivityStateQueue,
 		ForceMotionView forceMotionView,
 		ref ForceData forceGivenData
