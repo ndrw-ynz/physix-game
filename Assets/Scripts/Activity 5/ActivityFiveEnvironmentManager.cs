@@ -6,6 +6,7 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 	[Header("Views")]
 	[SerializeField] private ForceMotionView appleMotionView;
 	[SerializeField] private ForceMotionView rockMotionView;
+	[SerializeField] private ForceMotionView boatMotionView;
 
 	[Header("Submission Status Displays")]
 	[Header("Apple Force Submission Status Displays")]
@@ -14,6 +15,9 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 	[Header("Rock Force Submission Status Displays")]
 	[SerializeField] private ForceSubmissionStatusDisplay rockForceSubmissionStatusDisplay;
 	[SerializeField] private ForceDiagramSubmissionStatusDisplay rockForceDiagramSubmissionStatusDisplay;
+	[Header("Boat Force Submission Status Displays")]
+	[SerializeField] private ForceSubmissionStatusDisplay boatForceSubmissionStatusDisplay;
+	[SerializeField] private ForceDiagramSubmissionStatusDisplay boatForceDiagramSubmissionStatusDisplay;
 
 	[Header("Environment Cameras")]
 	[SerializeField] private Camera appleOnBranchCamera;
@@ -65,6 +69,11 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 		rockMotionView.QuitViewEvent += () => rockMotionEnvironmentStateMachine.TransitionToState(RockMotionEnvironmentState.None);
 		rockForceSubmissionStatusDisplay.ProceedEvent += DequeueRockEnvironmentStateQueue;
 		rockForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueRockEnvironmentStateQueue;
+
+		boatMotionView.OpenViewEvent += UpdateBoatEnvironmentStateMachine;
+		boatMotionView.QuitViewEvent += () => rockMotionEnvironmentStateMachine.TransitionToState(RockMotionEnvironmentState.None);
+		boatForceSubmissionStatusDisplay.ProceedEvent += DequeueBoatEnvironmentStateQueue;
+		boatForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueBoatEnvironmentStateQueue;
 
 		// Initialize environment state queues
 		InitializeEnvironmentStateQueues();
@@ -225,5 +234,27 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 	{
 		boatMovingLeftCamera.gameObject.SetActive(isActive);
 		boatMovingLeft.gameObject.SetActive(isActive);
+	}
+
+	private void DequeueBoatEnvironmentStateQueue()
+	{
+		boatMotionEnvironmentStateQueue.Dequeue();
+		UpdateBoatEnvironmentStateMachine();
+	}
+
+	private void UpdateBoatEnvironmentStateMachine()
+	{
+		if (boatMotionEnvironmentStateQueue.Count == 0)
+		{
+			// Deactivate area effect and interactable boat
+			boatAreaIndicatorEffect.gameObject.SetActive(false);
+			interactableBoat.SetInteractable(false);
+
+			boatMotionEnvironmentStateMachine.TransitionToState(BoatMotionEnvironmentState.None);
+		}
+		else
+		{
+			boatMotionEnvironmentStateMachine.TransitionToState(boatMotionEnvironmentStateQueue.Peek());
+		}
 	}
 }
