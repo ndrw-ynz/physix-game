@@ -95,7 +95,12 @@ public class ActivityFiveManager : MonoBehaviour
 	{
 		ConfigureLevelData(Difficulty.Easy);
 
-		appleMotionView.OpenViewEvent += UpdateAppleSubActivityStateMachine;
+		appleMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
+			appleForceMotionSubActivityStateMachine,
+			appleForceMotionSubActivityStateQueue,
+			appleMotionView,
+			ref appleForceGivenData
+			);
 		appleMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
 			answer,
 			appleForceGivenData,
@@ -110,7 +115,12 @@ public class ActivityFiveManager : MonoBehaviour
 		appleForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateAppleForceDiagramStateQueue;
 
 
-		rockMotionView.OpenViewEvent += UpdateRockSubActivityStateMachine;
+		rockMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
+			rockForceMotionSubActivityStateMachine,
+			rockForceMotionSubActivityStateQueue,
+			rockMotionView,
+			ref rockForceGivenData
+			);
 		rockMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
 			answer,
 			rockForceGivenData,
@@ -137,9 +147,19 @@ public class ActivityFiveManager : MonoBehaviour
 		rockForceMotionSubActivityStateMachine = new ForceMotionViewStateMachine(rockMotionView);
 		rockForceMotionSubActivityStateMachine.Initialize(rockForceMotionSubActivityStateQueue.Peek());
 
-		// Update state machine
-		UpdateAppleSubActivityStateMachine();
-		UpdateRockSubActivityStateMachine();
+		// Update state machines
+		UpdateSubActivityStateMachine(
+			appleForceMotionSubActivityStateMachine,
+			appleForceMotionSubActivityStateQueue,
+			appleMotionView,
+			ref appleForceGivenData
+			);
+		UpdateSubActivityStateMachine(
+			rockForceMotionSubActivityStateMachine,
+			rockForceMotionSubActivityStateQueue,
+			rockMotionView,
+			ref rockForceGivenData
+			);
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -267,8 +287,38 @@ public class ActivityFiveManager : MonoBehaviour
 		submissionStatusDisplay.gameObject.SetActive(true);
 	}
 
-	#region Apple Motion
+	private void UpdateSubActivityStateMachine(
+		ForceMotionViewStateMachine forceSubActivityStateMachine,
+		Queue<ActivityFiveSubActivityState> subactivityStateQueue,
+		ForceMotionView forceMotionView,
+		ref ForceData forceGivenData
+		)
+	{
+		if (subactivityStateQueue.Count == 0)
+		{
+			forceSubActivityStateMachine.TransitionToState(ActivityFiveSubActivityState.None);
+		}
+		else
+		{
+			ActivityFiveSubActivityState queueSubActivityHead = subactivityStateQueue.Peek();
 
+			// Do manager handling stuff
+			switch (queueSubActivityHead)
+			{
+				case ActivityFiveSubActivityState.SolveForceDiagram:
+					forceMotionView.ResetForceDiagram();
+					break;
+				case ActivityFiveSubActivityState.SolveForceCalculation:
+					forceGivenData = GenerateNewForceGivenData(currentForceLevel);
+					forceMotionView.SetupForceCalculationDisplay(forceGivenData);
+					break;
+			}
+
+			forceSubActivityStateMachine.TransitionToState(queueSubActivityHead);
+		}
+	}
+
+	#region Apple Motion
 	private void UpdateAppleForceDiagramStateQueue()
 	{
 		appleForceDiagramStateQueue.Dequeue();
@@ -278,37 +328,16 @@ public class ActivityFiveManager : MonoBehaviour
 	private void UpdateAppleSubActivityStateQueue()
 	{
 		appleForceMotionSubActivityStateQueue.Dequeue();
-		UpdateAppleSubActivityStateMachine();
-	}
-
-	private void UpdateAppleSubActivityStateMachine()
-	{
-		if (appleForceMotionSubActivityStateQueue.Count == 0)
-		{
-			appleForceMotionSubActivityStateMachine.TransitionToState(ActivityFiveSubActivityState.None);
-		} else
-		{
-			ActivityFiveSubActivityState queueSubActivityHead = appleForceMotionSubActivityStateQueue.Peek();
-
-			// Do manager handling stuff
-			switch (queueSubActivityHead)
-			{
-				case ActivityFiveSubActivityState.SolveForceDiagram:
-					appleMotionView.ResetForceDiagram();
-					break;
-				case ActivityFiveSubActivityState.SolveForceCalculation:
-					appleForceGivenData = GenerateNewForceGivenData(currentForceLevel);
-					appleMotionView.SetupForceCalculationDisplay(appleForceGivenData);
-					break;
-			}
-
-			appleForceMotionSubActivityStateMachine.TransitionToState(queueSubActivityHead);
-		}
+		UpdateSubActivityStateMachine(
+			appleForceMotionSubActivityStateMachine,
+			appleForceMotionSubActivityStateQueue,
+			appleMotionView,
+			ref appleForceGivenData
+			);
 	}
 	#endregion
 
 	#region Rock Motion
-
 	private void UpdateRockForceDiagramStateQueue()
 	{
 		rockForceDiagramStateQueue.Dequeue();
@@ -318,33 +347,12 @@ public class ActivityFiveManager : MonoBehaviour
 	private void UpdateRockSubActivityStateQueue()
 	{
 		rockForceMotionSubActivityStateQueue.Dequeue();
-		UpdateRockSubActivityStateMachine();
-	}
-
-	private void UpdateRockSubActivityStateMachine()
-	{
-		if (rockForceMotionSubActivityStateQueue.Count == 0)
-		{
-			rockForceMotionSubActivityStateMachine.TransitionToState(ActivityFiveSubActivityState.None);
-		}
-		else
-		{
-			ActivityFiveSubActivityState queueSubActivityHead = rockForceMotionSubActivityStateQueue.Peek();
-
-			// Do manager handling stuff
-			switch (queueSubActivityHead)
-			{
-				case ActivityFiveSubActivityState.SolveForceDiagram:
-					rockMotionView.ResetForceDiagram();
-					break;
-				case ActivityFiveSubActivityState.SolveForceCalculation:
-					rockForceGivenData = GenerateNewForceGivenData(currentForceLevel);
-					rockMotionView.SetupForceCalculationDisplay(rockForceGivenData);
-					break;
-			}
-
-			rockForceMotionSubActivityStateMachine.TransitionToState(queueSubActivityHead);
-		}
+		UpdateSubActivityStateMachine(
+			rockForceMotionSubActivityStateMachine,
+			rockForceMotionSubActivityStateQueue,
+			rockMotionView,
+			ref rockForceGivenData
+			);
 	}
 	#endregion
 }
