@@ -61,6 +61,24 @@ public static class ActivityFiveUtilities
 				results.isLeftForceTypeCorrect = submission.leftForceType == null;
 				results.isRightForceTypeCorrect = submission.rightForceType == ForceType.DragForce;
 				break;
+			case ForceObjectMotionType.Boat_Stationary:
+				results.isUpForceTypeCorrect = submission.upForceType == ForceType.BuoyantForce;
+				results.isDownForceTypeCorrect = submission.downForceType == ForceType.GravitationalForce;
+				results.isLeftForceTypeCorrect = submission.leftForceType == null;
+				results.isRightForceTypeCorrect = submission.rightForceType == null;
+				break;
+			case ForceObjectMotionType.Boat_MovingRight:
+				results.isUpForceTypeCorrect = submission.upForceType == ForceType.BuoyantForce;
+				results.isDownForceTypeCorrect = submission.downForceType == ForceType.GravitationalForce;
+				results.isLeftForceTypeCorrect = submission.leftForceType == ForceType.DragForce;
+				results.isRightForceTypeCorrect = submission.rightForceType == ForceType.ThrustForce;
+				break;
+			case ForceObjectMotionType.Boat_MovingLeft:
+				results.isUpForceTypeCorrect = submission.upForceType == ForceType.BuoyantForce;
+				results.isDownForceTypeCorrect = submission.downForceType == ForceType.GravitationalForce;
+				results.isLeftForceTypeCorrect = submission.leftForceType == ForceType.ThrustForce;
+				results.isRightForceTypeCorrect = submission.rightForceType == ForceType.DragForce;
+				break;
 		}
 		return results;
 	}
