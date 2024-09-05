@@ -20,7 +20,7 @@ public class ForceTypeAnswerSubmissionResults
 
 public static class ActivityFiveUtilities
 {
-    public static ForceTypeAnswerSubmissionResults ValidateForceTypeSubmission(ForceObjectMotionType forceObjectMotionType, ForceTypeAnswerSubmission submission)
+    public static ForceTypeAnswerSubmissionResults ValidateForceTypeSubmission(ForceObjectMotionType forceObjectMotionType, ForceDiagramAnswerSubmission submission)
     {
 		ForceTypeAnswerSubmissionResults results = new ForceTypeAnswerSubmissionResults();
 		switch (forceObjectMotionType)

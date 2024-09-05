@@ -29,14 +29,14 @@ public class ForceData
 	public float mass;
 }
 
-public class ForceTypeAnswerSubmission
+public class ForceDiagramAnswerSubmission
 {
 	public ForceType? upForceType { get; private set; }
 	public ForceType? downForceType { get; private set; }
 	public ForceType? leftForceType {get; private set;}
 	public ForceType? rightForceType { get; private set; }
 
-	public ForceTypeAnswerSubmission(
+	public ForceDiagramAnswerSubmission(
 		ForceType? upForceType,
 		ForceType? downForceType,
 		ForceType? leftForceType,
@@ -101,7 +101,7 @@ public class ActivityFiveManager : MonoBehaviour
 			appleForceGivenData,
 			appleForceSubmissionStatusDisplay
 			);
-		appleMotionView.SubmitForceTypesAnswerEvent += (answer) => CheckForceDiagramAnswer(
+		appleMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
 			answer,
 			appleForceDiagramStateQueue,
 			appleForceDiagramSubmissionStatusDisplay
@@ -116,7 +116,7 @@ public class ActivityFiveManager : MonoBehaviour
 			rockForceGivenData,
 			rockForceSubmissionStatusDisplay
 			);
-		rockMotionView.SubmitForceTypesAnswerEvent += (answer) => CheckForceDiagramAnswer(
+		rockMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
 			answer,
 			rockForceDiagramStateQueue,
 			rockForceDiagramSubmissionStatusDisplay
@@ -231,14 +231,14 @@ public class ActivityFiveManager : MonoBehaviour
 	}
 
 
-	private void CheckForceDiagramAnswer(ForceTypeAnswerSubmission answer, Queue<ForceObjectMotionType> forceDiagramStateQueue, ForceDiagramSubmissionStatusDisplay forceDiagramSubmissionStatusDisplay)
+	private void CheckForceDiagramAnswer(ForceDiagramAnswerSubmission answer, Queue<ForceObjectMotionType> forceDiagramStateQueue, ForceDiagramSubmissionStatusDisplay forceDiagramSubmissionStatusDisplay)
 	{
 		ForceTypeAnswerSubmissionResults results = ActivityFiveUtilities.ValidateForceTypeSubmission(forceDiagramStateQueue.Peek(), answer);
 		// add metrics alter
 		DisplayForceTypeSubmissionResults(answer, results, forceDiagramSubmissionStatusDisplay);
 	}
 
-	private void DisplayForceTypeSubmissionResults(ForceTypeAnswerSubmission answer, ForceTypeAnswerSubmissionResults results, ForceDiagramSubmissionStatusDisplay forceTypeSubmissionStatusDisplay)
+	private void DisplayForceTypeSubmissionResults(ForceDiagramAnswerSubmission answer, ForceTypeAnswerSubmissionResults results, ForceDiagramSubmissionStatusDisplay forceTypeSubmissionStatusDisplay)
 	{
 		if (results.isAllCorrect())
 		{

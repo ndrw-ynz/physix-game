@@ -11,13 +11,13 @@ public class ForceDiagramSubmissionStatusDisplay : SubmissionStatusDisplay
 	[SerializeField] private ForceTypeAnswerDisplay leftForceTypeAnswerDisplay;
 	[SerializeField] private ForceTypeAnswerDisplay rightForceTypeAnswerDisplay;
 
-	public void UpdateForceDiagramDisplay(ForceTypeAnswerSubmission answer, ForceTypeAnswerSubmissionResults results)
+	public void UpdateForceDiagramDisplay(ForceDiagramAnswerSubmission answer, ForceTypeAnswerSubmissionResults results)
     {
         UpdateForceDiagramText(answer);
         UpdateForceDiagramStatusColors(results);
     }
 
-    private void UpdateForceDiagramText(ForceTypeAnswerSubmission answer)
+    private void UpdateForceDiagramText(ForceDiagramAnswerSubmission answer)
     {
 		upForceTypeAnswerDisplay.UpdateTextDisplay(answer.upForceType);
 		downForceTypeAnswerDisplay.UpdateTextDisplay(answer.downForceType);

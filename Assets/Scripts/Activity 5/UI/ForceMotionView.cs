@@ -7,7 +7,7 @@ public class ForceMotionView : MonoBehaviour
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
 	public event Action<float?> SubmitForceAnswerEvent;
-	public event Action<ForceTypeAnswerSubmission> SubmitForceTypesAnswerEvent;
+	public event Action<ForceDiagramAnswerSubmission> SubmitForceDiagramAnswerEvent;
 
 	[Header("Displays")]
 	[SerializeField] private GameObject forceDiagramSelectionDisplay;
@@ -88,14 +88,14 @@ public class ForceMotionView : MonoBehaviour
 
 	public void OnSubmitForceTypesButtonClick()
 	{
-		ForceTypeAnswerSubmission submission = new ForceTypeAnswerSubmission(
+		ForceDiagramAnswerSubmission submission = new ForceDiagramAnswerSubmission(
 			upForceType: upForceContainer.GetCurrentForceType(),
 			downForceType: downForceContainer.GetCurrentForceType(),
 			leftForceType: leftForceContainer.GetCurrentForceType(),
 			rightForceType: rightForceContainer.GetCurrentForceType()
 			);
 
-		SubmitForceTypesAnswerEvent?.Invoke(submission);
+		SubmitForceDiagramAnswerEvent?.Invoke(submission);
 	}
 
 	public void OnQuitButtonClick()
