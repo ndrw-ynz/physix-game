@@ -51,6 +51,8 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 	private Queue<AppleMotionEnvironmentState> appleMotionEnvironmentStateQueue;
 	private RockMotionEnvironmentStateMachine rockMotionEnvironmentStateMachine;
 	private Queue<RockMotionEnvironmentState> rockMotionEnvironmentStateQueue;
+	private BoatMotionEnvironmentStateMachine boatMotionEnvironmentStateMachine;
+	private Queue<BoatMotionEnvironmentState> boatMotionEnvironmentStateQueue;
 
 	public void Start()
 	{
@@ -73,6 +75,9 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 		// Initialize values for rock environment state machine
 		rockMotionEnvironmentStateMachine = new RockMotionEnvironmentStateMachine(this);
 		rockMotionEnvironmentStateMachine.Initialize(RockMotionEnvironmentState.None);
+		// Initialize values for rock environment state machine
+		boatMotionEnvironmentStateMachine = new BoatMotionEnvironmentStateMachine(this);
+		boatMotionEnvironmentStateMachine.Initialize(BoatMotionEnvironmentState.None);
 	}
 
 	private void InitializeEnvironmentStateQueues()
@@ -91,6 +96,11 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 		rockMotionEnvironmentStateQueue.Enqueue(RockMotionEnvironmentState.Flying);
 		rockMotionEnvironmentStateQueue.Enqueue(RockMotionEnvironmentState.Flying);
 
+		boatMotionEnvironmentStateQueue = new Queue<BoatMotionEnvironmentState>();
+		boatMotionEnvironmentStateQueue.Enqueue(BoatMotionEnvironmentState.Stationary);
+		boatMotionEnvironmentStateQueue.Enqueue(BoatMotionEnvironmentState.MovingRight);
+		boatMotionEnvironmentStateQueue.Enqueue(BoatMotionEnvironmentState.MovingRight);
+
 		// Enqueue addition environment states based on difficulty configuration
 		switch (ActivityFiveManager.difficultyConfiguration)
 		{
@@ -99,6 +109,9 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 
 				rockMotionEnvironmentStateQueue.Enqueue(RockMotionEnvironmentState.Rolling);
 				rockMotionEnvironmentStateQueue.Enqueue(RockMotionEnvironmentState.Flying);
+
+				boatMotionEnvironmentStateQueue.Enqueue(BoatMotionEnvironmentState.MovingLeft);
+				boatMotionEnvironmentStateQueue.Enqueue(BoatMotionEnvironmentState.MovingLeft);
 				break;
 			case Difficulty.Hard:
 				appleMotionEnvironmentStateQueue.Enqueue(AppleMotionEnvironmentState.Falling);
@@ -108,6 +121,10 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 				rockMotionEnvironmentStateQueue.Enqueue(RockMotionEnvironmentState.Flying);
 				rockMotionEnvironmentStateQueue.Enqueue(RockMotionEnvironmentState.Rolling);
 				rockMotionEnvironmentStateQueue.Enqueue(RockMotionEnvironmentState.Flying);
+
+				boatMotionEnvironmentStateQueue.Enqueue(BoatMotionEnvironmentState.MovingLeft);
+				boatMotionEnvironmentStateQueue.Enqueue(BoatMotionEnvironmentState.MovingLeft);
+				boatMotionEnvironmentStateQueue.Enqueue(BoatMotionEnvironmentState.MovingRight);
 				break;
 		}
 	}
