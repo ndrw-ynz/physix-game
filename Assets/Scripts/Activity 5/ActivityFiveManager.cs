@@ -117,6 +117,8 @@ public class ActivityFiveManager : MonoBehaviour
 		appleForceMotionSubActivityStateMachine.Initialize(appleForceMotionSubActivityStateQueue.Peek());
 		rockForceMotionSubActivityStateMachine = new ForceMotionSubActivityStateMachine(rockMotionView);
 		rockForceMotionSubActivityStateMachine.Initialize(rockForceMotionSubActivityStateQueue.Peek());
+		boatForceMotionSubActivityStateMachine = new ForceMotionSubActivityStateMachine(boatMotionView);
+		boatForceMotionSubActivityStateMachine.Initialize(boatForceMotionSubActivityStateQueue.Peek());
 
 		// Update state machines
 		UpdateSubActivityStateMachine(
@@ -130,6 +132,12 @@ public class ActivityFiveManager : MonoBehaviour
 			rockForceMotionSubActivityStateQueue,
 			rockMotionView,
 			ref rockForceGivenData
+			);
+		UpdateSubActivityStateMachine(
+			boatForceMotionSubActivityStateMachine,
+			boatForceMotionSubActivityStateQueue,
+			boatMotionView,
+			ref boatForceGivenData
 			);
 	}
 
