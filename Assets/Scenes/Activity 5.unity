@@ -5344,16 +5344,22 @@ MonoBehaviour:
   player: {fileID: 950148098}
   appleMotionView: {fileID: 2099505144}
   rockMotionView: {fileID: 1984238574}
+  boatMotionView: {fileID: 1963148713}
   appleForceSubmissionStatusDisplay: {fileID: 1000110612}
   appleForceDiagramSubmissionStatusDisplay: {fileID: 1307384447}
   rockForceSubmissionStatusDisplay: {fileID: 511673903}
   rockForceDiagramSubmissionStatusDisplay: {fileID: 1387217553}
+  boatForceSubmissionStatusDisplay: {fileID: 625241029}
+  boatForceDiagramSubmissionStatusDisplay: {fileID: 2085955229}
   appleOnBranchCamera: {fileID: 443709632}
   appleTreeCamera: {fileID: 864880160}
   stationaryRockCamera: {fileID: 1410544181}
   rollingRockCamera: {fileID: 1904073445}
   bouncingRockCamera: {fileID: 806913927}
   flyingRockCamera: {fileID: 1563288064}
+  stationaryBoatCamera: {fileID: 559358069}
+  boatMovingRightCamera: {fileID: 644617305}
+  boatMovingLeftCamera: {fileID: 1944155783}
   appleOnBranch: {fileID: 278668059}
   fallingApple: {fileID: 1094688596}
   appleTreeAreaIndicatorEffect: {fileID: 1822438615}
@@ -5364,6 +5370,11 @@ MonoBehaviour:
   flyingRock: {fileID: 1067322690}
   rockAreaIndicatorEffect: {fileID: 2067762226}
   interactableRock: {fileID: 362028550}
+  stationaryBoat: {fileID: 270680928}
+  boatMovingRight: {fileID: 1439956978}
+  boatMovingLeft: {fileID: 501479866}
+  boatAreaIndicatorEffect: {fileID: 414009281}
+  interactableBoat: {fileID: 10939244}
 --- !u!4 &339558598
 Transform:
   m_ObjectHideFlags: 0
@@ -6085,7 +6096,7 @@ GameObject:
   - component: {fileID: 414009284}
   - component: {fileID: 414009283}
   m_Layer: 0
-  m_Name: AreaIndicatorEffect
+  m_Name: BoatAreaIndicatorEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -25245,10 +25256,13 @@ MonoBehaviour:
   forceLevelThree: {fileID: 11400000, guid: b1430d342e924ef4da02f0ea18259db0, type: 2}
   appleMotionView: {fileID: 2099505144}
   rockMotionView: {fileID: 1984238574}
+  boatMotionView: {fileID: 1963148713}
   appleForceSubmissionStatusDisplay: {fileID: 1000110612}
   appleForceDiagramSubmissionStatusDisplay: {fileID: 1307384447}
   rockForceSubmissionStatusDisplay: {fileID: 511673903}
   rockForceDiagramSubmissionStatusDisplay: {fileID: 1387217553}
+  boatForceSubmissionStatusDisplay: {fileID: 625241029}
+  boatForceDiagramSubmissionStatusDisplay: {fileID: 2085955229}
 --- !u!1001 &934756717
 PrefabInstance:
   m_ObjectHideFlags: 0
