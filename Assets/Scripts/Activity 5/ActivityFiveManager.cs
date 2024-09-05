@@ -66,6 +66,7 @@ public class ActivityFiveManager : MonoBehaviour
 	[Header("Views")]
 	[SerializeField] private ForceMotionView appleMotionView;
 	[SerializeField] private ForceMotionView rockMotionView;
+	[SerializeField] private ForceMotionView boatMotionView;
 
 
 	[Header("Submission Status Displays")]
@@ -75,6 +76,9 @@ public class ActivityFiveManager : MonoBehaviour
 	[Header("Rock Force Submission Status Displays")]
 	[SerializeField] private ForceSubmissionStatusDisplay rockForceSubmissionStatusDisplay;
 	[SerializeField] private ForceDiagramSubmissionStatusDisplay rockForceDiagramSubmissionStatusDisplay;
+	[Header("Rock Force Submission Status Displays")]
+	[SerializeField] private ForceSubmissionStatusDisplay boatForceSubmissionStatusDisplay;
+	[SerializeField] private ForceDiagramSubmissionStatusDisplay boatForceDiagramSubmissionStatusDisplay;
 
 	// queue for apple motion
 	private ForceMotionSubActivityStateMachine appleForceMotionSubActivityStateMachine;
@@ -82,7 +86,9 @@ public class ActivityFiveManager : MonoBehaviour
 	// queue for rock motion
 	private ForceMotionSubActivityStateMachine rockForceMotionSubActivityStateMachine;
 	private Queue<ActivityFiveSubActivityState> rockForceMotionSubActivityStateQueue;
-
+	// queue for boat motion
+	private ForceMotionSubActivityStateMachine boatForceMotionSubActivityStateMachine;
+	private Queue<ActivityFiveSubActivityState> boatForceMotionSubActivityStateQueue;
 
 	// given data - force apple
 	private ForceData appleForceGivenData;
@@ -90,6 +96,9 @@ public class ActivityFiveManager : MonoBehaviour
 	// given data - force rock
 	private ForceData rockForceGivenData;
 	private Queue<ForceObjectMotionType> rockForceDiagramStateQueue;
+	// given data - force rock
+	private ForceData boatForceGivenData;
+	private Queue<ForceObjectMotionType> boatForceDiagramStateQueue;
 
 	private void Start()
 	{
@@ -183,6 +192,26 @@ public class ActivityFiveManager : MonoBehaviour
 			);
 		rockForceSubmissionStatusDisplay.ProceedEvent += UpdateRockSubActivityStateQueue;
 		rockForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateRockForceDiagramStateQueue;
+
+		// Rock Force Motion related events
+		boatMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
+			boatForceMotionSubActivityStateMachine,
+			boatForceMotionSubActivityStateQueue,
+			boatMotionView,
+			ref boatForceGivenData
+			);
+		boatMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
+			answer,
+			boatForceGivenData,
+			boatForceSubmissionStatusDisplay
+			);
+		boatMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
+			answer,
+			boatForceDiagramStateQueue,
+			boatForceDiagramSubmissionStatusDisplay
+			);
+		boatForceSubmissionStatusDisplay.ProceedEvent += UpdateBoatSubActivityStateQueue;
+		boatForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateBoatForceDiagramStateQueue;
 	}
 
 	private void InitializeSubActivityStateQueues()
@@ -357,6 +386,25 @@ public class ActivityFiveManager : MonoBehaviour
 			rockForceMotionSubActivityStateQueue,
 			rockMotionView,
 			ref rockForceGivenData
+			);
+	}
+	#endregion
+
+	#region Boat Motion
+	private void UpdateBoatForceDiagramStateQueue()
+	{
+		boatForceDiagramStateQueue.Dequeue();
+		UpdateBoatSubActivityStateQueue();
+	}
+
+	private void UpdateBoatSubActivityStateQueue()
+	{
+		boatForceMotionSubActivityStateQueue.Dequeue();
+		UpdateSubActivityStateMachine(
+			boatForceMotionSubActivityStateMachine,
+			boatForceMotionSubActivityStateQueue,
+			boatMotionView,
+			ref boatForceGivenData
 			);
 	}
 	#endregion
