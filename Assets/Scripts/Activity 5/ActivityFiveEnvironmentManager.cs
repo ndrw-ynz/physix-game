@@ -22,6 +22,9 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private Camera rollingRockCamera;
 	[SerializeField] private Camera bouncingRockCamera;
 	[SerializeField] private Camera flyingRockCamera;
+	[SerializeField] private Camera stationaryBoatCamera;
+	[SerializeField] private Camera boatMovingRightCamera;
+	[SerializeField] private Camera boatMovingLeftCamera;
 
 	[Header("Apple Tree Area Game Objects")]
 	[SerializeField] private GameObject appleOnBranch;
@@ -36,6 +39,13 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private FlyingRockAnimate flyingRock;
 	[SerializeField] private GameObject rockAreaIndicatorEffect;
 	[SerializeField] private InteractableViewOpenerObject interactableRock;
+
+	[Header("Boat River Area Game Objects")]
+	[SerializeField] private BoatMotionAnimate stationaryBoat;
+	[SerializeField] private BoatMotionAnimate boatMovingRight;
+	[SerializeField] private BoatMotionAnimate boatMovingLeft;
+	[SerializeField] private GameObject boatAreaIndicatorEffect;
+	[SerializeField] private InteractableViewOpenerObject interactableBoat;
 
 	private AppleMotionEnvironmentStateMachine appleMotionEnvironmentStateMachine;
 	private Queue<AppleMotionEnvironmentState> appleMotionEnvironmentStateQueue;
@@ -180,5 +190,23 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 		{
 			rockMotionEnvironmentStateMachine.TransitionToState(rockMotionEnvironmentStateQueue.Peek());
 		}
+	}
+
+	public void SetBoatStationaryState(bool isActive)
+	{
+		stationaryBoatCamera.gameObject.SetActive(isActive);
+		stationaryBoat.gameObject.SetActive(isActive);
+	}
+
+	public void SetBoatMovingRightState(bool isActive)
+	{
+		boatMovingRightCamera.gameObject.SetActive(isActive);
+		boatMovingRight.gameObject.SetActive(isActive);
+	}
+
+	public void SetBoatMovingLeftState(bool isActive)
+	{
+		boatMovingLeftCamera.gameObject.SetActive(isActive);
+		boatMovingLeft.gameObject.SetActive(isActive);
 	}
 }
