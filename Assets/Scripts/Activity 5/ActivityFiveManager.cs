@@ -276,6 +276,20 @@ public class ActivityFiveManager : MonoBehaviour
 		rockForceDiagramStateQueue.Enqueue(ForceObjectMotionType.Rock_RollingRight);
 		rockForceDiagramStateQueue.Enqueue(ForceObjectMotionType.Rock_Bouncing);
 		rockForceDiagramStateQueue.Enqueue(ForceObjectMotionType.Rock_Flying);
+
+		// Initialize queue for boat force
+		boatForceDiagramStateQueue = new Queue<ForceObjectMotionType>();
+
+		boatForceDiagramStateQueue.Enqueue(ForceObjectMotionType.Boat_Stationary);
+		boatForceDiagramStateQueue.Enqueue(ForceObjectMotionType.Boat_MovingRight);
+		// Add additional force diagram if difficulty is medium/hard.
+		switch (difficultyConfiguration)
+		{
+			case Difficulty.Medium:
+			case Difficulty.Hard:
+				boatForceDiagramStateQueue.Enqueue(ForceObjectMotionType.Boat_MovingLeft);
+				break;
+		}
 	}
 
 	private ForceData GenerateNewForceGivenData(ForceSubActivitySO forceSO)
