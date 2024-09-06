@@ -102,7 +102,7 @@ public class ActivityFiveManager : MonoBehaviour
 
 	private void Start()
 	{
-		ConfigureLevelData(Difficulty.Medium);
+		ConfigureLevelData(Difficulty.Easy);
 
 		SubscribeForceMotionEvents();
 	
@@ -332,11 +332,11 @@ public class ActivityFiveManager : MonoBehaviour
 	{
 		if (results.isAllCorrect())
 		{
-			forceTypeSubmissionStatusDisplay.SetSubmissionStatus(true, "correct");
+			forceTypeSubmissionStatusDisplay.SetSubmissionStatus(true, "The submitted force diagram is correct.");
 		}
 		else
 		{
-			forceTypeSubmissionStatusDisplay.SetSubmissionStatus(false, "wrong");
+			forceTypeSubmissionStatusDisplay.SetSubmissionStatus(false, "There are errors in your submission. Please review and fix it.");
 		}
 
 		forceTypeSubmissionStatusDisplay.UpdateForceDiagramDisplay(answer, results);
@@ -348,10 +348,10 @@ public class ActivityFiveManager : MonoBehaviour
 	{
 		if (isCorrect)
 		{
-			submissionStatusDisplay.SetSubmissionStatus(true, "correct");
+			submissionStatusDisplay.SetSubmissionStatus(true, "The submitted answer is correct.");
 		} else
 		{
-			submissionStatusDisplay.SetSubmissionStatus(false, "wrong");
+			submissionStatusDisplay.SetSubmissionStatus(false, "There are errors in your submission. Please review and fix it.");
 		}
 
 		submissionStatusDisplay.gameObject.SetActive(true);
