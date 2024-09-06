@@ -5366,7 +5366,7 @@ MonoBehaviour:
   interactableApples: {fileID: 860433531}
   stationaryRock: {fileID: 2001298862}
   rollingRock: {fileID: 1774638955}
-  bouncingRock: {fileID: 1186826353}
+  bouncingRock: {fileID: 1186826350}
   flyingRock: {fileID: 1067322690}
   rockAreaIndicatorEffect: {fileID: 2067762226}
   interactableRock: {fileID: 362028550}
@@ -30123,11 +30123,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6359112800851487366, guid: c0695e50372965840badd7b84ed57617, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.080002
+      value: -3.79
       objectReference: {fileID: 0}
     - target: {fileID: 6359112800851487366, guid: c0695e50372965840badd7b84ed57617, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 11.37
+      value: 10.83
       objectReference: {fileID: 0}
     - target: {fileID: 6359112800851487366, guid: c0695e50372965840badd7b84ed57617, type: 3}
       propertyPath: m_LocalPosition.z
@@ -30164,13 +30164,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6359112800851457702, guid: c0695e50372965840badd7b84ed57617, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1186826352}
-    - targetCorrespondingSourceObject: {fileID: 6359112800851457702, guid: c0695e50372965840badd7b84ed57617, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1186826353}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0695e50372965840badd7b84ed57617, type: 3}
 --- !u!4 &1186826349 stripped
 Transform:
@@ -30182,47 +30176,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6359112800851457702, guid: c0695e50372965840badd7b84ed57617, type: 3}
   m_PrefabInstance: {fileID: 1186826348}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &1186826352
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1186826350}
-  serializedVersion: 4
-  m_Mass: 25
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 8
-  m_CollisionDetection: 0
---- !u!114 &1186826353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1186826350}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dccb91114f04223478286c01b380895e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forceMagnitude: 250
-  resetDelay: 1.5
 --- !u!1 &1192791501
 GameObject:
   m_ObjectHideFlags: 0
@@ -56044,5 +55997,5 @@ SceneRoots:
   - {fileID: 415098829}
   - {fileID: 403149771}
   - {fileID: 1328432455}
-  - {fileID: 650149146}
   - {fileID: 365916351}
+  - {fileID: 650149146}

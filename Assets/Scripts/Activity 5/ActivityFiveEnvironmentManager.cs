@@ -39,11 +39,11 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 	[Header("Rock Area Game Objects")]
 	[SerializeField] private GameObject stationaryRock;
 	[SerializeField] private RollingRockMotionAnimate rollingRock;
-	[SerializeField] private BouncingRockMotionAnimate bouncingRock;
+	[SerializeField] private GameObject bouncingRock;
 	[SerializeField] private FlyingRockAnimate flyingRock;
 	[SerializeField] private GameObject rockAreaIndicatorEffect;
 	[SerializeField] private InteractableViewOpenerObject interactableRock;
-
+ 
 	[Header("Boat River Area Game Objects")]
 	[SerializeField] private BoatMotionAnimate stationaryBoat;
 	[SerializeField] private BoatMotionAnimate boatMovingRight;
