@@ -102,7 +102,7 @@ public class ActivityFiveManager : MonoBehaviour
 
 	private void Start()
 	{
-		ConfigureLevelData(Difficulty.Easy);
+		ConfigureLevelData(Difficulty.Medium);
 
 		SubscribeForceMotionEvents();
 	
@@ -307,8 +307,8 @@ public class ActivityFiveManager : MonoBehaviour
 	{
 		ForceData forceData = new ForceData();
 
-		forceData.acceleration = (float) Math.Round(Random.Range(forceSO.accelerationMinVal, forceSO.accelerationMaxVal), 3);
-		forceData.mass = (float) Math.Round(Random.Range(forceSO.massMinVal, forceSO.massMaxVal), 3);
+		forceData.acceleration = (float) Math.Round(Random.Range(forceSO.accelerationMinVal, forceSO.accelerationMaxVal), 2);
+		forceData.mass = (float) Math.Round(Random.Range(forceSO.massMinVal, forceSO.massMaxVal), 2);
 
 		return forceData;
 	}
