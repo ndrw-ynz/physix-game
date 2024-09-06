@@ -49,8 +49,8 @@ public class ForceMotionView : MonoBehaviour
 				break;
 			case Difficulty.Medium:
 			case Difficulty.Hard:
-				givenAcceleration.text = $"{data.acceleration * 0.001} km/s^2";
-				givenMass.text = $"{data.mass * 1000} g";
+				givenAcceleration.text = $"{data.acceleration * 0.001f} km/s^2";
+				givenMass.text = $"{data.mass * 1000f} g";
 				break;
 		}
 	}
