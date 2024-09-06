@@ -60,20 +60,7 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 
 	public void Start()
 	{
-		appleMotionView.OpenViewEvent += UpdateAppleEnvironmentStateMachine;
-		appleMotionView.QuitViewEvent += () => appleMotionEnvironmentStateMachine.TransitionToState(AppleMotionEnvironmentState.None);
-		appleForceSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
-		appleForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
-
-		rockMotionView.OpenViewEvent += UpdateRockEnvironmentStateMachine;
-		rockMotionView.QuitViewEvent += () => rockMotionEnvironmentStateMachine.TransitionToState(RockMotionEnvironmentState.None);
-		rockForceSubmissionStatusDisplay.ProceedEvent += DequeueRockEnvironmentStateQueue;
-		rockForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueRockEnvironmentStateQueue;
-
-		boatMotionView.OpenViewEvent += UpdateBoatEnvironmentStateMachine;
-		boatMotionView.QuitViewEvent += () => rockMotionEnvironmentStateMachine.TransitionToState(RockMotionEnvironmentState.None);
-		boatForceSubmissionStatusDisplay.ProceedEvent += DequeueBoatEnvironmentStateQueue;
-		boatForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueBoatEnvironmentStateQueue;
+		SubscribeForceMotionEnvironmentEvents();
 
 		// Initialize environment state queues
 		InitializeEnvironmentStateQueues();
@@ -87,6 +74,27 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 		// Initialize values for rock environment state machine
 		boatMotionEnvironmentStateMachine = new BoatMotionEnvironmentStateMachine(this);
 		boatMotionEnvironmentStateMachine.Initialize(BoatMotionEnvironmentState.None);
+	}
+
+	private void SubscribeForceMotionEnvironmentEvents()
+	{
+		// Apple force motion environment related events
+		appleMotionView.OpenViewEvent += UpdateAppleEnvironmentStateMachine;
+		appleMotionView.QuitViewEvent += () => appleMotionEnvironmentStateMachine.TransitionToState(AppleMotionEnvironmentState.None);
+		appleForceSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
+		appleForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueAppleEnvironmentStateQueue;
+
+		// Rock force motion environment related events
+		rockMotionView.OpenViewEvent += UpdateRockEnvironmentStateMachine;
+		rockMotionView.QuitViewEvent += () => rockMotionEnvironmentStateMachine.TransitionToState(RockMotionEnvironmentState.None);
+		rockForceSubmissionStatusDisplay.ProceedEvent += DequeueRockEnvironmentStateQueue;
+		rockForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueRockEnvironmentStateQueue;
+
+		// Boat force motion environment related events
+		boatMotionView.OpenViewEvent += UpdateBoatEnvironmentStateMachine;
+		boatMotionView.QuitViewEvent += () => rockMotionEnvironmentStateMachine.TransitionToState(RockMotionEnvironmentState.None);
+		boatForceSubmissionStatusDisplay.ProceedEvent += DequeueBoatEnvironmentStateQueue;
+		boatForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueBoatEnvironmentStateQueue;
 	}
 
 	private void InitializeEnvironmentStateQueues()
