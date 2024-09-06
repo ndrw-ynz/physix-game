@@ -87,6 +87,6 @@ public static class ActivityFiveUtilities
 	{
 		if (submittedForce == null) return false;
 		// Formula: Force = mass * acceleration
-		return Math.Abs((float)submittedForce - (forceData.mass * forceData.acceleration)) <= 0.0001;
+		return Math.Abs((float)submittedForce - (forceData.mass * forceData.acceleration)) <= 0.01;
 	}
 }
