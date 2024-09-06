@@ -1,6 +1,6 @@
 using System;
 
-public class ForceTypeAnswerSubmissionResults
+public class ForceDiagramAnswerSubmissionResults
 {
 	public bool isUpForceTypeCorrect;
 	public bool isDownForceTypeCorrect;
@@ -20,9 +20,9 @@ public class ForceTypeAnswerSubmissionResults
 
 public static class ActivityFiveUtilities
 {
-    public static ForceTypeAnswerSubmissionResults ValidateForceTypeSubmission(ForceObjectMotionType forceObjectMotionType, ForceDiagramAnswerSubmission submission)
+    public static ForceDiagramAnswerSubmissionResults ValidateForceDiagramSubmission(ForceObjectMotionType forceObjectMotionType, ForceDiagramAnswerSubmission submission)
     {
-		ForceTypeAnswerSubmissionResults results = new ForceTypeAnswerSubmissionResults();
+		ForceDiagramAnswerSubmissionResults results = new ForceDiagramAnswerSubmissionResults();
 		switch (forceObjectMotionType)
 		{
 			case ForceObjectMotionType.Apple_OnBranch:

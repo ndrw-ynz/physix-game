@@ -11,7 +11,7 @@ public class ForceDiagramSubmissionStatusDisplay : SubmissionStatusDisplay
 	[SerializeField] private ForceTypeAnswerDisplay leftForceTypeAnswerDisplay;
 	[SerializeField] private ForceTypeAnswerDisplay rightForceTypeAnswerDisplay;
 
-	public void UpdateForceDiagramDisplay(ForceDiagramAnswerSubmission answer, ForceTypeAnswerSubmissionResults results)
+	public void UpdateForceDiagramDisplay(ForceDiagramAnswerSubmission answer, ForceDiagramAnswerSubmissionResults results)
     {
         UpdateForceDiagramText(answer);
         UpdateForceDiagramStatusColors(results);
@@ -25,7 +25,7 @@ public class ForceDiagramSubmissionStatusDisplay : SubmissionStatusDisplay
 		rightForceTypeAnswerDisplay.UpdateTextDisplay(answer.rightForceType);
 	}
 
-	private void UpdateForceDiagramStatusColors(ForceTypeAnswerSubmissionResults results)
+	private void UpdateForceDiagramStatusColors(ForceDiagramAnswerSubmissionResults results)
     {
 		upForceTypeAnswerDisplay.UpdateStatusBorderDisplay(results.isUpForceTypeCorrect);
 		downForceTypeAnswerDisplay.UpdateStatusBorderDisplay(results.isDownForceTypeCorrect);

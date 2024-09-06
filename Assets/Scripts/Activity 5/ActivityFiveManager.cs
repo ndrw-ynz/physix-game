@@ -323,25 +323,25 @@ public class ActivityFiveManager : MonoBehaviour
 
 	private void CheckForceDiagramAnswer(ForceDiagramAnswerSubmission answer, Queue<ForceObjectMotionType> forceDiagramStateQueue, ForceDiagramSubmissionStatusDisplay forceDiagramSubmissionStatusDisplay)
 	{
-		ForceTypeAnswerSubmissionResults results = ActivityFiveUtilities.ValidateForceTypeSubmission(forceDiagramStateQueue.Peek(), answer);
+		ForceDiagramAnswerSubmissionResults results = ActivityFiveUtilities.ValidateForceDiagramSubmission(forceDiagramStateQueue.Peek(), answer);
 		// add metrics alter
-		DisplayForceTypeSubmissionResults(answer, results, forceDiagramSubmissionStatusDisplay);
+		DisplayForceDiagramSubmissionResults(answer, results, forceDiagramSubmissionStatusDisplay);
 	}
 
-	private void DisplayForceTypeSubmissionResults(ForceDiagramAnswerSubmission answer, ForceTypeAnswerSubmissionResults results, ForceDiagramSubmissionStatusDisplay forceTypeSubmissionStatusDisplay)
+	private void DisplayForceDiagramSubmissionResults(ForceDiagramAnswerSubmission answer, ForceDiagramAnswerSubmissionResults results, ForceDiagramSubmissionStatusDisplay forceDiagramSubmissionStatusDisplay)
 	{
 		if (results.isAllCorrect())
 		{
-			forceTypeSubmissionStatusDisplay.SetSubmissionStatus(true, "The submitted force diagram is correct.");
+			forceDiagramSubmissionStatusDisplay.SetSubmissionStatus(true, "The submitted force diagram is correct.");
 		}
 		else
 		{
-			forceTypeSubmissionStatusDisplay.SetSubmissionStatus(false, "There are errors in your submission. Please review and fix it.");
+			forceDiagramSubmissionStatusDisplay.SetSubmissionStatus(false, "There are errors in your submission. Please review and fix it.");
 		}
 
-		forceTypeSubmissionStatusDisplay.UpdateForceDiagramDisplay(answer, results);
+		forceDiagramSubmissionStatusDisplay.UpdateForceDiagramDisplay(answer, results);
 
-		forceTypeSubmissionStatusDisplay.gameObject.SetActive(true);
+		forceDiagramSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
 	private void DisplayForceSubmissionResults(bool isCorrect, SubmissionStatusDisplay submissionStatusDisplay)
