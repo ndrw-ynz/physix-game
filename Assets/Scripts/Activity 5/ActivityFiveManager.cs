@@ -100,6 +100,28 @@ public class ActivityFiveManager : MonoBehaviour
 	private ForceData boatForceGivenData;
 	private Queue<ForceObjectMotionType> boatForceDiagramStateQueue;
 
+	// Variables for tracking which view is currently active
+	bool isAppleMotionViewActive;
+	bool isRockMotionViewActive;
+	bool isBoatMotionViewActive;
+
+	// Gameplay performance metrics variables
+	// Apple Motion Sub Activity
+	private float appleMotionGameplayDuartion;
+	private bool isAppleMotionSubActivityFinished;
+	private int numIncorrectAppleMotionForceDiagramSubmission;
+	private int numIncorrectAppleMotionForceSubmission;
+	// Rock Motion Sub Activity
+	private float rockMotionGameplayDuartion;
+	private bool isRockMotionSubActivityFinished;
+	private int numIncorrectRockMotionForceDiagramSubmission;
+	private int numIncorrectRockMotionForceSubmission;
+	// Boat Motion Sub Activity
+	private float boatMotionGameplayDuartion;
+	private bool isBoatMotionSubActivityFinished;
+	private int numIncorrectBoatMotionForceDiagramSubmission;
+	private int numIncorrectBoatMotionForceSubmission;
+
 	private void Start()
 	{
 		ConfigureLevelData(Difficulty.Easy);
@@ -125,20 +147,30 @@ public class ActivityFiveManager : MonoBehaviour
 			appleForceMotionSubActivityStateMachine,
 			appleForceMotionSubActivityStateQueue,
 			appleMotionView,
-			ref appleForceGivenData
+			ref appleForceGivenData,
+			ref isAppleMotionSubActivityFinished
 			);
 		UpdateSubActivityStateMachine(
 			rockForceMotionSubActivityStateMachine,
 			rockForceMotionSubActivityStateQueue,
 			rockMotionView,
-			ref rockForceGivenData
+			ref rockForceGivenData,
+			ref isRockMotionSubActivityFinished
 			);
 		UpdateSubActivityStateMachine(
 			boatForceMotionSubActivityStateMachine,
 			boatForceMotionSubActivityStateQueue,
 			boatMotionView,
-			ref boatForceGivenData
+			ref boatForceGivenData,
+			ref isBoatMotionSubActivityFinished
 			);
+	}
+
+	private void Update()
+	{
+		if (isAppleMotionViewActive && !isAppleMotionSubActivityFinished) appleMotionGameplayDuartion += Time.deltaTime;
+		if (isRockMotionViewActive && !isRockMotionSubActivityFinished) rockMotionGameplayDuartion += Time.deltaTime;
+		if (isBoatMotionViewActive && !isBoatMotionSubActivityFinished) boatMotionGameplayDuartion += Time.deltaTime;
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -162,60 +194,75 @@ public class ActivityFiveManager : MonoBehaviour
 	private void SubscribeForceMotionEvents()
 	{
 		// Apple Force Motion related events
+		appleMotionView.OpenViewEvent += () => isAppleMotionViewActive = true;
 		appleMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
 			appleForceMotionSubActivityStateMachine,
 			appleForceMotionSubActivityStateQueue,
 			appleMotionView,
-			ref appleForceGivenData
+			ref appleForceGivenData,
+			ref isAppleMotionSubActivityFinished
 			);
+		appleMotionView.QuitViewEvent += () => isAppleMotionViewActive = false;
 		appleMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
 			answer,
 			appleForceGivenData,
+			ref numIncorrectAppleMotionForceSubmission,
 			appleForceSubmissionStatusDisplay
 			);
 		appleMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
 			answer,
 			appleForceDiagramStateQueue,
+			ref numIncorrectAppleMotionForceDiagramSubmission,
 			appleForceDiagramSubmissionStatusDisplay
 			);
 		appleForceSubmissionStatusDisplay.ProceedEvent += UpdateAppleSubActivityStateQueue;
 		appleForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateAppleForceDiagramStateQueue;
 
 		// Rock Force Motion related events
+		rockMotionView.OpenViewEvent += () => isRockMotionViewActive = true;
 		rockMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
 			rockForceMotionSubActivityStateMachine,
 			rockForceMotionSubActivityStateQueue,
 			rockMotionView,
-			ref rockForceGivenData
+			ref rockForceGivenData,
+			ref isRockMotionSubActivityFinished
 			);
+		rockMotionView.QuitViewEvent += () => isRockMotionViewActive = false;
 		rockMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
 			answer,
 			rockForceGivenData,
+			ref numIncorrectRockMotionForceSubmission,
 			rockForceSubmissionStatusDisplay
 			);
 		rockMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
 			answer,
 			rockForceDiagramStateQueue,
+			ref numIncorrectRockMotionForceDiagramSubmission,
 			rockForceDiagramSubmissionStatusDisplay
 			);
 		rockForceSubmissionStatusDisplay.ProceedEvent += UpdateRockSubActivityStateQueue;
 		rockForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateRockForceDiagramStateQueue;
 
-		// Rock Force Motion related events
+		// Boat Force Motion related events
+		boatMotionView.OpenViewEvent += () => isBoatMotionViewActive = true;
 		boatMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
 			boatForceMotionSubActivityStateMachine,
 			boatForceMotionSubActivityStateQueue,
 			boatMotionView,
-			ref boatForceGivenData
+			ref boatForceGivenData,
+			ref isBoatMotionSubActivityFinished
 			);
+		boatMotionView.QuitViewEvent += () => isBoatMotionViewActive = false;
 		boatMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
 			answer,
 			boatForceGivenData,
+			ref numIncorrectBoatMotionForceSubmission,
 			boatForceSubmissionStatusDisplay
 			);
 		boatMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
 			answer,
 			boatForceDiagramStateQueue,
+			ref numIncorrectBoatMotionForceDiagramSubmission,
 			boatForceDiagramSubmissionStatusDisplay
 			);
 		boatForceSubmissionStatusDisplay.ProceedEvent += UpdateBoatSubActivityStateQueue;
@@ -313,18 +360,22 @@ public class ActivityFiveManager : MonoBehaviour
 		return forceData;
 	}
 
-	private void CheckForceAnswer(float? answer, ForceData forceGivenData, ForceSubmissionStatusDisplay forceSubmissionStatusDisplay)
+	private void CheckForceAnswer(float? answer, ForceData forceGivenData, ref int numIncorrectForceSubmissionRef, ForceSubmissionStatusDisplay forceSubmissionStatusDisplay)
 	{
 		bool result = ActivityFiveUtilities.ValidateForceSubmission(answer, forceGivenData);
-		// add metrics alter
+		
+		// Update force answer gameplay metric
+		if (!result) numIncorrectForceSubmissionRef++;
 		DisplayForceSubmissionResults(result, forceSubmissionStatusDisplay);
 	}
 
-
-	private void CheckForceDiagramAnswer(ForceDiagramAnswerSubmission answer, Queue<ForceObjectMotionType> forceDiagramStateQueue, ForceDiagramSubmissionStatusDisplay forceDiagramSubmissionStatusDisplay)
+	private void CheckForceDiagramAnswer(ForceDiagramAnswerSubmission answer, Queue<ForceObjectMotionType> forceDiagramStateQueue, ref int numIncorrectForceDiagramSubmissionRef, ForceDiagramSubmissionStatusDisplay forceDiagramSubmissionStatusDisplay)
 	{
 		ForceDiagramAnswerSubmissionResults results = ActivityFiveUtilities.ValidateForceDiagramSubmission(forceDiagramStateQueue.Peek(), answer);
-		// add metrics alter
+
+		// Update force diagram answer gameplay metric
+		if (!results.isAllCorrect()) numIncorrectForceDiagramSubmissionRef++;
+
 		DisplayForceDiagramSubmissionResults(answer, results, forceDiagramSubmissionStatusDisplay);
 	}
 
@@ -361,12 +412,14 @@ public class ActivityFiveManager : MonoBehaviour
 		ForceMotionSubActivityStateMachine forceSubActivityStateMachine,
 		Queue<ActivityFiveSubActivityState> subactivityStateQueue,
 		ForceMotionView forceMotionView,
-		ref ForceData forceGivenData
+		ref ForceData forceGivenData,
+		ref bool isSubActivityFinished
 		)
 	{
 		if (subactivityStateQueue.Count == 0)
 		{
 			forceSubActivityStateMachine.TransitionToState(ActivityFiveSubActivityState.None);
+			isSubActivityFinished = true;
 		}
 		else
 		{
@@ -402,7 +455,8 @@ public class ActivityFiveManager : MonoBehaviour
 			appleForceMotionSubActivityStateMachine,
 			appleForceMotionSubActivityStateQueue,
 			appleMotionView,
-			ref appleForceGivenData
+			ref appleForceGivenData,
+			ref isAppleMotionSubActivityFinished
 			);
 	}
 	#endregion
@@ -421,7 +475,8 @@ public class ActivityFiveManager : MonoBehaviour
 			rockForceMotionSubActivityStateMachine,
 			rockForceMotionSubActivityStateQueue,
 			rockMotionView,
-			ref rockForceGivenData
+			ref rockForceGivenData,
+			ref isRockMotionSubActivityFinished
 			);
 	}
 	#endregion
@@ -440,7 +495,8 @@ public class ActivityFiveManager : MonoBehaviour
 			boatForceMotionSubActivityStateMachine,
 			boatForceMotionSubActivityStateQueue,
 			boatMotionView,
-			ref boatForceGivenData
+			ref boatForceGivenData,
+			ref isBoatMotionSubActivityFinished
 			);
 	}
 	#endregion
