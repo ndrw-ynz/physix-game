@@ -67,7 +67,7 @@ public class ActivityFiveManager : MonoBehaviour
 	[SerializeField] private ForceMotionView appleMotionView;
 	[SerializeField] private ForceMotionView rockMotionView;
 	[SerializeField] private ForceMotionView boatMotionView;
-
+	[SerializeField] private ActivityFivePerformanceView performanceView;
 
 	[Header("Submission Status Displays")]
 	[Header("Apple Force Submission Status Displays")]
@@ -171,6 +171,7 @@ public class ActivityFiveManager : MonoBehaviour
 		if (isAppleMotionViewActive && !isAppleMotionSubActivityFinished) appleMotionGameplayDuartion += Time.deltaTime;
 		if (isRockMotionViewActive && !isRockMotionSubActivityFinished) rockMotionGameplayDuartion += Time.deltaTime;
 		if (isBoatMotionViewActive && !isBoatMotionSubActivityFinished) boatMotionGameplayDuartion += Time.deltaTime;
+		if (isAppleMotionSubActivityFinished && isRockMotionSubActivityFinished && isBoatMotionSubActivityFinished) DisplayPerformanceView();
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -500,4 +501,33 @@ public class ActivityFiveManager : MonoBehaviour
 			);
 	}
 	#endregion
+
+	private void DisplayPerformanceView()
+	{
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
+
+		performanceView.SetTotalTimeDisplay(appleMotionGameplayDuartion + rockMotionGameplayDuartion + boatMotionGameplayDuartion);
+
+		performanceView.SetAppleMotionMetricsDisplay(
+			isAccomplished: isAppleMotionSubActivityFinished,
+			numIncorrectForceSubmission: numIncorrectAppleMotionForceSubmission,
+			numIncorrectForceDiagramSubmission: numIncorrectAppleMotionForceDiagramSubmission,
+			duration: appleMotionGameplayDuartion
+			);
+
+		performanceView.SetRockMotionMetricsDisplay(
+			isAccomplished: isRockMotionSubActivityFinished,
+			numIncorrectForceSubmission: numIncorrectRockMotionForceSubmission,
+			numIncorrectForceDiagramSubmission: numIncorrectRockMotionForceDiagramSubmission,
+			duration: rockMotionGameplayDuartion
+			);
+
+		performanceView.SetBoatMotionMetricsDisplay(
+			isAccomplished: isBoatMotionSubActivityFinished,
+			numIncorrectForceSubmission: numIncorrectBoatMotionForceSubmission,
+			numIncorrectForceDiagramSubmission: numIncorrectBoatMotionForceDiagramSubmission,
+			duration: boatMotionGameplayDuartion
+			);
+	}
 }
