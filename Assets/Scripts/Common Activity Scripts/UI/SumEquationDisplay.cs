@@ -38,4 +38,14 @@ public class SumEquationDisplay : MonoBehaviour
 			resultField.text = "N/A";
 		}
 	}
+
+	public void ResetState()
+	{
+		for (int i = 0; i < numberInputFields.Count; i++)
+		{
+			numberInputFields[i].text = "0";
+		}
+		resultField.text = "0";
+		sumValue = 0;
+	}
 }
