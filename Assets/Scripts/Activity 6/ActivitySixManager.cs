@@ -12,6 +12,11 @@ public class ActivitySixManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
 
+	public event Action MainSatelliteAreaClearEvent;
+
+	[Header("Input Reader")]
+	[SerializeField] InputReader inputReader;
+
 	[Header("Level Data - Dot Product")]
 	[SerializeField] private DotProductSubActivitySO dotProductLevelOne;
 	[SerializeField] private DotProductSubActivitySO dotProductLevelTwo;
@@ -20,6 +25,9 @@ public class ActivitySixManager : MonoBehaviour
 
 	[Header("Views")]
 	[SerializeField] private DotProductView dotProductView;
+
+	[Header("Submission Status Displays")]
+	[SerializeField] private DotProductSubmissionStatusDisplay dotProductSubmissionStatusDisplay;
 
 	// Given data
 	private DotProductData dotProductGivenData;
@@ -64,6 +72,7 @@ public class ActivitySixManager : MonoBehaviour
 	private void SubscribeViewAndDisplayEvents()
 	{
 		dotProductView.SubmitAnswerEvent += CheckDotProductAnswers;
+		dotProductSubmissionStatusDisplay.ProceedEvent += UpdateDotProductViewState;
 	}
 
 	#region Dot Product
@@ -88,10 +97,38 @@ public class ActivitySixManager : MonoBehaviour
 	{
 		DotProductAnswerSubmissionResults results = ActivitySixUtilities.ValidateDotProductSubmission(answer, dotProductGivenData);
 
-		Debug.Log(results.isXCoordScalarProductCorrect);
-		Debug.Log(results.isYCoordScalarProductCorrect);
-		Debug.Log(results.isZCoordScalarProductCorrect);
-		Debug.Log(results.isDotProductCorrect);
+		// add func here for updating gameplay metrics variables
+		if (results.isAllCorrect()) currentNumDotProductTests--; 
+		DisplayDotProductSubmissionResults(results);
+	}
+
+	private void DisplayDotProductSubmissionResults(DotProductAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			dotProductSubmissionStatusDisplay.SetSubmissionStatus(true, "The submitted calculations are correct.");
+		}
+		else
+		{
+			dotProductSubmissionStatusDisplay.SetSubmissionStatus(false, "There are errors in your submission. Please review and fix it.");
+		}
+
+		dotProductSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
+		dotProductSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateDotProductViewState()
+	{
+		if (currentNumDotProductTests > 0)
+		{
+			GenerateDotProductGivenData(currentDotProductLevel);
+			dotProductView.SetupDotProductView(dotProductGivenData);
+		} else
+		{
+			dotProductView.gameObject.SetActive(false);
+			MainSatelliteAreaClearEvent?.Invoke();
+		}
 	}
 	#endregion
 }
