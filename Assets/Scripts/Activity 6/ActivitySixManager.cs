@@ -31,6 +31,8 @@ public class ActivitySixManager : MonoBehaviour
 	{
 		ConfigureLevelData(Difficulty.Easy);
 
+		SubscribeViewAndDisplayEvents();
+
 		// Initialize given values
 		GenerateDotProductGivenData(currentDotProductLevel);
 
@@ -59,6 +61,11 @@ public class ActivitySixManager : MonoBehaviour
 		}
 	}
 
+	private void SubscribeViewAndDisplayEvents()
+	{
+		dotProductView.SubmitAnswerEvent += CheckDotProductAnswers;
+	}
+
 	#region Dot Product
 	private void GenerateDotProductGivenData(DotProductSubActivitySO dotProductSO)
 	{
@@ -75,6 +82,16 @@ public class ActivitySixManager : MonoBehaviour
 		randomVector.y = (float) Math.Round(Random.Range(vectorMinThreshold.y, vectorMaxThreshold.y), 1);
 		randomVector.z = (float) Math.Round(Random.Range(vectorMinThreshold.z, vectorMaxThreshold.z), 1);
 		return randomVector;
+	}
+
+	private void CheckDotProductAnswers(DotProductAnswerSubmission answer)
+	{
+		DotProductAnswerSubmissionResults results = ActivitySixUtilities.ValidateDotProductSubmission(answer, dotProductGivenData);
+
+		Debug.Log(results.isXCoordScalarProductCorrect);
+		Debug.Log(results.isYCoordScalarProductCorrect);
+		Debug.Log(results.isZCoordScalarProductCorrect);
+		Debug.Log(results.isDotProductCorrect);
 	}
 	#endregion
 }
