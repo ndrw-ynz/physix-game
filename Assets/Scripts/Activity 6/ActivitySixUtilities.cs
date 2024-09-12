@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class DotProductAnswerSubmissionResults
 {
@@ -15,6 +16,17 @@ public class DotProductAnswerSubmissionResults
 			isZCoordScalarProductCorrect &&
 			isDotProductCorrect
 			);
+	}
+}
+
+public class WorkSubActivityAnswerSubmissionResults
+{
+	public bool isForceCorrect;
+	public bool isWorkCorrect;
+
+	public bool isAllCorrect()
+	{
+		return isForceCorrect && isWorkCorrect;
 	}
 }
 
@@ -38,6 +50,34 @@ public static class ActivitySixUtilities
 		// Formula: xCoordScalarProduct + yCoordScalarProduct + zCoordScalarProduct;
 		float calculatedDotProduct = calculatedXCoordScalarProduct + calculatedYCoordScalarProduct + calculatedZCoordScalarProduct;
 		results.isDotProductCorrect = Math.Abs((float)answer.dotProduct - calculatedDotProduct) <= 0.1;
+
+		return results;
+	}
+
+	public static WorkSubActivityAnswerSubmissionResults ValidateWorkSubActivitySubmission(WorkSubActivityAnswerSubmission answer, WorkSubActivityData givenData)
+	{
+		WorkSubActivityAnswerSubmissionResults results = new WorkSubActivityAnswerSubmissionResults();
+
+		// Validate force
+		// Formula: Force = mass * acceleration
+		float calculatedForce = givenData.mass * givenData.acceleration;
+		Debug.Log(answer.force);
+		Debug.Log(calculatedForce);
+		results.isForceCorrect = Math.Abs((float)answer.force - calculatedForce) <= 0.1;
+
+		// Validate work
+		// Formula (Linear work): Work = Force * displacement
+		// Formula (Angular work): Work = Force * displacement * cos(angle)
+		string workFormulaExpression;
+		if (givenData.workSubActivityState == WorkSubActivityState.LinearWork)
+		{
+			workFormulaExpression = $"{calculatedForce} * {givenData.displacement}";
+		} else
+		{
+			workFormulaExpression = $"{calculatedForce} * {givenData.displacement} * cos({givenData.angleMeasure})";
+		}
+		ExpressionEvaluator.Evaluate(workFormulaExpression, out float calculatedWork);
+		results.isWorkCorrect = Math.Abs((float)answer.work - calculatedWork) <= 0.1;
 
 		return results;
 	}
