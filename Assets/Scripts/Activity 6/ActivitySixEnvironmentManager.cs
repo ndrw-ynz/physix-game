@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
@@ -7,6 +8,11 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 
     [Header("Views")]
     [SerializeField] private DotProductView dotProductView;
+	[SerializeField] private WorkView workView;
+
+	[Header("Submission Status Displays")]
+	[Header("Work Submission Status Displays")]
+	[SerializeField] private WorkSubmissionStatusDisplay workSubmissionStatusDisplay;
 
 	[Header("Environment Cameras")]
 	[SerializeField] private Camera satelliteEnvironmentCamera;
@@ -16,10 +22,23 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 	[Header("Main Satellite Area Game Objects")]
 	[SerializeField] private InteractableViewOpenerObject mainSatelliteControlPanel;
 	[SerializeField] private GameObject mainSatelliteAreaIndicatorEffect;
+	[SerializeField] private InteractableViewOpenerObject satelliteTruck;
+	[SerializeField] private GameObject satelliteTruckAreaIndicatorEffect;
+
+	[Header("Desert Trail Area Game Objects")]
+	[Header("Desert Straight Path Area")]
+	[SerializeField] private GameObject desertStraightPathArea;
+	[Header("Desert Curved Path Area")]
+	[SerializeField] private GameObject desertCurvedPathArea;
+
+	private DesertEnvironmentStateMachine desertEnvironmentStateMachine;
+	private Queue<DesertEnvironmentState> desertEnvironmentStateQueue;
 
 	private void Start()
 	{
 		SubscribeEnvironmentEvents();
+
+		InitializeDesertEnvironmentStateMachine();
 	}
 
 	private void SubscribeEnvironmentEvents()
@@ -28,6 +47,31 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 		dotProductView.OpenViewEvent += () => SetSatelliteEnvironmentState(true);
 		dotProductView.QuitViewEvent += () => SetSatelliteEnvironmentState(false);
 		activitySixManager.MainSatelliteAreaClearEvent += ClearSatelliteEnvironmentState;
+
+
+		workView.OpenViewEvent += UpdateDesertEnvironmentStateMachine;
+		workView.QuitViewEvent += () => desertEnvironmentStateMachine.TransitionToState(DesertEnvironmentState.None);
+		workSubmissionStatusDisplay.ProceedEvent += DequeueDesertEnvironmentStateQueue;
+	}
+
+	private void InitializeDesertEnvironmentStateMachine()
+	{
+		desertEnvironmentStateMachine = new DesertEnvironmentStateMachine(this);
+		desertEnvironmentStateMachine.Initialize(DesertEnvironmentState.None);
+
+		desertEnvironmentStateQueue = new Queue<DesertEnvironmentState>();
+		int numCycles = ActivitySixManager.difficultyConfiguration switch
+		{
+			Difficulty.Easy => 1,
+			Difficulty.Medium => 2,
+			Difficulty.Hard => 3,
+		};
+		for (int i = 0; i < numCycles; i++)
+		{
+			desertEnvironmentStateQueue.Enqueue(DesertEnvironmentState.StraightPath);
+			desertEnvironmentStateQueue.Enqueue(DesertEnvironmentState.CurvedPath);
+			desertEnvironmentStateQueue.Enqueue(DesertEnvironmentState.StraightPath);
+		}
 	}
 
 	private void SetSatelliteEnvironmentState(bool isActive)
@@ -43,5 +87,40 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 		SetSatelliteEnvironmentState(false);
 		mainSatelliteControlPanel.SetInteractable(false);
 		mainSatelliteAreaIndicatorEffect.gameObject.SetActive(false);
+
+		satelliteTruck.SetInteractable(true);
+		satelliteTruckAreaIndicatorEffect.gameObject.SetActive(true);
+	}
+
+	public void SetDesertStraightPathEnvironmentState(bool isActive)
+	{
+		desertStraightPathArea.gameObject.SetActive(isActive);
+	}
+
+	public void SetDesertCurvedPathEnvironmentState(bool isActive)
+	{
+		desertCurvedPathArea.gameObject.SetActive(isActive);
+	}
+
+	private void DequeueDesertEnvironmentStateQueue()
+	{
+		desertEnvironmentStateQueue.Dequeue();
+		UpdateDesertEnvironmentStateMachine();
+	}
+
+	private void UpdateDesertEnvironmentStateMachine()
+	{
+		if (desertEnvironmentStateQueue.Count == 0)
+		{
+			// Deactivate area effect and interactable truck
+			satelliteTruckAreaIndicatorEffect.gameObject.SetActive(false);
+			satelliteTruck.SetInteractable(false);
+
+			desertEnvironmentStateMachine.TransitionToState(DesertEnvironmentState.None);
+		}
+		else
+		{
+			desertEnvironmentStateMachine.TransitionToState(desertEnvironmentStateQueue.Peek());
+		}
 	}
 }
