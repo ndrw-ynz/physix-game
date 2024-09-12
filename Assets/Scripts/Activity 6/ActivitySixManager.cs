@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -6,6 +7,14 @@ public class DotProductData
 {
 	public Vector3 satelliteDishVector;
 	public Vector3 targetObjectVector;
+}
+
+public class WorkSubActivityData
+{
+	public float acceleration;
+	public float mass;
+	public float displacement;
+	public int angleMeasure;
 }
 
 public class ActivitySixManager : MonoBehaviour
@@ -23,14 +32,26 @@ public class ActivitySixManager : MonoBehaviour
 	[SerializeField] private DotProductSubActivitySO dotProductLevelThree;
 	private DotProductSubActivitySO currentDotProductLevel;
 
+	[Header("Level Data - Work")]
+	[SerializeField] private WorkSubActivitySO workLevelOne;
+	[SerializeField] private WorkSubActivitySO workLevelTwo;
+	[SerializeField] private WorkSubActivitySO workLevelThree;
+	private WorkSubActivitySO currentWorkLevel;
+
 	[Header("Views")]
 	[SerializeField] private DotProductView dotProductView;
+	[SerializeField] private WorkView workView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private DotProductSubmissionStatusDisplay dotProductSubmissionStatusDisplay;
 
+	// queue for work sub actvity
+	private WorkSubActivityStateMachine workSubActivityStateMachine;
+	private Queue<WorkSubActivityState> workSubActivityStateQueue;
+
 	// Given data
 	private DotProductData dotProductGivenData;
+	private WorkSubActivityData workSubActivityGivenData;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumDotProductTests;
@@ -43,12 +64,19 @@ public class ActivitySixManager : MonoBehaviour
 
 		// Initialize given values
 		GenerateDotProductGivenData(currentDotProductLevel);
+		GenerateWorkSubActivityGivenData(currentWorkLevel);
+
+		// Initialize values for state machines
+		workSubActivityStateMachine = new WorkSubActivityStateMachine(workView);
+		workSubActivityStateMachine.Initialize(WorkSubActivityState.None);
+		InitializeWorkSubActivityStateQueues();
 
 		// Setting number of tests
 		currentNumDotProductTests = currentDotProductLevel.numberOfTests;
 
 		// Setting up views
 		dotProductView.SetupDotProductView(dotProductGivenData);
+		workView.SetupWorkView(workSubActivityGivenData, workSubActivityStateQueue.Peek());
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -59,12 +87,15 @@ public class ActivitySixManager : MonoBehaviour
 		{
 			case Difficulty.Easy:
 				currentDotProductLevel = dotProductLevelOne;
+				currentWorkLevel = workLevelOne;
 				break;
 			case Difficulty.Medium:
 				currentDotProductLevel = dotProductLevelTwo;
+				currentWorkLevel = workLevelTwo;
 				break;
 			case Difficulty.Hard:
 				currentDotProductLevel = dotProductLevelThree;
+				currentWorkLevel = workLevelThree;
 				break;
 		}
 	}
@@ -73,6 +104,8 @@ public class ActivitySixManager : MonoBehaviour
 	{
 		dotProductView.SubmitAnswerEvent += CheckDotProductAnswers;
 		dotProductSubmissionStatusDisplay.ProceedEvent += UpdateDotProductViewState;
+
+		workView.OpenViewEvent += UpdateWorkSubActivityStateMachine;
 	}
 
 	#region Dot Product
@@ -128,6 +161,42 @@ public class ActivitySixManager : MonoBehaviour
 		{
 			dotProductView.gameObject.SetActive(false);
 			MainSatelliteAreaClearEvent?.Invoke();
+		}
+	}
+	#endregion
+
+	#region Work
+	private void GenerateWorkSubActivityGivenData(WorkSubActivitySO workSubActivitySO)
+	{
+		WorkSubActivityData data = new WorkSubActivityData();
+		data.acceleration = (float) Math.Round(Random.Range(workSubActivitySO.accelerationMinVal, workSubActivitySO.accelerationMaxVal), 2);
+		data.mass = (float) Math.Round(Random.Range(workSubActivitySO.massMinVal, workSubActivitySO.massMinVal), 2);
+		data.displacement = (float)Math.Round(Random.Range(workSubActivitySO.displacementMinVal, workSubActivitySO.displacementMaxVal), 2);
+		data.angleMeasure = Random.Range(workSubActivitySO.degreeMinVal, workSubActivitySO.degreeMaxVal);
+		workSubActivityGivenData = data;
+	}
+
+	private void UpdateWorkSubActivityStateMachine()
+	{
+		if (workSubActivityStateQueue.Count == 0)
+		{
+			workSubActivityStateMachine.TransitionToState(WorkSubActivityState.None);
+		}
+		else
+		{
+			WorkSubActivityState queueSubActivityHead = workSubActivityStateQueue.Peek();
+			workSubActivityStateMachine.TransitionToState(queueSubActivityHead);
+		}
+	}
+
+	private void InitializeWorkSubActivityStateQueues()
+	{
+		workSubActivityStateQueue = new Queue<WorkSubActivityState>();
+		for (int i = 0; i < currentWorkLevel.numberOfRepetitions; i++)
+		{
+			workSubActivityStateQueue.Enqueue(WorkSubActivityState.LinearWork);
+			workSubActivityStateQueue.Enqueue(WorkSubActivityState.AngularWork);
+			workSubActivityStateQueue.Enqueue(WorkSubActivityState.LinearWork);
 		}
 	}
 	#endregion
