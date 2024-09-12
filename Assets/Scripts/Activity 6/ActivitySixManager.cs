@@ -11,6 +11,7 @@ public class DotProductData
 
 public class WorkSubActivityData
 {
+	public WorkSubActivityState workSubActivityState;
 	public float acceleration;
 	public float mass;
 	public float displacement;
@@ -62,14 +63,15 @@ public class ActivitySixManager : MonoBehaviour
 
 		SubscribeViewAndDisplayEvents();
 
-		// Initialize given values
-		GenerateDotProductGivenData(currentDotProductLevel);
-		GenerateWorkSubActivityGivenData(currentWorkLevel);
-
 		// Initialize values for state machines
 		workSubActivityStateMachine = new WorkSubActivityStateMachine(workView);
 		workSubActivityStateMachine.Initialize(WorkSubActivityState.None);
 		InitializeWorkSubActivityStateQueues();
+
+
+		// Initialize given values
+		GenerateDotProductGivenData(currentDotProductLevel);
+		GenerateWorkSubActivityGivenData(currentWorkLevel, workSubActivityStateQueue.Peek());
 
 		// Setting number of tests
 		currentNumDotProductTests = currentDotProductLevel.numberOfTests;
@@ -106,6 +108,7 @@ public class ActivitySixManager : MonoBehaviour
 		dotProductSubmissionStatusDisplay.ProceedEvent += UpdateDotProductViewState;
 
 		workView.OpenViewEvent += UpdateWorkSubActivityStateMachine;
+		workView.SubmitAnswerEvent += CheckWorkSubActivityAnswers;
 	}
 
 	#region Dot Product
@@ -166,9 +169,10 @@ public class ActivitySixManager : MonoBehaviour
 	#endregion
 
 	#region Work
-	private void GenerateWorkSubActivityGivenData(WorkSubActivitySO workSubActivitySO)
+	private void GenerateWorkSubActivityGivenData(WorkSubActivitySO workSubActivitySO, WorkSubActivityState workSubActivityState)
 	{
 		WorkSubActivityData data = new WorkSubActivityData();
+		data.workSubActivityState = workSubActivityState;
 		data.acceleration = (float) Math.Round(Random.Range(workSubActivitySO.accelerationMinVal, workSubActivitySO.accelerationMaxVal), 2);
 		data.mass = (float) Math.Round(Random.Range(workSubActivitySO.massMinVal, workSubActivitySO.massMinVal), 2);
 		data.displacement = (float)Math.Round(Random.Range(workSubActivitySO.displacementMinVal, workSubActivitySO.displacementMaxVal), 2);
@@ -198,6 +202,14 @@ public class ActivitySixManager : MonoBehaviour
 			workSubActivityStateQueue.Enqueue(WorkSubActivityState.AngularWork);
 			workSubActivityStateQueue.Enqueue(WorkSubActivityState.LinearWork);
 		}
+	}
+
+	private void CheckWorkSubActivityAnswers(WorkSubActivityAnswerSubmission answer)
+	{
+		WorkSubActivityAnswerSubmissionResults results = ActivitySixUtilities.ValidateWorkSubActivitySubmission(answer, workSubActivityGivenData);
+
+		Debug.Log(results.isForceCorrect);
+		Debug.Log(results.isWorkCorrect);
 	}
 	#endregion
 }
