@@ -45,6 +45,7 @@ public class ActivitySixManager : MonoBehaviour
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private DotProductSubmissionStatusDisplay dotProductSubmissionStatusDisplay;
+	[SerializeField] private WorkSubmissionStatusDisplay workSubmissionStatusDisplay;
 
 	// queue for work sub actvity
 	private WorkSubActivityStateMachine workSubActivityStateMachine;
@@ -109,6 +110,7 @@ public class ActivitySixManager : MonoBehaviour
 
 		workView.OpenViewEvent += UpdateWorkSubActivityStateMachine;
 		workView.SubmitAnswerEvent += CheckWorkSubActivityAnswers;
+		workSubmissionStatusDisplay.ProceedEvent += UpdateWorkViewState;
 	}
 
 	#region Dot Product
@@ -208,8 +210,39 @@ public class ActivitySixManager : MonoBehaviour
 	{
 		WorkSubActivityAnswerSubmissionResults results = ActivitySixUtilities.ValidateWorkSubActivitySubmission(answer, workSubActivityGivenData);
 
-		Debug.Log(results.isForceCorrect);
-		Debug.Log(results.isWorkCorrect);
+		DisplayWorkSubActivitySubmissionResults(results);
+	}
+
+	private void DisplayWorkSubActivitySubmissionResults(WorkSubActivityAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			workSubmissionStatusDisplay.SetSubmissionStatus(true, "The submitted calculations are correct.");
+		}
+		else
+		{
+			workSubmissionStatusDisplay.SetSubmissionStatus(false, "There are errors in your submission. Please review and fix it.");
+		}
+
+		workSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
+		workSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateWorkViewState()
+	{
+		workSubActivityStateQueue.Dequeue();
+		if (workSubActivityStateQueue.Count > 0)
+		{
+			UpdateWorkSubActivityStateMachine();
+			GenerateWorkSubActivityGivenData(currentWorkLevel, workSubActivityStateQueue.Peek());
+			workView.SetupWorkView(workSubActivityGivenData, workSubActivityStateQueue.Peek());
+		}
+		else
+		{
+			workView.gameObject.SetActive(false);
+			// event for clear...
+		}
 	}
 	#endregion
 }
