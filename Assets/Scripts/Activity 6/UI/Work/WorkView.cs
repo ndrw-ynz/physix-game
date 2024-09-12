@@ -1,11 +1,26 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
+
+public class WorkSubActivityAnswerSubmission
+{
+	public float? force { get; private set; }
+	public float? work { get; private set; }
+
+	public WorkSubActivityAnswerSubmission(
+		float? force,
+		float? work
+		)
+	{
+		this.force = force;
+		this.work = work;
+	}
+}
 
 public class WorkView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
+	public event Action<WorkSubActivityAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Given Variable Displays")]
 	[SerializeField] private GivenVariableDisplay givenAcceleration;
@@ -21,6 +36,11 @@ public class WorkView : MonoBehaviour
 	[SerializeField] private ProductEquationDisplay forceEquationDisplay;
 	[SerializeField] private ProductEquationDisplay linearWorkEquationDisplay;
 	[SerializeField] private AngularWorkEquationDisplay angularWorkEquationDisplay;
+
+	private void OnEnable()
+	{
+		OpenViewEvent?.Invoke();
+	}
 
 	public void SetupWorkView(WorkSubActivityData data, WorkSubActivityState subActivityState)
 	{
@@ -50,9 +70,14 @@ public class WorkView : MonoBehaviour
 		angularWorkEquationDisplay.ResetState();
 	}
 
-	private void OnEnable()
+	public void OnSubmitButtonClick()
 	{
-		OpenViewEvent?.Invoke();
+		WorkSubActivityAnswerSubmission submission = new WorkSubActivityAnswerSubmission(
+			force: forceEquationDisplay.productValue,
+			work: linearWorkCalculationDisplay.activeSelf ? linearWorkEquationDisplay.productValue : angularWorkEquationDisplay.angularWorkValue
+			);
+
+		SubmitAnswerEvent?.Invoke(submission);
 	}
 
 	public void OnQuitButtonClick()
