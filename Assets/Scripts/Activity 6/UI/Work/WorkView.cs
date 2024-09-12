@@ -49,7 +49,7 @@ public class WorkView : MonoBehaviour
 		givenAcceleration.SetupGivenVariableDisplay("Acceleration:", $"{data.acceleration} m/s^2");
 		givenMass.SetupGivenVariableDisplay("Mass:", $"{data.mass} kg");
 		givenDisplacement.SetupGivenVariableDisplay("Displacement:", $"{data.displacement} m");
-		givenAngleMeasure.SetupGivenVariableDisplay("Angle Measure:", $"{data.angleMeasure} °");
+		givenAngleMeasure.SetupGivenVariableDisplay("Angle Measure:", $"{data.angleMeasure}°");
 		givenAngleMeasure.gameObject.SetActive(subActivityState == WorkSubActivityState.AngularWork);
 	}
 
