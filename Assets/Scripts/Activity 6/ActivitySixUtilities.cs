@@ -61,8 +61,6 @@ public static class ActivitySixUtilities
 		// Validate force
 		// Formula: Force = mass * acceleration
 		float calculatedForce = givenData.mass * givenData.acceleration;
-		Debug.Log(answer.force);
-		Debug.Log(calculatedForce);
 		results.isForceCorrect = Math.Abs((float)answer.force - calculatedForce) <= 0.1;
 
 		// Validate work
@@ -74,7 +72,7 @@ public static class ActivitySixUtilities
 			workFormulaExpression = $"{calculatedForce} * {givenData.displacement}";
 		} else
 		{
-			workFormulaExpression = $"{calculatedForce} * {givenData.displacement} * cos({givenData.angleMeasure})";
+			workFormulaExpression = $"{calculatedForce} * {givenData.displacement} * cos({givenData.angleMeasure}*(pi/180))";
 		}
 		ExpressionEvaluator.Evaluate(workFormulaExpression, out float calculatedWork);
 		results.isWorkCorrect = Math.Abs((float)answer.work - calculatedWork) <= 0.1;
