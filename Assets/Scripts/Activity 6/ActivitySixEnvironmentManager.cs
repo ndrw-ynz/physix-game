@@ -20,6 +20,7 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private Camera targetObjectCamera;
 
 	[Header("Main Satellite Area Game Objects")]
+	[SerializeField] private GameObject mainSatelliteArea;
 	[SerializeField] private InteractableViewOpenerObject mainSatelliteControlPanel;
 	[SerializeField] private GameObject mainSatelliteAreaIndicatorEffect;
 	[SerializeField] private InteractableViewOpenerObject satelliteTruck;
@@ -30,6 +31,10 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private GameObject desertStraightPathArea;
 	[Header("Desert Curved Path Area")]
 	[SerializeField] private GameObject desertCurvedPathArea;
+
+	[Header("Crashed Drone Area Game Objects")]
+	[SerializeField] private GameObject crashedDroneArea;
+	[SerializeField] private GameObject crashedDroneAreaSpawnPoint;
 
 	private DesertEnvironmentStateMachine desertEnvironmentStateMachine;
 	private Queue<DesertEnvironmentState> desertEnvironmentStateQueue;
@@ -117,6 +122,11 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 			satelliteTruck.SetInteractable(false);
 
 			desertEnvironmentStateMachine.TransitionToState(DesertEnvironmentState.None);
+
+			// Set crashed drone area active, and teleport player to specified spawn point on said area
+			mainSatelliteArea.gameObject.SetActive(false); // deactivate unacessible location for optimized performance
+			crashedDroneArea.gameObject.SetActive(true);
+			player.transform.position = crashedDroneAreaSpawnPoint.transform.position;
 		}
 		else
 		{

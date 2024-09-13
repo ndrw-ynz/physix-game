@@ -1206,12 +1206,15 @@ MonoBehaviour:
   satelliteEnvironmentCamera: {fileID: 1438353494}
   mainSatelliteCamera: {fileID: 1221535804}
   targetObjectCamera: {fileID: 1464521920}
+  mainSatelliteArea: {fileID: 1702929889}
   mainSatelliteControlPanel: {fileID: 1157103490}
   mainSatelliteAreaIndicatorEffect: {fileID: 117733028}
   satelliteTruck: {fileID: 2063972916}
   satelliteTruckAreaIndicatorEffect: {fileID: 1343349705}
   desertStraightPathArea: {fileID: 188643548}
   desertCurvedPathArea: {fileID: 279441046}
+  crashedDroneArea: {fileID: 1022273462}
+  crashedDroneAreaSpawnPoint: {fileID: 326657162}
 --- !u!1 &98047876
 GameObject:
   m_ObjectHideFlags: 0
@@ -9148,7 +9151,7 @@ Transform:
   m_GameObject: {fileID: 326657162}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.15, y: 5, z: -30}
+  m_LocalPosition: {x: 1, y: 4, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19511,7 +19514,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1022273463
 Transform:
   m_ObjectHideFlags: 0
@@ -36930,7 +36933,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4384400948941904, guid: 41e722f5443cbd048b675375e24f1beb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.9
+      value: 0.6
       objectReference: {fileID: 0}
     - target: {fileID: 4384400948941904, guid: 41e722f5443cbd048b675375e24f1beb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -48055,5 +48058,5 @@ SceneRoots:
   - {fileID: 1706142076}
   - {fileID: 1702929890}
   - {fileID: 2111548127}
-  - {fileID: 116014575}
   - {fileID: 1022273463}
+  - {fileID: 116014575}
