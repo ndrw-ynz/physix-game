@@ -18,6 +18,13 @@ public class WorkSubActivityData
 	public int angleMeasure;
 }
 
+public enum ForceDisplacementCurveType
+{
+	ConstantForceGraph,
+	LinearlyIncreasingForceGraph,
+	LinearlyDecreasingForceGraph
+}
+
 public class ActivitySixManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
@@ -42,6 +49,7 @@ public class ActivitySixManager : MonoBehaviour
 	[Header("Views")]
 	[SerializeField] private DotProductView dotProductView;
 	[SerializeField] private WorkView workView;
+	[SerializeField] private WorkGraphInterpretationView workGraphInterpretationView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private DotProductSubmissionStatusDisplay dotProductSubmissionStatusDisplay;
@@ -54,6 +62,7 @@ public class ActivitySixManager : MonoBehaviour
 	// Given data
 	private DotProductData dotProductGivenData;
 	private WorkSubActivityData workSubActivityGivenData;
+	private Dictionary<ForceDisplacementCurveType, List<Vector2>> forceDisplacementGraphData;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumDotProductTests;
@@ -73,6 +82,7 @@ public class ActivitySixManager : MonoBehaviour
 		// Initialize given values
 		GenerateDotProductGivenData(currentDotProductLevel);
 		GenerateWorkSubActivityGivenData(currentWorkLevel, workSubActivityStateQueue.Peek());
+		GenerateForceDisplacementGraphData();
 
 		// Setting number of tests
 		currentNumDotProductTests = currentDotProductLevel.numberOfTests;
@@ -80,6 +90,7 @@ public class ActivitySixManager : MonoBehaviour
 		// Setting up views
 		dotProductView.SetupDotProductView(dotProductGivenData);
 		workView.SetupWorkView(workSubActivityGivenData, workSubActivityStateQueue.Peek());
+		workGraphInterpretationView.SetupWorkGraphInterpretationView(ref forceDisplacementGraphData);
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -244,5 +255,44 @@ public class ActivitySixManager : MonoBehaviour
 			// event for clear...
 		}
 	}
+	#endregion
+
+	#region Work Graph Interpretation
+
+	private void GenerateForceDisplacementGraphData()
+	{
+		Dictionary<ForceDisplacementCurveType, List<Vector2>> data = new Dictionary<ForceDisplacementCurveType, List<Vector2>>();
+
+		// Constant
+		List<Vector2> constantForceGraphPoints = new List<Vector2>();
+		int constantVal = Random.Range(0, 10);
+		for (int i = 0; i < 11; i++)
+		{
+			constantForceGraphPoints.Add(new Vector2(i, constantVal));
+		}
+		data.Add(ForceDisplacementCurveType.ConstantForceGraph, constantForceGraphPoints);
+
+		// Linearly ascending
+		List<Vector2> linearlyIncreasingForceGraphPoints = new List<Vector2>();
+		for (int i = 0; i < 11; i++)
+		{
+			linearlyIncreasingForceGraphPoints.Add(new Vector2(i, i));
+		}
+		data.Add(ForceDisplacementCurveType.LinearlyIncreasingForceGraph, linearlyIncreasingForceGraphPoints);
+
+		// Linearly descending
+		List<Vector2> linearlyDecreasingForceGraphPoints = new List<Vector2>();
+		for (int i = 0; i < 11; i++)
+		{
+			linearlyDecreasingForceGraphPoints.Add(new Vector2(i, 10-i));
+		}
+		data.Add(ForceDisplacementCurveType.LinearlyDecreasingForceGraph, linearlyDecreasingForceGraphPoints);
+
+		forceDisplacementGraphData = data;
+	}
+
+	// validation
+	// feedback
+	// update of view
 	#endregion
 }
