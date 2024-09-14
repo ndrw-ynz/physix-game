@@ -71,10 +71,11 @@ public class ActivitySixManager : MonoBehaviour
 
 	// Variables for keeping track of current number of tests
 	private int currentNumDotProductTests;
+	private int currentNumWorkGraphTests;
 
 	private void Start()
 	{
-		ConfigureLevelData(Difficulty.Easy);
+		ConfigureLevelData(Difficulty.Hard);
 
 		SubscribeViewAndDisplayEvents();
 
@@ -92,6 +93,12 @@ public class ActivitySixManager : MonoBehaviour
 
 		// Setting number of tests
 		currentNumDotProductTests = currentDotProductLevel.numberOfTests;
+		currentNumWorkGraphTests = difficultyConfiguration switch
+		{
+			Difficulty.Easy => 1,
+			Difficulty.Medium => 2,
+			Difficulty.Hard => 3,
+		};
 
 		// Setting up views
 		dotProductView.SetupDotProductView(dotProductGivenData);
@@ -130,6 +137,7 @@ public class ActivitySixManager : MonoBehaviour
 		workSubmissionStatusDisplay.ProceedEvent += UpdateWorkViewState;
 
 		workGraphInterpretationView.SubmitAnswerEvent += CheckWorkGraphInterpretationAnswer;
+		workGraphSubmissionStatusDisplay.ProceedEvent += UpdateWorkGraphInterpretationViewState;
 	}
 
 	#region Dot Product
@@ -311,7 +319,11 @@ public class ActivitySixManager : MonoBehaviour
 	private void CheckWorkGraphInterpretationAnswer(float? answer)
 	{
 		bool result = ActivitySixUtilities.ValidateWorkGraphInterpretationSubmission(answer, forceDisplacementGraphData, currentGraphTypeDisplayed);
-		if (result) forceDisplacementGraphData.Remove(currentGraphTypeDisplayed);
+		if (result)
+		{
+			currentNumWorkGraphTests--;
+			forceDisplacementGraphData.Remove(currentGraphTypeDisplayed);
+		}
 		DisplayWorkGraphInterpretationSubmissionResults(result);
 	}
 
@@ -330,6 +342,18 @@ public class ActivitySixManager : MonoBehaviour
 
 		workGraphSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
-	// update of view
+	 private void UpdateWorkGraphInterpretationViewState()
+	{
+		if (currentNumWorkGraphTests > 0)
+		{
+			UpdateCurrentGraphTypeRandomly();
+			workGraphInterpretationView.SetupWorkGraphInterpretationView(forceDisplacementGraphData, currentGraphTypeDisplayed);
+		}
+		else
+		{
+			workGraphInterpretationView.gameObject.SetActive(false);
+			// show summmary?
+		}
+	}
 	#endregion
 }
