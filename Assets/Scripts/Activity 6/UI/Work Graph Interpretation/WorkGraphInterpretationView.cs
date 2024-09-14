@@ -75,4 +75,10 @@ public class WorkGraphInterpretationView : MonoBehaviour
 
 		SubmitAnswerEvent?.Invoke(submission);
 	}
+
+	public void OnQuitButtonClick()
+	{
+		gameObject.SetActive(false);
+		QuitViewEvent?.Invoke();
+	}
 }
