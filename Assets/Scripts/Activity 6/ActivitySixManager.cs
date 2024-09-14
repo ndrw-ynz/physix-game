@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -64,6 +65,9 @@ public class ActivitySixManager : MonoBehaviour
 	private WorkSubActivityData workSubActivityGivenData;
 	private Dictionary<ForceDisplacementCurveType, List<Vector2>> forceDisplacementGraphData;
 
+	// Track current graph type displayed
+	private ForceDisplacementCurveType currentGraphTypeDisplayed;
+
 	// Variables for keeping track of current number of tests
 	private int currentNumDotProductTests;
 
@@ -83,6 +87,7 @@ public class ActivitySixManager : MonoBehaviour
 		GenerateDotProductGivenData(currentDotProductLevel);
 		GenerateWorkSubActivityGivenData(currentWorkLevel, workSubActivityStateQueue.Peek());
 		GenerateForceDisplacementGraphData();
+		UpdateCurrentGraphTypeRandomly();
 
 		// Setting number of tests
 		currentNumDotProductTests = currentDotProductLevel.numberOfTests;
@@ -90,7 +95,7 @@ public class ActivitySixManager : MonoBehaviour
 		// Setting up views
 		dotProductView.SetupDotProductView(dotProductGivenData);
 		workView.SetupWorkView(workSubActivityGivenData, workSubActivityStateQueue.Peek());
-		workGraphInterpretationView.SetupWorkGraphInterpretationView(ref forceDisplacementGraphData);
+		workGraphInterpretationView.SetupWorkGraphInterpretationView(forceDisplacementGraphData, currentGraphTypeDisplayed);
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -122,6 +127,8 @@ public class ActivitySixManager : MonoBehaviour
 		workView.OpenViewEvent += UpdateWorkSubActivityStateMachine;
 		workView.SubmitAnswerEvent += CheckWorkSubActivityAnswers;
 		workSubmissionStatusDisplay.ProceedEvent += UpdateWorkViewState;
+
+		workGraphInterpretationView.SubmitAnswerEvent += CheckWorkGraphInterpretationAnswer;
 	}
 
 	#region Dot Product
@@ -291,7 +298,21 @@ public class ActivitySixManager : MonoBehaviour
 		forceDisplacementGraphData = data;
 	}
 
-	// validation
+	private void UpdateCurrentGraphTypeRandomly()
+	{
+		List<ForceDisplacementCurveType> keys = forceDisplacementGraphData.Keys.ToList();
+
+		// Randomly select one key
+		int randomIndex = Random.Range(0, keys.Count);
+		currentGraphTypeDisplayed = keys[randomIndex];
+	}
+
+	private void CheckWorkGraphInterpretationAnswer(float? answer)
+	{
+		bool result = ActivitySixUtilities.ValidateWorkGraphInterpretationSubmission(answer, forceDisplacementGraphData, currentGraphTypeDisplayed);
+		if (result) forceDisplacementGraphData.Remove(currentGraphTypeDisplayed);
+		Debug.Log(result);
+	}
 	// feedback
 	// update of view
 	#endregion
