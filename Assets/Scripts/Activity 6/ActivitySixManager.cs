@@ -95,7 +95,7 @@ public class ActivitySixManager : MonoBehaviour
 
 	private void Start()
 	{
-		ConfigureLevelData(Difficulty.Hard);
+		ConfigureLevelData(Difficulty.Easy);
 
 		SubscribeViewAndDisplayEvents();
 
@@ -196,14 +196,13 @@ public class ActivitySixManager : MonoBehaviour
 	{
 		DotProductAnswerSubmissionResults results = ActivitySixUtilities.ValidateDotProductSubmission(answer, dotProductGivenData);
 
-		// add func here for updating gameplay metrics variables
 		if (results.isAllCorrect()) {
 			currentNumDotProductTests--;
-			if (currentNumDotProductTests <= 0) isDotProductSubActivityFinished = true;
 		} else
 		{
 			numIncorrectDotProductSubmission++;
 		}
+
 		DisplayDotProductSubmissionResults(results);
 	}
 
@@ -231,6 +230,7 @@ public class ActivitySixManager : MonoBehaviour
 			dotProductView.SetupDotProductView(dotProductGivenData);
 		} else
 		{
+			isDotProductSubActivityFinished = true;
 			dotProductView.gameObject.SetActive(false);
 			MainSatelliteAreaClearEvent?.Invoke();
 		}
@@ -254,7 +254,6 @@ public class ActivitySixManager : MonoBehaviour
 		if (workSubActivityStateQueue.Count == 0)
 		{
 			workSubActivityStateMachine.TransitionToState(WorkSubActivityState.None);
-			isWorkSubActivityFinished = true;
 		}
 		else
 		{
@@ -308,6 +307,7 @@ public class ActivitySixManager : MonoBehaviour
 		}
 		else
 		{
+			isWorkSubActivityFinished = true;
 			workView.gameObject.SetActive(false);
 		}
 	}
@@ -362,7 +362,6 @@ public class ActivitySixManager : MonoBehaviour
 		if (result)
 		{
 			currentNumWorkGraphTests--;
-			if (currentNumWorkGraphTests <= 0) isWorkGraphSubActivityFinished = true;
 			numIncorrectWorkGraphSubmission++;
 			forceDisplacementGraphData.Remove(currentGraphTypeDisplayed);
 		}
@@ -393,6 +392,7 @@ public class ActivitySixManager : MonoBehaviour
 		}
 		else
 		{
+			isWorkGraphSubActivityFinished = true;
 			workGraphInterpretationView.gameObject.SetActive(false);
 		}
 	}
