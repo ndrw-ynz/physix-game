@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class WorkGraphInterpretationView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
+	public event Action<float?> SubmitAnswerEvent;
 
 	[Header("Graph Components")]
 	[SerializeField] private GraphCoordinatePlotter graphCoordinatePlotter;
@@ -21,26 +20,16 @@ public class WorkGraphInterpretationView : MonoBehaviour
 	[SerializeField] private ProductEquationDisplay constantWorkEquationDisplay;
 	[SerializeField] private ProductEquationDisplay linearWorkEquationDisplay;
 
-	public void SetupWorkGraphInterpretationView(ref Dictionary<ForceDisplacementCurveType, List<Vector2>> data)
+	public void SetupWorkGraphInterpretationView(Dictionary<ForceDisplacementCurveType, List<Vector2>> data, ForceDisplacementCurveType graphType)
     {
-		List<ForceDisplacementCurveType> keys = data.Keys.ToList();
-
-		// Randomly select one key
-		int randomIndex = Random.Range(0, keys.Count);
-		ForceDisplacementCurveType randomType = keys[randomIndex];
-
 		// With data, setup line renderer and graph coordinate plotter
-		List<Vector2> graphPoints = data[randomType];
-		SetupGraphDisplay(graphPoints);
-
-		// Remove the selected key-value pair
-		data.Remove(randomType);
+		SetupGraphDisplay(data[graphType]);
 
 		// Clear fields
 		ClearAllFields();
 
 		// Update displayed equation
-		UpdateDisplayedWorkGraphEquation(randomType);
+		UpdateDisplayedWorkGraphEquation(graphType);
     }
 
 	private void SetupGraphDisplay(List<Vector2> graphPoints)
@@ -78,5 +67,12 @@ public class WorkGraphInterpretationView : MonoBehaviour
 	{
 		constantWorkEquationDisplay.ResetState();
 		linearWorkEquationDisplay.ResetState();
+	}
+
+	public void OnSubmitButtonClick()
+	{
+		float? submission = constantWorkCalculationDisplay.activeSelf ? constantWorkEquationDisplay.productValue : linearWorkEquationDisplay.productValue;
+
+		SubmitAnswerEvent?.Invoke(submission);
 	}
 }
