@@ -51,6 +51,7 @@ public class ActivitySixManager : MonoBehaviour
 	[SerializeField] private DotProductView dotProductView;
 	[SerializeField] private WorkView workView;
 	[SerializeField] private WorkGraphInterpretationView workGraphInterpretationView;
+	[SerializeField] private ActivitySixPerformanceView performanceView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private DotProductSubmissionStatusDisplay dotProductSubmissionStatusDisplay;
@@ -72,6 +73,25 @@ public class ActivitySixManager : MonoBehaviour
 	// Variables for keeping track of current number of tests
 	private int currentNumDotProductTests;
 	private int currentNumWorkGraphTests;
+
+	// Variables for tracking which view is currently active
+	private bool isDotProductViewActive;
+	private bool isWorkViewActive;
+	private bool isWorkGraphInterpretationViewActive;
+
+	// Gameplay performance metrics variables
+	// Dot Product Sub Activity
+	private float dotProductGameplayDuration;
+	private bool isDotProductSubActivityFinished;
+	private int numIncorrectDotProductSubmission;
+	// Work Sub Activity
+	private float workSubActivityGameplayDuration;
+	private bool isWorkSubActivityFinished;
+	private int numIncorrectWorkSubmission;
+	// Work Graph Interaction Sub Activity
+	private float workGraphSubActivityDuration;
+	private bool isWorkGraphSubActivityFinished;
+	private int numIncorrectWorkGraphSubmission;
 
 	private void Start()
 	{
@@ -106,6 +126,14 @@ public class ActivitySixManager : MonoBehaviour
 		workGraphInterpretationView.SetupWorkGraphInterpretationView(forceDisplacementGraphData, currentGraphTypeDisplayed);
 	}
 
+	private void Update()
+	{
+		if (isDotProductViewActive && !isDotProductSubActivityFinished) dotProductGameplayDuration += Time.deltaTime;
+		if (isWorkViewActive && !isWorkSubActivityFinished) workSubActivityGameplayDuration += Time.deltaTime;
+		if (isWorkGraphInterpretationViewActive && !isWorkGraphSubActivityFinished) workGraphSubActivityDuration += Time.deltaTime;
+		if (isDotProductSubActivityFinished && isWorkSubActivityFinished && isWorkGraphSubActivityFinished) DisplayPerformanceView();
+	}
+
 	private void ConfigureLevelData(Difficulty difficulty)
 	{
 		difficultyConfiguration = difficulty;
@@ -129,13 +157,19 @@ public class ActivitySixManager : MonoBehaviour
 
 	private void SubscribeViewAndDisplayEvents()
 	{
+		dotProductView.OpenViewEvent += () => isDotProductViewActive = true;
+		dotProductView.QuitViewEvent += () => isDotProductViewActive = false;
 		dotProductView.SubmitAnswerEvent += CheckDotProductAnswers;
 		dotProductSubmissionStatusDisplay.ProceedEvent += UpdateDotProductViewState;
 
 		workView.OpenViewEvent += UpdateWorkSubActivityStateMachine;
+		workView.OpenViewEvent += () => isWorkViewActive = true;
+		workView.QuitViewEvent += () => isWorkViewActive = false;
 		workView.SubmitAnswerEvent += CheckWorkSubActivityAnswers;
 		workSubmissionStatusDisplay.ProceedEvent += UpdateWorkViewState;
 
+		workGraphInterpretationView.OpenViewEvent += () => isWorkGraphInterpretationViewActive = true;
+		workGraphInterpretationView.QuitViewEvent += () => isWorkGraphInterpretationViewActive = false;
 		workGraphInterpretationView.SubmitAnswerEvent += CheckWorkGraphInterpretationAnswer;
 		workGraphSubmissionStatusDisplay.ProceedEvent += UpdateWorkGraphInterpretationViewState;
 	}
@@ -163,7 +197,13 @@ public class ActivitySixManager : MonoBehaviour
 		DotProductAnswerSubmissionResults results = ActivitySixUtilities.ValidateDotProductSubmission(answer, dotProductGivenData);
 
 		// add func here for updating gameplay metrics variables
-		if (results.isAllCorrect()) currentNumDotProductTests--; 
+		if (results.isAllCorrect()) {
+			currentNumDotProductTests--;
+			if (currentNumDotProductTests <= 0) isDotProductSubActivityFinished = true;
+		} else
+		{
+			numIncorrectDotProductSubmission++;
+		}
 		DisplayDotProductSubmissionResults(results);
 	}
 
@@ -214,6 +254,7 @@ public class ActivitySixManager : MonoBehaviour
 		if (workSubActivityStateQueue.Count == 0)
 		{
 			workSubActivityStateMachine.TransitionToState(WorkSubActivityState.None);
+			isWorkSubActivityFinished = true;
 		}
 		else
 		{
@@ -236,7 +277,7 @@ public class ActivitySixManager : MonoBehaviour
 	private void CheckWorkSubActivityAnswers(WorkSubActivityAnswerSubmission answer)
 	{
 		WorkSubActivityAnswerSubmissionResults results = ActivitySixUtilities.ValidateWorkSubActivitySubmission(answer, workSubActivityGivenData);
-
+		if (!results.isAllCorrect()) numIncorrectWorkSubmission++;
 		DisplayWorkSubActivitySubmissionResults(results);
 	}
 
@@ -268,7 +309,6 @@ public class ActivitySixManager : MonoBehaviour
 		else
 		{
 			workView.gameObject.SetActive(false);
-			// event for clear...
 		}
 	}
 	#endregion
@@ -322,6 +362,8 @@ public class ActivitySixManager : MonoBehaviour
 		if (result)
 		{
 			currentNumWorkGraphTests--;
+			if (currentNumWorkGraphTests <= 0) isWorkGraphSubActivityFinished = true;
+			numIncorrectWorkGraphSubmission++;
 			forceDisplacementGraphData.Remove(currentGraphTypeDisplayed);
 		}
 		DisplayWorkGraphInterpretationSubmissionResults(result);
@@ -352,8 +394,33 @@ public class ActivitySixManager : MonoBehaviour
 		else
 		{
 			workGraphInterpretationView.gameObject.SetActive(false);
-			// show summmary?
 		}
 	}
 	#endregion
+
+	private void DisplayPerformanceView()
+	{
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
+
+		performanceView.SetTotalTimeDisplay(dotProductGameplayDuration + workSubActivityGameplayDuration + workGraphSubActivityDuration);
+
+		performanceView.SetDotProductMetricsDisplay(
+			isAccomplished: isDotProductSubActivityFinished,
+			numIncorrectSubmission: numIncorrectDotProductSubmission,
+			duration: dotProductGameplayDuration
+			);
+
+		performanceView.SetWorkSubActivityMetricsDisplay(
+			isAccomplished: isWorkSubActivityFinished,
+			numIncorrectSubmission: numIncorrectWorkSubmission,
+			duration: workSubActivityGameplayDuration
+			);
+
+		performanceView.SetWorkGraphInterpretationMetricsDisplay(
+			isAccomplished: isWorkGraphSubActivityFinished,
+			numIncorrectSubmission: numIncorrectWorkGraphSubmission,
+			duration: workGraphSubActivityDuration
+			);
+	}
 }
