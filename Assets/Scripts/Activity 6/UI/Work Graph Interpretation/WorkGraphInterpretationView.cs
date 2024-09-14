@@ -20,6 +20,11 @@ public class WorkGraphInterpretationView : MonoBehaviour
 	[SerializeField] private ProductEquationDisplay constantWorkEquationDisplay;
 	[SerializeField] private ProductEquationDisplay linearWorkEquationDisplay;
 
+	private void OnEnable()
+	{
+		OpenViewEvent?.Invoke();
+	}
+
 	public void SetupWorkGraphInterpretationView(Dictionary<ForceDisplacementCurveType, List<Vector2>> data, ForceDisplacementCurveType graphType)
     {
 		// With data, setup line renderer and graph coordinate plotter
