@@ -9,6 +9,7 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
     [Header("Views")]
     [SerializeField] private DotProductView dotProductView;
 	[SerializeField] private WorkView workView;
+	[SerializeField] private WorkGraphInterpretationView workGraphInterpretationView;
 
 	[Header("Submission Status Displays")]
 	[Header("Work Submission Status Displays")]
@@ -18,6 +19,7 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private Camera satelliteEnvironmentCamera;
 	[SerializeField] private Camera mainSatelliteCamera;
 	[SerializeField] private Camera targetObjectCamera;
+	[SerializeField] private Camera crashedDroneEnvironmentAreaCamera;
 
 	[Header("Main Satellite Area Game Objects")]
 	[SerializeField] private GameObject mainSatelliteArea;
@@ -57,6 +59,9 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 		workView.OpenViewEvent += UpdateDesertEnvironmentStateMachine;
 		workView.QuitViewEvent += () => desertEnvironmentStateMachine.TransitionToState(DesertEnvironmentState.None);
 		workSubmissionStatusDisplay.ProceedEvent += DequeueDesertEnvironmentStateQueue;
+
+		workGraphInterpretationView.OpenViewEvent += () => SetCrashedDroneEnvironmentState(true);
+		workGraphInterpretationView.QuitViewEvent += () => SetCrashedDroneEnvironmentState(false);
 	}
 
 	private void InitializeDesertEnvironmentStateMachine()
@@ -132,5 +137,11 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 		{
 			desertEnvironmentStateMachine.TransitionToState(desertEnvironmentStateQueue.Peek());
 		}
+	}
+
+	private void SetCrashedDroneEnvironmentState(bool isActive)
+	{
+		SetPlayerActivityState(!isActive);
+		crashedDroneEnvironmentAreaCamera.gameObject.SetActive(isActive);
 	}
 }
