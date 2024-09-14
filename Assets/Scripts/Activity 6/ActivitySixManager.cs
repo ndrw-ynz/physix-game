@@ -55,6 +55,7 @@ public class ActivitySixManager : MonoBehaviour
 	[Header("Submission Status Displays")]
 	[SerializeField] private DotProductSubmissionStatusDisplay dotProductSubmissionStatusDisplay;
 	[SerializeField] private WorkSubmissionStatusDisplay workSubmissionStatusDisplay;
+	[SerializeField] private WorkGraphSubmissionStatusDisplay workGraphSubmissionStatusDisplay;
 
 	// queue for work sub actvity
 	private WorkSubActivityStateMachine workSubActivityStateMachine;
@@ -311,9 +312,24 @@ public class ActivitySixManager : MonoBehaviour
 	{
 		bool result = ActivitySixUtilities.ValidateWorkGraphInterpretationSubmission(answer, forceDisplacementGraphData, currentGraphTypeDisplayed);
 		if (result) forceDisplacementGraphData.Remove(currentGraphTypeDisplayed);
-		Debug.Log(result);
+		DisplayWorkGraphInterpretationSubmissionResults(result);
 	}
-	// feedback
+
+	private void DisplayWorkGraphInterpretationSubmissionResults(bool result)
+	{
+		if (result)
+		{
+			workGraphSubmissionStatusDisplay.SetSubmissionStatus(true, "The submitted calculations are correct.");
+		}
+		else
+		{
+			workGraphSubmissionStatusDisplay.SetSubmissionStatus(false, "There are errors in your submission. Please review and fix it.");
+		}
+
+		workGraphSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(result);
+
+		workGraphSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
 	// update of view
 	#endregion
 }
