@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DotProductAnswerSubmissionResults
@@ -78,5 +79,34 @@ public static class ActivitySixUtilities
 		results.isWorkCorrect = Math.Abs((float)answer.work - calculatedWork) <= 0.1;
 
 		return results;
+	}
+
+	public static bool ValidateWorkGraphInterpretationSubmission(float? answer, Dictionary<ForceDisplacementCurveType, List<Vector2>> givenData, ForceDisplacementCurveType currentGraphType)
+	{
+		if (answer == null) return false;
+		// The point increments and number of intervals of the graph.
+		int xIncrements = 100;
+		int xNumIntervals = 10;
+		int yIncrements = 1000;
+		int yNumIntervals = 10;
+
+		float calculatedArea = 0;
+		switch (currentGraphType)
+		{
+			case ForceDisplacementCurveType.ConstantForceGraph:
+				// Formula: l*w
+				// Since it is just a rectangle, it is just xLength * yPoint
+				Vector2 representativePoint = givenData[currentGraphType][0];
+				calculatedArea = xIncrements * xNumIntervals * representativePoint.y * yIncrements;
+				break;
+			case ForceDisplacementCurveType.LinearlyIncreasingForceGraph:
+			case ForceDisplacementCurveType.LinearlyDecreasingForceGraph:
+				// Formula: 1/2 (bh)
+				// b = xLength, h = yLength
+				calculatedArea = xIncrements * xNumIntervals * yIncrements * yNumIntervals * 0.5f;
+				break;
+		}
+
+		return Math.Abs((float)answer - calculatedArea) <= 0.1;
 	}
 }
