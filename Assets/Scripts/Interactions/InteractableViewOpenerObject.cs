@@ -6,6 +6,7 @@ public class InteractableViewOpenerObject : IInteractableObject
 	[SerializeField] private InputReader inputReader;
 	[SerializeField] private GameObject viewUI;
 	[SerializeField] private string interactionDescription;
+	public bool isInteractableOnStart = true;
 
 	public override void Interact()
 	{
@@ -20,6 +21,6 @@ public class InteractableViewOpenerObject : IInteractableObject
 
 	private void Start()
 	{
-		SetInteractable(true);
+		SetInteractable(isInteractableOnStart);
 	}
 }

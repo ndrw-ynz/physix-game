@@ -7,7 +7,7 @@ public abstract class ActivityEnvironmentManager : MonoBehaviour
 
 
 	[Header("Player")]
-	[SerializeField] private GameObject player;
+	[SerializeField] protected GameObject player;
 
 	public void SetPlayerActivityState(bool isActive)
 	{
