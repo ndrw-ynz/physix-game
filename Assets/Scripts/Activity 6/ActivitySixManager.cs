@@ -362,8 +362,10 @@ public class ActivitySixManager : MonoBehaviour
 		if (result)
 		{
 			currentNumWorkGraphTests--;
-			numIncorrectWorkGraphSubmission++;
 			forceDisplacementGraphData.Remove(currentGraphTypeDisplayed);
+		} else
+		{
+			numIncorrectWorkGraphSubmission++;
 		}
 		DisplayWorkGraphInterpretationSubmissionResults(result);
 	}
