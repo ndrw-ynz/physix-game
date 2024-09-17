@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,9 +6,16 @@ using UnityEngine.InputSystem;
 /// The InputReader class is where all input events are delegated.
 /// </summary>
 [CreateAssetMenu(menuName = "InputReader")]
-public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInput.IUIActions
+public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInput.IGameplayPauseMenuActions, GameInput.IGameplayUIActions
 {
-    private GameInput _gameInput;
+    public enum GameplayState
+    {
+        Gameplay,
+        UI
+    }
+
+	private GameInput _gameInput;
+    private GameplayState _previousGameplayState;
 
     private void OnEnable()
     {
@@ -21,7 +26,8 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
             // Mapping events here to GameInput, wherein input events are triggered with events defined on InputReader.
             _gameInput.Gameplay.SetCallbacks(this);
-            _gameInput.UI.SetCallbacks(this);
+            _gameInput.GameplayPauseMenu.SetCallbacks(this);
+            _gameInput.GameplayUI.SetCallbacks(this);
 
             // Have gameplay as the first mapping to be enabled
             SetGameplay();
@@ -34,27 +40,46 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
     public void SetGameplay()
     {
         _gameInput.Gameplay.Enable();
-        _gameInput.UI.Disable();
+		_gameInput.GameplayUI.Disable();
+		_gameInput.GameplayPauseMenu.Disable();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
     /// <summary>
-    /// Enables UI as current state.
+    /// Enables gameplay pause menu as current state.
     /// </summary>
-    public void SetUI()
+    public void SetGameplayPauseMenu()
     {
-        _gameInput.UI.Enable();
-        _gameInput.Gameplay.Disable();
+        _gameInput.GameplayPauseMenu.Enable();
+		_gameInput.Gameplay.Disable();
+		_gameInput.GameplayUI.Disable();
+		Cursor.lockState = CursorLockMode.None;
+	}
+
+	/// <summary>
+	/// Enables UI as current state.
+	/// </summary>
+	public void SetUI()
+    {
+        _gameInput.GameplayUI.Enable();
+		_gameInput.Gameplay.Disable();
+		_gameInput.GameplayPauseMenu.Disable();
         Cursor.lockState = CursorLockMode.None;
     }
 
+    // Gameplay action map
     public event Action<Vector2> MoveEvent;
     public event Action<Vector2> LookEvent;
     public event Action JumpEvent;
     public event Action InteractEvent;
-    public event Action PauseEvent;
-    public event Action ResumeEvent;
+	public event Action PauseGameplayEvent;
+    // GameplayPauseMenu action map
+	public event Action ResumeGameplayEvent;
+    public event Action<Vector2> PauseMenuNavigationEvent;
+    // GameplayUI action map
+    public event Action PauseGameplayUIEvent;
 
+    // Gameplay functions
     public void OnJump(InputAction.CallbackContext context)
     {
         JumpEvent?.Invoke();
@@ -75,15 +100,42 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
         InteractEvent?.Invoke();
     }
 
-    public void OnPause(InputAction.CallbackContext context)
+    public void OnPauseGameplay(InputAction.CallbackContext context)
     {
-        PauseEvent?.Invoke();
-        SetUI();
+        _previousGameplayState = GameplayState.Gameplay;
+		PauseGameplayEvent?.Invoke();
+		SetGameplayPauseMenu(); 
     }
 
-    public void OnResume(InputAction.CallbackContext context)
-    {
-        ResumeEvent?.Invoke();
-        SetGameplay();
-    }
+	// GameplayPauseMenu functions
+	public void OnResumeGame(InputAction.CallbackContext context)
+	{
+        SetGameplayPreviousState();
+		ResumeGameplayEvent?.Invoke();
+	}
+
+	public void SetGameplayPreviousState()
+	{
+		if (_previousGameplayState == GameplayState.Gameplay)
+		{
+			SetGameplay();
+		}
+		else if (_previousGameplayState == GameplayState.UI)
+		{
+			SetUI();
+		}
+	}
+
+	public void OnPauseMenuNavigation(InputAction.CallbackContext context)
+	{
+        PauseMenuNavigationEvent?.Invoke(context.ReadValue<Vector2>());
+	}
+
+    // GameplayUI functions
+	public void OnPauseGameplayUI(InputAction.CallbackContext context)
+	{
+        _previousGameplayState = GameplayState.UI;
+        PauseGameplayUIEvent?.Invoke();
+		SetGameplayPauseMenu();
+	}
 }
