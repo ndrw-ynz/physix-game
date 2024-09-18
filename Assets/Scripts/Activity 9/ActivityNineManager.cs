@@ -260,12 +260,11 @@ public class ActivityNineManager : ActivityManager
 		List<string> taskText = new List<string>();
 		if (!isGravityCalculationFinished)
 		{
-			taskText.Add("- Calculate the gravitational force of the planet");
-			taskText.Add("- Calculate the gravitational potential energy of the planet");
+			taskText.Add("- Calculate the gravitational force and gravity potential energy of the satellite orbiting planet Terra.");
 		}
 
 		List<string> objectiveText = new List<string>();
-		objectiveText.Add("Make final preparations and calculations to land on planet Terra");
+		objectiveText.Add("Make final preparations and calculations to land on planet Terra.");
 
 		activityPauseMenuUI.UpdateContent("Lesson 9 - Activity 9", taskText, objectiveText);
 	}
