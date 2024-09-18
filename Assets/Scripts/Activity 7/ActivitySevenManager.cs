@@ -203,16 +203,13 @@ public enum Difficulty
 	Hard
 }
 
-public class ActivitySevenManager : MonoBehaviour
+public class ActivitySevenManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
 
 	public static event Action RoomOneClearEvent;
 	public static event Action RoomTwoClearEvent;
 	public static event Action RoomThreeClearEvent;
-
-	[Header("Input Reader")]
-	[SerializeField] InputReader inputReader;
 
     [Header("Level Data - Center of Mass")]
     [SerializeField] CenterOfMassSubActivitySO centerOfMassLevelOne;
@@ -271,8 +268,9 @@ public class ActivitySevenManager : MonoBehaviour
 	private int numIncorrectElasticInelasticCollisionSubmission;
 	private float elasticInelasticCollisionDuration;
 
-	void Start()
+	protected override void Start()
     {
+		base.Start();
 		// Difficulty selection
 		difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
         
@@ -750,7 +748,7 @@ public class ActivitySevenManager : MonoBehaviour
 	}
 	#endregion
 
-	private void DisplayPerformanceView()
+	public override void DisplayPerformanceView()
 	{
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
@@ -774,5 +772,34 @@ public class ActivitySevenManager : MonoBehaviour
 			numIncorrectSubmission: numIncorrectElasticInelasticCollisionSubmission,
 			duration: elasticInelasticCollisionDuration
 			);
+	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isCenterOfMassCalculationFinished)
+		{
+			taskText.Add("- Release the power cube");
+			taskText.Add("	- Calculate the center of mass");
+			taskText.Add("	- Enter room");
+		}
+		if (!isMomentumImpulseForceCalculationFinished)
+		{
+			taskText.Add("- Impulse momentum room");
+			taskText.Add("	- Calculate the impulse momentum");
+		}
+		if (!isElasticInelasticCollisionCalculationFinished)
+		{
+			taskText.Add("- Retrieve the ships' data module");
+			taskText.Add("	- Enter room");
+			taskText.Add("	- Determine if the collision if elastic or inelastic");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Retrieve the ships' data module for analysis");
+
+		activityPauseMenuUI.UpdateContent("Lesson 7 - Activity 7", taskText, objectiveText);
 	}
 }
