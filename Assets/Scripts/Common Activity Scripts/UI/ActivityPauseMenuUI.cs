@@ -27,6 +27,7 @@ public class ActivityPauseMenuUI : MonoBehaviour
 	{
 		inputReader.ResumeGameplayEvent += ResumeActivity;
 		inputReader.PauseMenuNavigationEvent += HandleButtonNavigationChange;
+		inputReader.PauseMenuSelectChoiceEvent += HandleMenuSelectChoice;
 
 		InitializeInteractableButtons();
 	}
@@ -48,6 +49,11 @@ public class ActivityPauseMenuUI : MonoBehaviour
 	{
 		selectedButtonIndex = (selectedButtonIndex - (int) obj.y + interactableButtons.Count) % interactableButtons.Count;
 		UpdateSelectedButtonState(selectedButtonIndex);
+	}
+
+	private void HandleMenuSelectChoice()
+	{
+		interactableButtons[selectedButtonIndex].onClick.Invoke();
 	}
 
 	private void UpdateSelectedButtonState(int selectedIndex = 0)
