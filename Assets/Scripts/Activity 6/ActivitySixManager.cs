@@ -433,22 +433,20 @@ public class ActivitySixManager : ActivityManager
 		List<string> taskText = new List<string>();
 		if (!isDotProductSubActivityFinished)
 		{
-			taskText.Add("- Complete the satellite terminal");
-			taskText.Add("	- Calculate the dot product of the concerned objects");
+			taskText.Add("- Find and open the satellite control panel. Monitor the satellite antenna's direction to the target object by computing the dot product.");
 		}
 		if (!isWorkSubActivityFinished)
 		{
-			taskText.Add("- Embark on the satellite truck");
-			taskText.Add("	- Calculate the work done by the vehicle");
+			taskText.Add("- Embark on the satellite truck. Monitor the work done by the vehicle while travelling on the land of Nakalais.");
 		}
 		if (!isWorkGraphSubActivityFinished)
 		{
-			taskText.Add("- Find and interact with the crashed drone");
-			taskText.Add("	- Determine the work exerted from the Force vs Displacement graph");
+			taskText.Add("- Find and interact with the drone at the crash site. Determine the net work exerted from the Force vs. Displacement graph data.");
 		}
 
 		List<string> objectiveText = new List<string>();
-		objectiveText.Add("Find the crashed drone on the planet");
+		objectiveText.Add("Properly adjust the satellite’s direction, observe the work done by the vehicle, " +
+			"and investigate the crash site of the drone from the previous team.");
 
 		activityPauseMenuUI.UpdateContent("Lesson 6 - Activity 6", taskText, objectiveText);
 	}
