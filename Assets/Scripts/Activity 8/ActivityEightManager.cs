@@ -124,17 +124,13 @@ public class EquilibriumAnswerSubmissionResults
 
 }
 
-public class ActivityEightManager : MonoBehaviour
+public class ActivityEightManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
 
 	public static event Action GeneratorRoomClearEvent;
 	public static event Action WeighingScaleRoomClearEvent;
 	public static event Action RebootRoomClearEvent;
-
-	[Header("Input Reader")]
-	[SerializeField] InputReader inputReader;
-
 
 	[Header("Level Data - Moment of Inertia")]
 	[SerializeField] private MomentOfInertiaSubActivitySO momentOfInertiaLevelOne;
@@ -193,8 +189,9 @@ public class ActivityEightManager : MonoBehaviour
 	private int numIncorrectEquilibriumSubmission;
 	private float equilibriumDuration;
 
-	void Start()
+	protected override void Start()
     {
+		base.Start();
 		// Set level data based from difficulty configuration.
 		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
@@ -630,7 +627,7 @@ public class ActivityEightManager : MonoBehaviour
 	}
 	#endregion
 
-	private void DisplayPerformanceView()
+	public override void DisplayPerformanceView()
 	{
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
@@ -654,5 +651,32 @@ public class ActivityEightManager : MonoBehaviour
 			numIncorrectSubmission: numIncorrectEquilibriumSubmission,
 			duration: equilibriumDuration
 			);
+	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isMomentOfInertiaCalculationFinished)
+		{
+			taskText.Add("- Calibrate the power station");
+			taskText.Add("	- Calculate the moment of inertia");
+		}
+		if (!isTorqueCalculationFinished)
+		{
+			taskText.Add("- Fix the fulcrum of the weighing scale");
+			taskText.Add("	- Calculate the torque of the screws");
+		}
+		if (!isEquilibriumCalculationFinished)
+		{
+			taskText.Add("- Reboot the electrical system");
+			taskText.Add("	- Calculate the equilibrium of the system");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Restore the ships' electrical system");
+
+		activityPauseMenuUI.UpdateContent("Lesson 8 - Activity 8", taskText, objectiveText);
 	}
 }
