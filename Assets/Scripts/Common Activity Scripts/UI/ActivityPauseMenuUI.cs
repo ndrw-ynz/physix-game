@@ -36,13 +36,13 @@ public class ActivityPauseMenuUI : MonoBehaviour
 		this.tasksText.text = "";
 		foreach (string activityTask in tasksText)
 		{
-			this.tasksText.text += $"- {activityTask}\n";
+			this.tasksText.text += $"{activityTask}\n";
 		}
 
 		this.objectivesText.text = "";
 		foreach (string activityTask in objectivesText)
 		{
-			this.objectivesText.text += $"- {activityTask}\n";
+			this.objectivesText.text += $"{activityTask}\n";
 		}
 	}
 
