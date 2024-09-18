@@ -660,22 +660,19 @@ public class ActivityEightManager : ActivityManager
 		List<string> taskText = new List<string>();
 		if (!isMomentOfInertiaCalculationFinished)
 		{
-			taskText.Add("- Calibrate the power station");
-			taskText.Add("	- Calculate the moment of inertia");
+			taskText.Add("- Fix the generator's power terminal by calibrating its moment of inertia calculation module.");
 		}
 		if (!isTorqueCalculationFinished)
 		{
-			taskText.Add("- Fix the fulcrum of the weighing scale");
-			taskText.Add("	- Calculate the torque of the screws");
+			taskText.Add("- Secure the bolts of the fulcrum on the weighing scale using its terminal by calibrating its torque calculation module.");
 		}
 		if (!isEquilibriumCalculationFinished)
 		{
-			taskText.Add("- Reboot the electrical system");
-			taskText.Add("	- Calculate the equilibrium of the system");
+			taskText.Add("- Ensure equilibrium of the power switch by calibrating the terminal's equilibrium calculation module.");
 		}
 
 		List<string> objectiveText = new List<string>();
-		objectiveText.Add("Restore the ships' electrical system");
+		objectiveText.Add("Conduct proper maintenance on the ship’s generator, industrial switch, and properly reboot the ships' system.");
 
 		activityPauseMenuUI.UpdateContent("Lesson 8 - Activity 8", taskText, objectiveText);
 	}
