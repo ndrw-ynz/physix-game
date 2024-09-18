@@ -76,8 +76,9 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
     // GameplayPauseMenu action map
 	public event Action ResumeGameplayEvent;
     public event Action<Vector2> PauseMenuNavigationEvent;
-    // GameplayUI action map
-    public event Action PauseGameplayUIEvent;
+    public event Action PauseMenuSelectChoiceEvent;
+	// GameplayUI action map
+	public event Action PauseGameplayUIEvent;
 
     // Gameplay functions
     public void OnJump(InputAction.CallbackContext context)
@@ -131,7 +132,12 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
         if (context.performed) PauseMenuNavigationEvent?.Invoke(context.ReadValue<Vector2>());
 	}
 
-    // GameplayUI functions
+	public void OnPauseMenuSelectChoice(InputAction.CallbackContext context)
+	{
+        if (context.performed) PauseMenuSelectChoiceEvent?.Invoke();
+	}
+
+	// GameplayUI functions
 	public void OnPauseGameplayUI(InputAction.CallbackContext context)
 	{
         _previousGameplayState = GameplayState.UI;

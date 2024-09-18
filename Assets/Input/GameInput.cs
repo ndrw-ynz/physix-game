@@ -251,6 +251,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PauseMenuSelectChoice"",
+                    ""type"": ""Button"",
+                    ""id"": ""b08f5ee2-19d2-4d0b-b1be-8e9b8686dfa0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -319,6 +328,17 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""action"": ""PauseMenuNavigation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""42a8a641-1fa6-480f-ac72-a6da05470190"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMenuSelectChoice"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -376,6 +396,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_GameplayPauseMenu = asset.FindActionMap("GameplayPauseMenu", throwIfNotFound: true);
         m_GameplayPauseMenu_ResumeGame = m_GameplayPauseMenu.FindAction("ResumeGame", throwIfNotFound: true);
         m_GameplayPauseMenu_PauseMenuNavigation = m_GameplayPauseMenu.FindAction("PauseMenuNavigation", throwIfNotFound: true);
+        m_GameplayPauseMenu_PauseMenuSelectChoice = m_GameplayPauseMenu.FindAction("PauseMenuSelectChoice", throwIfNotFound: true);
         // GameplayUI
         m_GameplayUI = asset.FindActionMap("GameplayUI", throwIfNotFound: true);
         m_GameplayUI_PauseGameplayUI = m_GameplayUI.FindAction("PauseGameplayUI", throwIfNotFound: true);
@@ -520,12 +541,14 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private List<IGameplayPauseMenuActions> m_GameplayPauseMenuActionsCallbackInterfaces = new List<IGameplayPauseMenuActions>();
     private readonly InputAction m_GameplayPauseMenu_ResumeGame;
     private readonly InputAction m_GameplayPauseMenu_PauseMenuNavigation;
+    private readonly InputAction m_GameplayPauseMenu_PauseMenuSelectChoice;
     public struct GameplayPauseMenuActions
     {
         private @GameInput m_Wrapper;
         public GameplayPauseMenuActions(@GameInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @ResumeGame => m_Wrapper.m_GameplayPauseMenu_ResumeGame;
         public InputAction @PauseMenuNavigation => m_Wrapper.m_GameplayPauseMenu_PauseMenuNavigation;
+        public InputAction @PauseMenuSelectChoice => m_Wrapper.m_GameplayPauseMenu_PauseMenuSelectChoice;
         public InputActionMap Get() { return m_Wrapper.m_GameplayPauseMenu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -541,6 +564,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @PauseMenuNavigation.started += instance.OnPauseMenuNavigation;
             @PauseMenuNavigation.performed += instance.OnPauseMenuNavigation;
             @PauseMenuNavigation.canceled += instance.OnPauseMenuNavigation;
+            @PauseMenuSelectChoice.started += instance.OnPauseMenuSelectChoice;
+            @PauseMenuSelectChoice.performed += instance.OnPauseMenuSelectChoice;
+            @PauseMenuSelectChoice.canceled += instance.OnPauseMenuSelectChoice;
         }
 
         private void UnregisterCallbacks(IGameplayPauseMenuActions instance)
@@ -551,6 +577,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @PauseMenuNavigation.started -= instance.OnPauseMenuNavigation;
             @PauseMenuNavigation.performed -= instance.OnPauseMenuNavigation;
             @PauseMenuNavigation.canceled -= instance.OnPauseMenuNavigation;
+            @PauseMenuSelectChoice.started -= instance.OnPauseMenuSelectChoice;
+            @PauseMenuSelectChoice.performed -= instance.OnPauseMenuSelectChoice;
+            @PauseMenuSelectChoice.canceled -= instance.OnPauseMenuSelectChoice;
         }
 
         public void RemoveCallbacks(IGameplayPauseMenuActions instance)
@@ -635,6 +664,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     {
         void OnResumeGame(InputAction.CallbackContext context);
         void OnPauseMenuNavigation(InputAction.CallbackContext context);
+        void OnPauseMenuSelectChoice(InputAction.CallbackContext context);
     }
     public interface IGameplayUIActions
     {

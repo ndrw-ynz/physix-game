@@ -229,6 +229,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "PauseMenuSelectChoice",
+                    "type": "Button",
+                    "id": "b08f5ee2-19d2-4d0b-b1be-8e9b8686dfa0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -297,6 +306,17 @@
                     "action": "PauseMenuNavigation",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "42a8a641-1fa6-480f-ac72-a6da05470190",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMenuSelectChoice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
