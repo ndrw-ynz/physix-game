@@ -50,12 +50,9 @@ public class ForceDiagramAnswerSubmission
 	}
 }
 
-public class ActivityFiveManager : MonoBehaviour
+public class ActivityFiveManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
-
-	[Header("Input Reader")]
-	[SerializeField] InputReader inputReader;
 
 	[Header("Level Data - Force")]
 	[SerializeField] private ForceSubActivitySO forceLevelOne;
@@ -122,8 +119,10 @@ public class ActivityFiveManager : MonoBehaviour
 	private int numIncorrectBoatMotionForceDiagramSubmission;
 	private int numIncorrectBoatMotionForceSubmission;
 
-	private void Start()
+	protected override void Start()
 	{
+		base.Start();
+
 		ConfigureLevelData(Difficulty.Easy);
 
 		SubscribeForceMotionEvents();
@@ -502,7 +501,7 @@ public class ActivityFiveManager : MonoBehaviour
 	}
 	#endregion
 
-	private void DisplayPerformanceView()
+	public override void DisplayPerformanceView()
 	{
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
@@ -529,5 +528,36 @@ public class ActivityFiveManager : MonoBehaviour
 			numIncorrectForceDiagramSubmission: numIncorrectBoatMotionForceDiagramSubmission,
 			duration: boatMotionGameplayDuartion
 			);
+	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isAppleMotionSubActivityFinished)
+		{
+			taskText.Add("- Find and investigate the apple from the region of Nakalais.");
+			taskText.Add("	- Investigate the forces acting on the apple.");
+			taskText.Add("	- Determine the value of forces acting on the apple.");
+		}
+		if (!isRockMotionSubActivityFinished)
+		{
+			taskText.Add("- Find and investigate the rock from the region of Nakalais.");
+			taskText.Add("	- Investigate the forces acting on the rock.");
+			taskText.Add("	- Determine the value of forces acting on the rock.");
+		}
+		if (!isBoatMotionSubActivityFinished)
+		{
+			taskText.Add("- Find and investigate the boat from the region of Nakalais.");
+			taskText.Add("	- Investigate the forces acting on the boat.");
+			taskText.Add("	- Determine the value of forces acting on the boat.");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Conduct research around the environment of Nakalais. " +
+			"Gather data about the acting forces and force values of different objects for research.");
+
+		activityPauseMenuUI.UpdateContent("Lesson 5 - Activity 5", taskText, objectiveText);
 	}
 }

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -44,8 +42,6 @@ public class ActivityOneManager : MonoBehaviour
 
     void Start()
     {
-        _input.PauseEvent += HandlePause;
-        _input.ResumeEvent += HandleResume;
         BoxContainer.BoxInteractEvent += OnSelectBox;
         ViewScientificNotation.OpenViewEvent += OnOpenViewSN;
         ViewScientificNotation.SubmitAnswerEvent += CheckSubmittedSNAnswer;
@@ -77,16 +73,6 @@ public class ActivityOneManager : MonoBehaviour
         isAccuracyAndPrecisionFinished = false;
         isVarianceFinished = false;
         isErrorsFinished = false;
-    }
-
-    private void HandlePause()
-    {
-        //pauseMenu.SetActive(true);
-    }
-
-    private void HandleResume()
-    {
-        //pauseMenu.SetActive(false);
     }
 
     private void RandomlyGenerateBoxValues()

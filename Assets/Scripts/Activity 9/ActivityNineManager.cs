@@ -45,12 +45,9 @@ public class GravityAnswerSubmissionResults
 	}
 }
 
-public class ActivityNineManager : MonoBehaviour
+public class ActivityNineManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
-
-	[Header("Input Reader")]
-	[SerializeField] InputReader inputReader;
 
 	[Header("Level Data - Gravity")]
 	[SerializeField] private GravitySubActivitySO gravityLevelOne;
@@ -78,8 +75,10 @@ public class ActivityNineManager : MonoBehaviour
 	private bool isGravityCalculationFinished;
 	private int numIncorrectGravitySubmission;
 
-	private void Start()
+	protected override void Start()
 	{
+		base.Start();
+
 		// Set level data based from difficulty configuration.
 		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
@@ -240,7 +239,7 @@ public class ActivityNineManager : MonoBehaviour
 		}
 	}
 
-	private void DisplayPerformanceView()
+	public override void DisplayPerformanceView()
 	{
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
@@ -252,5 +251,21 @@ public class ActivityNineManager : MonoBehaviour
 			numIncorrectSubmission: numIncorrectGravitySubmission,
 			duration: gameplayTime
 			);
+	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isGravityCalculationFinished)
+		{
+			taskText.Add("- Calculate the gravitational force and gravity potential energy of the satellite orbiting planet Terra.");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Make final preparations and calculations to land on planet Terra.");
+
+		activityPauseMenuUI.UpdateContent("Lesson 9 - Activity 9", taskText, objectiveText);
 	}
 }

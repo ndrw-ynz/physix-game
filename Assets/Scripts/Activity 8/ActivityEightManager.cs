@@ -124,17 +124,13 @@ public class EquilibriumAnswerSubmissionResults
 
 }
 
-public class ActivityEightManager : MonoBehaviour
+public class ActivityEightManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
 
 	public static event Action GeneratorRoomClearEvent;
 	public static event Action WeighingScaleRoomClearEvent;
 	public static event Action RebootRoomClearEvent;
-
-	[Header("Input Reader")]
-	[SerializeField] InputReader inputReader;
-
 
 	[Header("Level Data - Moment of Inertia")]
 	[SerializeField] private MomentOfInertiaSubActivitySO momentOfInertiaLevelOne;
@@ -193,8 +189,9 @@ public class ActivityEightManager : MonoBehaviour
 	private int numIncorrectEquilibriumSubmission;
 	private float equilibriumDuration;
 
-	void Start()
+	protected override void Start()
     {
+		base.Start();
 		// Set level data based from difficulty configuration.
 		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
@@ -630,7 +627,7 @@ public class ActivityEightManager : MonoBehaviour
 	}
 	#endregion
 
-	private void DisplayPerformanceView()
+	public override void DisplayPerformanceView()
 	{
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
@@ -654,5 +651,29 @@ public class ActivityEightManager : MonoBehaviour
 			numIncorrectSubmission: numIncorrectEquilibriumSubmission,
 			duration: equilibriumDuration
 			);
+	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isMomentOfInertiaCalculationFinished)
+		{
+			taskText.Add("- Fix the generator's power terminal by calibrating its moment of inertia calculation module.");
+		}
+		if (!isTorqueCalculationFinished)
+		{
+			taskText.Add("- Secure the bolts of the fulcrum on the weighing scale using its terminal by calibrating its torque calculation module.");
+		}
+		if (!isEquilibriumCalculationFinished)
+		{
+			taskText.Add("- Ensure equilibrium of the power switch by calibrating the terminal's equilibrium calculation module.");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Conduct proper maintenance on the ship’s generator, industrial switch, and properly reboot the ships' system.");
+
+		activityPauseMenuUI.UpdateContent("Lesson 8 - Activity 8", taskText, objectiveText);
 	}
 }

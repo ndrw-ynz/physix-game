@@ -203,16 +203,13 @@ public enum Difficulty
 	Hard
 }
 
-public class ActivitySevenManager : MonoBehaviour
+public class ActivitySevenManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
 
 	public static event Action RoomOneClearEvent;
 	public static event Action RoomTwoClearEvent;
 	public static event Action RoomThreeClearEvent;
-
-	[Header("Input Reader")]
-	[SerializeField] InputReader inputReader;
 
     [Header("Level Data - Center of Mass")]
     [SerializeField] CenterOfMassSubActivitySO centerOfMassLevelOne;
@@ -271,8 +268,9 @@ public class ActivitySevenManager : MonoBehaviour
 	private int numIncorrectElasticInelasticCollisionSubmission;
 	private float elasticInelasticCollisionDuration;
 
-	void Start()
+	protected override void Start()
     {
+		base.Start();
 		// Difficulty selection
 		difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
         
@@ -750,7 +748,7 @@ public class ActivitySevenManager : MonoBehaviour
 	}
 	#endregion
 
-	private void DisplayPerformanceView()
+	public override void DisplayPerformanceView()
 	{
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
@@ -774,5 +772,29 @@ public class ActivitySevenManager : MonoBehaviour
 			numIncorrectSubmission: numIncorrectElasticInelasticCollisionSubmission,
 			duration: elasticInelasticCollisionDuration
 			);
+	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isCenterOfMassCalculationFinished)
+		{
+			taskText.Add("- Unlock the power cube using the center of mass terminal.");
+		}
+		if (!isMomentumImpulseForceCalculationFinished)
+		{
+			taskText.Add("- Activate the impulse unlock mechanism of the door using the impulse-momentum terminal.");
+		}
+		if (!isElasticInelasticCollisionCalculationFinished)
+		{
+			taskText.Add("- Acquire the ships' data module by overriding the collisions terminal");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Traverse through a series of heavily secured rooms to acquire the ships' data module for analysis.");
+
+		activityPauseMenuUI.UpdateContent("Lesson 7 - Activity 7", taskText, objectiveText);
 	}
 }

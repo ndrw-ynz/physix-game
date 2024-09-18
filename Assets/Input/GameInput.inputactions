@@ -42,7 +42,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Pause",
+                    "name": "PauseGameplay",
                     "type": "Button",
                     "id": "edf38e1b-90fb-468c-b5a0-d1cbf0d8351e",
                     "expectedControlType": "Button",
@@ -198,24 +198,42 @@
                 {
                     "name": "",
                     "id": "2ac4e3ed-d71c-4fa1-a154-c5df64c23f8d",
-                    "path": "<Keyboard>/p",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pause",
+                    "action": "PauseGameplay",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
             ]
         },
         {
-            "name": "UI",
-            "id": "dc83973f-4524-4fe8-8124-c2a2879aee24",
+            "name": "GameplayPauseMenu",
+            "id": "3a48c27f-edcc-4b7f-ba81-92f9899f30f3",
             "actions": [
                 {
-                    "name": "Resume",
+                    "name": "ResumeGame",
                     "type": "Button",
-                    "id": "aa6908aa-f6d7-4218-b942-ea15bffdee9f",
+                    "id": "cb65c0d5-ea88-48ef-bf55-c46e80414c5a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PauseMenuNavigation",
+                    "type": "Value",
+                    "id": "7000f78b-860a-446a-a499-5f75a98533c0",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "PauseMenuSelectChoice",
+                    "type": "Button",
+                    "id": "b08f5ee2-19d2-4d0b-b1be-8e9b8686dfa0",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -225,12 +243,106 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "12416030-782e-473e-b345-472a62db7145",
-                    "path": "<Keyboard>/p",
+                    "id": "2da83663-00f8-4db7-9546-0b95f8e19d65",
+                    "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Resume",
+                    "action": "ResumeGame",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "2D Vector",
+                    "id": "d2e0a7ff-8c7d-4d22-abeb-fea7b90b5f9d",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMenuNavigation",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "14d07181-393b-42b5-9954-41ccef174496",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMenuNavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "b11c360f-042a-4642-bbaf-eb992536356c",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMenuNavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "ac908498-72f2-4f7c-9398-fa5a29d953f4",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMenuNavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "2308f91d-1d50-4087-9958-261039d22a84",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMenuNavigation",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "42a8a641-1fa6-480f-ac72-a6da05470190",
+                    "path": "<Keyboard>/enter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMenuSelectChoice",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "GameplayUI",
+            "id": "dc83973f-4524-4fe8-8124-c2a2879aee24",
+            "actions": [
+                {
+                    "name": "PauseGameplayUI",
+                    "type": "Button",
+                    "id": "fb80e025-b0ba-4317-a5ad-3c2df7002535",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "bf9b8493-ba61-4c9b-b284-a667e181b837",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseGameplayUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
