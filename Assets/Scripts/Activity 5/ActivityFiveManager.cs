@@ -50,12 +50,9 @@ public class ForceDiagramAnswerSubmission
 	}
 }
 
-public class ActivityFiveManager : MonoBehaviour
+public class ActivityFiveManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
-
-	[Header("Input Reader")]
-	[SerializeField] InputReader inputReader;
 
 	[Header("Level Data - Force")]
 	[SerializeField] private ForceSubActivitySO forceLevelOne;
@@ -122,8 +119,10 @@ public class ActivityFiveManager : MonoBehaviour
 	private int numIncorrectBoatMotionForceDiagramSubmission;
 	private int numIncorrectBoatMotionForceSubmission;
 
-	private void Start()
+	protected override void Start()
 	{
+		base.Start();
+
 		ConfigureLevelData(Difficulty.Easy);
 
 		SubscribeForceMotionEvents();
@@ -502,7 +501,7 @@ public class ActivityFiveManager : MonoBehaviour
 	}
 	#endregion
 
-	private void DisplayPerformanceView()
+	public override void DisplayPerformanceView()
 	{
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
@@ -529,5 +528,35 @@ public class ActivityFiveManager : MonoBehaviour
 			numIncorrectForceDiagramSubmission: numIncorrectBoatMotionForceDiagramSubmission,
 			duration: boatMotionGameplayDuartion
 			);
+	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isAppleMotionSubActivityFinished)
+		{
+			taskText.Add("- Find and interact with the apple");
+			taskText.Add("	- Identify the acting forces on the apple");
+			taskText.Add("	- Calculate the force acting on the apple");
+		}
+		if (!isRockMotionSubActivityFinished)
+		{
+			taskText.Add("- Find and interact with the rock");
+			taskText.Add("	- Identify the acting forces on the rock");
+			taskText.Add("	- Calculate the force acting on the rock");
+		}
+		if (!isBoatMotionSubActivityFinished)
+		{
+			taskText.Add("- Find and interact with the boat");
+			taskText.Add("	- Identify the acting forces on the boat");
+			taskText.Add("	- Calculate the force acting on the boat");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Complete all interactable objects to complete surveying of the planet");
+
+		activityPauseMenuUI.UpdateContent("Lesson 5 - Activity 5", taskText, objectiveText);
 	}
 }
