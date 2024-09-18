@@ -26,14 +26,11 @@ public enum ForceDisplacementCurveType
 	LinearlyDecreasingForceGraph
 }
 
-public class ActivitySixManager : MonoBehaviour
+public class ActivitySixManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
 
 	public event Action MainSatelliteAreaClearEvent;
-
-	[Header("Input Reader")]
-	[SerializeField] InputReader inputReader;
 
 	[Header("Level Data - Dot Product")]
 	[SerializeField] private DotProductSubActivitySO dotProductLevelOne;
@@ -93,8 +90,10 @@ public class ActivitySixManager : MonoBehaviour
 	private bool isWorkGraphSubActivityFinished;
 	private int numIncorrectWorkGraphSubmission;
 
-	private void Start()
+	protected override void Start()
 	{
+		base.Start();
+
 		ConfigureLevelData(Difficulty.Easy);
 
 		SubscribeViewAndDisplayEvents();
@@ -118,6 +117,7 @@ public class ActivitySixManager : MonoBehaviour
 			Difficulty.Easy => 1,
 			Difficulty.Medium => 2,
 			Difficulty.Hard => 3,
+			_ => 0
 		};
 
 		// Setting up views
@@ -400,7 +400,7 @@ public class ActivitySixManager : MonoBehaviour
 	}
 	#endregion
 
-	private void DisplayPerformanceView()
+	public override void DisplayPerformanceView()
 	{
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
@@ -424,5 +424,32 @@ public class ActivitySixManager : MonoBehaviour
 			numIncorrectSubmission: numIncorrectWorkGraphSubmission,
 			duration: workGraphSubActivityDuration
 			);
+	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isDotProductSubActivityFinished)
+		{
+			taskText.Add("- Complete the satellite terminal");
+			taskText.Add("	- Calculate the dot product of the concerned objects");
+		}
+		if (!isWorkSubActivityFinished)
+		{
+			taskText.Add("- Embark on the satellite truck");
+			taskText.Add("	- Calculate the work done by the vehicle");
+		}
+		if (!isWorkGraphSubActivityFinished)
+		{
+			taskText.Add("- Find and interact with the crashed drone");
+			taskText.Add("	- Determine the work exerted from the Force vs Displacement graph");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Find the crashed drone on the planet");
+
+		activityPauseMenuUI.UpdateContent("Lesson 6 - Activity 6", taskText, objectiveText);
 	}
 }
