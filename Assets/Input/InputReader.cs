@@ -128,7 +128,7 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 
 	public void OnPauseMenuNavigation(InputAction.CallbackContext context)
 	{
-        PauseMenuNavigationEvent?.Invoke(context.ReadValue<Vector2>());
+        if (context.performed) PauseMenuNavigationEvent?.Invoke(context.ReadValue<Vector2>());
 	}
 
     // GameplayUI functions
