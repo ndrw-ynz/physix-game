@@ -781,24 +781,19 @@ public class ActivitySevenManager : ActivityManager
 		List<string> taskText = new List<string>();
 		if (!isCenterOfMassCalculationFinished)
 		{
-			taskText.Add("- Release the power cube");
-			taskText.Add("	- Calculate the center of mass");
-			taskText.Add("	- Enter room");
+			taskText.Add("- Unlock the power cube using the center of mass terminal.");
 		}
 		if (!isMomentumImpulseForceCalculationFinished)
 		{
-			taskText.Add("- Impulse momentum room");
-			taskText.Add("	- Calculate the impulse momentum");
+			taskText.Add("- Activate the impulse unlock mechanism of the door using the impulse-momentum terminal.");
 		}
 		if (!isElasticInelasticCollisionCalculationFinished)
 		{
-			taskText.Add("- Retrieve the ships' data module");
-			taskText.Add("	- Enter room");
-			taskText.Add("	- Determine if the collision if elastic or inelastic");
+			taskText.Add("- Acquire the ships' data module by overriding the collisions terminal");
 		}
 
 		List<string> objectiveText = new List<string>();
-		objectiveText.Add("Retrieve the ships' data module for analysis");
+		objectiveText.Add("Traverse through a series of heavily secured rooms to acquire the ships' data module for analysis.");
 
 		activityPauseMenuUI.UpdateContent("Lesson 7 - Activity 7", taskText, objectiveText);
 	}
