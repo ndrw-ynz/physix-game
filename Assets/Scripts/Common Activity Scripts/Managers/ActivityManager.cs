@@ -21,4 +21,6 @@ public abstract class ActivityManager : MonoBehaviour
 	{
 		activityPauseMenuUI.gameObject.SetActive(false);
 	}
+
+	public abstract void DisplayPerformanceView();
 }
