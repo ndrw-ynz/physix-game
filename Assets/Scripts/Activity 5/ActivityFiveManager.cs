@@ -537,25 +537,26 @@ public class ActivityFiveManager : ActivityManager
 		List<string> taskText = new List<string>();
 		if (!isAppleMotionSubActivityFinished)
 		{
-			taskText.Add("- Find and interact with the apple");
-			taskText.Add("	- Identify the acting forces on the apple");
-			taskText.Add("	- Calculate the force acting on the apple");
+			taskText.Add("- Find and investigate the apple from the region of Nakalais.");
+			taskText.Add("	- Investigate the forces acting on the apple.");
+			taskText.Add("	- Determine the value of forces acting on the apple.");
 		}
 		if (!isRockMotionSubActivityFinished)
 		{
-			taskText.Add("- Find and interact with the rock");
-			taskText.Add("	- Identify the acting forces on the rock");
-			taskText.Add("	- Calculate the force acting on the rock");
+			taskText.Add("- Find and investigate the rock from the region of Nakalais.");
+			taskText.Add("	- Investigate the forces acting on the rock.");
+			taskText.Add("	- Determine the value of forces acting on the rock.");
 		}
 		if (!isBoatMotionSubActivityFinished)
 		{
-			taskText.Add("- Find and interact with the boat");
-			taskText.Add("	- Identify the acting forces on the boat");
-			taskText.Add("	- Calculate the force acting on the boat");
+			taskText.Add("- Find and investigate the boat from the region of Nakalais.");
+			taskText.Add("	- Investigate the forces acting on the boat.");
+			taskText.Add("	- Determine the value of forces acting on the boat.");
 		}
 
 		List<string> objectiveText = new List<string>();
-		objectiveText.Add("Complete all interactable objects to complete surveying of the planet");
+		objectiveText.Add("Conduct research around the environment of Nakalais. " +
+			"Gather data about the acting forces and force values of different objects for research.");
 
 		activityPauseMenuUI.UpdateContent("Lesson 5 - Activity 5", taskText, objectiveText);
 	}
