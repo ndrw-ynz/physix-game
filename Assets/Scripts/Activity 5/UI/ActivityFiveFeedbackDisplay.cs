@@ -104,7 +104,7 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 					if (metric.numIncorrectAnswers == 0)
 					{
 						// Case 3.4: Perfect score
-						forceCalculationfeedbackStatus = $"<color=#ADA52B>You received a perfect score for forces.</color> ";
+						forceCalculationfeedbackStatus = $"<color=#FFD70E>You received a perfect score for forces.</color> ";
 					}
 					else if (metric.numIncorrectAnswers <= forceCalculationGoodThreshold)
 					{
@@ -149,7 +149,7 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 					if (metric.numIncorrectAnswers == 0)
 					{
 						// Case 3.4: Perfect score
-						forceDiagramfeedbackStatus = "<color=#ADA52B>You received a perfect score for force diagrams.</color>";
+						forceDiagramfeedbackStatus = "<color=#FFD70E>You received a perfect score for force diagrams.</color>";
 					}
 					else if (metric.numIncorrectAnswers <= forceDiagramGoodThreshold)
 					{
