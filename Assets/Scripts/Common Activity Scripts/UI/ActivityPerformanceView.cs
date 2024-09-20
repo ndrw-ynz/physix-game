@@ -9,6 +9,9 @@ public abstract class ActivityPerformanceView : MonoBehaviour
 	[Header("Total Time Text")]
 	[SerializeField] private TextMeshProUGUI totalTimeText;
 
+	[Header("Activity Feedback Display")]
+	[SerializeField] private ActivityFeedbackDisplay activityFeedbackDisplay;
+
 	public void SetTotalTimeDisplay(float totalTime)
 	{
 		SetDurationText(totalTimeText, totalTime);
@@ -33,6 +36,11 @@ public abstract class ActivityPerformanceView : MonoBehaviour
 		int minutes = Mathf.FloorToInt(duration / 60);
 		int seconds = Mathf.FloorToInt(duration % 60);
 		durationText.text = string.Format("{0:00}m : {1:00}s", minutes, seconds);
+	}
+
+	public void UpdateActivityFeedbackDisplay(params SubActivityPerformanceMetric[] performanceMetrics)
+	{
+		activityFeedbackDisplay.UpdateFeedbackDisplay(performanceMetrics);
 	}
 
 	public abstract void RetryLevel();
