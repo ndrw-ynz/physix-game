@@ -107,17 +107,23 @@ public class ActivityFiveManager : ActivityManager
 	private float appleMotionGameplayDuartion;
 	private bool isAppleMotionSubActivityFinished;
 	private int numIncorrectAppleMotionForceDiagramSubmission;
+	private int numCorrectAppleMotionForceDiagramSubmission;
 	private int numIncorrectAppleMotionForceSubmission;
+	private int numCorrectAppleMotionForceSubmission;
 	// Rock Motion Sub Activity
 	private float rockMotionGameplayDuartion;
 	private bool isRockMotionSubActivityFinished;
 	private int numIncorrectRockMotionForceDiagramSubmission;
+	private int numCorrectRockMotionForceDiagramSubmission;
 	private int numIncorrectRockMotionForceSubmission;
+	private int numCorrectRockMotionForceSubmission;
 	// Boat Motion Sub Activity
 	private float boatMotionGameplayDuartion;
 	private bool isBoatMotionSubActivityFinished;
 	private int numIncorrectBoatMotionForceDiagramSubmission;
+	private int numCorrectBoatMotionForceDiagramSubmission;
 	private int numIncorrectBoatMotionForceSubmission;
+	private int numCorrectBoatMotionForceSubmission;
 
 	protected override void Start()
 	{
@@ -207,12 +213,14 @@ public class ActivityFiveManager : ActivityManager
 			answer,
 			appleForceGivenData,
 			ref numIncorrectAppleMotionForceSubmission,
+			ref numCorrectAppleMotionForceSubmission,
 			appleForceSubmissionStatusDisplay
 			);
 		appleMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
 			answer,
 			appleForceDiagramStateQueue,
 			ref numIncorrectAppleMotionForceDiagramSubmission,
+			ref numCorrectAppleMotionForceDiagramSubmission,
 			appleForceDiagramSubmissionStatusDisplay
 			);
 		appleForceSubmissionStatusDisplay.ProceedEvent += UpdateAppleSubActivityStateQueue;
@@ -232,12 +240,14 @@ public class ActivityFiveManager : ActivityManager
 			answer,
 			rockForceGivenData,
 			ref numIncorrectRockMotionForceSubmission,
+			ref numCorrectRockMotionForceSubmission,
 			rockForceSubmissionStatusDisplay
 			);
 		rockMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
 			answer,
 			rockForceDiagramStateQueue,
 			ref numIncorrectRockMotionForceDiagramSubmission,
+			ref numCorrectRockMotionForceDiagramSubmission,
 			rockForceDiagramSubmissionStatusDisplay
 			);
 		rockForceSubmissionStatusDisplay.ProceedEvent += UpdateRockSubActivityStateQueue;
@@ -257,12 +267,14 @@ public class ActivityFiveManager : ActivityManager
 			answer,
 			boatForceGivenData,
 			ref numIncorrectBoatMotionForceSubmission,
+			ref numCorrectBoatMotionForceSubmission,
 			boatForceSubmissionStatusDisplay
 			);
 		boatMotionView.SubmitForceDiagramAnswerEvent += (answer) => CheckForceDiagramAnswer(
 			answer,
 			boatForceDiagramStateQueue,
 			ref numIncorrectBoatMotionForceDiagramSubmission,
+			ref numCorrectBoatMotionForceDiagramSubmission,
 			boatForceDiagramSubmissionStatusDisplay
 			);
 		boatForceSubmissionStatusDisplay.ProceedEvent += UpdateBoatSubActivityStateQueue;
@@ -360,21 +372,33 @@ public class ActivityFiveManager : ActivityManager
 		return forceData;
 	}
 
-	private void CheckForceAnswer(float? answer, ForceData forceGivenData, ref int numIncorrectForceSubmissionRef, ForceSubmissionStatusDisplay forceSubmissionStatusDisplay)
+	private void CheckForceAnswer(float? answer, ForceData forceGivenData, ref int numIncorrectForceSubmissionRef, ref int numCorrectForceSubmissionRef, ForceSubmissionStatusDisplay forceSubmissionStatusDisplay)
 	{
 		bool result = ActivityFiveUtilities.ValidateForceSubmission(answer, forceGivenData);
-		
+
 		// Update force answer gameplay metric
-		if (!result) numIncorrectForceSubmissionRef++;
+		if (!result)
+		{
+			numIncorrectForceSubmissionRef++;
+		} else
+		{
+			numCorrectForceSubmissionRef++;
+		}
+
 		DisplayForceSubmissionResults(result, forceSubmissionStatusDisplay);
 	}
 
-	private void CheckForceDiagramAnswer(ForceDiagramAnswerSubmission answer, Queue<ForceObjectMotionType> forceDiagramStateQueue, ref int numIncorrectForceDiagramSubmissionRef, ForceDiagramSubmissionStatusDisplay forceDiagramSubmissionStatusDisplay)
+	private void CheckForceDiagramAnswer(ForceDiagramAnswerSubmission answer, Queue<ForceObjectMotionType> forceDiagramStateQueue, ref int numIncorrectForceDiagramSubmissionRef, ref int numCorrectForceDiagramSubmissionRef, ForceDiagramSubmissionStatusDisplay forceDiagramSubmissionStatusDisplay)
 	{
 		ForceDiagramAnswerSubmissionResults results = ActivityFiveUtilities.ValidateForceDiagramSubmission(forceDiagramStateQueue.Peek(), answer);
 
 		// Update force diagram answer gameplay metric
-		if (!results.isAllCorrect()) numIncorrectForceDiagramSubmissionRef++;
+		if (!results.isAllCorrect()) {
+			numIncorrectForceDiagramSubmissionRef++;
+		} else
+		{
+			numCorrectForceDiagramSubmissionRef++;
+		}
 
 		DisplayForceDiagramSubmissionResults(answer, results, forceDiagramSubmissionStatusDisplay);
 	}
@@ -527,6 +551,46 @@ public class ActivityFiveManager : ActivityManager
 			numIncorrectForceSubmission: numIncorrectBoatMotionForceSubmission,
 			numIncorrectForceDiagramSubmission: numIncorrectBoatMotionForceDiagramSubmission,
 			duration: boatMotionGameplayDuartion
+			);
+
+		// Update its activity feedback display (six args)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "AppleForceDiagram",
+				isSubActivityFinished: isAppleMotionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectAppleMotionForceDiagramSubmission,
+				numCorrectAnswers: numCorrectAppleMotionForceDiagramSubmission
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "AppleForceCalculation",
+				isSubActivityFinished: isAppleMotionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectAppleMotionForceSubmission,
+				numCorrectAnswers: numCorrectAppleMotionForceSubmission
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "RockForceDiagram",
+				isSubActivityFinished: isRockMotionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectRockMotionForceDiagramSubmission,
+				numCorrectAnswers: numCorrectRockMotionForceDiagramSubmission
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "RockForceCalculation",
+				isSubActivityFinished: isRockMotionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectRockMotionForceSubmission,
+				numCorrectAnswers: numCorrectRockMotionForceSubmission
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "BoatForceDiagram",
+				isSubActivityFinished: isBoatMotionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectBoatMotionForceDiagramSubmission,
+				numCorrectAnswers: numCorrectBoatMotionForceDiagramSubmission
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "BoatForceCalculation",
+				isSubActivityFinished: isBoatMotionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectBoatMotionForceSubmission,
+				numCorrectAnswers: numCorrectBoatMotionForceSubmission
+				)
 			);
 	}
 
