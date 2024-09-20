@@ -27,6 +27,10 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 		rockMotionFeedbackText.text = "";
 		boatMotionFeedbackText.text = "";
 
+		int totalSubActivityAttemptsCounter = 0;
+		bool isCaseOne = false;
+		bool isCaseTwo = false;
+
 		foreach (SubActivityPerformanceMetric metric in performanceMetrics)
 		{
 			// Determine feedbackText to be modified based on the present metric
@@ -51,7 +55,7 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 					break;
 			}
 
-			// Determine what part of the feedbackText to be modified, which can either be force calculation or force diagram
+			// Determine what part of the feedbackText to be modified, which can either be force calculation (prepend) or force diagram (append)
 			switch (metric.subActivityName)
 			{
 				// Construct force calculation message to be prepended to feedback text
@@ -74,57 +78,72 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 							break;
 					}
 
-
-					// Construct feedbackMessage to be prepended
-					string prependedfeedbackMessage = "";
+					// Construct message if case one or two
+					string caseOneOrTwoMessage = "";
 					// Case 1: No submissions for sub activity
-					if (metric.numCorrectAnswers + metric.numIncorrectAnswers <= 0)
+					if (metric.numCorrectAnswers + metric.numIncorrectAnswers + totalSubActivityAttemptsCounter <= 0 || (isCaseOne && !isCaseTwo))
 					{
-						prependedfeedbackMessage = $"- You did not submit any answers for the <b><color=blue>{subActivityName}</color></b> sub activity <color=red>and have withdrawn from the activity.</color>" +
+						caseOneOrTwoMessage = $"- You did not submit any answers for the <b><color=blue>{subActivityName}</color></b> sub activity <color=red>and have withdrawn from the activity.</color>" +
 										  " Don't give up, comrade! Review, practice, and give it another shot. Each attempt brings you closer to your goal.";
-						feedbackText.text = prependedfeedbackMessage;
+						feedbackText.text = caseOneOrTwoMessage;
+
+						// Reset temp variables
+						isCaseOne = false;
+						isCaseTwo = false;
+						totalSubActivityAttemptsCounter = 0;
 						continue;
 					}
+
 					// Case 2: Sub activity not accomplished
-					else if (!metric.isSubActivityFinished)
+					else if (!metric.isSubActivityFinished || (isCaseTwo && !isCaseOne))
 					{
-						prependedfeedbackMessage = $"- You attempted the <b><color=blue>{subActivityName}</color></b> sub activity <b><color=blue>{metric.numIncorrectAnswers + metric.numCorrectAnswers}</color></b> time(s) but <color=red>didn't finish the sub activity.</color>" +
+						totalSubActivityAttemptsCounter += metric.numIncorrectAnswers + metric.numCorrectAnswers;
+						caseOneOrTwoMessage = $"- You attempted the <b><color=blue>{subActivityName}</color></b> sub activity <b><color=blue>{totalSubActivityAttemptsCounter}</color></b> time(s) but <color=red>didn't finish the sub activity.</color> " +
 										  "It seems you're struggling with the concept of either force or force diagrams. Review the material and give it another try.";
-						feedbackText.text = prependedfeedbackMessage;
+						feedbackText.text = caseOneOrTwoMessage;
+
+						// Reset temp variables
+						isCaseOne = false;
+						isCaseTwo = false;
+						totalSubActivityAttemptsCounter = 0;
 						continue;
-					} 
+					}
+
 					// Case 3: Sub activity finished
-					prependedfeedbackMessage += $"- You accomplished the <b><color=blue>{subActivityName}</color></b> sub activity. ";
-					prependedfeedbackMessage += $"You got <b><color=blue>{metric.numCorrectAnswers}</color></b> correct answers out of <b><color=blue>{metric.numIncorrectAnswers + metric.numCorrectAnswers}</color></b> submission(s) for <b><color=blue>forces</color></b>. ";
-
-
-					// Append feedback for forces
+					// Construct feedback message for forces
+					string prependedfeedbackMessage = $"You got <b><color=blue>{metric.numCorrectAnswers}</color></b> correct answer(s) out of <b><color=blue>{metric.numIncorrectAnswers + metric.numCorrectAnswers}</color></b> submission(s) for <b><color=blue>forces</color></b>. ";
+					
+					// Select force feedback status message to be prepended
 					string forceCalculationfeedbackStatus = "";
-					// Case 3: Sub activity finished
+					// Case 3.4: Perfect score
 					if (metric.numIncorrectAnswers == 0)
 					{
-						// Case 3.4: Perfect score
 						forceCalculationfeedbackStatus = $"<color=#FFD70E>You received a perfect score for forces.</color> ";
 					}
+					// Case 3.3: High score
 					else if (metric.numIncorrectAnswers <= forceCalculationGoodThreshold)
 					{
-						// Case 3.3: High score
-						forceCalculationfeedbackStatus= $"<color=#46A028>You received a high score for forces.</color> ";
+						forceCalculationfeedbackStatus = $"<color=#46A028>You received a high score for forces.</color> ";
 					}
+					// Case 3.2: Average score
 					else if (metric.numIncorrectAnswers <= forceCalculationAverageThreshold)
 					{
-						// Case 3.2: Average score
-						forceCalculationfeedbackStatus= $"<color=#A56340>You received an average score for forces.</color> ";
+						forceCalculationfeedbackStatus = $"<color=#A56340>You received an average score for forces.</color> ";
 					}
+					// Case 3.1: Bad score
 					else if (metric.numIncorrectAnswers <= forceCalculationBadThreshold)
 					{
-						// Case 3.1: Bad score
-						forceCalculationfeedbackStatus= $"<color=red>You received a bad score due to too many incorrect submissions for forces.</color> ";
+						forceCalculationfeedbackStatus = $"<color=red>You received a bad score due to too many incorrect submissions for forces.</color> ";
 					}
 					prependedfeedbackMessage += forceCalculationfeedbackStatus;
 
-
 					feedbackText.text = prependedfeedbackMessage + feedbackText.text;
+
+					// Prepend Case 3 calculation message
+					feedbackText.text = $"- You accomplished the <b><color=blue>{subActivityName}</color></b> sub activity. " + feedbackText.text;
+					isCaseOne = false;
+					isCaseTwo = false;
+					totalSubActivityAttemptsCounter = 0;
 					break;
 
 
@@ -132,38 +151,47 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 				case "AppleForceDiagram":
 				case "RockForceDiagram":
 				case "BoatForceDiagram":
-					// Case 1 and 2: No submissions for sub activity or sub activity is not accomplished.
-					if (metric.numCorrectAnswers + metric.numIncorrectAnswers <= 0 || metric.isSubActivityFinished == false)
+					// Update counter variable
+					totalSubActivityAttemptsCounter += metric.numCorrectAnswers + metric.numIncorrectAnswers;
+
+					// Update case variables and proceed to next metric
+					// Case 1: No submissions for sub activity
+					if (metric.numCorrectAnswers + metric.numIncorrectAnswers <= 0)
 					{
-						// No message to append.
+						isCaseOne = true;
+						continue;
+					}
+					// Case 2: Sub activity not accomplished
+					else if (!metric.isSubActivityFinished)
+					{
+						isCaseTwo = true;
 						continue;
 					}
 
-					// Construct feedbackMessage to be prepended
-					string appendedfeedbackMessage = "";
-					appendedfeedbackMessage += $"You got <b><color=blue>{metric.numCorrectAnswers}</color></b> correct answers out of <b><color=blue>{metric.numIncorrectAnswers + metric.numCorrectAnswers}</color></b> submission(s) for <b><color=blue>force diagrams</color></b>. ";
 
-					// Append feedback for force diagrams
+					// Construct feedbackMessage to be appended
+					string appendedfeedbackMessage = $"You got <b><color=blue>{metric.numCorrectAnswers}</color></b> correct answer(s) out of <b><color=blue>{metric.numIncorrectAnswers + metric.numCorrectAnswers}</color></b> submission(s) for <b><color=blue>force diagrams</color></b>. ";
+
+					// Select force diagram feedback status message to be prepended
 					string forceDiagramfeedbackStatus = "";
-					// Case 3: Sub activity finished
+					// Case 3.4: Perfect score
 					if (metric.numIncorrectAnswers == 0)
 					{
-						// Case 3.4: Perfect score
 						forceDiagramfeedbackStatus = "<color=#FFD70E>You received a perfect score for force diagrams.</color>";
 					}
+					// Case 3.3: High score
 					else if (metric.numIncorrectAnswers <= forceDiagramGoodThreshold)
 					{
-						// Case 3.3: High score
 						forceDiagramfeedbackStatus = "<color=#46A028>You received a high score for force diagrams.</color>";
 					}
+					// Case 3.2: Average score
 					else if (metric.numIncorrectAnswers <= forceDiagramAverageThreshold)
 					{
-						// Case 3.2: Average score
 						forceDiagramfeedbackStatus = "<color=#A56340>You received an average score for force diagrams.</color>";
 					}
+					// Case 3.1: Bad score
 					else if (metric.numIncorrectAnswers <= forceDiagramBadThreshold)
 					{
-						// Case 3.1: Bad score
 						forceDiagramfeedbackStatus = "<color=red>You received a bad score due to too many incorrect submissions for force diagrams.</color>";
 					}
 					appendedfeedbackMessage += forceDiagramfeedbackStatus;
