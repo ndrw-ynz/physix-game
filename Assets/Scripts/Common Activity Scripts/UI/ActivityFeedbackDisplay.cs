@@ -23,5 +23,11 @@ public class SubActivityPerformanceMetric
 
 public abstract class ActivityFeedbackDisplay : MonoBehaviour
 {
-    public abstract void UpdateFeedbackDisplay(params SubActivityPerformanceMetric[] performanceMetrics);
+    public void UpdateFeedbackDisplay(params SubActivityPerformanceMetric[] performanceMetrics)
+    {
+        UpdateFeedbackMessageDisplay(performanceMetrics);
+        UpdateFeedbackRecommendationsDisplay(performanceMetrics);
+	}
+    protected abstract void UpdateFeedbackMessageDisplay(params SubActivityPerformanceMetric[] performanceMetrics);
+	protected abstract void UpdateFeedbackRecommendationsDisplay(params SubActivityPerformanceMetric[] performanceMetrics);
 }
