@@ -1,22 +1,27 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 {
+	[Header("Feedback Message Text")]
 	[SerializeField] private TextMeshProUGUI appleMotionFeedbackText;
 	[SerializeField] private TextMeshProUGUI rockMotionFeedbackText;
 	[SerializeField] private TextMeshProUGUI boatMotionFeedbackText;
 
-	public override void UpdateFeedbackDisplay(params SubActivityPerformanceMetric[] performanceMetrics)
+	[Header("Lesson Recommendations Display")]
+	[SerializeField] private Image forcesLessonDisplay;
+	[SerializeField] private Image forceDiagramsLessonDisplay;
+
+	private int forceCalculationBadThreshold = 3;
+	private int forceCalculationAverageThreshold = 2;
+	private int forceCalculationGoodThreshold = 1;
+	private int forceDiagramBadThreshold = 5;
+	private int forceDiagramAverageThreshold = 3;
+	private int forceDiagramGoodThreshold = 1;
+
+	protected override void UpdateFeedbackMessageDisplay(params SubActivityPerformanceMetric[] performanceMetrics)
 	{
-		int forceCalculationBadThreshold = 3;
-		int forceCalculationAverageThreshold = 2;
-		int forceCalculationGoodThreshold = 1;
-
-		int forceDiagramBadThreshold = 5;
-		int forceDiagramAverageThreshold = 3;
-		int forceDiagramGoodThreshold = 1;
-
 		// Reset feedbackText content
 		appleMotionFeedbackText.text = "";
 		rockMotionFeedbackText.text = "";
@@ -166,6 +171,43 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 					feedbackText.text += appendedfeedbackMessage;
 					break;
 			}			
+		}
+	}
+
+	protected override void UpdateFeedbackRecommendationsDisplay(params SubActivityPerformanceMetric[] performanceMetrics)
+	{
+		// Set lesson recommendations hidden/inactive first.
+		forcesLessonDisplay.gameObject.SetActive(false);
+		forceDiagramsLessonDisplay.gameObject.SetActive(false);
+
+		foreach (SubActivityPerformanceMetric metric in performanceMetrics)
+		{
+			// Determine which lesson recommendation to display
+			switch (metric.subActivityName)
+			{
+				// Use metrics for force calculation in displaying lesson recommendation
+				case "AppleForceCalculation":
+				case "RockForceCalculation":
+				case "BoatForceCalculation":
+					// Either no perfect score or doesn't have a high score result on force calculation
+					if (metric.numIncorrectAnswers > forceCalculationGoodThreshold || metric.numIncorrectAnswers != 0 || !metric.isSubActivityFinished)
+					{
+						forcesLessonDisplay.gameObject.SetActive(true);
+						forceDiagramsLessonDisplay.gameObject.SetActive(true);
+					}
+					break;
+				// Use metrics for force diagram in displaying lesson recommendation
+				case "AppleForceDiagram":
+				case "RockForceDiagram":
+				case "BoatForceDiagram":
+					// Either no perfect score or doesn't have a high score result on force diagrams
+					if (metric.numIncorrectAnswers > forceDiagramGoodThreshold || metric.numIncorrectAnswers != 0 || !metric.isSubActivityFinished)
+					{
+						forcesLessonDisplay.gameObject.SetActive(true);
+						forceDiagramsLessonDisplay.gameObject.SetActive(true);
+					}
+					break;
+			}
 		}
 	}
 }
