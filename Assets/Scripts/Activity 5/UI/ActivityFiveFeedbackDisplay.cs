@@ -15,10 +15,8 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 
 	private int forceCalculationBadThreshold = 3;
 	private int forceCalculationAverageThreshold = 2;
-	private int forceCalculationGoodThreshold = 1;
 	private int forceDiagramBadThreshold = 5;
 	private int forceDiagramAverageThreshold = 3;
-	private int forceDiagramGoodThreshold = 1;
 
 	protected override void UpdateFeedbackMessageDisplay(params SubActivityPerformanceMetric[] performanceMetrics)
 	{
@@ -115,25 +113,25 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 					
 					// Select force feedback status message to be prepended
 					string forceCalculationfeedbackStatus = "";
-					// Case 3.4: Perfect score
-					if (metric.numIncorrectAnswers == 0)
+					// Case 3.1: Bad score
+					if (metric.numIncorrectAnswers >= forceCalculationBadThreshold)
 					{
-						forceCalculationfeedbackStatus = $"<color=#FFD70E>You received a perfect score for forces.</color> ";
-					}
-					// Case 3.3: High score
-					else if (metric.numIncorrectAnswers <= forceCalculationGoodThreshold)
-					{
-						forceCalculationfeedbackStatus = $"<color=#46A028>You received a high score for forces.</color> ";
+						forceCalculationfeedbackStatus = $"<color=red>You received a bad score due to too many incorrect submissions for forces.</color> ";
 					}
 					// Case 3.2: Average score
-					else if (metric.numIncorrectAnswers <= forceCalculationAverageThreshold)
+					else if (metric.numIncorrectAnswers >= forceCalculationAverageThreshold && metric.numIncorrectAnswers < forceCalculationBadThreshold)
 					{
 						forceCalculationfeedbackStatus = $"<color=#A56340>You received an average score for forces.</color> ";
 					}
-					// Case 3.1: Bad score
-					else if (metric.numIncorrectAnswers <= forceCalculationBadThreshold)
+					// Case 3.3: High score
+					else if (metric.numIncorrectAnswers > 0 && metric.numIncorrectAnswers < forceCalculationAverageThreshold)
 					{
-						forceCalculationfeedbackStatus = $"<color=red>You received a bad score due to too many incorrect submissions for forces.</color> ";
+						forceCalculationfeedbackStatus = $"<color=#46A028>You received a high score for forces.</color> ";
+					}
+					// Case 3.4: Perfect score
+					else if (metric.numIncorrectAnswers == 0)
+					{
+						forceCalculationfeedbackStatus = $"<color=#FFD70E>You received a perfect score for forces.</color> ";
 					}
 					prependedfeedbackMessage += forceCalculationfeedbackStatus;
 
@@ -174,25 +172,25 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 
 					// Select force diagram feedback status message to be prepended
 					string forceDiagramfeedbackStatus = "";
-					// Case 3.4: Perfect score
-					if (metric.numIncorrectAnswers == 0)
+					// Case 3.1: Bad score
+					if (metric.numIncorrectAnswers >= forceDiagramBadThreshold)
 					{
-						forceDiagramfeedbackStatus = "<color=#FFD70E>You received a perfect score for force diagrams.</color>";
-					}
-					// Case 3.3: High score
-					else if (metric.numIncorrectAnswers <= forceDiagramGoodThreshold)
-					{
-						forceDiagramfeedbackStatus = "<color=#46A028>You received a high score for force diagrams.</color>";
+						forceDiagramfeedbackStatus = "<color=red>You received a bad score due to too many incorrect submissions for force diagrams.</color>";
 					}
 					// Case 3.2: Average score
-					else if (metric.numIncorrectAnswers <= forceDiagramAverageThreshold)
+					else if (metric.numIncorrectAnswers >= forceDiagramAverageThreshold && metric.numIncorrectAnswers < forceDiagramBadThreshold)
 					{
 						forceDiagramfeedbackStatus = "<color=#A56340>You received an average score for force diagrams.</color>";
 					}
-					// Case 3.1: Bad score
-					else if (metric.numIncorrectAnswers <= forceDiagramBadThreshold)
+					// Case 3.3: High score
+					else if (metric.numIncorrectAnswers > 0 && metric.numIncorrectAnswers < forceDiagramAverageThreshold)
 					{
-						forceDiagramfeedbackStatus = "<color=red>You received a bad score due to too many incorrect submissions for force diagrams.</color>";
+						forceDiagramfeedbackStatus = "<color=#46A028>You received a high score for force diagrams.</color>";
+					}
+					// Case 3.4: Perfect score
+					else if (metric.numIncorrectAnswers == 0)
+					{
+						forceDiagramfeedbackStatus = "<color=#FFD70E>You received a perfect score for force diagrams.</color>";
 					}
 					appendedfeedbackMessage += forceDiagramfeedbackStatus;
 
@@ -218,7 +216,7 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 				case "RockForceCalculation":
 				case "BoatForceCalculation":
 					// Either no perfect score, doesn't have a high score result on force calculation, or hasn't finished sub activity
-					if (metric.numIncorrectAnswers > forceCalculationGoodThreshold || !metric.isSubActivityFinished)
+					if (metric.numIncorrectAnswers > 0 || !metric.isSubActivityFinished)
 					{
 						forcesLessonDisplay.gameObject.SetActive(true);
 						forceDiagramsLessonDisplay.gameObject.SetActive(true);
@@ -229,7 +227,7 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 				case "RockForceDiagram":
 				case "BoatForceDiagram":
 					// Either no perfect score, doesn't have a high score result on force diagrams, or hasn't finished sub activity
-					if (metric.numIncorrectAnswers > forceDiagramGoodThreshold || !metric.isSubActivityFinished)
+					if (metric.numIncorrectAnswers > 0 || !metric.isSubActivityFinished)
 					{
 						forcesLessonDisplay.gameObject.SetActive(true);
 						forceDiagramsLessonDisplay.gameObject.SetActive(true);
