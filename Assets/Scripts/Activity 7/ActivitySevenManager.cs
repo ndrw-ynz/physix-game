@@ -258,14 +258,17 @@ public class ActivitySevenManager : ActivityManager
 	// Center of Mass
 	private bool isCenterOfMassCalculationFinished;
 	private int numIncorrectCenterOfMassSubmission;
+	private int numCorrectCenterOfMassSubmission;
 	private float centerOfMassDuration;
 	// Momentum Impulse Force
 	private bool isMomentumImpulseForceCalculationFinished;
 	private int numIncorrectMomentumImpulseForceSubmission;
+	private int numCorrectMomentumImpulseForceSubmission;
 	private float momentumImpulseForceDuration;
 	// Elastic Inelastic Collision
 	private bool isElasticInelasticCollisionCalculationFinished;
 	private int numIncorrectElasticInelasticCollisionSubmission;
+	private int numCorrectElasticInelasticCollisionSubmission;
 	private float elasticInelasticCollisionDuration;
 
 	protected override void Start()
@@ -381,6 +384,7 @@ public class ActivitySevenManager : ActivityManager
 		// Modify display border and text
 		if (results.isAllCorrect())
 		{
+			numCorrectCenterOfMassSubmission++;
 			currentNumCenterOfMassTests--;
 			string displayText;
 			if (currentNumCenterOfMassTests <= 0)
@@ -537,6 +541,7 @@ public class ActivitySevenManager : ActivityManager
 		{
 			if (easyResults.isAllCorrect())
 			{
+				numCorrectMomentumImpulseForceSubmission++;
 				currentNumMomentumImpulseForceTests--;
 				string displayText;
 				if (currentNumMomentumImpulseForceTests <= 0)
@@ -566,6 +571,7 @@ public class ActivitySevenManager : ActivityManager
 		{
 			if (mediumHardResults.isAllCorrect())
 			{
+				numCorrectMomentumImpulseForceSubmission++;
 				currentNumMomentumImpulseForceTests--;
 				string displayText;
 				if (currentNumMomentumImpulseForceTests <= 0)
@@ -700,6 +706,7 @@ public class ActivitySevenManager : ActivityManager
 		// Modify display border and text
 		if (results.isAllCorrect())
 		{
+			numCorrectElasticInelasticCollisionSubmission++;
 			currentNumElasticInelasticCollisionTests--;
 			string displayText;
 			if (currentNumElasticInelasticCollisionTests <= 0)
@@ -771,6 +778,34 @@ public class ActivitySevenManager : ActivityManager
 			isAccomplished: isElasticInelasticCollisionCalculationFinished,
 			numIncorrectSubmission: numIncorrectElasticInelasticCollisionSubmission,
 			duration: elasticInelasticCollisionDuration
+			);
+
+		// Update its activity feedback display (three args)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "center of mass",
+				isSubActivityFinished: isCenterOfMassCalculationFinished,
+				numIncorrectAnswers: numIncorrectCenterOfMassSubmission,
+				numCorrectAnswers: numCorrectCenterOfMassSubmission,
+				badScoreThreshold: 5,
+				averageScoreThreshold: 3
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "momentum, impulse, and net force",
+				isSubActivityFinished: isMomentumImpulseForceCalculationFinished,
+				numIncorrectAnswers: numIncorrectMomentumImpulseForceSubmission,
+				numCorrectAnswers: numCorrectMomentumImpulseForceSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "elastic and inelastic collision",
+				isSubActivityFinished: isElasticInelasticCollisionCalculationFinished,
+				numIncorrectAnswers: numIncorrectElasticInelasticCollisionSubmission,
+				numCorrectAnswers: numCorrectElasticInelasticCollisionSubmission,
+				badScoreThreshold: 5,
+				averageScoreThreshold: 3
+				)
 			);
 	}
 
