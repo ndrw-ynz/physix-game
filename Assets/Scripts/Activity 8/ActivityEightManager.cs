@@ -179,14 +179,17 @@ public class ActivityEightManager : ActivityManager
 	// Moment of Inertia
 	private bool isMomentOfInertiaCalculationFinished;
 	private int numIncorrectMomentOfInertiaSubmission;
+	private int numCorrectMomentOfInertiaSubmission;
 	private float momentOfInertiaDuration;
 	// Torque
 	private bool isTorqueCalculationFinished;
 	private int numIncorrectTorqueSubmission;
+	private int numCorrectTorqueSubmission;
 	private float torqueDuration;
 	// Equilibrium
 	private bool isEquilibriumCalculationFinished;
 	private int numIncorrectEquilibriumSubmission;
+	private int numCorrectEquilibriumSubmission;
 	private float equilibriumDuration;
 
 	protected override void Start()
@@ -348,6 +351,7 @@ public class ActivityEightManager : ActivityManager
 	{
 		if (results.isAllCorrect())
 		{
+			numCorrectMomentOfInertiaSubmission++;
 			currentNumMomentOfInertiaTests--;
 			string displayText;
 			if (currentNumMomentOfInertiaTests <= 0)
@@ -464,6 +468,7 @@ public class ActivityEightManager : ActivityManager
 	{
 		if (results.isAllCorrect())
 		{
+			numCorrectTorqueSubmission++;
 			currentNumOfTorqueTests--;
 			string displayText;
 			if (currentNumOfTorqueTests <= 0)
@@ -574,6 +579,7 @@ public class ActivityEightManager : ActivityManager
 	{
 		if (results.isAllCorrect())
 		{
+			numCorrectEquilibriumSubmission++;
 			currentNumOfEquilibriumTests--;
 			string displayText;
 			if (currentNumOfEquilibriumTests <= 0)
@@ -650,6 +656,34 @@ public class ActivityEightManager : ActivityManager
 			isAccomplished: isEquilibriumCalculationFinished,
 			numIncorrectSubmission: numIncorrectEquilibriumSubmission,
 			duration: equilibriumDuration
+			);
+
+		// Update its activity feedback display (three args)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "moment of inertia",
+				isSubActivityFinished: isMomentOfInertiaCalculationFinished,
+				numIncorrectAnswers: numIncorrectMomentOfInertiaSubmission,
+				numCorrectAnswers: numCorrectMomentOfInertiaSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "torque",
+				isSubActivityFinished: isTorqueCalculationFinished,
+				numIncorrectAnswers: numIncorrectTorqueSubmission,
+				numCorrectAnswers: numCorrectTorqueSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "equilibrium",
+				isSubActivityFinished: isEquilibriumCalculationFinished,
+				numIncorrectAnswers: numIncorrectEquilibriumSubmission,
+				numCorrectAnswers: numCorrectEquilibriumSubmission,
+				badScoreThreshold: 5,
+				averageScoreThreshold: 3
+				)
 			);
 	}
 
