@@ -217,8 +217,8 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 				case "AppleForceCalculation":
 				case "RockForceCalculation":
 				case "BoatForceCalculation":
-					// Either no perfect score or doesn't have a high score result on force calculation
-					if (metric.numIncorrectAnswers > forceCalculationGoodThreshold || metric.numIncorrectAnswers != 0 || !metric.isSubActivityFinished)
+					// Either no perfect score, doesn't have a high score result on force calculation, or hasn't finished sub activity
+					if (metric.numIncorrectAnswers > forceCalculationGoodThreshold || !metric.isSubActivityFinished)
 					{
 						forcesLessonDisplay.gameObject.SetActive(true);
 						forceDiagramsLessonDisplay.gameObject.SetActive(true);
@@ -228,8 +228,8 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 				case "AppleForceDiagram":
 				case "RockForceDiagram":
 				case "BoatForceDiagram":
-					// Either no perfect score or doesn't have a high score result on force diagrams
-					if (metric.numIncorrectAnswers > forceDiagramGoodThreshold || metric.numIncorrectAnswers != 0 || !metric.isSubActivityFinished)
+					// Either no perfect score, doesn't have a high score result on force diagrams, or hasn't finished sub activity
+					if (metric.numIncorrectAnswers > forceDiagramGoodThreshold || !metric.isSubActivityFinished)
 					{
 						forcesLessonDisplay.gameObject.SetActive(true);
 						forceDiagramsLessonDisplay.gameObject.SetActive(true);
