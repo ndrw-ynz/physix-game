@@ -74,6 +74,7 @@ public class ActivityNineManager : ActivityManager
 	// Gravity subactivity
 	private bool isGravityCalculationFinished;
 	private int numIncorrectGravitySubmission;
+	private int numCorrectGravitySubmission;
 
 	protected override void Start()
 	{
@@ -195,6 +196,7 @@ public class ActivityNineManager : ActivityManager
 	{
 		if (results.isAllCorrect())
 		{
+			numCorrectGravitySubmission++;
 			currentNumGravityTests--;
 			string displayText;
 			if (currentNumGravityTests <= 0)
@@ -250,6 +252,18 @@ public class ActivityNineManager : ActivityManager
 			isAccomplished: isGravityCalculationFinished,
 			numIncorrectSubmission: numIncorrectGravitySubmission,
 			duration: gameplayTime
+			);
+
+		// Update its activity feedback display (one arg)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "gravity",
+				isSubActivityFinished: isGravityCalculationFinished,
+				numIncorrectAnswers: numIncorrectGravitySubmission,
+				numCorrectAnswers: numCorrectGravitySubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				)
 			);
 	}
 
