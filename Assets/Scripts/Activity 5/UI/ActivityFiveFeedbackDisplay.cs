@@ -13,11 +13,6 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 	[SerializeField] private Image forcesLessonDisplay;
 	[SerializeField] private Image forceDiagramsLessonDisplay;
 
-	private int forceCalculationBadThreshold = 3;
-	private int forceCalculationAverageThreshold = 2;
-	private int forceDiagramBadThreshold = 5;
-	private int forceDiagramAverageThreshold = 3;
-
 	protected override void UpdateFeedbackMessageDisplay(params SubActivityPerformanceMetric[] performanceMetrics)
 	{
 		// Reset feedbackText content
@@ -32,26 +27,7 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 		foreach (SubActivityPerformanceMetric metric in performanceMetrics)
 		{
 			// Determine feedbackText to be modified based on the present metric
-			TextMeshProUGUI feedbackText;
-			switch (metric.subActivityName)
-			{
-				case "AppleForceCalculation":
-				case "AppleForceDiagram":
-					feedbackText = appleMotionFeedbackText;
-					break;
-				case "RockForceCalculation":
-				case "RockForceDiagram":
-					feedbackText = rockMotionFeedbackText;
-					break;
-				case "BoatForceCalculation":
-				case "BoatForceDiagram":
-					feedbackText = boatMotionFeedbackText;
-					break;
-				default:
-					feedbackText = null;
-					Debug.Log("ERROR: improper subActivityName");
-					break;
-			}
+			SelectCurrentFeedbackText(metric);
 
 			// Determine what part of the feedbackText to be modified, which can either be force calculation (prepend) or force diagram (append)
 			switch (metric.subActivityName)
@@ -83,7 +59,7 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 					{
 						caseOneOrTwoMessage = $"- You did not submit any answers for the <b><color=blue>{subActivityName}</color></b> sub activity <color=red>and have withdrawn from the activity.</color>" +
 										  " Don't give up, comrade! Review, practice, and give it another shot. Each attempt brings you closer to your goal.";
-						feedbackText.text = caseOneOrTwoMessage;
+						currentFeedbackText.text = caseOneOrTwoMessage;
 
 						// Reset temp variables
 						isCaseOne = false;
@@ -98,7 +74,7 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 						totalSubActivityAttemptsCounter += metric.numIncorrectAnswers + metric.numCorrectAnswers;
 						caseOneOrTwoMessage = $"- You attempted the <b><color=blue>{subActivityName}</color></b> sub activity <b><color=blue>{totalSubActivityAttemptsCounter}</color></b> time(s) but <color=red>didn't finish the sub activity.</color> " +
 										  "It seems you're struggling with the concept of either force or force diagrams. Review the material and give it another try.";
-						feedbackText.text = caseOneOrTwoMessage;
+						currentFeedbackText.text = caseOneOrTwoMessage;
 
 						// Reset temp variables
 						isCaseOne = false;
@@ -114,17 +90,17 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 					// Select force feedback status message to be prepended
 					string forceCalculationfeedbackStatus = "";
 					// Case 3.1: Bad score
-					if (metric.numIncorrectAnswers >= forceCalculationBadThreshold)
+					if (metric.numIncorrectAnswers >= metric.badScoreThreshold)
 					{
 						forceCalculationfeedbackStatus = $"<color=red>You received a bad score due to too many incorrect submissions for forces.</color> ";
 					}
 					// Case 3.2: Average score
-					else if (metric.numIncorrectAnswers >= forceCalculationAverageThreshold && metric.numIncorrectAnswers < forceCalculationBadThreshold)
+					else if (metric.numIncorrectAnswers >= metric.averageScoreThreshold && metric.numIncorrectAnswers < metric.badScoreThreshold)
 					{
 						forceCalculationfeedbackStatus = $"<color=#A56340>You received an average score for forces.</color> ";
 					}
 					// Case 3.3: High score
-					else if (metric.numIncorrectAnswers > 0 && metric.numIncorrectAnswers < forceCalculationAverageThreshold)
+					else if (metric.numIncorrectAnswers > 0 && metric.numIncorrectAnswers < metric.averageScoreThreshold)
 					{
 						forceCalculationfeedbackStatus = $"<color=#46A028>You received a high score for forces.</color> ";
 					}
@@ -135,10 +111,10 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 					}
 					prependedfeedbackMessage += forceCalculationfeedbackStatus;
 
-					feedbackText.text = prependedfeedbackMessage + feedbackText.text;
+					currentFeedbackText.text = prependedfeedbackMessage + currentFeedbackText.text;
 
 					// Prepend Case 3 calculation message
-					feedbackText.text = $"- You accomplished the <b><color=blue>{subActivityName}</color></b> sub activity. " + feedbackText.text;
+					currentFeedbackText.text = $"- You accomplished the <b><color=blue>{subActivityName}</color></b> sub activity. " + currentFeedbackText.text;
 					isCaseOne = false;
 					isCaseTwo = false;
 					totalSubActivityAttemptsCounter = 0;
@@ -173,17 +149,17 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 					// Select force diagram feedback status message to be prepended
 					string forceDiagramfeedbackStatus = "";
 					// Case 3.1: Bad score
-					if (metric.numIncorrectAnswers >= forceDiagramBadThreshold)
+					if (metric.numIncorrectAnswers >= metric.badScoreThreshold)
 					{
 						forceDiagramfeedbackStatus = "<color=red>You received a bad score due to too many incorrect submissions for force diagrams.</color>";
 					}
 					// Case 3.2: Average score
-					else if (metric.numIncorrectAnswers >= forceDiagramAverageThreshold && metric.numIncorrectAnswers < forceDiagramBadThreshold)
+					else if (metric.numIncorrectAnswers >= metric.averageScoreThreshold && metric.numIncorrectAnswers < metric.badScoreThreshold)
 					{
 						forceDiagramfeedbackStatus = "<color=#A56340>You received an average score for force diagrams.</color>";
 					}
 					// Case 3.3: High score
-					else if (metric.numIncorrectAnswers > 0 && metric.numIncorrectAnswers < forceDiagramAverageThreshold)
+					else if (metric.numIncorrectAnswers > 0 && metric.numIncorrectAnswers < metric.averageScoreThreshold)
 					{
 						forceDiagramfeedbackStatus = "<color=#46A028>You received a high score for force diagrams.</color>";
 					}
@@ -194,7 +170,7 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 					}
 					appendedfeedbackMessage += forceDiagramfeedbackStatus;
 
-					feedbackText.text += appendedfeedbackMessage;
+					currentFeedbackText.text += appendedfeedbackMessage;
 					break;
 			}			
 		}
@@ -203,37 +179,47 @@ public class ActivityFiveFeedbackDisplay : ActivityFeedbackDisplay
 	protected override void UpdateFeedbackRecommendationsDisplay(params SubActivityPerformanceMetric[] performanceMetrics)
 	{
 		// Set lesson recommendations hidden/inactive first.
-		forcesLessonDisplay.gameObject.SetActive(false);
-		forceDiagramsLessonDisplay.gameObject.SetActive(false);
+		HideLessonRecommendationDisplays();
 
 		foreach (SubActivityPerformanceMetric metric in performanceMetrics)
 		{
 			// Determine which lesson recommendation to display
-			switch (metric.subActivityName)
+			// Either no perfect score, doesn't have a high score result on force calculation, or hasn't finished sub activity
+			if (metric.numIncorrectAnswers >= metric.averageScoreThreshold || !metric.isSubActivityFinished)
 			{
-				// Use metrics for force calculation in displaying lesson recommendation
-				case "AppleForceCalculation":
-				case "RockForceCalculation":
-				case "BoatForceCalculation":
-					// Either no perfect score, doesn't have a high score result on force calculation, or hasn't finished sub activity
-					if (metric.numIncorrectAnswers >= forceCalculationAverageThreshold || !metric.isSubActivityFinished)
-					{
-						forcesLessonDisplay.gameObject.SetActive(true);
-						forceDiagramsLessonDisplay.gameObject.SetActive(true);
-					}
-					break;
-				// Use metrics for force diagram in displaying lesson recommendation
-				case "AppleForceDiagram":
-				case "RockForceDiagram":
-				case "BoatForceDiagram":
-					// Either no perfect score, doesn't have a high score result on force diagrams, or hasn't finished sub activity
-					if (metric.numIncorrectAnswers >= forceDiagramAverageThreshold || !metric.isSubActivityFinished)
-					{
-						forcesLessonDisplay.gameObject.SetActive(true);
-						forceDiagramsLessonDisplay.gameObject.SetActive(true);
-					}
-					break;
+				forcesLessonDisplay.gameObject.SetActive(true);
+				forceDiagramsLessonDisplay.gameObject.SetActive(true);
 			}
 		}
+	}
+
+	protected override void SelectCurrentFeedbackText(SubActivityPerformanceMetric metric)
+	{
+		switch (metric.subActivityName)
+		{
+			case "AppleForceCalculation":
+			case "AppleForceDiagram":
+				currentFeedbackText = appleMotionFeedbackText;
+				break;
+			case "RockForceCalculation":
+			case "RockForceDiagram":
+				currentFeedbackText = rockMotionFeedbackText;
+				break;
+			case "BoatForceCalculation":
+			case "BoatForceDiagram":
+				currentFeedbackText = boatMotionFeedbackText;
+				break;
+		}
+	}
+
+	protected override void SelectCurrentLessonDisplay(SubActivityPerformanceMetric metric)
+	{
+		// Will not be implemented, activity five is a special case. Either both lessons are displayed or not, thus no need to select currentLesson.
+	}
+
+	protected override void HideLessonRecommendationDisplays()
+	{
+		forcesLessonDisplay.gameObject.SetActive(false);
+		forceDiagramsLessonDisplay.gameObject.SetActive(false);
 	}
 }
