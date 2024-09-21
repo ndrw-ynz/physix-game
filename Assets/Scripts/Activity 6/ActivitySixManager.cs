@@ -81,14 +81,17 @@ public class ActivitySixManager : ActivityManager
 	private float dotProductGameplayDuration;
 	private bool isDotProductSubActivityFinished;
 	private int numIncorrectDotProductSubmission;
+	private int numCorrectDotProductSubmission;
 	// Work Sub Activity
 	private float workSubActivityGameplayDuration;
 	private bool isWorkSubActivityFinished;
 	private int numIncorrectWorkSubmission;
+	private int numCorrectWorkSubmission;
 	// Work Graph Interaction Sub Activity
 	private float workGraphSubActivityDuration;
 	private bool isWorkGraphSubActivityFinished;
 	private int numIncorrectWorkGraphSubmission;
+	private int numCorrectWorkGraphSubmission;
 
 	protected override void Start()
 	{
@@ -197,6 +200,7 @@ public class ActivitySixManager : ActivityManager
 		DotProductAnswerSubmissionResults results = ActivitySixUtilities.ValidateDotProductSubmission(answer, dotProductGivenData);
 
 		if (results.isAllCorrect()) {
+			numCorrectDotProductSubmission++;
 			currentNumDotProductTests--;
 		} else
 		{
@@ -276,7 +280,14 @@ public class ActivitySixManager : ActivityManager
 	private void CheckWorkSubActivityAnswers(WorkSubActivityAnswerSubmission answer)
 	{
 		WorkSubActivityAnswerSubmissionResults results = ActivitySixUtilities.ValidateWorkSubActivitySubmission(answer, workSubActivityGivenData);
-		if (!results.isAllCorrect()) numIncorrectWorkSubmission++;
+		if (results.isAllCorrect())
+		{
+			numCorrectWorkSubmission++;
+		} else
+		{
+			numIncorrectWorkSubmission++;
+		}
+
 		DisplayWorkSubActivitySubmissionResults(results);
 	}
 
@@ -362,8 +373,10 @@ public class ActivitySixManager : ActivityManager
 		if (result)
 		{
 			currentNumWorkGraphTests--;
+			numCorrectWorkGraphSubmission++;
 			forceDisplacementGraphData.Remove(currentGraphTypeDisplayed);
-		} else
+		}
+		else
 		{
 			numIncorrectWorkGraphSubmission++;
 		}
@@ -423,6 +436,34 @@ public class ActivitySixManager : ActivityManager
 			isAccomplished: isWorkGraphSubActivityFinished,
 			numIncorrectSubmission: numIncorrectWorkGraphSubmission,
 			duration: workGraphSubActivityDuration
+			);
+
+		// Update its activity feedback display (three args)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "dot product",
+				isSubActivityFinished: isDotProductSubActivityFinished,
+				numIncorrectAnswers: numIncorrectDotProductSubmission,
+				numCorrectAnswers: numCorrectDotProductSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "work calculation",
+				isSubActivityFinished: isWorkSubActivityFinished,
+				numIncorrectAnswers: numIncorrectWorkSubmission,
+				numCorrectAnswers: numCorrectWorkSubmission,
+				badScoreThreshold: 5,
+				averageScoreThreshold: 3
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "work graph interpretation",
+				isSubActivityFinished: isWorkGraphSubActivityFinished,
+				numIncorrectAnswers: numIncorrectWorkGraphSubmission,
+				numCorrectAnswers: numCorrectWorkGraphSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				)
 			);
 	}
 
