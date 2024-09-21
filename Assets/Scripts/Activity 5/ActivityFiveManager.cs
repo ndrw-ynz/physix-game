@@ -559,37 +559,49 @@ public class ActivityFiveManager : ActivityManager
 				subActivityName: "AppleForceDiagram",
 				isSubActivityFinished: isAppleMotionSubActivityFinished,
 				numIncorrectAnswers: numIncorrectAppleMotionForceDiagramSubmission,
-				numCorrectAnswers: numCorrectAppleMotionForceDiagramSubmission
+				numCorrectAnswers: numCorrectAppleMotionForceDiagramSubmission,
+				badScoreThreshold: 5,
+				averageScoreThreshold: 3
 				),
 			new SubActivityPerformanceMetric(
 				subActivityName: "AppleForceCalculation",
 				isSubActivityFinished: isAppleMotionSubActivityFinished,
 				numIncorrectAnswers: numIncorrectAppleMotionForceSubmission,
-				numCorrectAnswers: numCorrectAppleMotionForceSubmission
+				numCorrectAnswers: numCorrectAppleMotionForceSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
 				),
 			new SubActivityPerformanceMetric(
 				subActivityName: "RockForceDiagram",
 				isSubActivityFinished: isRockMotionSubActivityFinished,
 				numIncorrectAnswers: numIncorrectRockMotionForceDiagramSubmission,
-				numCorrectAnswers: numCorrectRockMotionForceDiagramSubmission
+				numCorrectAnswers: numCorrectRockMotionForceDiagramSubmission,
+				badScoreThreshold: 5,
+				averageScoreThreshold: 3
 				),
 			new SubActivityPerformanceMetric(
 				subActivityName: "RockForceCalculation",
 				isSubActivityFinished: isRockMotionSubActivityFinished,
 				numIncorrectAnswers: numIncorrectRockMotionForceSubmission,
-				numCorrectAnswers: numCorrectRockMotionForceSubmission
+				numCorrectAnswers: numCorrectRockMotionForceSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
 				),
 			new SubActivityPerformanceMetric(
 				subActivityName: "BoatForceDiagram",
 				isSubActivityFinished: isBoatMotionSubActivityFinished,
 				numIncorrectAnswers: numIncorrectBoatMotionForceDiagramSubmission,
-				numCorrectAnswers: numCorrectBoatMotionForceDiagramSubmission
+				numCorrectAnswers: numCorrectBoatMotionForceDiagramSubmission,
+				badScoreThreshold: 5,
+				averageScoreThreshold: 3
 				),
 			new SubActivityPerformanceMetric(
 				subActivityName: "BoatForceCalculation",
 				isSubActivityFinished: isBoatMotionSubActivityFinished,
 				numIncorrectAnswers: numIncorrectBoatMotionForceSubmission,
-				numCorrectAnswers: numCorrectBoatMotionForceSubmission
+				numCorrectAnswers: numCorrectBoatMotionForceSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
 				)
 			);
 	}
