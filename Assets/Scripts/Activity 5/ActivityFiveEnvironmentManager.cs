@@ -92,7 +92,7 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 
 		// Boat force motion environment related events
 		boatMotionView.OpenViewEvent += UpdateBoatEnvironmentStateMachine;
-		boatMotionView.QuitViewEvent += () => rockMotionEnvironmentStateMachine.TransitionToState(RockMotionEnvironmentState.None);
+		boatMotionView.QuitViewEvent += () => boatMotionEnvironmentStateMachine.TransitionToState(BoatMotionEnvironmentState.None);
 		boatForceSubmissionStatusDisplay.ProceedEvent += DequeueBoatEnvironmentStateQueue;
 		boatForceDiagramSubmissionStatusDisplay.ProceedEvent += DequeueBoatEnvironmentStateQueue;
 	}
