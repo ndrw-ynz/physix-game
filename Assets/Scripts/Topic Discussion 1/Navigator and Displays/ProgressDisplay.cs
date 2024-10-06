@@ -105,7 +105,7 @@ public class ProgressDisplay : MonoBehaviour
             Image temporaryImage = progressBarButtons[i].progressBarTempColor;
             Image finalImage = progressBarButtons[i].progressBarFinalColor;
             Color oldColor = progressBarButtons[i].progressBarFinalColor.color;
-            Color newColor = new Color(0.8339623f, 0.8339623f, 0.8339623f);
+            Color newColor = Color.white;
             ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
         else
@@ -114,7 +114,7 @@ public class ProgressDisplay : MonoBehaviour
             Image temporaryImage = progressBarButtons[i].progressBarTempColor;
             Image finalImage = progressBarButtons[i].progressBarFinalColor;
             Color oldColor = progressBarButtons[i].progressBarFinalColor.color;
-            Color newColor = Color.gray;
+            Color newColor = new Color(0.764151f, 0.764151f, 0.764151f);
             ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
     }
@@ -180,7 +180,7 @@ public class ProgressDisplay : MonoBehaviour
             else
             {
                 // Set progress bar color to light color gray
-                progressBarButtons[i].progressBarFinalColor.color = Color.gray;
+                progressBarButtons[i].progressBarFinalColor.color = new Color(0.764151f, 0.764151f, 0.764151f);
             }
         }
     }
