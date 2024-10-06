@@ -1942,7 +1942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   page: {fileID: 315810636}
-  isMarkedUnderstood: 0
+  isMarkedRead: 0
   canvasGroup: {fileID: 315810639}
 --- !u!225 &315810639
 CanvasGroup:
@@ -2858,6 +2858,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 413942950}
   m_CullTransparentMesh: 1
+--- !u!114 &421803863 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7778787147472181009, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+  m_PrefabInstance: {fileID: 1200577989}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9fd4c74137d74e48b8362f18a3ec1e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &421803864 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5979464649476981092, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+  m_PrefabInstance: {fileID: 1200577989}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &440254261
 GameObject:
   m_ObjectHideFlags: 0
@@ -3546,7 +3568,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   page: {fileID: 605383806}
-  isMarkedUnderstood: 0
+  isMarkedRead: 0
   canvasGroup: {fileID: 605383809}
 --- !u!225 &605383809
 CanvasGroup:
@@ -4110,7 +4132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   page: {fileID: 655087164}
-  isMarkedUnderstood: 0
+  isMarkedRead: 0
   canvasGroup: {fileID: 655087167}
 --- !u!225 &655087167
 CanvasGroup:
@@ -4178,7 +4200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   page: {fileID: 692835982}
-  isMarkedUnderstood: 0
+  isMarkedRead: 0
   canvasGroup: {fileID: 692835985}
 --- !u!225 &692835985
 CanvasGroup:
@@ -7446,7 +7468,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   page: {fileID: 1130456356}
-  isMarkedUnderstood: 0
+  isMarkedRead: 0
   canvasGroup: {fileID: 1130456359}
 --- !u!225 &1130456359
 CanvasGroup:
@@ -8207,6 +8229,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -0.00012207031
       objectReference: {fileID: 0}
+    - target: {fileID: 3967437627486071927, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4099780953957832981, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -8335,10 +8361,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -0.0025634766
       objectReference: {fileID: 0}
+    - target: {fileID: 7107106925991949707, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+      propertyPath: markAsReadButton
+      value: 
+      objectReference: {fileID: 421803863}
+    - target: {fileID: 7107106925991949707, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+      propertyPath: markAsNotReadButton
+      value: 
+      objectReference: {fileID: 1621724354}
     - target: {fileID: 7516363703406544057, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
       propertyPath: m_text
       value: Work, Energy, and Energy Conservation
       objectReference: {fileID: 0}
+    - target: {fileID: 7778787147472181009, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+      propertyPath: _readIndicatorButton
+      value: 
+      objectReference: {fileID: 421803864}
     - target: {fileID: 9167619652044094513, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -8353,6 +8391,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9167619652044094513, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9192754135639237163, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -9948,7 +9990,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   page: {fileID: 1507529603}
-  isMarkedUnderstood: 0
+  isMarkedRead: 0
   canvasGroup: {fileID: 1507529606}
 --- !u!225 &1507529606
 CanvasGroup:
@@ -10018,7 +10060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   page: {fileID: 1515244830}
-  isMarkedUnderstood: 0
+  isMarkedRead: 0
   canvasGroup: {fileID: 1515244833}
 --- !u!225 &1515244833
 CanvasGroup:
@@ -10803,6 +10845,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1619958718}
   m_CullTransparentMesh: 1
+--- !u!114 &1621724354 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8808759019801348803, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+  m_PrefabInstance: {fileID: 1200577989}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9fd4c74137d74e48b8362f18a3ec1e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1624055915
 GameObject:
   m_ObjectHideFlags: 0
@@ -11567,7 +11620,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   page: {fileID: 1776897680}
-  isMarkedUnderstood: 0
+  isMarkedRead: 0
   canvasGroup: {fileID: 1776897683}
 --- !u!225 &1776897683
 CanvasGroup:

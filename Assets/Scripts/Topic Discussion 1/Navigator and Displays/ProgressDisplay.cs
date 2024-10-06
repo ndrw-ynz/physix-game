@@ -29,7 +29,7 @@ public class ProgressDisplay : MonoBehaviour
         // Add listeners
         DiscussionNavigator.DiscussionPageStart += LoadProgressBars;
         DiscussionNavigator.SectorChangeEvent += UpdateIndicatorLine;
-        DiscussionNavigator.UnderstandMarkerChangeEvent += UpdateProgressBar;
+        DiscussionNavigator.ReadMarkerChangeEvent += UpdateProgressBar;
     }
 
     private void OnDisable()
@@ -37,7 +37,7 @@ public class ProgressDisplay : MonoBehaviour
         // Remove listeners
         DiscussionNavigator.DiscussionPageStart -= LoadProgressBars;
         DiscussionNavigator.SectorChangeEvent -= UpdateIndicatorLine;
-        DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdateProgressBar;
+        DiscussionNavigator.ReadMarkerChangeEvent -= UpdateProgressBar;
     }
 
     private void Update()
@@ -56,11 +56,11 @@ public class ProgressDisplay : MonoBehaviour
         for (int i = 0; i < subtopicsCount; i++)
         {
             string sectorTitle = discNavig.GetSectorTitle(i);
-            string progressCount = $"{discNavig.CountUnderstoodPages(i).ToString()}/{discNavig.CountTotalPages(i).ToString()}";
+            string progressCount = $"{discNavig.CountReadPages(i).ToString()}/{discNavig.CountTotalPages(i).ToString()}";
             GenerateProgressBarButton(i, sectorTitle, progressCount);
         }
 
-        // Load the colors based on the amount of understood pages for each progress bar
+        // Load the colors based on the amount of read pages for each progress bar
         LoadProgressBarsColors(discNavig);
     }
     private void UpdateProgressBar(DiscussionNavigator discNavig)
@@ -72,14 +72,14 @@ public class ProgressDisplay : MonoBehaviour
         // Activate the temporary background color of the progress bar to give way for the color transition
         progressBarButtons[i].progressBarTempColor.gameObject.SetActive(true);
 
-        // Get the values for understood pages and total pages
-        double currUnderstoodPagesCount = discNavig.CountUnderstoodPages(i);
+        // Get the values for read pages and total pages
+        double currReadPagesCount = discNavig.CountReadPages(i);
         double currSectorPagesCount = discNavig.CountTotalPages(i);
-        // Assign text value for understood pages and total pages to the progress bar
-        progressBarButtons[i].progressCountText.text = $"{currUnderstoodPagesCount}/{currSectorPagesCount}";
+        // Assign text value for read pages and total pages to the progress bar
+        progressBarButtons[i].progressCountText.text = $"{currReadPagesCount}/{currSectorPagesCount}";
 
-        // Calculate the percentage of understood pages
-        double currProgressBarPercentage = currUnderstoodPagesCount / currSectorPagesCount * 100;
+        // Calculate the percentage of read pages
+        double currProgressBarPercentage = currReadPagesCount / currSectorPagesCount * 100;
 
         if (currProgressBarPercentage == 100)
         {
@@ -99,7 +99,7 @@ public class ProgressDisplay : MonoBehaviour
             Color newColor = new Color(0.9546386f, 1f, 0.5254902f);
             ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
-        else if (currUnderstoodPagesCount > 0)
+        else if (currReadPagesCount > 0)
         {
             // Transition progress bar color to light color gray
             Image temporaryImage = progressBarButtons[i].progressBarTempColor;
@@ -161,7 +161,7 @@ public class ProgressDisplay : MonoBehaviour
             progressBarButtons[i].progressBarTempColor.gameObject.SetActive(false);
 
             // Calculate progress percentage
-            double currProgressBarPercentage = discNavig.CountUnderstoodPages(i) / discNavig.CountTotalPages(i) * 100;
+            double currProgressBarPercentage = discNavig.CountReadPages(i) / discNavig.CountTotalPages(i) * 100;
             if (currProgressBarPercentage == 100)
             {
                 // Set progress bar color to light color green
@@ -172,7 +172,7 @@ public class ProgressDisplay : MonoBehaviour
                 // Set progress bar color to light color yellow
                 progressBarButtons[i].progressBarFinalColor.color = new Color(0.9546386f, 1f, 0.5254902f);
             }
-            else if (discNavig.CountUnderstoodPages(i) > 0)
+            else if (discNavig.CountReadPages(i) > 0)
             {
                 // Set progress bar color to light color gray
                 progressBarButtons[i].progressBarFinalColor.color = new Color(0.8339623f, 0.8339623f, 0.8339623f);

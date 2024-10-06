@@ -5,6 +5,6 @@ public class Page : MonoBehaviour
 {
     [Header("Page Properties")]
     public GameObject page;
-    public bool isMarkedUnderstood;
+    public bool isMarkedRead;
     public CanvasGroup canvasGroup;
 }
