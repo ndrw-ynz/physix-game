@@ -5,7 +5,7 @@ public class ProgressDisplay : MonoBehaviour
 {
     [Header("Progress Bar Button Properties")]
     [SerializeField] private ProgressBarButton progressBarButtonPrefab;
-    [SerializeField] private HorizontalLayoutGroup progressBarButtonGroup;
+    [SerializeField] private VerticalLayoutGroup progressBarButtonGroup;
 
     // Progress bar animation properties
     private Image _temporaryImage;
