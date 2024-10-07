@@ -7,21 +7,21 @@ public class ButtonsDisplay : MonoBehaviour
     [SerializeField] private PagePrevNextButton nextPageButton;
     [SerializeField] private SectorPrevNextButton prevSectorButton;
     [SerializeField] private SectorPrevNextButton nextSectorButton;
-    [Header("Understood Indicator Buttons")]
-    [SerializeField] private UnderstoodIndicatorButton markAsUnderstoodButton;
-    [SerializeField] private UnderstoodIndicatorButton markAsNotYetUnderstoodButton;
+    [Header("Read Indicator Buttons")]
+    [SerializeField] private ReadIndicatorButton markAsReadButton;
+    [SerializeField] private ReadIndicatorButton markAsNotReadButton;
 
     private void OnEnable()
     {
         // Add listeners
         DiscussionNavigator.PageChangeEvent += ChangePrevNextButtonsState;
-        DiscussionNavigator.UnderstandMarkerChangeEvent += ChangeUnderstoodIndicatorButtonsState;
+        DiscussionNavigator.ReadMarkerChangeEvent += ChangeReadIndicatorButtonsState;
     }
     private void OnDisable()
     {
         // Remove listeners
         DiscussionNavigator.PageChangeEvent -= ChangePrevNextButtonsState;
-        DiscussionNavigator.UnderstandMarkerChangeEvent -= ChangeUnderstoodIndicatorButtonsState;
+        DiscussionNavigator.ReadMarkerChangeEvent -= ChangeReadIndicatorButtonsState;
     }
 
     #region Previous and Next Buttons
@@ -136,20 +136,20 @@ public class ButtonsDisplay : MonoBehaviour
     }
     #endregion
 
-    #region Understood Indicator Buttons
-    public void ChangeUnderstoodIndicatorButtonsState(DiscussionNavigator discNav)
+    #region Read Indicator Buttons
+    public void ChangeReadIndicatorButtonsState(DiscussionNavigator discNav)
     {
-        if (!discNav.CurrentPageIsMarkedUnderstood())
+        if (!discNav.CurrentPageIsMarkedRead())
         {
-            // Activate the mark as understood button
-            markAsUnderstoodButton.gameObject.SetActive(true);
-            markAsNotYetUnderstoodButton.gameObject.SetActive(false);
+            // Activate the mark as read button
+            markAsReadButton.gameObject.SetActive(true);
+            markAsNotReadButton.gameObject.SetActive(false);
         }
         else
         {
-            // Activate the mark as not yet understood button
-            markAsUnderstoodButton.gameObject.SetActive(false);
-            markAsNotYetUnderstoodButton.gameObject.SetActive(true);
+            // Activate the mark as not yet read button
+            markAsReadButton.gameObject.SetActive(false);
+            markAsNotReadButton.gameObject.SetActive(true);
         }
     }
     #endregion

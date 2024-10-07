@@ -23,7 +23,7 @@ public class PageJumpDisplay : MonoBehaviour
         DiscussionNavigator.DiscussionPageStart += LoadPageJumpButtons;
         DiscussionNavigator.SectorChangeEvent += LoadPageJumpButtons;
         DiscussionNavigator.PageChangeEvent += UpdatePageJumpButtonOutline;
-        DiscussionNavigator.UnderstandMarkerChangeEvent += UpdatePageJumpButtonColors;
+        DiscussionNavigator.ReadMarkerChangeEvent += UpdatePageJumpButtonColors;
     }
 
     private void OnDisable()
@@ -32,7 +32,7 @@ public class PageJumpDisplay : MonoBehaviour
         DiscussionNavigator.DiscussionPageStart -= LoadPageJumpButtons;
         DiscussionNavigator.SectorChangeEvent -= LoadPageJumpButtons;
         DiscussionNavigator.PageChangeEvent -= UpdatePageJumpButtonOutline;
-        DiscussionNavigator.UnderstandMarkerChangeEvent -= UpdatePageJumpButtonColors;
+        DiscussionNavigator.ReadMarkerChangeEvent -= UpdatePageJumpButtonColors;
     }
 
     private void Update()
@@ -86,10 +86,10 @@ public class PageJumpDisplay : MonoBehaviour
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
-        // Loop through the button list and change their colors to green if page is marked as understood
+        // Loop through the button list and change their colors to green if page is marked as read
         for (int i = 0; i < pageJumpButtons.Length; i++)
         {
-            if (discNav.IsPageMarkedUnderstood(i))
+            if (discNav.IsPageMarkedRead(i))
             {
                 pageJumpButtons[i].buttonColor.color = new Color(0.51f, 1, 0.22f); // Darker green color
             }

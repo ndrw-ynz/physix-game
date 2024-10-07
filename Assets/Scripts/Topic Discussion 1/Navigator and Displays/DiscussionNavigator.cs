@@ -8,16 +8,16 @@ public enum Direction
     PreviousSector,
     NextSector
 }
-public enum UnderstoodState
+public enum ReadState
 {
-    Understood,
-    NotYetUnderstood
+    Read,
+    NotRead
 }
 public class DiscussionNavigator : MonoBehaviour
 {
     public static event Action<DiscussionNavigator> PageChangeEvent;
     public static event Action<DiscussionNavigator> SectorChangeEvent;
-    public static event Action<DiscussionNavigator> UnderstandMarkerChangeEvent;
+    public static event Action<DiscussionNavigator> ReadMarkerChangeEvent;
     public static event Action<DiscussionNavigator> DiscussionPageStart;
 
     [Header("Sub Topics Sectors")]
@@ -40,7 +40,7 @@ public class DiscussionNavigator : MonoBehaviour
         SectorPrevNextButton.SectorPrevNextClickEvent += ChangePage;
         ProgressBarButton.ProgressBarClickEvent += JumpToSector;
         PageJumpButton.PageCircleClick += JumpToPage;
-        UnderstoodIndicatorButton.UnderstoodIndicatorClickEvent += ChangeUnderstoodState;
+        ReadIndicatorButton.ReadIndicatorClickEvent += ChangeReadState;
 
         // Setup display scripts
         DiscussionPageStart?.Invoke(this);
@@ -56,7 +56,7 @@ public class DiscussionNavigator : MonoBehaviour
         SectorPrevNextButton.SectorPrevNextClickEvent -= ChangePage;
         ProgressBarButton.ProgressBarClickEvent -= JumpToSector;
         PageJumpButton.PageCircleClick -= JumpToPage;
-        UnderstoodIndicatorButton.UnderstoodIndicatorClickEvent -= ChangeUnderstoodState;
+        ReadIndicatorButton.ReadIndicatorClickEvent -= ChangeReadState;
     }
 
     private void Update()
@@ -73,7 +73,7 @@ public class DiscussionNavigator : MonoBehaviour
 
         PageChangeEvent?.Invoke(this);
         SectorChangeEvent?.Invoke(this);
-        UnderstandMarkerChangeEvent?.Invoke(this);
+        ReadMarkerChangeEvent?.Invoke(this);
     }
     private void ChangePage(Direction direction)
     {
@@ -87,7 +87,7 @@ public class DiscussionNavigator : MonoBehaviour
                 ActivatePageAnimation(subTopicsList[_currentSectorIndex].pages[_currentPageIndex]);
 
                 PageChangeEvent?.Invoke(this);
-                UnderstandMarkerChangeEvent?.Invoke(this);
+                ReadMarkerChangeEvent?.Invoke(this);
                 break;
 
             case Direction.NextPage:
@@ -97,7 +97,7 @@ public class DiscussionNavigator : MonoBehaviour
                 ActivatePageAnimation(subTopicsList[_currentSectorIndex].pages[_currentPageIndex]);
 
                 PageChangeEvent?.Invoke(this);
-                UnderstandMarkerChangeEvent?.Invoke(this);
+                ReadMarkerChangeEvent?.Invoke(this);
                 break;
 
             case Direction.PreviousSector:
@@ -113,7 +113,7 @@ public class DiscussionNavigator : MonoBehaviour
 
                 PageChangeEvent?.Invoke(this);
                 SectorChangeEvent?.Invoke(this);
-                UnderstandMarkerChangeEvent?.Invoke(this);
+                ReadMarkerChangeEvent?.Invoke(this);
                 break;
 
             case Direction.NextSector:
@@ -129,7 +129,7 @@ public class DiscussionNavigator : MonoBehaviour
 
                 PageChangeEvent?.Invoke(this);
                 SectorChangeEvent?.Invoke(this);
-                UnderstandMarkerChangeEvent?.Invoke(this);
+                ReadMarkerChangeEvent?.Invoke(this);
                 break;
         }
     }
@@ -150,7 +150,7 @@ public class DiscussionNavigator : MonoBehaviour
 
             PageChangeEvent?.Invoke(this);
             SectorChangeEvent?.Invoke(this);
-            UnderstandMarkerChangeEvent?.Invoke(this);
+            ReadMarkerChangeEvent?.Invoke(this);
         }
     }
     public void JumpToPage(int pageIndex)
@@ -165,12 +165,12 @@ public class DiscussionNavigator : MonoBehaviour
             ActivatePageAnimation(subTopicsList[_currentSectorIndex].pages[_currentPageIndex]);
 
             PageChangeEvent?.Invoke(this);
-            UnderstandMarkerChangeEvent?.Invoke(this);
+            ReadMarkerChangeEvent?.Invoke(this);
         }
     }
     #endregion
 
-    #region Private Classes Used For [Sector and Page Navigation]. Open/Close of Pages and Changing Understood Indicator States
+    #region Private Classes Used For [Sector and Page Navigation]. Open/Close of Pages and Changing Read Indicator States
     private void CloseCurrentPage()
     {
         // Closes the current page
@@ -193,20 +193,20 @@ public class DiscussionNavigator : MonoBehaviour
             }
         }
     }
-    private void ChangeUnderstoodState(UnderstoodState understoodState)
+    private void ChangeReadState(ReadState readState)
     {
-        switch (understoodState)
+        switch (readState)
         {
-            case UnderstoodState.Understood:
-                // Set page to understood
-                subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood = true;
-                UnderstandMarkerChangeEvent?.Invoke(this);
+            case ReadState.Read:
+                // Set page to read
+                subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedRead = true;
+                ReadMarkerChangeEvent?.Invoke(this);
                 break;
 
-            case UnderstoodState.NotYetUnderstood:
-                // Set page to not yet understood
-                subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood = false;
-                UnderstandMarkerChangeEvent?.Invoke(this);
+            case ReadState.NotRead:
+                // Set page to not yet read
+                subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedRead = false;
+                ReadMarkerChangeEvent?.Invoke(this);
                 break;
         }
     }
@@ -238,20 +238,20 @@ public class DiscussionNavigator : MonoBehaviour
     #endregion
 
     #region Counting Functions Used Outside Script
-    public double CountUnderstoodPages(int sectorIndex)
+    public double CountReadPages(int sectorIndex)
     {
-        // Count the understood pages of a given sector
-        double understoodPages = 0;
+        // Count the read pages of a given sector
+        double readPages = 0;
         for (int i = 0; i < subTopicsList[sectorIndex].pages.Count; i++)
         {
-            bool isPageUnderstood = subTopicsList[sectorIndex].pages[i].isMarkedUnderstood;
+            bool isPageRead = subTopicsList[sectorIndex].pages[i].isMarkedRead;
 
-            if (isPageUnderstood)
+            if (isPageRead)
             {
-                understoodPages++;
+                readPages++;
             }
         }
-        return understoodPages;
+        return readPages;
     }
     public double CountTotalPages(int sectorIndex)
     {
@@ -260,16 +260,16 @@ public class DiscussionNavigator : MonoBehaviour
     }
     #endregion
 
-    #region Page's Understood Checkers for Outside Script
-    public bool CurrentPageIsMarkedUnderstood()
+    #region Page's Read Checkers for Outside Script
+    public bool CurrentPageIsMarkedRead()
     {
-        // Check if the current page is marked as understood or not
-        return subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedUnderstood;
+        // Check if the current page is marked as read or not
+        return subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedRead;
     }
-    public bool IsPageMarkedUnderstood(int pageIndex)
+    public bool IsPageMarkedRead(int pageIndex)
     {
-        // Check if the given page is marked as understood or not
-        return subTopicsList[_currentSectorIndex].pages[pageIndex].isMarkedUnderstood;
+        // Check if the given page is marked as read or not
+        return subTopicsList[_currentSectorIndex].pages[pageIndex].isMarkedRead;
     }
     #endregion
 
