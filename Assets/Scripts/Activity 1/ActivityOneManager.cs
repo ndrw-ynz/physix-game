@@ -1,11 +1,69 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
-public class ActivityOneManager : MonoBehaviour
+public class ActivityOneManager : ActivityManager
 {
-    [SerializeField] private InputReader _input;
+	public static Difficulty difficultyConfiguration;
+
+	[Header("Level Data - Scientific Notation (SN)")]
+	[SerializeField] private ScientificNotationSubActivitySO SNLevelOne;
+	[SerializeField] private ScientificNotationSubActivitySO SNLevelTwo;
+	[SerializeField] private ScientificNotationSubActivitySO SNLevelThree;
+	private ScientificNotationSubActivitySO currentSNLevel;
+
+    [Header("Handlers")]
+    [SerializeField] private ContainerSelectionHandler containerSelectionHandler;
+
+	[Header("Views")]
+	[SerializeField] private ContainerPickerView containerPickerView;
+
+	// Variables for keeping track of current number of tests
+	private int currentNumSNTests;
+
+
+	protected override void Start()
+	{
+		base.Start();
+
+		ConfigureLevelData(Difficulty.Easy);
+
+		// Initialize given values
+		containerSelectionHandler.SetupContainerValues(currentSNLevel);
+
+		// Setting number of tests
+		currentNumSNTests = currentSNLevel.numberOfTests;
+	}
+
+	private void ConfigureLevelData(Difficulty difficulty)
+	{
+		difficultyConfiguration = difficulty;
+
+		switch (difficulty)
+		{
+			case Difficulty.Easy:
+				currentSNLevel = SNLevelOne;
+				break;
+			case Difficulty.Medium:
+				currentSNLevel = SNLevelTwo;
+				break;
+			case Difficulty.Hard:
+				currentSNLevel = SNLevelThree;
+				break;
+		}
+	}
+
+	#region Scientific Notation
+
+	#endregion
+
+	public override void DisplayPerformanceView()
+	{
+		return;
+	}
+
+	// --  OLD CODE --
+	// -- REMOVE AFTER REFACTORING WHOLE SCRIPT -- 
+
+	/*[SerializeField] private InputReader _input;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private ScientificNotationSO level1;
 
@@ -425,5 +483,5 @@ public class ActivityOneManager : MonoBehaviour
             Debug.Log("Errors answer is incorrect.");
             numIncorrectErrorsSubmission++;
         }
-    }
+    }*/
 }
