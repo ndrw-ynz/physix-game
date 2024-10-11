@@ -15,6 +15,7 @@ public class ActivityOneManager : ActivityManager
 
 	[Header("Views")]
 	[SerializeField] private ContainerPickerView containerPickerView;
+    [SerializeField] private ScientificNotationView scientificNotationView;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumSNTests;
@@ -26,11 +27,17 @@ public class ActivityOneManager : ActivityManager
 
 		ConfigureLevelData(Difficulty.Easy);
 
+		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => containerPickerView.UpdateContainerDisplay(boxContainer);
+		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => scientificNotationView.UpdateScientificNotationView(boxContainer);
+
 		// Initialize given values
 		containerSelectionHandler.SetupContainerValues(currentSNLevel);
 
 		// Setting number of tests
 		currentNumSNTests = currentSNLevel.numberOfTests;
+
+        // Setup views
+        scientificNotationView.UpdateNumberOfContainersTextDisplay(0, currentNumSNTests);
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
