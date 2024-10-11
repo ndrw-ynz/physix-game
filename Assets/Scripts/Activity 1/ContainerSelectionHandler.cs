@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ContainerSelectionHandler : MonoBehaviour
 {
-	public event Action<BoxContainer?> UpdateSelectedContainerEvent;
+	public event Action<BoxContainer> UpdateSelectedContainerEvent;
 
 	[SerializeField] private Camera containerAreaCamera;
 

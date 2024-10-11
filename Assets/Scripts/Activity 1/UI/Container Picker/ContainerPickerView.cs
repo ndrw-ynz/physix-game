@@ -7,18 +7,11 @@ public class ContainerPickerView : MonoBehaviour
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
 
-	[SerializeField] private ContainerSelectionHandler containerSelectionHandler;
-
 	[Header("Container Display Components")]
 	[SerializeField] private TextMeshProUGUI containerValueText;
 	[SerializeField] private GameObject displayedContainerObject;
 
-	private void Start()
-	{
-		containerSelectionHandler.UpdateSelectedContainerEvent += UpdateContainerDisplay;
-	}
-
-	private void UpdateContainerDisplay(BoxContainer? boxContainer)
+	public void UpdateContainerDisplay(BoxContainer boxContainer)
 	{
 		if (boxContainer == null)
 		{
