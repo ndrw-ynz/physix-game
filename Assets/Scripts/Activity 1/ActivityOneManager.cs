@@ -1,8 +1,13 @@
+using System;
+using System.Xml.Linq;
 using UnityEngine;
 
 public class ActivityOneManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
+
+	public event Action SNRoomClearEvent;
+	public event Action SNCorrectAnswerEvent;
 
 	[Header("Level Data - Scientific Notation (SN)")]
 	[SerializeField] private ScientificNotationSubActivitySO SNLevelOne;
@@ -23,6 +28,12 @@ public class ActivityOneManager : ActivityManager
 	// Variables for keeping track of current number of tests
 	private int currentNumSNTests;
 
+	// Gameplay performance metrics variables
+	// Scientific Notation Sub Activity
+	private float SNGameplayDuration;
+	private bool isSNSubActivityFinished;
+	private int numIncorrectSNSubmission;
+	private int numCorrectSNSubmission;
 
 	protected override void Start()
 	{
@@ -33,6 +44,7 @@ public class ActivityOneManager : ActivityManager
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => containerPickerView.UpdateContainerDisplay(boxContainer);
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => scientificNotationView.UpdateScientificNotationView(boxContainer);
 		scientificNotationView.SubmitAnswerEvent += CheckScientificNotationAnswer;
+		SNSubmissionStatusDisplay.ProceedEvent += UpdateSNViewState;
 
 
 		// Initialize given values
@@ -70,7 +82,17 @@ public class ActivityOneManager : ActivityManager
         BoxContainer selectedContainer = containerSelectionHandler.GetSelectedContainer();
 		ScientificNotationAnswerSubmissionResults results = ActivityOneUtilities.ValidateScientificNotationSubmission(answer, selectedContainer.numericalValue, selectedContainer.unitOfMeasurement);
 
-        DisplaySNSubmissionResults(results);
+		if (results.isAllCorrect())
+		{
+			numCorrectSNSubmission++;
+			currentNumSNTests--;
+		}
+		else
+		{
+			numIncorrectSNSubmission++;
+		}
+
+		DisplaySNSubmissionResults(results);
 	}
 
 	private void DisplaySNSubmissionResults(ScientificNotationAnswerSubmissionResults results)
@@ -87,6 +109,23 @@ public class ActivityOneManager : ActivityManager
 		SNSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
 
 		SNSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateSNViewState()
+	{
+		if (currentNumSNTests > 0)
+		{
+			SNCorrectAnswerEvent.Invoke();
+            scientificNotationView.UpdateNumberOfContainersTextDisplay(currentNumSNTests, currentSNLevel.numberOfTests);
+			scientificNotationView.UpdateScientificNotationView(containerSelectionHandler.GetSelectedContainer());
+		}
+		else
+		{
+            isSNSubActivityFinished = true;
+            SNRoomClearEvent?.Invoke();
+		}
+		containerPickerView.UpdateContainerDisplay(null);
+		scientificNotationView.gameObject.SetActive(false);
 	}
 
 	#endregion
