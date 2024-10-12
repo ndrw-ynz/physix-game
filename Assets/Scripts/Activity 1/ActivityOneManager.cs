@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Xml.Linq;
 using UnityEngine;
 
@@ -21,12 +22,15 @@ public class ActivityOneManager : ActivityManager
 	[Header("Views")]
 	[SerializeField] private ContainerPickerView containerPickerView;
     [SerializeField] private ScientificNotationView scientificNotationView;
+    [SerializeField] private VarianceView varianceView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private SNSubmissionStatusDisplay SNSubmissionStatusDisplay;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumSNTests;
+
+    private List<BoxContainer> solvedBoxContainers;
 
 	// Gameplay performance metrics variables
 	// Scientific Notation Sub Activity
@@ -49,6 +53,7 @@ public class ActivityOneManager : ActivityManager
 
 		// Initialize given values
 		containerSelectionHandler.SetupContainerValues(currentSNLevel);
+        solvedBoxContainers = new List<BoxContainer>();
 
 		// Setting number of tests
 		currentNumSNTests = currentSNLevel.numberOfTests;
@@ -86,6 +91,7 @@ public class ActivityOneManager : ActivityManager
 		{
 			numCorrectSNSubmission++;
 			currentNumSNTests--;
+            solvedBoxContainers.Add(selectedContainer);
 		}
 		else
 		{
@@ -123,6 +129,7 @@ public class ActivityOneManager : ActivityManager
 		{
             isSNSubActivityFinished = true;
             SNRoomClearEvent?.Invoke();
+            varianceView.SetupVarianceView(solvedBoxContainers);
 		}
 		containerPickerView.UpdateContainerDisplay(null);
 		scientificNotationView.gameObject.SetActive(false);
