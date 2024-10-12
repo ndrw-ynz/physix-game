@@ -1,12 +1,27 @@
 using System;
-using System.Xml.Linq;
 using TMPro;
 using UnityEngine;
+
+public class ScientificNotationAnswerSubmission
+{
+	public float? coefficientValue;
+	public float? exponentValue;
+	
+	public ScientificNotationAnswerSubmission(
+		float? coefficientValue,
+		float? exponentValue
+		)
+	{
+		this.coefficientValue = coefficientValue;
+		this.exponentValue = exponentValue;
+	}
+}
 
 public class ScientificNotationView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
+	public event Action<ScientificNotationAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Display Text")]
 	[SerializeField] private TextMeshProUGUI numberOfContainersText;
@@ -51,10 +66,19 @@ public class ScientificNotationView : MonoBehaviour
 		exponentInputField.text = "0";
 	}
 
+	public void OnSubmitButtonClick()
+	{
+		ScientificNotationAnswerSubmission submission = new ScientificNotationAnswerSubmission(
+			coefficientValue: float.Parse(coefficientInputField.text),
+			exponentValue: float.Parse(exponentInputField.text)
+			);
+
+		SubmitAnswerEvent?.Invoke(submission);
+	}
+
 	public void OnQuitButtonClick()
 	{
 		gameObject.SetActive(false);
 		QuitViewEvent?.Invoke();
 	}
-
 }
