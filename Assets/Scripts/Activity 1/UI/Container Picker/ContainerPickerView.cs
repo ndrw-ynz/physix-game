@@ -9,19 +9,10 @@ public class ContainerPickerView : MonoBehaviour
 
 	[Header("Container Display Components")]
 	[SerializeField] private TextMeshProUGUI containerValueText;
-	[SerializeField] private GameObject displayedContainerObject;
 
 	public void UpdateContainerDisplay(BoxContainer boxContainer)
 	{
-		if (boxContainer == null)
-		{
-			containerValueText.text = "";
-			displayedContainerObject.gameObject.SetActive(false);
-		} else
-		{
-			containerValueText.text = $"{boxContainer.measurementText.text}";
-			displayedContainerObject.gameObject.SetActive(true);
-		}
+		containerValueText.text = boxContainer == null ? "" : $"{boxContainer.measurementText.text}";
 	}
 
 	private void OnEnable()
