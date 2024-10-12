@@ -17,6 +17,9 @@ public class ActivityOneManager : ActivityManager
 	[SerializeField] private ContainerPickerView containerPickerView;
     [SerializeField] private ScientificNotationView scientificNotationView;
 
+	[Header("Submission Status Displays")]
+	[SerializeField] private SNSubmissionStatusDisplay SNSubmissionStatusDisplay;
+
 	// Variables for keeping track of current number of tests
 	private int currentNumSNTests;
 
@@ -66,8 +69,24 @@ public class ActivityOneManager : ActivityManager
     {
         BoxContainer selectedContainer = containerSelectionHandler.GetSelectedContainer();
 		ScientificNotationAnswerSubmissionResults results = ActivityOneUtilities.ValidateScientificNotationSubmission(answer, selectedContainer.numericalValue, selectedContainer.unitOfMeasurement);
-        Debug.Log(results.isCoefficientValueCorrect);
-        Debug.Log(results.isExponentValueCorrect);
+
+        DisplaySNSubmissionResults(results);
+	}
+
+	private void DisplaySNSubmissionResults(ScientificNotationAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			SNSubmissionStatusDisplay.SetSubmissionStatus(true, "Great job! Your calculations are correct. Making containers for ejection.");
+		}
+		else
+		{
+			SNSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+		}
+
+		SNSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+
+		SNSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
 	#endregion
