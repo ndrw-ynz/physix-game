@@ -12,10 +12,12 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	[Header("Views")]
 	[SerializeField] private ContainerPickerView containerPickerView;
 	[SerializeField] private ScientificNotationView scientificNotationView;
+	[SerializeField] private VarianceView varianceView;
 
 	[Header("Environment Cameras")]
 	[SerializeField] private Camera containerEnvironmentCamera;
 	[SerializeField] private Camera SNRoomEnvironmentCamera;
+	[SerializeField] private Camera varianceRoomEnvironmentCamera;
 
 	[Header("Scientific Notation Terminal Area Game Objects")]
 	[SerializeField] private InteractableViewOpenerObject containerPickerControlPanel;
@@ -31,6 +33,9 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 
 		scientificNotationView.OpenViewEvent += () => SetSNRoomAreaEnvironmentState(true);
 		scientificNotationView.QuitViewEvent += () => SetSNRoomAreaEnvironmentState(false);
+
+		varianceView.OpenViewEvent += () => SetVarianceRoomAreaEnvironmentState(true);
+		varianceView.QuitViewEvent += () => SetVarianceRoomAreaEnvironmentState(false);
 
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => displayedContainerObject.SetActive(boxContainer != null);
 
@@ -69,5 +74,13 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 		scientificNotationTransitionBarrier.gameObject.SetActive(false);
 	}
 
+	#endregion
+
+	#region Variance Terminal Room
+	private void SetVarianceRoomAreaEnvironmentState(bool isActive)
+	{
+		SetPlayerActivityState(!isActive);
+		varianceRoomEnvironmentCamera.gameObject.SetActive(isActive);
+	}
 	#endregion
 }
