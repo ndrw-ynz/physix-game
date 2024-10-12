@@ -232,8 +232,10 @@ public class DiscussionNavigator : MonoBehaviour
             else
             {
                 _animatePage = false;
+                _page.canvasGroup.alpha = 1;
             }
         }
+        
     }
     #endregion
 
