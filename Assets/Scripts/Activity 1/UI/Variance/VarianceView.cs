@@ -14,6 +14,15 @@ public class VarianceView : MonoBehaviour
 	[Header("Prefabs")]
 	[SerializeField] private GivenVariableDisplay givenVariableDisplayPrefab;
 
+	[Header("Calculation Page List")]
+	[SerializeField] private List<GameObject> calculationPages;
+
+	[Header("Interactive Buttons")]
+	[SerializeField] private Button leftPageButton;
+	[SerializeField] private Button rightPageButton;
+
+	private int currentPageIndex;
+
 	public void SetupVarianceView(List<BoxContainer> boxContainerList)
 	{
 		for (int i = 0; i < boxContainerList.Count; i++)
@@ -26,6 +35,32 @@ public class VarianceView : MonoBehaviour
 	private void OnEnable()
 	{
 		OpenViewEvent?.Invoke();
+	}
+
+	public void OnLeftPageButtonClick()
+	{
+		calculationPages[currentPageIndex].gameObject.SetActive(false);
+		currentPageIndex--;
+		calculationPages[currentPageIndex].gameObject.SetActive(true);
+
+		if (currentPageIndex <= 0)
+		{
+			leftPageButton.gameObject.SetActive(false);
+		}
+		rightPageButton.gameObject.SetActive(true);
+	}
+
+	public void OnRightPageButtonClick()
+	{
+		calculationPages[currentPageIndex].gameObject.SetActive(false);
+		currentPageIndex++;
+		calculationPages[currentPageIndex].gameObject.SetActive(true);
+
+		if (currentPageIndex >= calculationPages.Count-1)
+		{
+			rightPageButton.gameObject.SetActive(false);
+		}
+		leftPageButton.gameObject.SetActive(true);
 	}
 
 	public void OnQuitButtonClick()
