@@ -113,9 +113,9 @@ public class ActivityOneManager : ActivityManager
 
 	private void UpdateSNViewState()
 	{
+		SNCorrectAnswerEvent.Invoke();
 		if (currentNumSNTests > 0)
 		{
-			SNCorrectAnswerEvent.Invoke();
             scientificNotationView.UpdateNumberOfContainersTextDisplay(currentNumSNTests, currentSNLevel.numberOfTests);
 			scientificNotationView.UpdateScientificNotationView(containerSelectionHandler.GetSelectedContainer());
 		}

@@ -92,9 +92,9 @@ public class ContainerSelectionHandler : MonoBehaviour
 		return null;
 	}
 
-	public void DestroySelectedContainer()
+	public void ClearSelectedContainer()
 	{
-		Destroy(selectedContainer.gameObject);
+		selectedContainer.gameObject.SetActive(false);
 		selectedContainer = null;
 	}
 }

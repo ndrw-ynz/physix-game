@@ -53,7 +53,7 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 
 	private void ResetSNRoomAreaEnvironmentState()
 	{
-		containerSelectionHandler.DestroySelectedContainer();
+		containerSelectionHandler.ClearSelectedContainer();
 		SetSNRoomAreaEnvironmentState(false);
 		displayedContainerObject.SetActive(false);
 	}
