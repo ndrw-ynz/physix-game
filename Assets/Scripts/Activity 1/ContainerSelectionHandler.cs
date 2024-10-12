@@ -91,4 +91,10 @@ public class ContainerSelectionHandler : MonoBehaviour
 		}
 		return null;
 	}
+
+	public void DestroySelectedContainer()
+	{
+		Destroy(selectedContainer.gameObject);
+		selectedContainer = null;
+	}
 }
