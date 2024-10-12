@@ -29,6 +29,8 @@ public class ActivityOneManager : ActivityManager
 
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => containerPickerView.UpdateContainerDisplay(boxContainer);
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => scientificNotationView.UpdateScientificNotationView(boxContainer);
+		scientificNotationView.SubmitAnswerEvent += CheckScientificNotationAnswer;
+
 
 		// Initialize given values
 		containerSelectionHandler.SetupContainerValues(currentSNLevel);
@@ -59,6 +61,14 @@ public class ActivityOneManager : ActivityManager
 	}
 
 	#region Scientific Notation
+
+    private void CheckScientificNotationAnswer(ScientificNotationAnswerSubmission answer)
+    {
+        BoxContainer selectedContainer = containerSelectionHandler.GetSelectedContainer();
+		ScientificNotationAnswerSubmissionResults results = ActivityOneUtilities.ValidateScientificNotationSubmission(answer, selectedContainer.numericalValue, selectedContainer.unitOfMeasurement);
+        Debug.Log(results.isCoefficientValueCorrect);
+        Debug.Log(results.isExponentValueCorrect);
+	}
 
 	#endregion
 
