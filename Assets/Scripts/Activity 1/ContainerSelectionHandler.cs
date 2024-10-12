@@ -82,4 +82,13 @@ public class ContainerSelectionHandler : MonoBehaviour
 			box.SetValues(scientificNotationSO);
 		}
 	}
+
+	public BoxContainer GetSelectedContainer()
+	{
+		if (selectedContainer != null)
+		{
+			return selectedContainer.gameObject.GetComponent<BoxContainer>();
+		}
+		return null;
+	}
 }
