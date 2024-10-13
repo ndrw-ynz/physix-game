@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using UnityEngine;
 
 public class ActivityOneManager : ActivityManager
@@ -30,7 +29,7 @@ public class ActivityOneManager : ActivityManager
 	// Variables for keeping track of current number of tests
 	private int currentNumSNTests;
 
-    private List<BoxContainer> solvedBoxContainers;
+    private List<float> numericalContainerValues;
 
 	// Gameplay performance metrics variables
 	// Scientific Notation Sub Activity
@@ -49,11 +48,11 @@ public class ActivityOneManager : ActivityManager
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => scientificNotationView.UpdateScientificNotationView(boxContainer);
 		scientificNotationView.SubmitAnswerEvent += CheckScientificNotationAnswer;
 		SNSubmissionStatusDisplay.ProceedEvent += UpdateSNViewState;
-
+        varianceView.SubmitAnswerEvent += CheckVarianceAnswer;
 
 		// Initialize given values
 		containerSelectionHandler.SetupContainerValues(currentSNLevel);
-        solvedBoxContainers = new List<BoxContainer>();
+        numericalContainerValues = new List<float>();
 
 		// Setting number of tests
 		currentNumSNTests = currentSNLevel.numberOfTests;
@@ -91,7 +90,7 @@ public class ActivityOneManager : ActivityManager
 		{
 			numCorrectSNSubmission++;
 			currentNumSNTests--;
-            solvedBoxContainers.Add(selectedContainer);
+            numericalContainerValues.Add(selectedContainer.numericalValue);
 		}
 		else
 		{
@@ -129,10 +128,26 @@ public class ActivityOneManager : ActivityManager
 		{
             isSNSubActivityFinished = true;
             SNRoomClearEvent?.Invoke();
-            varianceView.SetupVarianceView(solvedBoxContainers);
+            varianceView.SetupVarianceView(numericalContainerValues);
 		}
 		containerPickerView.UpdateContainerDisplay(null);
 		scientificNotationView.gameObject.SetActive(false);
+	}
+
+	#endregion
+
+	#region Variance
+    private void CheckVarianceAnswer(VarianceAnswerSubmission answer)
+    {
+		VarianceAnswerSubmissionResults results = ActivityOneUtilities.ValidateVarianceSubmission(answer, numericalContainerValues);
+        Debug.Log(results.isMassSumValueCorrect);
+        Debug.Log(results.isMeanValueCorrect);
+        foreach (bool val in results.squaredDeviationsResult)
+        {
+            Debug.Log(val);
+        }
+        Debug.Log(results.isVarianceValueCorrect);
+		Debug.Log(results.isAllCorrect());
 	}
 
 	#endregion
