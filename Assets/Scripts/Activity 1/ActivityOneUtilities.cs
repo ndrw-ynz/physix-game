@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 
 public class ScientificNotationAnswerSubmissionResults
 {
@@ -12,6 +12,24 @@ public class ScientificNotationAnswerSubmissionResults
 		return (
 			isCoefficientValueCorrect &&
 			isExponentValueCorrect
+			);
+	}
+}
+
+public class VarianceAnswerSubmissionResults
+{
+	public bool isMassSumValueCorrect;
+	public bool isMeanValueCorrect;
+	public List<bool> squaredDeviationsResult;
+	public bool isVarianceValueCorrect;
+
+	public bool isAllCorrect()
+	{
+		return (
+			isMassSumValueCorrect &&
+			isMeanValueCorrect &&
+			squaredDeviationsResult.All(x => x) &&
+			isVarianceValueCorrect
 			);
 	}
 }
@@ -57,5 +75,60 @@ public static class ActivityOneUtilities
 		{
 			return null;
 		}
+	}
+
+	public static VarianceAnswerSubmissionResults ValidateVarianceSubmission(VarianceAnswerSubmission answer, List<float> numericalContainerValues)
+	{
+		VarianceAnswerSubmissionResults results = new VarianceAnswerSubmissionResults();
+
+		// Validate sum of masses
+		float computedSum = numericalContainerValues.Sum();
+		if (answer.massSumValue == null)
+		{
+			results.isMassSumValueCorrect = false;
+		} else
+		{
+			results.isMassSumValueCorrect = Math.Abs((float)answer.massSumValue - computedSum) <= 0.01;
+		}
+
+		// Validate mean
+		float computedMean = computedSum / numericalContainerValues.Count;
+		if (answer.meanValue == null)
+		{
+			results.isMeanValueCorrect = false;
+		} else
+		{
+			results.isMeanValueCorrect = Math.Abs((float)answer.meanValue - computedMean) <= 0.01;
+		}
+
+		// Validate squared deviations
+		List<bool> squaredDeviationResults = new List<bool>();
+		List<float> computedSquaredDeviations = new List<float>();
+		for (int i = 0; i < numericalContainerValues.Count; i++)
+		{
+			if (answer.squaredDeviationValues[i] == null)
+			{
+				computedSquaredDeviations.Add(0f);
+				squaredDeviationResults.Add(false);
+				continue;
+			}
+
+			float computedDeviation = (float) Math.Pow(numericalContainerValues[i] - computedMean, 2);
+			computedSquaredDeviations.Add(computedDeviation);
+			squaredDeviationResults.Add(Math.Abs((float)answer.squaredDeviationValues[i] - computedDeviation) <= 0.01);
+		}
+		results.squaredDeviationsResult = squaredDeviationResults;
+
+		// Validate variance
+		float computedVariance = computedSquaredDeviations.Sum() / (numericalContainerValues.Count - 1);
+		if (answer.varianceValue == null)
+		{
+			results.isVarianceValueCorrect = false;
+		} else
+		{
+			results.isVarianceValueCorrect = Math.Abs((float)answer.varianceValue - computedVariance) <= 0.01;
+		}
+
+		return results;
 	}
 }
