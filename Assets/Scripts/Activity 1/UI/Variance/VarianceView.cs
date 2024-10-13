@@ -3,10 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class VarianceAnswerSubmission
+{
+	public float? massSumValue;
+	public float? meanValue;
+	public List<float?> squaredDeviationValues;
+	public float? varianceValue;
+
+	public VarianceAnswerSubmission(
+		float? massSumValue,
+		float? meanValue,
+		List<float?> squaredDeviationValues,
+		float? varianceValue
+		)
+	{
+		this.massSumValue = massSumValue;
+		this.meanValue = meanValue;
+		this.squaredDeviationValues = squaredDeviationValues;
+		this.varianceValue = varianceValue;
+	}
+}
+
 public class VarianceView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
+	public event Action<VarianceAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Given Numerical Value Display Container")]
 	[SerializeField] private VerticalLayoutGroup numericalValueContainers;
@@ -30,19 +52,19 @@ public class VarianceView : MonoBehaviour
 
 	private int currentPageIndex;
 
-	public void SetupVarianceView(List<BoxContainer> boxContainerList)
+	public void SetupVarianceView(List<float> numericalContainerValues)
 	{
-		for (int i = 0; i < boxContainerList.Count; i++)
+		for (int i = 0; i < numericalContainerValues.Count; i++)
 		{
 			GivenVariableDisplay numericalValueDisplay = Instantiate(givenVariableDisplayPrefab, numericalValueContainers.transform, false);
-			numericalValueDisplay.SetupGivenVariableDisplay($"Container No. {i+1} : ", $"{boxContainerList[i].numericalValue}");
+			numericalValueDisplay.SetupGivenVariableDisplay($"Container No. {i+1} : ", $"{numericalContainerValues[i]}");
 
 			ContainerSquaredDeviationEquationDisplay squaredDeviationDisplay = Instantiate(squaredDeviationEquationDisplayPrefab, squaredDeviationEquationContainer.transform, false);
 			squaredDeviationDisplay.SetupHeaderText($"Calculate the Squared Devation of Container No. {i+1}");
 		}
 
-		massSumEquationDisplay.SetupEquationDisplay(boxContainerList.Count);
-		varianceEquationDisplay.SetupEquationDisplay(boxContainerList.Count);
+		massSumEquationDisplay.SetupEquationDisplay(numericalContainerValues.Count);
+		varianceEquationDisplay.SetupEquationDisplay(numericalContainerValues.Count);
 	}
 
 	private void OnEnable()
@@ -74,6 +96,24 @@ public class VarianceView : MonoBehaviour
 			rightPageButton.gameObject.SetActive(false);
 		}
 		leftPageButton.gameObject.SetActive(true);
+	}
+
+	public void OnSubmitButtonClick()
+	{
+		List<float?> squaredDeviationValues = new List<float?>();
+		foreach (ContainerSquaredDeviationEquationDisplay squaredDeviationDisplay in squaredDeviationEquationContainer.GetComponentsInChildren<ContainerSquaredDeviationEquationDisplay>())
+		{
+			squaredDeviationValues.Add(squaredDeviationDisplay.resultValue);
+		}
+
+		VarianceAnswerSubmission submission = new VarianceAnswerSubmission(
+			massSumValue: massSumEquationDisplay.resultValue,
+			meanValue: meanEquationDisplay.quotientValue,
+			squaredDeviationValues: squaredDeviationValues,
+			varianceValue: varianceEquationDisplay.resultValue
+			);
+
+		SubmitAnswerEvent?.Invoke(submission);
 	}
 
 	public void OnQuitButtonClick()
