@@ -1,4 +1,3 @@
-using System.Xml.Linq;
 using UnityEngine;
 
 public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
@@ -26,6 +25,11 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private GameObject scientificNotationTransitionDoor;
 	[SerializeField] private GameObject scientificNotationTransitionBarrier;
 
+	[Header("Variance Room Terminal Area Game Objects")]
+	[SerializeField] private InteractableViewOpenerObject varianceControlPanel;
+	[SerializeField] private GameObject varianceTransitionDoor;
+	[SerializeField] private GameObject varianceTransitionBarrier;
+
 	private void Start()
 	{
 		containerPickerView.OpenViewEvent += () => SetContainerAreaEnvironmentState(true);
@@ -41,6 +45,7 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 
 		activityOneManager.SNRoomClearEvent += ClearSNRoomEnvironmentState;
 		activityOneManager.SNCorrectAnswerEvent += ResetSNRoomAreaEnvironmentState;
+		activityOneManager.VarianceRoomClearEvent += ClearVarianceRoomEnvironmentState;
 	}
 
 	#region Scientific Notation Terminal Room
@@ -81,6 +86,15 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	{
 		SetPlayerActivityState(!isActive);
 		varianceRoomEnvironmentCamera.gameObject.SetActive(isActive);
+	}
+
+	private void ClearVarianceRoomEnvironmentState()
+	{
+		SetVarianceRoomAreaEnvironmentState(false);
+		varianceControlPanel.SetInteractable(false);
+
+		varianceTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false); ;
+		varianceTransitionBarrier.gameObject.SetActive(false);
 	}
 	#endregion
 }
