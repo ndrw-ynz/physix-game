@@ -25,6 +25,7 @@ public class ActivityOneManager : ActivityManager
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private SNSubmissionStatusDisplay SNSubmissionStatusDisplay;
+    [SerializeField] private VarianceSubmissionStatusDisplay varianceSubmissionStatusDisplay;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumSNTests;
@@ -37,6 +38,11 @@ public class ActivityOneManager : ActivityManager
 	private bool isSNSubActivityFinished;
 	private int numIncorrectSNSubmission;
 	private int numCorrectSNSubmission;
+	// Variance Sub Activity
+	private float varianceGameplayDuration;
+	private bool isVarianceSubActivityFinished;
+	private int numIncorrectVarianceSubmission;
+	private int numCorrectVarianceSubmission;
 
 	protected override void Start()
 	{
@@ -140,14 +146,33 @@ public class ActivityOneManager : ActivityManager
     private void CheckVarianceAnswer(VarianceAnswerSubmission answer)
     {
 		VarianceAnswerSubmissionResults results = ActivityOneUtilities.ValidateVarianceSubmission(answer, numericalContainerValues);
-        Debug.Log(results.isMassSumValueCorrect);
-        Debug.Log(results.isMeanValueCorrect);
-        foreach (bool val in results.squaredDeviationsResult)
-        {
-            Debug.Log(val);
-        }
-        Debug.Log(results.isVarianceValueCorrect);
-		Debug.Log(results.isAllCorrect());
+
+		if (results.isAllCorrect())
+		{
+			numCorrectVarianceSubmission++;
+		}
+		else
+		{
+			numIncorrectVarianceSubmission++;
+		}
+
+        DisplayVarianceSubmissionResults(results);
+	}
+
+	private void DisplayVarianceSubmissionResults(VarianceAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			varianceSubmissionStatusDisplay.SetSubmissionStatus(true, "Amazing work! Container spread verified. Now placing containers on the ejecton site.");
+		}
+		else
+		{
+			varianceSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+		}
+
+		varianceSubmissionStatusDisplay.gameObject.SetActive(true);
+
+		varianceSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
 	}
 
 	#endregion
