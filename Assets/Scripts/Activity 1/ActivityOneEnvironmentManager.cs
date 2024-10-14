@@ -12,11 +12,13 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private ContainerPickerView containerPickerView;
 	[SerializeField] private ScientificNotationView scientificNotationView;
 	[SerializeField] private VarianceView varianceView;
+	[SerializeField] private AccuracyPrecisionView accuracyPrecisionView;
 
 	[Header("Environment Cameras")]
 	[SerializeField] private Camera containerEnvironmentCamera;
 	[SerializeField] private Camera SNRoomEnvironmentCamera;
 	[SerializeField] private Camera varianceRoomEnvironmentCamera;
+	[SerializeField] private Camera APRoomEnvironmentCamera;
 
 	[Header("Scientific Notation Terminal Area Game Objects")]
 	[SerializeField] private InteractableViewOpenerObject containerPickerControlPanel;
@@ -40,6 +42,9 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 
 		varianceView.OpenViewEvent += () => SetVarianceRoomAreaEnvironmentState(true);
 		varianceView.QuitViewEvent += () => SetVarianceRoomAreaEnvironmentState(false);
+
+		accuracyPrecisionView.OpenViewEvent += () => SetAPRoomAreaEnvironmentState(true);
+		accuracyPrecisionView.QuitViewEvent += () => SetAPRoomAreaEnvironmentState(false);
 
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => displayedContainerObject.SetActive(boxContainer != null);
 
@@ -95,6 +100,14 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 
 		varianceTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false); ;
 		varianceTransitionBarrier.gameObject.SetActive(false);
+	}
+	#endregion
+
+	#region Accuracy & Precision Terminal Room
+	private void SetAPRoomAreaEnvironmentState(bool isActive)
+	{
+		SetPlayerActivityState(!isActive);
+		APRoomEnvironmentCamera.gameObject.SetActive(isActive);
 	}
 	#endregion
 }
