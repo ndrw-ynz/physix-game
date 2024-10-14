@@ -52,12 +52,7 @@ public class ActivityOneManager : ActivityManager
 
 		ConfigureLevelData(Difficulty.Easy);
 
-		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => containerPickerView.UpdateContainerDisplay(boxContainer);
-		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => scientificNotationView.UpdateScientificNotationView(boxContainer);
-		scientificNotationView.SubmitAnswerEvent += CheckScientificNotationAnswer;
-		SNSubmissionStatusDisplay.ProceedEvent += UpdateSNViewState;
-        varianceView.SubmitAnswerEvent += CheckVarianceAnswer;
-		varianceSubmissionStatusDisplay.ProceedEvent += UpdateVarianceViewState;
+        SubscribeViewAndDisplayEvents();
 
 		// Initialize given values
 		containerSelectionHandler.SetupContainerValues(currentSNLevel);
@@ -88,9 +83,22 @@ public class ActivityOneManager : ActivityManager
 		}
 	}
 
+    private void SubscribeViewAndDisplayEvents()
+    {
+        // Scientific Notation Sub Activity Related Events
+		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => containerPickerView.UpdateContainerDisplay(boxContainer);
+		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => scientificNotationView.UpdateScientificNotationView(boxContainer);
+		scientificNotationView.SubmitAnswerEvent += CheckScientificNotationAnswer;
+		SNSubmissionStatusDisplay.ProceedEvent += UpdateSNViewState;
+		
+        // Variance Sub Activity Related Events
+        varianceView.SubmitAnswerEvent += CheckVarianceAnswer;
+		varianceSubmissionStatusDisplay.ProceedEvent += UpdateVarianceViewState;
+	}
+
 	#region Scientific Notation
 
-    private void CheckScientificNotationAnswer(ScientificNotationAnswerSubmission answer)
+	private void CheckScientificNotationAnswer(ScientificNotationAnswerSubmission answer)
     {
         BoxContainer selectedContainer = containerSelectionHandler.GetSelectedContainer();
 		ScientificNotationAnswerSubmissionResults results = ActivityOneUtilities.ValidateScientificNotationSubmission(answer, selectedContainer.numericalValue, selectedContainer.unitOfMeasurement);
