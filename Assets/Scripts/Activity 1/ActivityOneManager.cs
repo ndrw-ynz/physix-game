@@ -8,6 +8,8 @@ public class ActivityOneManager : ActivityManager
 
 	public event Action SNRoomClearEvent;
 	public event Action SNCorrectAnswerEvent;
+	public event Action VarianceRoomClearEvent;
+
 
 	[Header("Level Data - Scientific Notation (SN)")]
 	[SerializeField] private ScientificNotationSubActivitySO SNLevelOne;
@@ -55,6 +57,7 @@ public class ActivityOneManager : ActivityManager
 		scientificNotationView.SubmitAnswerEvent += CheckScientificNotationAnswer;
 		SNSubmissionStatusDisplay.ProceedEvent += UpdateSNViewState;
         varianceView.SubmitAnswerEvent += CheckVarianceAnswer;
+		varianceSubmissionStatusDisplay.ProceedEvent += UpdateVarianceViewState;
 
 		// Initialize given values
 		containerSelectionHandler.SetupContainerValues(currentSNLevel);
@@ -173,6 +176,13 @@ public class ActivityOneManager : ActivityManager
 		varianceSubmissionStatusDisplay.gameObject.SetActive(true);
 
 		varianceSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+	}
+
+	private void UpdateVarianceViewState()
+	{
+		isVarianceSubActivityFinished = true;
+		varianceView.gameObject.SetActive(false);
+        VarianceRoomClearEvent?.Invoke();
 	}
 
 	#endregion
