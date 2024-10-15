@@ -17,6 +17,9 @@ public class ActivityOneManager : ActivityManager
 	[SerializeField] private ScientificNotationSubActivitySO SNLevelThree;
 	private ScientificNotationSubActivitySO currentSNLevel;
 
+    [Header("Managers")]
+    [SerializeField] private APGraphManager APGraphManager;
+
     [Header("Handlers")]
     [SerializeField] private ContainerSelectionHandler containerSelectionHandler;
 
@@ -24,6 +27,7 @@ public class ActivityOneManager : ActivityManager
 	[SerializeField] private ContainerPickerView containerPickerView;
     [SerializeField] private ScientificNotationView scientificNotationView;
     [SerializeField] private VarianceView varianceView;
+    [SerializeField] private AccuracyPrecisionView accuracyPrecisionView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private SNSubmissionStatusDisplay SNSubmissionStatusDisplay;
@@ -45,6 +49,11 @@ public class ActivityOneManager : ActivityManager
 	private bool isVarianceSubActivityFinished;
 	private int numIncorrectVarianceSubmission;
 	private int numCorrectVarianceSubmission;
+	// Accuracy Precision Sub Activity
+	private float APGameplayDuration;
+	private bool isAPSubActivityFinished;
+	private int numIncorrectAPSubmission;
+	private int numCorrectAPSubmission;
 
 	protected override void Start()
 	{
@@ -94,6 +103,8 @@ public class ActivityOneManager : ActivityManager
         // Variance Sub Activity Related Events
         varianceView.SubmitAnswerEvent += CheckVarianceAnswer;
 		varianceSubmissionStatusDisplay.ProceedEvent += UpdateVarianceViewState;
+
+        accuracyPrecisionView.SubmitAnswerEvent += CheckAccuracyPrecisionAnswer;
 	}
 
 	#region Scientific Notation
@@ -191,6 +202,24 @@ public class ActivityOneManager : ActivityManager
 		isVarianceSubActivityFinished = true;
 		varianceView.gameObject.SetActive(false);
         VarianceRoomClearEvent?.Invoke();
+	}
+
+	#endregion
+
+	#region Accuracy and Precision
+    private void CheckAccuracyPrecisionAnswer(APGraphType? answer) 
+    {
+        APGraphType correctGraphType = APGraphManager.GetGraphTypeFromGraphs(1);
+        bool result = answer == correctGraphType;
+
+		if (result)
+		{
+			numCorrectAPSubmission++;
+		}
+		else
+		{
+			numIncorrectAPSubmission++;
+		}
 	}
 
 	#endregion
