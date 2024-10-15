@@ -34,6 +34,7 @@ public class ActivityOneManager : ActivityManager
 	[SerializeField] private SNSubmissionStatusDisplay scientificNotationSubmissionStatusDisplay;
     [SerializeField] private VarianceSubmissionStatusDisplay varianceSubmissionStatusDisplay;
     [SerializeField] private APSubmissionStatusDisplay accuracyPrecisionSubmissionStatusDisplay;
+    [SerializeField] private ErrorsSubmissionStatusDisplay errorsSubmissionStatusDisplay;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumSNTests;
@@ -267,9 +268,25 @@ public class ActivityOneManager : ActivityManager
         };
 
 		bool result = ActivityOneUtilities.ValidateErrorsSubmission(answer, givenGraphTypes);
-        Debug.Log(result);
+
+		DisplayErrorsSubmissionResult(result);
 	}
 
+    private void DisplayErrorsSubmissionResult(bool result)
+    {
+		if (result)
+		{
+			errorsSubmissionStatusDisplay.SetSubmissionStatus(true, "Nicely done! You may now eject the containers.");
+		}
+		else
+		{
+			errorsSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+		}
+
+		errorsSubmissionStatusDisplay.gameObject.SetActive(true);
+
+		errorsSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
+	}
 	#endregion
 
 	public override void DisplayPerformanceView()
