@@ -28,6 +28,7 @@ public class ActivityOneManager : ActivityManager
     [SerializeField] private ScientificNotationView scientificNotationView;
     [SerializeField] private VarianceView varianceView;
     [SerializeField] private AccuracyPrecisionView accuracyPrecisionView;
+    [SerializeField] private ErrorsView errorsView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private SNSubmissionStatusDisplay scientificNotationSubmissionStatusDisplay;
@@ -105,8 +106,12 @@ public class ActivityOneManager : ActivityManager
         varianceView.SubmitAnswerEvent += CheckVarianceAnswer;
 		varianceSubmissionStatusDisplay.ProceedEvent += UpdateVarianceViewState;
 
+        // Accuracy Precision Sub Activity Related Events
         accuracyPrecisionView.SubmitAnswerEvent += CheckAccuracyPrecisionAnswer;
 		accuracyPrecisionSubmissionStatusDisplay.ProceedEvent += UpdateAPViewState;
+
+        // Errors Sub Activity Related Events
+        errorsView.SubmitAnswerEvent += CheckErrorsAnswer;
 	}
 
 	#region Scientific Notation
@@ -247,6 +252,22 @@ public class ActivityOneManager : ActivityManager
 		isAPSubActivityFinished = true;
 		accuracyPrecisionView.gameObject.SetActive(false);
 		APRoomClearEvent?.Invoke();
+	}
+
+	#endregion
+
+	#region Errors
+    private void CheckErrorsAnswer(ErrorType? answer)
+    {
+        APGraphType[] givenGraphTypes =
+        {
+            APGraphManager.GetGraphTypeFromGraphs(1),
+            APGraphManager.GetGraphTypeFromGraphs(2),
+            APGraphManager.GetGraphTypeFromGraphs(3)
+        };
+
+		bool result = ActivityOneUtilities.ValidateErrorsSubmission(answer, givenGraphTypes);
+        Debug.Log(result);
 	}
 
 	#endregion
