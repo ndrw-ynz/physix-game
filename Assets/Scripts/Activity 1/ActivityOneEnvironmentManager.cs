@@ -119,7 +119,7 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	private void ClearAPRoomEnvironmentState()
 	{
 		SetAPRoomAreaEnvironmentState(false);
-		accuracyPrecisionControlPanel.gameObject.SetActive(false);
+		accuracyPrecisionControlPanel.SetInteractable(false);
 
 		accuracyPrecisionTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false);
 		accuracyPrecisionTransitionBarrier.gameObject.SetActive(false);
