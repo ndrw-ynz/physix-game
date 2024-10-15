@@ -32,6 +32,11 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private GameObject varianceTransitionDoor;
 	[SerializeField] private GameObject varianceTransitionBarrier;
 
+	[Header("Accuracy Precision Terminal Area Game Objects")]
+	[SerializeField] private InteractableViewOpenerObject accuracyPrecisionControlPanel;
+	[SerializeField] private GameObject accuracyPrecisionTransitionDoor;
+	[SerializeField] private GameObject accuracyPrecisionTransitionBarrier;
+
 	private void Start()
 	{
 		containerPickerView.OpenViewEvent += () => SetContainerAreaEnvironmentState(true);
@@ -51,6 +56,7 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 		activityOneManager.SNRoomClearEvent += ClearSNRoomEnvironmentState;
 		activityOneManager.SNCorrectAnswerEvent += ResetSNRoomAreaEnvironmentState;
 		activityOneManager.VarianceRoomClearEvent += ClearVarianceRoomEnvironmentState;
+		activityOneManager.APRoomClearEvent += ClearAPRoomEnvironmentState;
 	}
 
 	#region Scientific Notation Terminal Room
@@ -98,7 +104,7 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 		SetVarianceRoomAreaEnvironmentState(false);
 		varianceControlPanel.SetInteractable(false);
 
-		varianceTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false); ;
+		varianceTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false);
 		varianceTransitionBarrier.gameObject.SetActive(false);
 	}
 	#endregion
@@ -108,6 +114,15 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	{
 		SetPlayerActivityState(!isActive);
 		APRoomEnvironmentCamera.gameObject.SetActive(isActive);
+	}
+
+	private void ClearAPRoomEnvironmentState()
+	{
+		SetAPRoomAreaEnvironmentState(false);
+		varianceControlPanel.gameObject.SetActive(false);
+
+		accuracyPrecisionTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false);
+		accuracyPrecisionTransitionBarrier.gameObject.SetActive(false);
 	}
 	#endregion
 }
