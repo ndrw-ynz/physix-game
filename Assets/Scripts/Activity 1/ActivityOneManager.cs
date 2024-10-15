@@ -10,6 +10,7 @@ public class ActivityOneManager : ActivityManager
 	public event Action SNCorrectAnswerEvent;
 	public event Action VarianceRoomClearEvent;
 	public event Action APRoomClearEvent;
+	public event Action errorsRoomClearEvent;
 
 	[Header("Level Data - Scientific Notation (SN)")]
 	[SerializeField] private ScientificNotationSubActivitySO SNLevelOne;
@@ -57,6 +58,11 @@ public class ActivityOneManager : ActivityManager
 	private bool isAPSubActivityFinished;
 	private int numIncorrectAPSubmission;
 	private int numCorrectAPSubmission;
+	// Errors Sub Activity
+	private float errorsGameplayDuration;
+	private bool isErrorsSubActivityFinished;
+	private int numIncorrectErrorsSubmission;
+	private int numCorrectErrorsSubmission;
 
 	protected override void Start()
 	{
@@ -113,6 +119,7 @@ public class ActivityOneManager : ActivityManager
 
         // Errors Sub Activity Related Events
         errorsView.SubmitAnswerEvent += CheckErrorsAnswer;
+        errorsSubmissionStatusDisplay.ProceedEvent += UpdateErrorsViewState;
 	}
 
 	#region Scientific Notation
@@ -269,6 +276,15 @@ public class ActivityOneManager : ActivityManager
 
 		bool result = ActivityOneUtilities.ValidateErrorsSubmission(answer, givenGraphTypes);
 
+		if (result)
+		{
+			numCorrectErrorsSubmission++;
+		}
+		else
+		{
+			numIncorrectErrorsSubmission++;
+		}
+
 		DisplayErrorsSubmissionResult(result);
 	}
 
@@ -286,6 +302,13 @@ public class ActivityOneManager : ActivityManager
 		errorsSubmissionStatusDisplay.gameObject.SetActive(true);
 
 		errorsSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
+	}
+
+    private void UpdateErrorsViewState()
+    {
+		isErrorsSubActivityFinished = true;
+		errorsView.gameObject.SetActive(false);
+		errorsRoomClearEvent?.Invoke();
 	}
 	#endregion
 
