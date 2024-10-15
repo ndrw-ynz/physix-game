@@ -32,6 +32,7 @@ public class ActivityOneManager : ActivityManager
 	[Header("Submission Status Displays")]
 	[SerializeField] private SNSubmissionStatusDisplay SNSubmissionStatusDisplay;
     [SerializeField] private VarianceSubmissionStatusDisplay varianceSubmissionStatusDisplay;
+    [SerializeField] private APSubmissionStatusDisplay APSubmissionStatusDisplay;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumSNTests;
@@ -220,6 +221,24 @@ public class ActivityOneManager : ActivityManager
 		{
 			numIncorrectAPSubmission++;
 		}
+
+        DisplayAccuracyPrecisionSubmissionResult(result);
+	}
+
+    private void DisplayAccuracyPrecisionSubmissionResult(bool result)
+    {
+        if (result)
+        {
+			APSubmissionStatusDisplay.SetSubmissionStatus(true, "Great work! Containers are prepared and ready for ejection. Head to the last panel.");
+		}
+		else
+        {
+			APSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+		}
+
+		APSubmissionStatusDisplay.gameObject.SetActive(true);
+
+		APSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
 	}
 
 	#endregion
