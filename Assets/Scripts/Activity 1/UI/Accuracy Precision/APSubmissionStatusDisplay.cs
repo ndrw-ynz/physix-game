@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class APSubmissionStatusDisplay : SubmissionStatusDisplay
 {
-	public static event Action ProceedEvent;
+	public event Action ProceedEvent;
 
 	[Header("Accuracy Precision Status Border Displays")]
 	[SerializeField] private Image APStatusBorderDisplay;

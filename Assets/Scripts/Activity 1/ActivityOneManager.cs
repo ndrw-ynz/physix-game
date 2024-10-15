@@ -9,7 +9,7 @@ public class ActivityOneManager : ActivityManager
 	public event Action SNRoomClearEvent;
 	public event Action SNCorrectAnswerEvent;
 	public event Action VarianceRoomClearEvent;
-
+	public event Action APRoomClearEvent;
 
 	[Header("Level Data - Scientific Notation (SN)")]
 	[SerializeField] private ScientificNotationSubActivitySO SNLevelOne;
@@ -30,9 +30,9 @@ public class ActivityOneManager : ActivityManager
     [SerializeField] private AccuracyPrecisionView accuracyPrecisionView;
 
 	[Header("Submission Status Displays")]
-	[SerializeField] private SNSubmissionStatusDisplay SNSubmissionStatusDisplay;
+	[SerializeField] private SNSubmissionStatusDisplay scientificNotationSubmissionStatusDisplay;
     [SerializeField] private VarianceSubmissionStatusDisplay varianceSubmissionStatusDisplay;
-    [SerializeField] private APSubmissionStatusDisplay APSubmissionStatusDisplay;
+    [SerializeField] private APSubmissionStatusDisplay accuracyPrecisionSubmissionStatusDisplay;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumSNTests;
@@ -99,13 +99,14 @@ public class ActivityOneManager : ActivityManager
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => containerPickerView.UpdateContainerDisplay(boxContainer);
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => scientificNotationView.UpdateScientificNotationView(boxContainer);
 		scientificNotationView.SubmitAnswerEvent += CheckScientificNotationAnswer;
-		SNSubmissionStatusDisplay.ProceedEvent += UpdateSNViewState;
+		scientificNotationSubmissionStatusDisplay.ProceedEvent += UpdateSNViewState;
 		
         // Variance Sub Activity Related Events
         varianceView.SubmitAnswerEvent += CheckVarianceAnswer;
 		varianceSubmissionStatusDisplay.ProceedEvent += UpdateVarianceViewState;
 
         accuracyPrecisionView.SubmitAnswerEvent += CheckAccuracyPrecisionAnswer;
+		accuracyPrecisionSubmissionStatusDisplay.ProceedEvent += UpdateAPViewState;
 	}
 
 	#region Scientific Notation
@@ -133,16 +134,16 @@ public class ActivityOneManager : ActivityManager
 	{
 		if (results.isAllCorrect())
 		{
-			SNSubmissionStatusDisplay.SetSubmissionStatus(true, "Great job! Your calculations are correct. Making containers for ejection.");
+			scientificNotationSubmissionStatusDisplay.SetSubmissionStatus(true, "Great job! Your calculations are correct. Making containers for ejection.");
 		}
 		else
 		{
-			SNSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+			scientificNotationSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
 		}
 
-		SNSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
+		scientificNotationSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResult(results);
 
-		SNSubmissionStatusDisplay.gameObject.SetActive(true);
+		scientificNotationSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
 	private void UpdateSNViewState()
@@ -229,16 +230,23 @@ public class ActivityOneManager : ActivityManager
     {
         if (result)
         {
-			APSubmissionStatusDisplay.SetSubmissionStatus(true, "Great work! Containers are prepared and ready for ejection. Head to the last panel.");
+			accuracyPrecisionSubmissionStatusDisplay.SetSubmissionStatus(true, "Great work! Containers are prepared and ready for ejection. Head to the last panel.");
 		}
 		else
         {
-			APSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+			accuracyPrecisionSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
 		}
 
-		APSubmissionStatusDisplay.gameObject.SetActive(true);
+		accuracyPrecisionSubmissionStatusDisplay.gameObject.SetActive(true);
 
-		APSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
+		accuracyPrecisionSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
+	}
+
+    private void UpdateAPViewState()
+    {
+		isAPSubActivityFinished = true;
+		accuracyPrecisionView.gameObject.SetActive(false);
+		APRoomClearEvent?.Invoke();
 	}
 
 	#endregion
