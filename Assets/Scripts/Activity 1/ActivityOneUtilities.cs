@@ -131,4 +131,46 @@ public static class ActivityOneUtilities
 
 		return results;
 	}
+
+	public static bool ValidateErrorsSubmission(ErrorType? answer, APGraphType[] givenGraphTypes)
+	{
+		// Get number of accurate/precise graph
+		int numAccurate = 0;
+		int numPrecise = 0;
+
+		foreach (APGraphType graphType in givenGraphTypes)
+		{
+			switch (graphType)
+			{
+				case APGraphType.AccurateAndPrecise:
+					numAccurate++;
+					numPrecise++;
+					break;
+				case APGraphType.AccurateButNotPrecise:
+					numAccurate++;
+					break;
+				case APGraphType.PreciseButNotAccurate:
+					numPrecise++;
+					break;
+			}
+		}
+
+		bool isSystematicError = numAccurate <= 1;
+		bool isRandomError = numPrecise <= 1;
+
+		// Match answer based on determined error types
+		switch (answer)
+		{
+			case ErrorType.NoErrors:
+				return !isSystematicError && !isRandomError;
+			case ErrorType.RandomError:
+				return !isSystematicError && isRandomError;
+			case ErrorType.SystematicAndRandomError:
+				return isSystematicError && isRandomError;
+			case ErrorType.SystematicError:
+				return isSystematicError && !isRandomError;
+			default:
+				return false;
+		}
+	}
 }
