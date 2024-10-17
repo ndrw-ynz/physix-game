@@ -89,7 +89,7 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 		SetSNRoomAreaEnvironmentState(false);
 		containerPickerControlPanel.SetInteractable(false);
 		scientificNotationControlPanel.SetInteractable(false);
-		displayedContainerObject.SetActive(false);
+		displayedContainerObject.SetActive(true);
 
 		scientificNotationTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false); ;
 		scientificNotationTransitionBarrier.gameObject.SetActive(false);
@@ -108,6 +108,7 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	{
 		SetVarianceRoomAreaEnvironmentState(false);
 		varianceControlPanel.SetInteractable(false);
+		displayedContainerObject.SetActive(false);
 
 		varianceTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false);
 		varianceTransitionBarrier.gameObject.SetActive(false);
