@@ -30,6 +30,7 @@ public class ActivityOneManager : ActivityManager
     [SerializeField] private VarianceView varianceView;
     [SerializeField] private AccuracyPrecisionView accuracyPrecisionView;
     [SerializeField] private ErrorsView errorsView;
+    [SerializeField] private ActivityOnePerformanceView performanceView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private SNSubmissionStatusDisplay scientificNotationSubmissionStatusDisplay;
@@ -41,6 +42,12 @@ public class ActivityOneManager : ActivityManager
 	private int currentNumSNTests;
 
     private List<float> numericalContainerValues;
+
+	// Variables for tracking which view is currently active
+	private bool isSNViewActive;
+	private bool isVarianceViewActive;
+	private bool isAPViewActive;
+	private bool isErrorsViewActive;
 
 	// Gameplay performance metrics variables
 	// Scientific Notation Sub Activity
@@ -83,6 +90,15 @@ public class ActivityOneManager : ActivityManager
         scientificNotationView.UpdateNumberOfContainersTextDisplay(0, currentNumSNTests);
 	}
 
+	private void Update()
+	{
+		if (isSNViewActive && !isSNSubActivityFinished) SNGameplayDuration += Time.deltaTime;
+		if (isVarianceViewActive && !isVarianceSubActivityFinished) varianceGameplayDuration += Time.deltaTime;
+		if (isAPViewActive && !isAPSubActivityFinished) APGameplayDuration += Time.deltaTime;
+		if (isErrorsViewActive && !isErrorsSubActivityFinished) errorsGameplayDuration += Time.deltaTime;
+		if (isSNSubActivityFinished && isVarianceSubActivityFinished && isAPSubActivityFinished && isErrorsSubActivityFinished) DisplayPerformanceView();
+	}
+
 	private void ConfigureLevelData(Difficulty difficulty)
 	{
 		difficultyConfiguration = difficulty;
@@ -106,19 +122,27 @@ public class ActivityOneManager : ActivityManager
         // Scientific Notation Sub Activity Related Events
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => containerPickerView.UpdateContainerDisplay(boxContainer);
 		containerSelectionHandler.UpdateSelectedContainerEvent += (boxContainer) => scientificNotationView.UpdateScientificNotationView(boxContainer);
+		scientificNotationView.OpenViewEvent += () => isSNViewActive = true;
+		scientificNotationView.QuitViewEvent += () => isSNViewActive = false;
 		scientificNotationView.SubmitAnswerEvent += CheckScientificNotationAnswer;
 		scientificNotationSubmissionStatusDisplay.ProceedEvent += UpdateSNViewState;
-		
-        // Variance Sub Activity Related Events
-        varianceView.SubmitAnswerEvent += CheckVarianceAnswer;
+
+		// Variance Sub Activity Related Events
+		varianceView.OpenViewEvent += () => isVarianceViewActive = true;
+		varianceView.QuitViewEvent += () => isVarianceViewActive = false;
+		varianceView.SubmitAnswerEvent += CheckVarianceAnswer;
 		varianceSubmissionStatusDisplay.ProceedEvent += UpdateVarianceViewState;
 
-        // Accuracy Precision Sub Activity Related Events
-        accuracyPrecisionView.SubmitAnswerEvent += CheckAccuracyPrecisionAnswer;
+		// Accuracy Precision Sub Activity Related Events
+		accuracyPrecisionView.OpenViewEvent += () => isAPViewActive = true;
+		accuracyPrecisionView.QuitViewEvent += () => isAPViewActive = false;
+		accuracyPrecisionView.SubmitAnswerEvent += CheckAccuracyPrecisionAnswer;
 		accuracyPrecisionSubmissionStatusDisplay.ProceedEvent += UpdateAPViewState;
 
-        // Errors Sub Activity Related Events
-        errorsView.SubmitAnswerEvent += CheckErrorsAnswer;
+		// Errors Sub Activity Related Events
+		errorsView.OpenViewEvent += () => isErrorsViewActive = true;
+		errorsView.QuitViewEvent += () => isErrorsViewActive = false;
+		errorsView.SubmitAnswerEvent += CheckErrorsAnswer;
         errorsSubmissionStatusDisplay.ProceedEvent += UpdateErrorsViewState;
 	}
 
@@ -314,7 +338,70 @@ public class ActivityOneManager : ActivityManager
 
 	public override void DisplayPerformanceView()
 	{
-		return;
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
+
+		performanceView.SetTotalTimeDisplay(SNGameplayDuration + varianceGameplayDuration + APGameplayDuration + errorsGameplayDuration);
+
+		performanceView.SetScientificNotationMetricsDisplay(
+			isAccomplished: isSNSubActivityFinished,
+			numIncorrectSubmission: numIncorrectSNSubmission,
+			duration: SNGameplayDuration
+			);
+
+		performanceView.SetVarianceMetricsDisplay(
+			isAccomplished: isVarianceSubActivityFinished,
+			numIncorrectSubmission: numIncorrectVarianceSubmission,
+			duration: varianceGameplayDuration
+			);
+
+		performanceView.SetAccuracyPrecisionMetricsDisplay(
+			isAccomplished: isAPSubActivityFinished,
+			numIncorrectSubmission: numIncorrectAPSubmission,
+			duration: APGameplayDuration
+			);
+
+		performanceView.SetErrorsMetricsDisplay(
+			isAccomplished: isErrorsSubActivityFinished,
+			numIncorrectSubmission: numIncorrectErrorsSubmission,
+			duration: errorsGameplayDuration
+			);
+
+		// Update its activity feedback display (four args)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "scientific notation",
+				isSubActivityFinished: isSNSubActivityFinished,
+				numIncorrectAnswers: numIncorrectSNSubmission,
+				numCorrectAnswers: numCorrectSNSubmission,
+				badScoreThreshold: 6,
+				averageScoreThreshold: 3
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "variance",
+				isSubActivityFinished: isVarianceSubActivityFinished,
+				numIncorrectAnswers: numIncorrectVarianceSubmission,
+				numCorrectAnswers: numCorrectVarianceSubmission,
+				badScoreThreshold: 5,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "accuracy & precision",
+				isSubActivityFinished: isAPSubActivityFinished,
+				numIncorrectAnswers: numIncorrectAPSubmission,
+				numCorrectAnswers: numCorrectAPSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "errors",
+				isSubActivityFinished: isErrorsSubActivityFinished,
+				numIncorrectAnswers: numIncorrectErrorsSubmission,
+				numCorrectAnswers: numCorrectErrorsSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				)
+			);
 	}
 
 	// --  OLD CODE --
