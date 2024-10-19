@@ -41,7 +41,7 @@ public class ActivityOneManager : ActivityManager
 	// Variables for keeping track of current number of tests
 	private int currentNumSNTests;
 
-    private List<float> numericalContainerValues;
+	private List<float> numericalContainerValues;
 
 	// Variables for tracking which view is currently active
 	private bool isSNViewActive;
@@ -172,6 +172,7 @@ public class ActivityOneManager : ActivityManager
 		if (results.isAllCorrect())
 		{
 			scientificNotationSubmissionStatusDisplay.SetSubmissionStatus(true, "Great job! Your calculations are correct. Making containers for ejection.");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Select storage containers and determine its value in standard scientific notation ({currentNumSNTests}/{currentSNLevel.numberOfTests})");
 		}
 		else
 		{
@@ -196,6 +197,7 @@ public class ActivityOneManager : ActivityManager
             isSNSubActivityFinished = true;
             SNRoomClearEvent?.Invoke();
             varianceView.SetupVarianceView(numericalContainerValues);
+			missionObjectiveDisplayUI.ClearMissionObjective(0);
 		}
 		containerPickerView.UpdateContainerDisplay(null);
 		scientificNotationView.gameObject.SetActive(false);
@@ -225,6 +227,8 @@ public class ActivityOneManager : ActivityManager
 		if (results.isAllCorrect())
 		{
 			varianceSubmissionStatusDisplay.SetSubmissionStatus(true, "Amazing work! Container spread verified. Now placing containers on the ejecton site.");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the variance of the selected storage containers (1/1)");
+
 		}
 		else
 		{
@@ -241,12 +245,13 @@ public class ActivityOneManager : ActivityManager
 		isVarianceSubActivityFinished = true;
 		varianceView.gameObject.SetActive(false);
         VarianceRoomClearEvent?.Invoke();
+		missionObjectiveDisplayUI.ClearMissionObjective(1);
 	}
 
 	#endregion
 
 	#region Accuracy and Precision
-    private void CheckAccuracyPrecisionAnswer(APGraphType? answer) 
+	private void CheckAccuracyPrecisionAnswer(APGraphType? answer) 
     {
         APGraphType correctGraphType = APGraphManager.GetGraphTypeFromGraphs(1);
         bool result = answer == correctGraphType;
@@ -268,6 +273,7 @@ public class ActivityOneManager : ActivityManager
         if (result)
         {
 			accuracyPrecisionSubmissionStatusDisplay.SetSubmissionStatus(true, "Great work! Containers are prepared and ready for ejection. Head to the last panel.");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Determine the accuracy & precision of the placement of the selected containers (1/1)");
 		}
 		else
         {
@@ -284,12 +290,13 @@ public class ActivityOneManager : ActivityManager
 		isAPSubActivityFinished = true;
 		accuracyPrecisionView.gameObject.SetActive(false);
 		APRoomClearEvent?.Invoke();
+		missionObjectiveDisplayUI.ClearMissionObjective(2);
 	}
 
 	#endregion
 
 	#region Errors
-    private void CheckErrorsAnswer(ErrorType? answer)
+	private void CheckErrorsAnswer(ErrorType? answer)
     {
         APGraphType[] givenGraphTypes =
         {
@@ -317,6 +324,7 @@ public class ActivityOneManager : ActivityManager
 		if (result)
 		{
 			errorsSubmissionStatusDisplay.SetSubmissionStatus(true, "Nicely done! You may now eject the containers.");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(3, $"Determine the type of error from the positions of the selected containers (1/1)");
 		}
 		else
 		{
@@ -333,6 +341,7 @@ public class ActivityOneManager : ActivityManager
 		isErrorsSubActivityFinished = true;
 		errorsView.gameObject.SetActive(false);
 		errorsRoomClearEvent?.Invoke();
+		missionObjectiveDisplayUI.ClearMissionObjective(3);
 	}
 	#endregion
 
@@ -402,6 +411,34 @@ public class ActivityOneManager : ActivityManager
 				averageScoreThreshold: 2
 				)
 			);
+	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isSNSubActivityFinished)
+		{
+			taskText.Add($"- Select storage containers and determine its value in standard scientific notation.");
+		}
+		if (!isVarianceSubActivityFinished)
+		{
+			taskText.Add("- Calculate the variance of the selected storage containers.");
+		}
+		if (!isAPSubActivityFinished)
+		{
+			taskText.Add("- Determine the accuracy & precision of the placement of the selected containers.");
+		}
+		if (!isErrorsSubActivityFinished)
+		{
+			taskText.Add("- Determine the type of error from the positions of the selected containers.");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Eject containers from the space rocket. ");
+
+		activityPauseMenuUI.UpdateContent("Lesson 1 - Activity 1", taskText, objectiveText);
 	}
 
 	// --  OLD CODE --
