@@ -68,12 +68,14 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	private void SetContainerAreaEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
+		activityOneManager.SetMissionObjectiveDisplay(!isActive);
 		containerEnvironmentCamera.gameObject.SetActive(isActive);
 	}
 
 	private void SetSNRoomAreaEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
+		activityOneManager.SetMissionObjectiveDisplay(!isActive);
 		SNRoomEnvironmentCamera.gameObject.SetActive(isActive);
 	}
 
@@ -101,6 +103,7 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	private void SetVarianceRoomAreaEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
+		activityOneManager.SetMissionObjectiveDisplay(!isActive);
 		varianceRoomEnvironmentCamera.gameObject.SetActive(isActive);
 	}
 
@@ -119,6 +122,7 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	private void SetAPRoomAreaEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
+		activityOneManager.SetMissionObjectiveDisplay(!isActive);
 		APRoomEnvironmentCamera.gameObject.SetActive(isActive);
 	}
 
@@ -136,6 +140,7 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 	private void SetErrorsRoomAreaEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
+		activityOneManager.SetMissionObjectiveDisplay(!isActive);
 		errorsRoomEnvironmentCamera.gameObject.SetActive(isActive);
 	}
 	#endregion
