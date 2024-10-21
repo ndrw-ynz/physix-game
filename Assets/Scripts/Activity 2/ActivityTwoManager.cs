@@ -1,10 +1,71 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-public class ActivityTwoManager : MonoBehaviour
+public class ActivityTwoManager : ActivityManager
 {
-	[Header("Level Data")]
+	public static Difficulty difficultyConfiguration;
+
+	[Header("Level Data - Quantities")]
+	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelOne;
+	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelTwo;
+	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelThree;
+	private QuantitiesSubActivitySO currentQuantitiesLevel;
+
+	[Header("Views")]
+	[SerializeField] private QuantitiesView quantitiesView;
+
+	protected override void Start()
+	{
+		base.Start();
+
+		ConfigureLevelData(Difficulty.Easy);
+
+		SubscribeViewAndDisplayEvents();
+
+		// Setup views
+		quantitiesView.SetupQuantitiesView(currentQuantitiesLevel);
+	}
+
+	private void SubscribeViewAndDisplayEvents()
+	{
+		// Quantities Sub Activity Related Events
+		quantitiesView.SubmitAnswerEvent += CheckQuantitiesAnswer;
+	}
+
+	private void ConfigureLevelData(Difficulty difficulty)
+	{
+		difficultyConfiguration = difficulty;
+
+		switch (difficulty)
+		{
+			case Difficulty.Easy:
+				currentQuantitiesLevel = quantitiesLevelOne;
+				break;
+			case Difficulty.Medium:
+				currentQuantitiesLevel = quantitiesLevelTwo;
+				break;
+			case Difficulty.Hard:
+				currentQuantitiesLevel = quantitiesLevelThree;
+				break;
+		}
+	}
+
+	#region Quantities
+	private void CheckQuantitiesAnswer(QuantitiesAnswerSubmission answer)
+	{
+		QuantitiesAnswerSubmissionResults results = ActivityTwoUtilities.ValidateQuantitiesSubmission(answer);
+
+		Debug.Log(results.hasUnsolvedQuantities);
+		Debug.Log(results.isScalarListCorrect);
+		Debug.Log(results.isVectorListCorrect);
+	}
+	#endregion
+
+	public override void DisplayPerformanceView()
+	{
+
+	}
+
+	/*[Header("Level Data")]
 	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelOneSO;
 	[SerializeField] private VectorsSubActivitySO vectorsLevelOneSO;
 
@@ -182,5 +243,5 @@ public class ActivityTwoManager : MonoBehaviour
 
 		view.VectorAdditionStatusText.text += isVectorAdditionSubActivityFinished ? "Accomplished" : "Not accomplished";
 		view.VectorAdditionIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectVectorAdditionSubmission}";
-	}
+	}*/
 }
