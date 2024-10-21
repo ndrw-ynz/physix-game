@@ -5,7 +5,7 @@ public abstract class DraggableUIObject<T> : MonoBehaviour, IBeginDragHandler, I
 {
 	public Canvas canvas;
 
-	public void OnBeginDrag(PointerEventData eventData)
+	public virtual void OnBeginDrag(PointerEventData eventData)
 	{
 		transform.SetParent(canvas.transform, false);
 	}
@@ -27,7 +27,7 @@ public abstract class DraggableUIObject<T> : MonoBehaviour, IBeginDragHandler, I
 		}
 	}
 
-	private DraggableUIContainer<T> GetContainerUnderMouse(PointerEventData eventData)
+	protected DraggableUIContainer<T> GetContainerUnderMouse(PointerEventData eventData)
 	{
 		// Check if the draggable object is dropped over a container
 		PointerEventData pointerData = new PointerEventData(EventSystem.current)
