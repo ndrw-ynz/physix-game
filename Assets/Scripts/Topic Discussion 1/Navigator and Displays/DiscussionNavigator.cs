@@ -23,10 +23,6 @@ public class DiscussionNavigator : MonoBehaviour
     [Header("Sub Topics Sectors")]
     public List<Sector> subTopicsList;
 
-    // Current sector and page indexes
-    private int _currentSectorIndex = 0;
-    private int _currentPageIndex = 0;
-
     // Page animation properties
     private Page _page;
     private float _pageAnimationDuration = 0.2f;
@@ -35,28 +31,28 @@ public class DiscussionNavigator : MonoBehaviour
 
     private void Start()
     {
-        // Add button click listeners
-        PagePrevNextButton.PagePrevNextClickEvent += ChangePage;
-        SectorPrevNextButton.SectorPrevNextClickEvent += ChangePage;
-        ProgressBarButton.ProgressBarClickEvent += JumpToSector;
-        PageJumpButton.PageCircleClick += JumpToPage;
-        ReadIndicatorButton.ReadIndicatorClickEvent += ChangeReadState;
+        //// Add button click listeners
+        //PagePrevNextButton.PagePrevNextClickEvent += ChangePage;
+        //SectorPrevNextButton.SectorPrevNextClickEvent += ChangePage;
+        //ProgressBarButton.ProgressBarClickEvent += JumpToSector;
+        //PageJumpButton.PageCircleClick += JumpToPage;
+        //ReadIndicatorButton.ReadIndicatorClickEvent += ChangeReadState;
 
         // Setup display scripts
         DiscussionPageStart?.Invoke(this);
 
         // Load the proper page when scene is loaded
         // Might be useful when rule based algorithm creates a suggestion to review a certain sector
-        LoadPage();
+        //LoadPage();
     }
     private void OnDisable()
     {
-        // Remove button click listeners
-        PagePrevNextButton.PagePrevNextClickEvent -= ChangePage;
-        SectorPrevNextButton.SectorPrevNextClickEvent -= ChangePage;
-        ProgressBarButton.ProgressBarClickEvent -= JumpToSector;
-        PageJumpButton.PageCircleClick -= JumpToPage;
-        ReadIndicatorButton.ReadIndicatorClickEvent -= ChangeReadState;
+        //// Remove button click listeners
+        //PagePrevNextButton.PagePrevNextClickEvent -= ChangePage;
+        //SectorPrevNextButton.SectorPrevNextClickEvent -= ChangePage;
+        //ProgressBarButton.ProgressBarClickEvent -= JumpToSector;
+        //PageJumpButton.PageCircleClick -= JumpToPage;
+        //ReadIndicatorButton.ReadIndicatorClickEvent -= ChangeReadState;
     }
 
     private void Update()
@@ -65,121 +61,59 @@ public class DiscussionNavigator : MonoBehaviour
     }
 
     #region Sector and Page Navigation
-    private void LoadPage()
+    public void LoadPage(int currentSectorIndex, int currentPageIndex)
     {
         // Load Startup Page
-        ShowPage(_currentSectorIndex, _currentPageIndex);
-        ActivatePageAnimation(subTopicsList[_currentSectorIndex].pages[_currentPageIndex]);
+        ShowPage(currentSectorIndex, currentPageIndex);
+        ActivatePageAnimation(subTopicsList[currentSectorIndex].pages[currentPageIndex]);
 
         PageChangeEvent?.Invoke(this);
         SectorChangeEvent?.Invoke(this);
         ReadMarkerChangeEvent?.Invoke(this);
     }
-    private void ChangePage(Direction direction)
+    public void ChangePage(int currentSectorIndex, int currentPageIndex)
     {
-        // Change pages based on directions of previous page or sector and next page or sector
-        switch (direction) 
-        {
-            case Direction.PreviousPage:
-                // Change to previous page
-                _currentPageIndex -= 1;
-                ShowPage(_currentSectorIndex, _currentPageIndex);
-                ActivatePageAnimation(subTopicsList[_currentSectorIndex].pages[_currentPageIndex]);
+        ShowPage(currentSectorIndex, currentPageIndex);
+        ActivatePageAnimation(subTopicsList[currentSectorIndex].pages[currentPageIndex]);
 
-                PageChangeEvent?.Invoke(this);
-                ReadMarkerChangeEvent?.Invoke(this);
-                break;
-
-            case Direction.NextPage:
-                // Change to next page
-                _currentPageIndex += 1;
-                ShowPage(_currentSectorIndex, _currentPageIndex);
-                ActivatePageAnimation(subTopicsList[_currentSectorIndex].pages[_currentPageIndex]);
-
-                PageChangeEvent?.Invoke(this);
-                ReadMarkerChangeEvent?.Invoke(this);
-                break;
-
-            case Direction.PreviousSector:
-                // Change to previous sector
-                CloseCurrentPage();
-
-                _currentSectorIndex--;
-                int previousSectorLastPageIndex = GetCurrentSectorPagesCount() - 1;
-                _currentPageIndex = previousSectorLastPageIndex;
-
-                ShowPage(_currentSectorIndex, _currentPageIndex);
-                ActivatePageAnimation(subTopicsList[_currentSectorIndex].pages[_currentPageIndex]);
-
-                PageChangeEvent?.Invoke(this);
-                SectorChangeEvent?.Invoke(this);
-                ReadMarkerChangeEvent?.Invoke(this);
-                break;
-
-            case Direction.NextSector:
-                // Change to next sector
-                CloseCurrentPage();
-
-                _currentSectorIndex += 1;
-                int nextSectorFirstPageIndex = 0;
-                _currentPageIndex = nextSectorFirstPageIndex;
-
-                ShowPage(_currentSectorIndex, _currentPageIndex);
-                ActivatePageAnimation(subTopicsList[_currentSectorIndex].pages[_currentPageIndex]);
-
-                PageChangeEvent?.Invoke(this);
-                SectorChangeEvent?.Invoke(this);
-                ReadMarkerChangeEvent?.Invoke(this);
-                break;
-        }
+        PageChangeEvent?.Invoke(this);
+        ReadMarkerChangeEvent?.Invoke(this);
     }
-    public void JumpToSector(int sectorIndex) 
+    public void JumpToSector(int sectorIndex)
     {
-        // Jumps to a sector's first page if button is pressed and currently not on that same sector
-        if(_currentSectorIndex != sectorIndex)
-        {
-            // Close the page first
-            CloseCurrentPage();
-
             // Set the sector to be jumped to
-            _currentSectorIndex = sectorIndex;
-            _currentPageIndex = 0;
+            int jumpedSectorIndex = sectorIndex;
+            int jumpedPageIndex = 0;
 
-            ShowPage(_currentSectorIndex, _currentPageIndex);
-            ActivatePageAnimation(subTopicsList[_currentSectorIndex].pages[_currentPageIndex]);
+            ShowPage(jumpedSectorIndex, jumpedPageIndex);
+            ActivatePageAnimation(subTopicsList[jumpedSectorIndex].pages[jumpedPageIndex]);
 
             PageChangeEvent?.Invoke(this);
             SectorChangeEvent?.Invoke(this);
-            ReadMarkerChangeEvent?.Invoke(this);
-        }
     }
-    public void JumpToPage(int pageIndex)
+    public void JumpToPage(int currentSectorIndex, int pageIndex)
     {
-        // Jumps to a page of the current sector if button is pressed and currently not on that same page
-        if (_currentPageIndex != pageIndex)
-        {
             // Set the page to be jumped to
-            _currentPageIndex = pageIndex;
+            int jumpedPageIndex = pageIndex;
 
-            ShowPage(_currentSectorIndex, _currentPageIndex);
-            ActivatePageAnimation(subTopicsList[_currentSectorIndex].pages[_currentPageIndex]);
+            ShowPage(currentSectorIndex, jumpedPageIndex);
+            ActivatePageAnimation(subTopicsList[currentSectorIndex].pages[jumpedPageIndex]);
 
             PageChangeEvent?.Invoke(this);
             ReadMarkerChangeEvent?.Invoke(this);
-        }
     }
     #endregion
 
     #region Private Classes Used For [Sector and Page Navigation]. Open/Close of Pages and Changing Read Indicator States
-    private void CloseCurrentPage()
+    public void CloseCurrentPage(int currentSectorIndex, int currentPageIndex)
     {
         // Closes the current page
-        GameObject currentSectorAndPage = subTopicsList[_currentSectorIndex].pages[_currentPageIndex].page;
+        GameObject currentSectorAndPage = subTopicsList[currentSectorIndex].pages[currentPageIndex].page;
         currentSectorAndPage.SetActive(false);
     }
     private void ShowPage(int currentSector, int currentPage)
     {
-        for (int i = 0; i < subTopicsList[_currentSectorIndex].pages.Count; i++)
+        for (int i = 0; i < subTopicsList[currentSector].pages.Count; i++)
         {
             if (i == currentPage)
             {
@@ -193,19 +127,19 @@ public class DiscussionNavigator : MonoBehaviour
             }
         }
     }
-    private void ChangeReadState(ReadState readState)
+    public void ChangeReadState(ReadState readState, int currentSectorIndex, int currentPageIndex)
     {
         switch (readState)
         {
             case ReadState.Read:
                 // Set page to read
-                subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedRead = true;
+                subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedRead = true;
                 ReadMarkerChangeEvent?.Invoke(this);
                 break;
 
             case ReadState.NotRead:
                 // Set page to not yet read
-                subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedRead = false;
+                subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedRead = false;
                 ReadMarkerChangeEvent?.Invoke(this);
                 break;
         }
@@ -263,34 +197,34 @@ public class DiscussionNavigator : MonoBehaviour
     #endregion
 
     #region Page's Read Checkers for Outside Script
-    public bool CurrentPageIsMarkedRead()
+    public bool CurrentPageIsMarkedRead(int currentSectorIndex, int currentPageIndex)
     {
         // Check if the current page is marked as read or not
-        return subTopicsList[_currentSectorIndex].pages[_currentPageIndex].isMarkedRead;
+        return subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedRead;
     }
-    public bool IsPageMarkedRead(int pageIndex)
+    public bool IsPageMarkedRead(int currentSectorIndex, int pageIndex)
     {
         // Check if the given page is marked as read or not
-        return subTopicsList[_currentSectorIndex].pages[pageIndex].isMarkedRead;
+        return subTopicsList[currentSectorIndex].pages[pageIndex].isMarkedRead;
     }
     #endregion
 
     #region Discussion Navigator Getters For Outside Script
-    public int GetCurrentSectorIndex()
-    {
-        // Get the current sector's index
-        return _currentSectorIndex;
-    }
-    public int GetCurrentPageIndex()
-    {
-        // Get the current page's index
-        return _currentPageIndex;
-    }
-    public int GetCurrentSectorPagesCount()
-    {
-        // Get the current sector's page's total count
-        return subTopicsList[_currentSectorIndex].pages.Count;
-    }
+    //public int GetCurrentSectorIndex()
+    //{
+    //    // Get the current sector's index
+    //    return _currentSectorIndex;
+    //}
+    //public int GetCurrentPageIndex()
+    //{
+    //    // Get the current page's index
+    //    return _currentPageIndex;
+    //}
+    //public int GetCurrentSectorPagesCount()
+    //{
+    //    // Get the current sector's page's total count
+    //    return subTopicsList[_currentSectorIndex].pages.Count;
+    //}
     public int GetSubTopicListCount()
     {
         // Get the current sub topic list's count
@@ -301,15 +235,15 @@ public class DiscussionNavigator : MonoBehaviour
         // Get the title of a given sector
         return subTopicsList[sectorIndex].sectorTitle;
     }
-    public string GetPreviousSectorTitle()
+    public string GetPreviousSectorTitle(int currentSectorIndex)
     {
         // Get the title of the previous sector
-        return subTopicsList[_currentSectorIndex - 1].sectorTitle;
+        return subTopicsList[currentSectorIndex - 1].sectorTitle;
     }
-    public string GetNextSectorTitle()
+    public string GetNextSectorTitle(int currentSectorIndex)
     {
         // Get the title of the next sector
-        return subTopicsList[_currentSectorIndex + 1].sectorTitle;
+        return subTopicsList[currentSectorIndex + 1].sectorTitle;
     }
     #endregion
 }
