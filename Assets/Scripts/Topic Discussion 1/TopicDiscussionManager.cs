@@ -1,9 +1,9 @@
-using System;
 using UnityEngine;
 
 public class TopicDiscussionManager : MonoBehaviour
 {
     [SerializeField] private DiscussionNavigator discussionNavigator;
+    [SerializeField] private ProgressDisplay progressDisplay;
 
     private int _currentSectorIndex = 0;
     private int _currentPageIndex = 0;
@@ -11,7 +11,9 @@ public class TopicDiscussionManager : MonoBehaviour
     private void Start()
     {
         // Add button click listeners
-        DiscussionNavigator.DiscussionPageStart += HandleDiscussionPageStart;
+        discussionNavigator.LoadPage(_currentSectorIndex, _currentPageIndex);
+        progressDisplay.LoadProgressBars(discussionNavigator);
+        progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
 
         PagePrevNextButton.PagePrevNextClickEvent += HandlePrevNextClick;
         SectorPrevNextButton.SectorPrevNextClickEvent += HandlePrevNextClick;
@@ -23,18 +25,12 @@ public class TopicDiscussionManager : MonoBehaviour
     private void OnDisable()
     {
         // Remove button click listeners
-        DiscussionNavigator.DiscussionPageStart -= HandleDiscussionPageStart;
 
         PagePrevNextButton.PagePrevNextClickEvent -= HandlePrevNextClick;
         SectorPrevNextButton.SectorPrevNextClickEvent -= HandlePrevNextClick;
         ProgressBarButton.ProgressBarClickEvent -= HandleProgressBarClick;
         PageJumpButton.PageCircleClick -= HandlePageCircleClick;
         ReadIndicatorButton.ReadIndicatorClickEvent -= HandleReadIndicatorClick;
-    }
-
-    private void HandleDiscussionPageStart(DiscussionNavigator navigator)
-    {
-        discussionNavigator.LoadPage(_currentSectorIndex, _currentPageIndex);
     }
 
     private void HandlePrevNextClick(Direction direction)
@@ -70,6 +66,7 @@ public class TopicDiscussionManager : MonoBehaviour
     private void HandleProgressBarClick(int sectorIndex)
     {
         discussionNavigator.JumpToSector(sectorIndex);
+        progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
     }
 
     private void HandlePageCircleClick(int pageIndex)
@@ -81,5 +78,4 @@ public class TopicDiscussionManager : MonoBehaviour
     {
         discussionNavigator.ChangeReadState(readState, _currentSectorIndex, _currentPageIndex);
     }
-
 }

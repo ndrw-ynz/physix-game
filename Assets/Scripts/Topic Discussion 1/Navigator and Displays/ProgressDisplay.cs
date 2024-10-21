@@ -26,18 +26,19 @@ public class ProgressDisplay : MonoBehaviour
 
     private void OnEnable()
     {
+
         // Add listeners
-        DiscussionNavigator.DiscussionPageStart += LoadProgressBars;
-        DiscussionNavigator.SectorChangeEvent += UpdateIndicatorLine;
-        DiscussionNavigator.ReadMarkerChangeEvent += UpdateProgressBar;
+        //DiscussionNavigator.DiscussionPageStart += LoadProgressBars;
+        //DiscussionNavigator.SectorChangeEvent += UpdateIndicatorLine;
+        //DiscussionNavigator.ReadMarkerChangeEvent += UpdateProgressBar;
     }
 
     private void OnDisable()
     {
         // Remove listeners
-        DiscussionNavigator.DiscussionPageStart -= LoadProgressBars;
-        DiscussionNavigator.SectorChangeEvent -= UpdateIndicatorLine;
-        DiscussionNavigator.ReadMarkerChangeEvent -= UpdateProgressBar;
+        //DiscussionNavigator.DiscussionPageStart -= LoadProgressBars;
+        //DiscussionNavigator.SectorChangeEvent -= UpdateIndicatorLine;
+        //DiscussionNavigator.ReadMarkerChangeEvent -= UpdateProgressBar;
     }
 
     private void Update()
@@ -47,27 +48,70 @@ public class ProgressDisplay : MonoBehaviour
     }
 
     #region Loading/Updating of Progress Bar Colors, Progress Count Text, and Indicator Lines
-    private void LoadProgressBars(DiscussionNavigator discNavig)
+    public void LoadProgressBars(DiscussionNavigator discussionNavigator)
     {
         // Get the amount of buttons to be created
-        float subtopicsCount = discNavig.GetSubTopicListCount();
-
+        float subtopicsCount = discussionNavigator.GetSubTopicListCount();
+    
         // Create buttons with corresponding titles and progress count
         for (int i = 0; i < subtopicsCount; i++)
         {
-            string sectorTitle = discNavig.GetSectorTitle(i);
-            string progressCount = $"{discNavig.CountReadPages(i).ToString()}/{discNavig.CountTotalPages(i).ToString()}";
+            string sectorTitle = discussionNavigator.GetSectorTitle(i);
+            string progressCount = $"{discussionNavigator.CountReadPages(i).ToString()}/{discussionNavigator.CountTotalPages(i).ToString()}";
             GenerateProgressBarButton(i, sectorTitle, progressCount);
         }
-
+    
         // Load the colors based on the amount of read pages for each progress bar
-        LoadProgressBarsColors(discNavig);
+        LoadProgressBarsColors(discussionNavigator);
     }
-    private void UpdateProgressBar(DiscussionNavigator discNavig)
+    public void GenerateProgressBarButton(int i, string sectorTitle, string progressCount)
+    {
+        // Generate progress bar button with proper title and progress count
+        ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
+        newButton.transform.SetParent(progressBarButtonGroup.transform, false);
+        newButton.name = $"Progress Button {i + 1}";
+        newButton.Initialize(sectorTitle, progressCount, i);
+    }
+    private void LoadProgressBarsColors(DiscussionNavigator discNavig)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
 
-        int i = discNavig.GetCurrentSectorIndex();
+        // Check all progress bars
+        for (int i = 0; i < progressBarButtons.Length; i++)
+        {
+            // Deactivate the temporary background color
+            progressBarButtons[i].progressBarTempColor.gameObject.SetActive(false);
+
+            // Calculate progress percentage
+            double currProgressBarPercentage = discNavig.CountReadPages(i) / discNavig.CountTotalPages(i) * 100;
+            if (currProgressBarPercentage == 100)
+            {
+                // Set progress bar color to light color green
+                progressBarButtons[i].progressBarFinalColor.color = new Color(0.5890471f, 1f, 0.5264151f);
+            }
+            else if (currProgressBarPercentage > 50)
+            {
+                // Set progress bar color to light color yellow
+                progressBarButtons[i].progressBarFinalColor.color = new Color(0.9546386f, 1f, 0.5254902f);
+            }
+            else if (discNavig.CountReadPages(i) > 0)
+            {
+                // Set progress bar color to light color gray
+                progressBarButtons[i].progressBarFinalColor.color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
+            }
+            else
+            {
+                // Set progress bar color to light color gray
+                progressBarButtons[i].progressBarFinalColor.color = new Color(0.764151f, 0.764151f, 0.764151f);
+            }
+        }
+    }
+
+    public void UpdateProgressBar(int currentSectorIndex, DiscussionNavigator discNavig)
+    {
+        ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
+
+        int i = currentSectorIndex;
         
         // Activate the temporary background color of the progress bar to give way for the color transition
         progressBarButtons[i].progressBarTempColor.gameObject.SetActive(true);
@@ -118,14 +162,14 @@ public class ProgressDisplay : MonoBehaviour
             ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
     }
-    private void UpdateIndicatorLine(DiscussionNavigator discNav)
+    public void UpdateIndicatorLine(int currentSectorIndex)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
 
         // Check all indicator lines
         for (int i = 0; i < progressBarButtons.Length; i++)
         {
-            if (i == discNav.GetCurrentSectorIndex())
+            if (i == currentSectorIndex)
             {
                 // Activate sector indicator for the current viewed sector
                 progressBarButtons[i].progressBarIndicator.gameObject.SetActive(true);
@@ -137,50 +181,6 @@ public class ProgressDisplay : MonoBehaviour
             {
                 // Ensure other sector indicators and deactivated
                 progressBarButtons[i].progressBarIndicator.gameObject.SetActive(false);
-            }
-        }
-    }
-
-    // Progress bar generator and one time loader functions with no animation
-    private void GenerateProgressBarButton(int i, string sectorTitle, string progressCount)
-    {
-        // Generate progress bar button with proper title and progress count
-        ProgressBarButton newButton = Instantiate(progressBarButtonPrefab);
-        newButton.transform.SetParent(progressBarButtonGroup.transform, false);
-        newButton.name = $"Progress Button {i + 1}";
-        newButton.Initialize(sectorTitle, progressCount, i);
-    }
-    private void LoadProgressBarsColors(DiscussionNavigator discNavig)
-    {
-        ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
-
-        // Check all progress bars
-        for (int i = 0; i < progressBarButtons.Length; i++)
-        {
-            // Deactivate the temporary background color
-            progressBarButtons[i].progressBarTempColor.gameObject.SetActive(false);
-
-            // Calculate progress percentage
-            double currProgressBarPercentage = discNavig.CountReadPages(i) / discNavig.CountTotalPages(i) * 100;
-            if (currProgressBarPercentage == 100)
-            {
-                // Set progress bar color to light color green
-                progressBarButtons[i].progressBarFinalColor.color = new Color(0.5890471f, 1f, 0.5264151f);
-            }
-            else if (currProgressBarPercentage > 50)
-            {
-                // Set progress bar color to light color yellow
-                progressBarButtons[i].progressBarFinalColor.color = new Color(0.9546386f, 1f, 0.5254902f);
-            }
-            else if (discNavig.CountReadPages(i) > 0)
-            {
-                // Set progress bar color to light color gray
-                progressBarButtons[i].progressBarFinalColor.color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
-            }
-            else
-            {
-                // Set progress bar color to light color gray
-                progressBarButtons[i].progressBarFinalColor.color = new Color(0.764151f, 0.764151f, 0.764151f);
             }
         }
     }
