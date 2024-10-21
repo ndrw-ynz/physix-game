@@ -5,8 +5,67 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class QuantitiesAnswerSubmissionResults
+{
+	public bool hasUnsolvedQuantities;
+	public bool isScalarListCorrect;
+	public bool isVectorListCorrect;
+
+	public bool isAllCorrect()
+	{
+		return !hasUnsolvedQuantities && isScalarListCorrect && isVectorListCorrect;
+	}
+}
+
 public static class ActivityTwoUtilities
 {
+	public static QuantitiesAnswerSubmissionResults ValidateQuantitiesSubmission(QuantitiesAnswerSubmission answer)
+	{
+		// Set initial results to correct values
+		QuantitiesAnswerSubmissionResults results = new QuantitiesAnswerSubmissionResults();
+		results.hasUnsolvedQuantities = false;
+		results.isScalarListCorrect = true;
+		results.isVectorListCorrect = true;
+
+		// Checking of submitted unsolved quantities.
+		foreach (DraggableQuantityText quantity in answer.unsolvedQuantities)
+		{
+			if (quantity.quantityType == QuantityType.Scalar)
+			{
+				results.isScalarListCorrect = false;
+				results.hasUnsolvedQuantities = true;
+			} else
+			{
+				results.isVectorListCorrect = false;
+				results.hasUnsolvedQuantities = true;
+			}
+		}
+
+		// count number of scalar and vector. then, check if scalar = ok , and if scalar thuz far
+
+		// Checking of submitted scalar quantities.
+		foreach (DraggableQuantityText quantity in answer.scalarQuantities)
+		{
+			if (quantity.quantityType != QuantityType.Scalar)
+			{
+				results.isScalarListCorrect = false;
+				results.isVectorListCorrect = false;
+			}
+		}
+
+		// Checking of submitted vector quantities.
+		foreach (DraggableQuantityText quantity in answer.vectorQuantities)
+		{
+			if (quantity.quantityType != QuantityType.Vector)
+			{
+				results.isScalarListCorrect = false;
+				results.isVectorListCorrect = false;
+			}
+		}
+
+		return results;
+	}
+
 	public static float EvaluateNumericalExpressions(DraggableNumericalExpression[] numericalExpressions)
 	{
 		float currentValue = numericalExpressions.Length > 0 ? 1 : 0;
