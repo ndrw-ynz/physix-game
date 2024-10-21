@@ -1,13 +1,11 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "QuantitiesSubActivitySO")]
+[CreateAssetMenu(menuName = "Level Data/Quantities")]
 public class QuantitiesSubActivitySO : ScriptableObject
 {
 	[Header("Number of Quantities")]
-	public int numScalarQuantity;
-	public int numVectorQuantity;
+	public int numberOfQuantities;
 	[Header("Range of Magnitude")]
 	public int minimumMagnitudeValue;
 	public int maximumMagnitudeValue;
