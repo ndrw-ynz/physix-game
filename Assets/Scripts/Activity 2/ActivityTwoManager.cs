@@ -13,6 +13,16 @@ public class ActivityTwoManager : ActivityManager
 	[Header("Views")]
 	[SerializeField] private QuantitiesView quantitiesView;
 
+	[Header("Submission Status Displays")]
+	[SerializeField] private QuantitiesSubmissionStatusDisplay quantitiesSubmissionStatusDisplay;
+
+	// Gameplay performance metrics variables
+	// Quantities Sub Activity
+	private float quantitiesGameplayDuration;
+	private bool isQuantitiesSubActivityFinished;
+	private int numIncorrectQuantitiesSubmission;
+	private int numCorrectQuantitiesSubmission;
+
 	protected override void Start()
 	{
 		base.Start();
@@ -54,9 +64,33 @@ public class ActivityTwoManager : ActivityManager
 	{
 		QuantitiesAnswerSubmissionResults results = ActivityTwoUtilities.ValidateQuantitiesSubmission(answer);
 
-		Debug.Log(results.hasUnsolvedQuantities);
-		Debug.Log(results.isScalarListCorrect);
-		Debug.Log(results.isVectorListCorrect);
+		if (results.isAllCorrect())
+		{
+			numCorrectQuantitiesSubmission++;
+		}
+		else
+		{
+			numIncorrectQuantitiesSubmission++;
+		}
+
+		DisplayQuantitiesSubmissionResults(results);
+	}
+
+	private void DisplayQuantitiesSubmissionResults(QuantitiesAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			quantitiesSubmissionStatusDisplay.SetSubmissionStatus(true, "Quantities are correctly categorized. Fantastic work Captain!");
+			// missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"");
+		}
+		else
+		{
+			quantitiesSubmissionStatusDisplay.SetSubmissionStatus(false, "Captain, it looks like there's an error. Let's give it another shot!");
+		}
+
+		quantitiesSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResults(results);
+
+		quantitiesSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 	#endregion
 
