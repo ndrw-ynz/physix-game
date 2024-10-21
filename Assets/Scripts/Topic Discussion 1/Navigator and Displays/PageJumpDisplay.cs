@@ -7,9 +7,6 @@ public class PageJumpDisplay : MonoBehaviour
     [SerializeField] private PageJumpButton pageJumpButtonPrefab;
     [SerializeField] private HorizontalLayoutGroup pageJumpButtonGroup;
 
-    // Number of buttons to create
-    private int _numButtons;
-
     // Page circle outline animation properties
     private PageJumpButton _pageJumpButton;
     private Color _outlineColor;
@@ -20,19 +17,19 @@ public class PageJumpDisplay : MonoBehaviour
     private void OnEnable()
     {
         // Add Listeners
-        DiscussionNavigator.DiscussionPageStart += LoadPageJumpButtons;
-        DiscussionNavigator.SectorChangeEvent += LoadPageJumpButtons;
-        DiscussionNavigator.PageChangeEvent += UpdatePageJumpButtonOutline;
-        DiscussionNavigator.ReadMarkerChangeEvent += UpdatePageJumpButtonColors;
+        //DiscussionNavigator.DiscussionPageStart += LoadPageJumpButtons;
+        //DiscussionNavigator.SectorChangeEvent += LoadPageJumpButtons;
+        //DiscussionNavigator.PageChangeEvent += UpdatePageJumpButtonOutline;
+        //DiscussionNavigator.ReadMarkerChangeEvent += UpdatePageJumpButtonColors;
     }
 
     private void OnDisable()
     {
         // Remove Listeners
-        DiscussionNavigator.DiscussionPageStart -= LoadPageJumpButtons;
-        DiscussionNavigator.SectorChangeEvent -= LoadPageJumpButtons;
-        DiscussionNavigator.PageChangeEvent -= UpdatePageJumpButtonOutline;
-        DiscussionNavigator.ReadMarkerChangeEvent -= UpdatePageJumpButtonColors;
+        //DiscussionNavigator.DiscussionPageStart -= LoadPageJumpButtons;
+        //DiscussionNavigator.SectorChangeEvent -= LoadPageJumpButtons;
+        //DiscussionNavigator.PageChangeEvent -= UpdatePageJumpButtonOutline;
+        //DiscussionNavigator.ReadMarkerChangeEvent -= UpdatePageJumpButtonColors;
     }
 
     private void Update()
@@ -41,7 +38,7 @@ public class PageJumpDisplay : MonoBehaviour
     }
 
     #region Page Circle Creation and Outline/Color Updates
-    private void LoadPageJumpButtons(DiscussionNavigator discNav)
+    public void LoadPageJumpButtons(int currentSectorIndex, DiscussionNavigator discNav)
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
@@ -55,48 +52,10 @@ public class PageJumpDisplay : MonoBehaviour
         }
 
         // Create buttons for the new sector
-        _numButtons = discNav.GetCurrentSectorPagesCount();
-        for (int i = 0; i < _numButtons; i++)
+        int pagesCount = discNav.GetCurrentSectorPagesCount(currentSectorIndex);
+        for (int i = 0; i < pagesCount; i++)
         {
             GeneratePageJumpButton(i);
-        }
-
-        // Update the page circle button outlines and properly set the active outline
-        UpdatePageJumpButtonOutline(discNav);
-    }
-    private void UpdatePageJumpButtonOutline(DiscussionNavigator discNav)
-    {
-        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
-
-        // Loop through the button list and activate only the current page index's button outline
-        for (int i =0; i < pageJumpButtons.Length; i++)
-        {
-            if (i == discNav.GetCurrentPageIndex())
-            {
-                pageJumpButtons[i].buttonOutline.gameObject.SetActive(true);
-                ActivatePageJumpAnimation(pageJumpButtons[i]);
-            }
-            else
-            {
-                pageJumpButtons[i].buttonOutline.gameObject.SetActive(false);
-            }
-        }
-    }
-    private void UpdatePageJumpButtonColors(DiscussionNavigator discNav)
-    {
-        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
-
-        // Loop through the button list and change their colors to green if page is marked as read
-        for (int i = 0; i < pageJumpButtons.Length; i++)
-        {
-            if (discNav.IsPageMarkedRead(i))
-            {
-                pageJumpButtons[i].buttonColor.color = new Color(0.51f, 1, 0.22f); // Darker green color
-            }
-            else
-            {
-                pageJumpButtons[i].buttonColor.color = Color.white;
-            }
         }
     }
     private void GeneratePageJumpButton(int buttonIndex)
@@ -108,6 +67,42 @@ public class PageJumpDisplay : MonoBehaviour
 
         // Initialize index for jumping directly to its page upon button press
         newPageJumpButton.Initialize(buttonIndex);
+    }
+
+    public void UpdatePageJumpButtonOutline(int currentPageIndex)
+    {
+        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
+
+        // Loop through the button list and activate only the current page index's button outline
+        for (int i =0; i < pageJumpButtons.Length; i++)
+        {
+            if (i == currentPageIndex)
+            {
+                pageJumpButtons[i].buttonOutline.gameObject.SetActive(true);
+                ActivatePageJumpAnimation(pageJumpButtons[i]);
+            }
+            else
+            {
+                pageJumpButtons[i].buttonOutline.gameObject.SetActive(false);
+            }
+        }
+    }
+    public void UpdatePageJumpButtonColors(int currentSectorIndex,int currentPageIndex, DiscussionNavigator discNav)
+    {
+        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
+
+        // Loop through the button list and change their colors to green if page is marked as read
+        for (int i = 0; i < pageJumpButtons.Length; i++)
+        {
+            if (discNav.IsPageMarkedRead(currentSectorIndex, currentPageIndex))
+            {
+                pageJumpButtons[i].buttonColor.color = new Color(0.51f, 1, 0.22f); // Darker green color
+            }
+            else
+            {
+                pageJumpButtons[i].buttonColor.color = Color.white;
+            }
+        }
     }
     #endregion
 

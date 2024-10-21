@@ -18,7 +18,6 @@ public class DiscussionNavigator : MonoBehaviour
     public static event Action<DiscussionNavigator> PageChangeEvent;
     public static event Action<DiscussionNavigator> SectorChangeEvent;
     public static event Action<DiscussionNavigator> ReadMarkerChangeEvent;
-    public static event Action<DiscussionNavigator> DiscussionPageStart;
 
     [Header("Sub Topics Sectors")]
     public List<Sector> subTopicsList;
@@ -39,7 +38,7 @@ public class DiscussionNavigator : MonoBehaviour
         //ReadIndicatorButton.ReadIndicatorClickEvent += ChangeReadState;
 
         // Setup display scripts
-        DiscussionPageStart?.Invoke(this);
+        //DiscussionPageStart?.Invoke(this);
 
         // Load the proper page when scene is loaded
         // Might be useful when rule based algorithm creates a suggestion to review a certain sector
@@ -220,11 +219,11 @@ public class DiscussionNavigator : MonoBehaviour
     //    // Get the current page's index
     //    return _currentPageIndex;
     //}
-    //public int GetCurrentSectorPagesCount()
-    //{
-    //    // Get the current sector's page's total count
-    //    return subTopicsList[_currentSectorIndex].pages.Count;
-    //}
+    public int GetCurrentSectorPagesCount(int currentSectorIndex)
+    {
+        // Get the current sector's page's total count
+        return subTopicsList[currentSectorIndex].pages.Count;
+    }
     public int GetSubTopicListCount()
     {
         // Get the current sub topic list's count
