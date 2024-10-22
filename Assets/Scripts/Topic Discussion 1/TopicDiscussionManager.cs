@@ -3,7 +3,7 @@ using UnityEngine;
 public class TopicDiscussionManager : MonoBehaviour
 {
     [SerializeField] private DiscussionPagesDisplay discussionNavigator;
-    [SerializeField] private ProgressDisplay progressDisplay;
+    [SerializeField] private ProgressBarsDisplay progressDisplay;
     [SerializeField] private PageJumpButtonsDisplay pageJumpDisplay;
     [SerializeField] private PreviousNextButtonsDisplay previousNextButtonsDisplay;
     [SerializeField] private ReadIndicatorsDisplay readIndicatorsDisplay;

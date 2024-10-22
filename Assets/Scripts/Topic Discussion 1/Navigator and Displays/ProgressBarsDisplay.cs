@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ProgressDisplay : MonoBehaviour
+public class ProgressBarsDisplay : MonoBehaviour
 {
     [Header("Progress Bar Button Properties")]
     [SerializeField] private ProgressBarButton progressBarButtonPrefab;
