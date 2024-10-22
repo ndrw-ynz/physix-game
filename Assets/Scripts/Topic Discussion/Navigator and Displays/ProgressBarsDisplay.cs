@@ -24,6 +24,23 @@ public class ProgressBarsDisplay : MonoBehaviour
     private bool _animateIndicatorLine = false;
     private float _indicatorAnimationStartTime;         // Start time of indicator line animation
 
+    private void OnEnable()
+    {
+
+        // Add listeners
+        //DiscussionNavigator.DiscussionPageStart += LoadProgressBars;
+        //DiscussionNavigator.SectorChangeEvent += UpdateIndicatorLine;
+        //DiscussionNavigator.ReadMarkerChangeEvent += UpdateProgressBar;
+    }
+
+    private void OnDisable()
+    {
+        // Remove listeners
+        //DiscussionNavigator.DiscussionPageStart -= LoadProgressBars;
+        //DiscussionNavigator.SectorChangeEvent -= UpdateIndicatorLine;
+        //DiscussionNavigator.ReadMarkerChangeEvent -= UpdateProgressBar;
+    }
+
     private void Update()
     {
         AnimateProgressBar();
