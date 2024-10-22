@@ -94,7 +94,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
         // Loop through the button list and change their colors to green if page is marked as read
         for (int i = 0; i < pageJumpButtons.Length; i++)
         {
-            if (discNav.IsPageMarkedRead(currentSectorIndex, currentPageIndex))
+            if (discNav.IsPageMarkedRead(currentSectorIndex, i))
             {
                 pageJumpButtons[i].buttonColor.color = new Color(0.51f, 1, 0.22f); // Darker green color
             }

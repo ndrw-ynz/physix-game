@@ -155,6 +155,7 @@ public class TopicDiscussionManager : MonoBehaviour
     {
         discussionNavigator.ChangeReadState(readState, _currentSectorIndex, _currentPageIndex);
         progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
+        pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
         readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
     }
 }
