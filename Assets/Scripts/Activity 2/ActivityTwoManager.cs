@@ -1,5 +1,13 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
+public class VectorData
+{
+	public int magnitude;
+	public int angleMeasure;
+}
 
 public class ActivityTwoManager : ActivityManager
 {
@@ -13,11 +21,23 @@ public class ActivityTwoManager : ActivityManager
 	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelThree;
 	private QuantitiesSubActivitySO currentQuantitiesLevel;
 
+	[Header("Level Data - Vectors")]
+	[SerializeField] private VectorsSubActivitySO vectorsLevelOne;
+	[SerializeField] private VectorsSubActivitySO vectorsLevelTwo;
+	[SerializeField] private VectorsSubActivitySO vectorsLevelThree;
+	private VectorsSubActivitySO currentVectorsLevel;
+
 	[Header("Views")]
 	[SerializeField] private QuantitiesView quantitiesView;
+	[SerializeField] private CartesianComponentsView cartesianComponentsView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private QuantitiesSubmissionStatusDisplay quantitiesSubmissionStatusDisplay;
+
+	// Variables for keeping track of current number of tests
+	private int currentNumCartesianComponentsTests;
+
+	private List<VectorData> givenVectorDataList;
 
 	// Gameplay performance metrics variables
 	// Quantities Sub Activity
@@ -34,8 +54,15 @@ public class ActivityTwoManager : ActivityManager
 
 		SubscribeViewAndDisplayEvents();
 
+		// Initialize given values
+		GenerateVectorsGivenData(currentVectorsLevel);
+
+		// Setting number of tests
+		currentNumCartesianComponentsTests = currentVectorsLevel.numberOfVectors;
+
 		// Setup views
 		quantitiesView.SetupQuantitiesView(currentQuantitiesLevel);
+		cartesianComponentsView.UpdateCartesianComponentsView(givenVectorDataList[currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests]);
 	}
 
 	private void SubscribeViewAndDisplayEvents()
@@ -54,12 +81,15 @@ public class ActivityTwoManager : ActivityManager
 		{
 			case Difficulty.Easy:
 				currentQuantitiesLevel = quantitiesLevelOne;
+				currentVectorsLevel = vectorsLevelOne;
 				break;
 			case Difficulty.Medium:
 				currentQuantitiesLevel = quantitiesLevelTwo;
+				currentVectorsLevel = vectorsLevelTwo;
 				break;
 			case Difficulty.Hard:
 				currentQuantitiesLevel = quantitiesLevelThree;
+				currentVectorsLevel = vectorsLevelThree;
 				break;
 		}
 	}
@@ -106,6 +136,36 @@ public class ActivityTwoManager : ActivityManager
 		QuantitiesAreaClearEvent?.Invoke();
 	}
 	#endregion
+
+	private void GenerateVectorsGivenData(VectorsSubActivitySO vectorsSO)
+	{
+		givenVectorDataList = new List<VectorData>();
+
+		for (int i = 0; i < vectorsSO.numberOfVectors; i++)
+		{
+			VectorData generatedVectorData = new VectorData();
+
+			// Setting magnitude value
+			generatedVectorData.magnitude = Random.Range(vectorsSO.minimumMagnitudeValue, vectorsSO.maximumMagnitudeValue);
+			// Setting direction value
+			switch (vectorsSO.directionType)
+			{
+				case VectorDirectionType.Cardinal:
+					int[] cardinalDirectionValues = new int[] { 0, 90, 180, 270 };
+					generatedVectorData.angleMeasure = cardinalDirectionValues[Random.Range(0, cardinalDirectionValues.Length)];
+					break;
+				case VectorDirectionType.Standard:
+					int[] standardDirectionValues = new int[] { 0, 30, 45, 60, 90, 120, 135, 1150, 180, 210, 225, 240, 270, 300, 315, 330 };
+					generatedVectorData.angleMeasure = standardDirectionValues[Random.Range(0, standardDirectionValues.Length)];
+					break;
+				case VectorDirectionType.FullRange:
+					generatedVectorData.angleMeasure = Random.Range(0, 360);
+					break;
+			}
+
+			givenVectorDataList.Add(generatedVectorData);
+		}
+	}
 
 	public override void DisplayPerformanceView()
 	{
