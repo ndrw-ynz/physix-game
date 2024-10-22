@@ -16,6 +16,7 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 	[Header("Interactable Terminal Game Objects")]
 	[SerializeField] private InteractableViewOpenerObject quantitiesTerminal;
 	[SerializeField] private InteractableViewOpenerObject cartesianComponentsTerminal;
+	[SerializeField] private InteractableViewOpenerObject vectorAdditionTerminal;
 
 	private void Start()
 	{
@@ -26,6 +27,7 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 		cartesianComponentsView.QuitViewEvent += () => SetCartesianComponentsTerminalEnvironmentState(false);
 
 		activityTwoManager.QuantitiesAreaClearEvent += ClearQuantitiesTerminalEnvironmentState;
+		activityTwoManager.CartesianComponentsAreaClearEvent += ClearCartesianComponentsTerminalEnvironmentState;
 	}
 
 	#region Quantities Terminal Area
@@ -51,6 +53,13 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 		SetPlayerActivityState(!isActive);
 		// activityTwoManager.SetMissionObjectiveDisplay(!isActive);
 		cartesianComponentsTerminalAreaCamera.gameObject.SetActive(isActive);
+	}
+
+	private void ClearCartesianComponentsTerminalEnvironmentState()
+	{
+		SetCartesianComponentsTerminalEnvironmentState(false);
+		cartesianComponentsTerminal.SetInteractable(false);
+		vectorAdditionTerminal.SetInteractable(true);
 	}
 	#endregion
 }
