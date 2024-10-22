@@ -76,21 +76,17 @@ public class PageJumpButtonsDisplay : MonoBehaviour
             }
         }
     }
-    public void UpdatePageJumpButtonColors(int currentSectorIndex,int currentPageIndex, DiscussionPagesDisplay discNav)
+    public void UpdatePageJumpButtonColors(int currentSectorIndex, bool isPageMarkedRead, int i)
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
-        // Loop through the button list and change their colors to green if page is marked as read
-        for (int i = 0; i < pageJumpButtons.Length; i++)
+        if (isPageMarkedRead)
         {
-            if (discNav.IsPageMarkedRead(currentSectorIndex, i))
-            {
-                pageJumpButtons[i].buttonColor.color = new Color(0.51f, 1, 0.22f); // Darker green color
-            }
-            else
-            {
-                pageJumpButtons[i].buttonColor.color = Color.white;
-            }
+            pageJumpButtons[i].buttonColor.color = new Color(0.51f, 1, 0.22f); // Darker green color
+        }
+        else
+        {
+            pageJumpButtons[i].buttonColor.color = Color.white;
         }
     }
 

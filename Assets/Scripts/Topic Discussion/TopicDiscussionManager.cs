@@ -26,7 +26,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
         LoadPageJumpButtons();
         pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
-        pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+        UpdatePageJumpButtonColors();
 
         PagePrevNextButton.PagePrevNextClickEvent += HandlePrevNextClick;
         SectorPrevNextButton.SectorPrevNextClickEvent += HandlePrevNextClick;
@@ -61,7 +61,7 @@ public class TopicDiscussionManager : MonoBehaviour
                 UpdateProgressBarButtonColor();
 
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
-                pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+                UpdatePageJumpButtonColors();
                 break;
 
             case Direction.NextPage:
@@ -76,7 +76,7 @@ public class TopicDiscussionManager : MonoBehaviour
                 UpdateProgressBarButtonColor();
 
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
-                pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+                UpdatePageJumpButtonColors();
                 break;
             case Direction.PreviousSector:
                 discussionNavigator.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
@@ -97,7 +97,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 LoadPageJumpButtons();
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
-                pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+                UpdatePageJumpButtonColors();
                 break;
             case Direction.NextSector:
                 discussionNavigator.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
@@ -117,7 +117,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 LoadPageJumpButtons();
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
-                pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+                UpdatePageJumpButtonColors();
                 break;
         }
     }
@@ -142,7 +142,7 @@ public class TopicDiscussionManager : MonoBehaviour
             LoadPageJumpButtons();
 
             pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
-            pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+            UpdatePageJumpButtonColors();
         }
     }
 
@@ -160,7 +160,7 @@ public class TopicDiscussionManager : MonoBehaviour
             UpdateProgressBarButtonColor();
 
             pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
-            pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+            UpdatePageJumpButtonColors();
         }
     }
 
@@ -172,7 +172,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
         UpdateProgressBarButtonColor();
 
-        pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+        UpdatePageJumpButtonColors();
     }
 
     private void ChangePreviousAndNextButtonState()
@@ -232,6 +232,16 @@ public class TopicDiscussionManager : MonoBehaviour
         for (int i = 0; i < currentSectorPagesCount; i++)
         {
             pageJumpDisplay.GeneratePageJumpButton(i);
+        }
+    }
+
+    private void UpdatePageJumpButtonColors()
+    {
+        int pageJumpButtonsLength = pageJumpDisplay.GetPageJumpButtonsLength();
+        for (int i = 0; i < pageJumpButtonsLength; i++)
+        {
+            bool isPageMarkedRead = discussionNavigator.IsPageMarkedRead(_currentSectorIndex, i);
+            pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, isPageMarkedRead, i);
         }
     }
 }
