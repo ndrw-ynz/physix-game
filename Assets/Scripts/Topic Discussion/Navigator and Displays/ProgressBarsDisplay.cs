@@ -48,22 +48,6 @@ public class ProgressBarsDisplay : MonoBehaviour
     }
 
     #region Loading/Updating of Progress Bar Colors, Progress Count Text, and Indicator Lines
-    public void LoadProgressBars(DiscussionPagesDisplay discussionNavigator)
-    {
-        // Get the amount of buttons to be created
-        float subtopicsCount = discussionNavigator.GetSubTopicListCount();
-    
-        // Create buttons with corresponding titles and progress count
-        for (int i = 0; i < subtopicsCount; i++)
-        {
-            string sectorTitle = discussionNavigator.GetSectorTitle(i);
-            string progressCount = $"{discussionNavigator.CountReadPages(i).ToString()}/{discussionNavigator.CountTotalPages(i).ToString()}";
-            GenerateProgressBarButton(i, sectorTitle, progressCount);
-        }
-    
-        // Load the colors based on the amount of read pages for each progress bar
-        LoadProgressBarsColors(discussionNavigator);
-    }
     public void GenerateProgressBarButton(int i, string sectorTitle, string progressCount)
     {
         // Generate progress bar button with proper title and progress count
@@ -72,18 +56,15 @@ public class ProgressBarsDisplay : MonoBehaviour
         newButton.name = $"Progress Button {i + 1}";
         newButton.Initialize(sectorTitle, progressCount, i);
     }
-    private void LoadProgressBarsColors(DiscussionPagesDisplay discNavig)
+    public void LoadProgressBarsColors(double currentReadPagesCount, double currentTotalPages, int i)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
 
-        // Check all progress bars
-        for (int i = 0; i < progressBarButtons.Length; i++)
-        {
             // Deactivate the temporary background color
             progressBarButtons[i].progressBarTempColor.gameObject.SetActive(false);
 
             // Calculate progress percentage
-            double currProgressBarPercentage = discNavig.CountReadPages(i) / discNavig.CountTotalPages(i) * 100;
+            double currProgressBarPercentage = currentReadPagesCount / currentTotalPages * 100;
             if (currProgressBarPercentage == 100)
             {
                 // Set progress bar color to light color green
@@ -94,7 +75,7 @@ public class ProgressBarsDisplay : MonoBehaviour
                 // Set progress bar color to light color yellow
                 progressBarButtons[i].progressBarFinalColor.color = new Color(0.9546386f, 1f, 0.5254902f);
             }
-            else if (discNavig.CountReadPages(i) > 0)
+            else if (currentReadPagesCount > 0)
             {
                 // Set progress bar color to light color gray
                 progressBarButtons[i].progressBarFinalColor.color = new Color(0.8339623f, 0.8339623f, 0.8339623f);
@@ -103,24 +84,17 @@ public class ProgressBarsDisplay : MonoBehaviour
             {
                 // Set progress bar color to light color gray
                 progressBarButtons[i].progressBarFinalColor.color = new Color(0.764151f, 0.764151f, 0.764151f);
-            }
         }
     }
-
-    public void UpdateProgressBar(int currentSectorIndex, DiscussionPagesDisplay discNavig)
+    public void UpdateProgressBar(int currentSectorIndex, double currReadPagesCount, double currSectorPagesCount)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
-
-        int i = currentSectorIndex;
         
         // Activate the temporary background color of the progress bar to give way for the color transition
-        progressBarButtons[i].progressBarTempColor.gameObject.SetActive(true);
+        progressBarButtons[currentSectorIndex].progressBarTempColor.gameObject.SetActive(true);
 
-        // Get the values for read pages and total pages
-        double currReadPagesCount = discNavig.CountReadPages(i);
-        double currSectorPagesCount = discNavig.CountTotalPages(i);
         // Assign text value for read pages and total pages to the progress bar
-        progressBarButtons[i].progressCountText.text = $"{currReadPagesCount}/{currSectorPagesCount}";
+        progressBarButtons[currentSectorIndex].progressCountText.text = $"{currReadPagesCount}/{currSectorPagesCount}";
 
         // Calculate the percentage of read pages
         double currProgressBarPercentage = currReadPagesCount / currSectorPagesCount * 100;
@@ -128,36 +102,36 @@ public class ProgressBarsDisplay : MonoBehaviour
         if (currProgressBarPercentage == 100)
         {
             // Transition progress bar color to light color green
-            Image temporaryImage = progressBarButtons[i].progressBarTempColor;
-            Image finalImage = progressBarButtons[i].progressBarFinalColor;
-            Color oldColor = progressBarButtons[i].progressBarFinalColor.color;
+            Image temporaryImage = progressBarButtons[currentSectorIndex].progressBarTempColor;
+            Image finalImage = progressBarButtons[currentSectorIndex].progressBarFinalColor;
+            Color oldColor = progressBarButtons[currentSectorIndex].progressBarFinalColor.color;
             Color newColor = new Color(0.5890471f, 1f, 0.5264151f);
             ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
         else if (currProgressBarPercentage > 50)
         {
             // Transition progress bar color to light color yellow
-            Image temporaryImage = progressBarButtons[i].progressBarTempColor;
-            Image finalImage = progressBarButtons[i].progressBarFinalColor;
-            Color oldColor = progressBarButtons[i].progressBarFinalColor.color;
+            Image temporaryImage = progressBarButtons[currentSectorIndex].progressBarTempColor;
+            Image finalImage = progressBarButtons[currentSectorIndex].progressBarFinalColor;
+            Color oldColor = progressBarButtons[currentSectorIndex].progressBarFinalColor.color;
             Color newColor = new Color(0.9546386f, 1f, 0.5254902f);
             ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
         else if (currReadPagesCount > 0)
         {
             // Transition progress bar color to light color gray
-            Image temporaryImage = progressBarButtons[i].progressBarTempColor;
-            Image finalImage = progressBarButtons[i].progressBarFinalColor;
-            Color oldColor = progressBarButtons[i].progressBarFinalColor.color;
+            Image temporaryImage = progressBarButtons[currentSectorIndex].progressBarTempColor;
+            Image finalImage = progressBarButtons[currentSectorIndex].progressBarFinalColor;
+            Color oldColor = progressBarButtons[currentSectorIndex].progressBarFinalColor.color;
             Color newColor = Color.white;
             ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
         else
         {
             // Transition progress bar color to gray
-            Image temporaryImage = progressBarButtons[i].progressBarTempColor;
-            Image finalImage = progressBarButtons[i].progressBarFinalColor;
-            Color oldColor = progressBarButtons[i].progressBarFinalColor.color;
+            Image temporaryImage = progressBarButtons[currentSectorIndex].progressBarTempColor;
+            Image finalImage = progressBarButtons[currentSectorIndex].progressBarFinalColor;
+            Color oldColor = progressBarButtons[currentSectorIndex].progressBarFinalColor.color;
             Color newColor = new Color(0.764151f, 0.764151f, 0.764151f);
             ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
@@ -183,6 +157,12 @@ public class ProgressBarsDisplay : MonoBehaviour
                 progressBarButtons[i].progressBarIndicator.gameObject.SetActive(false);
             }
         }
+    }
+
+    public int GetProgressBarButtonsLength()
+    {
+        ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
+        return progressBarButtons.Length;
     }
     #endregion
 

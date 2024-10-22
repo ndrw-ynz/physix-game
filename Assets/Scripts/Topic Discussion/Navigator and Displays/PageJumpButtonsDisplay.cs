@@ -38,27 +38,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
     }
 
     #region Page Circle Creation and Outline/Color Updates
-    public void LoadPageJumpButtons(int currentSectorIndex, DiscussionPagesDisplay discNav)
-    {
-        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
-
-        // Remove all buttons if there are existing buttons
-        if (pageJumpButtons.Length > 0) 
-        {
-            for (int i = 0; i < pageJumpButtons.Length; ++i)
-            {
-                DestroyImmediate(pageJumpButtons[i].gameObject);
-            }
-        }
-
-        // Create buttons for the new sector
-        int pagesCount = discNav.GetCurrentSectorPagesCount(currentSectorIndex);
-        for (int i = 0; i < pagesCount; i++)
-        {
-            GeneratePageJumpButton(i);
-        }
-    }
-    private void GeneratePageJumpButton(int buttonIndex)
+    public void GeneratePageJumpButton(int buttonIndex)
     {
         // Instantiate and set parent of new page circle button to the horizontal group layout
         PageJumpButton newPageJumpButton = Instantiate(pageJumpButtonPrefab);
@@ -67,6 +47,15 @@ public class PageJumpButtonsDisplay : MonoBehaviour
 
         // Initialize index for jumping directly to its page upon button press
         newPageJumpButton.Initialize(buttonIndex);
+    }
+
+    public void DestroyImmediateAllPageJumpButtons()
+    {
+        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
+        for (int i = 0; i < pageJumpButtons.Length; ++i)
+        {
+            DestroyImmediate(pageJumpButtons[i].gameObject);
+        }
     }
 
     public void UpdatePageJumpButtonOutline(int currentPageIndex)
@@ -103,6 +92,12 @@ public class PageJumpButtonsDisplay : MonoBehaviour
                 pageJumpButtons[i].buttonColor.color = Color.white;
             }
         }
+    }
+
+    public int GetPageJumpButtonsLength()
+    {
+        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
+        return pageJumpButtons.Length;
     }
     #endregion
 
