@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 public class ActivityTwoManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
+
+	public event Action QuantitiesAreaClearEvent;
 
 	[Header("Level Data - Quantities")]
 	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelOne;
@@ -39,6 +42,8 @@ public class ActivityTwoManager : ActivityManager
 	{
 		// Quantities Sub Activity Related Events
 		quantitiesView.SubmitAnswerEvent += CheckQuantitiesAnswer;
+		quantitiesSubmissionStatusDisplay.ProceedEvent += UpdateQuantitiesViewState;
+
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -91,6 +96,14 @@ public class ActivityTwoManager : ActivityManager
 		quantitiesSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResults(results);
 
 		quantitiesSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateQuantitiesViewState()
+	{
+		isQuantitiesSubActivityFinished = true;
+		quantitiesView.gameObject.SetActive(false);
+		//missionObjectiveDisplayUI.ClearMissionObjective(0);
+		QuantitiesAreaClearEvent?.Invoke();
 	}
 	#endregion
 
