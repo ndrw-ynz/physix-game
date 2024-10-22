@@ -5,12 +5,12 @@ public class VectorInfo
 {
 	public int magnitudeValue;
 	public int directionValue;
-	public DirectionType directionType;
+	public VectorDirectionType directionType;
 	public VectorInfoDisplay vectorInfoDisplay;
 	public Vector2 vectorComponent;
 	public bool isComponentSolved;
 
-	public VectorInfo(int magnitudeValue, int directionValue, DirectionType directionType, VectorInfoDisplay vectorInfoDisplay)
+	public VectorInfo(int magnitudeValue, int directionValue, VectorDirectionType directionType, VectorInfoDisplay vectorInfoDisplay)
 	{
 		this.magnitudeValue = magnitudeValue;
 		this.directionValue = directionValue;

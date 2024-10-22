@@ -56,21 +56,21 @@ public class VectorInfoDisplay : MonoBehaviour
 			int randomizedDirectionValue = 0;
 			switch (vectorInfo.directionType)
 			{
-				case DirectionType.Cardinal:
+				case VectorDirectionType.Cardinal:
 					HashSet<int> cardinalDirectionsSet = new HashSet<int> { 0, 90, 180, 270 };
 					cardinalDirectionsSet.Remove(vectorInfo.directionValue);
 
 					List<int> cardinalDirectionsList = new List<int>(cardinalDirectionsSet);
 					randomizedDirectionValue = cardinalDirectionsList[Random.Range(0, cardinalDirectionsList.Count)];
 					break;
-				case DirectionType.Standard:
+				case VectorDirectionType.Standard:
 					HashSet<int> standardDirectionsSet = new HashSet<int> { 0, 30, 45, 60, 90, 120, 135, 1150, 180, 210, 225, 240, 270, 300, 315, 330 };
 					standardDirectionsSet.Remove(vectorInfo.directionValue);
 
 					List<int> standardDirectionsList = new List<int>(standardDirectionsSet);
 					randomizedDirectionValue = standardDirectionsList[Random.Range(0, standardDirectionsList.Count)];
 					break;
-				case DirectionType.FullRange:
+				case VectorDirectionType.FullRange:
 					randomizedDirectionValue = Random.Range(0, 360);
 					break;
 			}
