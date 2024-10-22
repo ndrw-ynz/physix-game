@@ -71,6 +71,7 @@ public class ActivityTwoManager : ActivityManager
 		quantitiesView.SubmitAnswerEvent += CheckQuantitiesAnswer;
 		quantitiesSubmissionStatusDisplay.ProceedEvent += UpdateQuantitiesViewState;
 
+		cartesianComponentsView.SubmitAnswerEvent += CheckCartesianComponentsAnswer;
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -166,6 +167,17 @@ public class ActivityTwoManager : ActivityManager
 			givenVectorDataList.Add(generatedVectorData);
 		}
 	}
+
+	#region Cartesian Components
+	private void CheckCartesianComponentsAnswer(CartesianComponentsAnswerSubmission answer)
+	{
+		CartesianComponentsAnswerSubmissionResults results = ActivityTwoUtilities.ValidateCartesianComponentsSubmission(answer, givenVectorDataList[currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests]);
+
+		Debug.Log(results.isVectorXComponentCorrect);
+		Debug.Log(results.isVectorYComponentCorrect);
+		Debug.Log(results.isAllCorrect());
+	}
+	#endregion
 
 	public override void DisplayPerformanceView()
 	{
