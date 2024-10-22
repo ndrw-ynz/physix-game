@@ -48,8 +48,8 @@ public class TopicDiscussionManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Current Sector Index is: "+ _currentSectorIndex);
-        Debug.Log("Current Page Index is: "+ _currentPageIndex);
+        //Debug.Log("Current Sector Index is: "+ _currentSectorIndex);
+        //Debug.Log("Current Page Index is: "+ _currentPageIndex);
     }
 
     private void HandlePrevNextClick(Direction direction)
@@ -113,7 +113,12 @@ public class TopicDiscussionManager : MonoBehaviour
         if (_currentSectorIndex != sectorIndex)
         {
             discussionNavigator.CloseCurrentPage(_currentSectorIndex,_currentPageIndex);
-            discussionNavigator.JumpToSector(sectorIndex);
+            Debug.Log("Current Sector in Topic Discussion: " + _currentSectorIndex);
+            Debug.Log("Sector to be jumped: " + sectorIndex);
+
+            _currentSectorIndex = sectorIndex;
+            discussionNavigator.JumpToSector(_currentSectorIndex);
+
             previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
             progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
             readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);

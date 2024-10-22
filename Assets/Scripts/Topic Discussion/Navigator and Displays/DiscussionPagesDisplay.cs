@@ -80,12 +80,8 @@ public class DiscussionPagesDisplay : MonoBehaviour
     }
     public void JumpToSector(int sectorIndex)
     {
-            // Set the sector to be jumped to
-            int jumpedSectorIndex = sectorIndex;
-            int jumpedPageIndex = 0;
-
-            ShowPage(jumpedSectorIndex, jumpedPageIndex);
-            ActivatePageAnimation(subTopicsList[jumpedSectorIndex].pages[jumpedPageIndex]);
+            ShowPage(sectorIndex, 0);
+            ActivatePageAnimation(subTopicsList[sectorIndex].pages[0]);
 
             PageChangeEvent?.Invoke(this);
             SectorChangeEvent?.Invoke(this);
