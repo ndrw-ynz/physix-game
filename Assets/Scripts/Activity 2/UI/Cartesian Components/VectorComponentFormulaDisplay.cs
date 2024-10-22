@@ -45,6 +45,10 @@ public class VectorComponentFormulaDisplay : MonoBehaviour
 		angleInputField.text = "0";
 
 		// Reset dropdown choice
+		trigonometricFunctionDropdown.value = 0;
+		trigonometricFunctionDropdown.RefreshShownValue();
+
+		// Clear result field
 		resultField.text = "";
 
 		// Set result value to null.
