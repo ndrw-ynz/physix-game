@@ -46,6 +46,7 @@ public class TopicDiscussionManager : MonoBehaviour
             case Direction.PreviousPage:
                 _currentPageIndex -= 1;
                 discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
+
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
                 pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 break;

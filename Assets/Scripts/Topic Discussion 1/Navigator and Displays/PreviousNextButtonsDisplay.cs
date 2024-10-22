@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ButtonsDisplay : MonoBehaviour
+public class PreviousNextButtonsDisplay : MonoBehaviour
 {
     [Header("Previous and Next Buttons")]
     [SerializeField] private PagePrevNextButton prevPageButton;
