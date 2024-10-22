@@ -15,10 +15,6 @@ public enum ReadState
 }
 public class DiscussionPagesDisplay : MonoBehaviour
 {
-    public static event Action<DiscussionPagesDisplay> PageChangeEvent;
-    public static event Action<DiscussionPagesDisplay> SectorChangeEvent;
-    public static event Action<DiscussionPagesDisplay> ReadMarkerChangeEvent;
-
     [Header("Sub Topics Sectors")]
     public List<Sector> subTopicsList;
 
@@ -27,32 +23,6 @@ public class DiscussionPagesDisplay : MonoBehaviour
     private float _pageAnimationDuration = 0.2f;
     private bool _animatePage = false;
     private float _pageAnimationStartTime;
-
-    private void Start()
-    {
-        //// Add button click listeners
-        //PagePrevNextButton.PagePrevNextClickEvent += ChangePage;
-        //SectorPrevNextButton.SectorPrevNextClickEvent += ChangePage;
-        //ProgressBarButton.ProgressBarClickEvent += JumpToSector;
-        //PageJumpButton.PageCircleClick += JumpToPage;
-        //ReadIndicatorButton.ReadIndicatorClickEvent += ChangeReadState;
-
-        // Setup display scripts
-        //DiscussionPageStart?.Invoke(this);
-
-        // Load the proper page when scene is loaded
-        // Might be useful when rule based algorithm creates a suggestion to review a certain sector
-        //LoadPage();
-    }
-    private void OnDisable()
-    {
-        //// Remove button click listeners
-        //PagePrevNextButton.PagePrevNextClickEvent -= ChangePage;
-        //SectorPrevNextButton.SectorPrevNextClickEvent -= ChangePage;
-        //ProgressBarButton.ProgressBarClickEvent -= JumpToSector;
-        //PageJumpButton.PageCircleClick -= JumpToPage;
-        //ReadIndicatorButton.ReadIndicatorClickEvent -= ChangeReadState;
-    }
 
     private void Update()
     {
@@ -65,26 +35,16 @@ public class DiscussionPagesDisplay : MonoBehaviour
         // Load Startup Page
         ShowPage(currentSectorIndex, currentPageIndex);
         ActivatePageAnimation(subTopicsList[currentSectorIndex].pages[currentPageIndex]);
-
-        PageChangeEvent?.Invoke(this);
-        SectorChangeEvent?.Invoke(this);
-        ReadMarkerChangeEvent?.Invoke(this);
     }
     public void ChangePage(int currentSectorIndex, int currentPageIndex)
     {
         ShowPage(currentSectorIndex, currentPageIndex);
         ActivatePageAnimation(subTopicsList[currentSectorIndex].pages[currentPageIndex]);
-
-        PageChangeEvent?.Invoke(this);
-        ReadMarkerChangeEvent?.Invoke(this);
     }
     public void JumpToSector(int sectorIndex, int pageIndex)
     {
             ShowPage(sectorIndex, pageIndex);
             ActivatePageAnimation(subTopicsList[sectorIndex].pages[pageIndex]);
-
-            PageChangeEvent?.Invoke(this);
-            SectorChangeEvent?.Invoke(this);
     }
     public void JumpToPage(int currentSectorIndex, int pageIndex)
     {
@@ -93,9 +53,6 @@ public class DiscussionPagesDisplay : MonoBehaviour
 
             ShowPage(currentSectorIndex, jumpedPageIndex);
             ActivatePageAnimation(subTopicsList[currentSectorIndex].pages[jumpedPageIndex]);
-
-            PageChangeEvent?.Invoke(this);
-            ReadMarkerChangeEvent?.Invoke(this);
     }
     #endregion
 
@@ -129,13 +86,11 @@ public class DiscussionPagesDisplay : MonoBehaviour
             case ReadState.Read:
                 // Set page to read
                 subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedRead = true;
-                ReadMarkerChangeEvent?.Invoke(this);
                 break;
 
             case ReadState.NotRead:
                 // Set page to not yet read
                 subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedRead = false;
-                ReadMarkerChangeEvent?.Invoke(this);
                 break;
         }
     }

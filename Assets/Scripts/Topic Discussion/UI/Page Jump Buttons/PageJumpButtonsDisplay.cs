@@ -14,24 +14,6 @@ public class PageJumpButtonsDisplay : MonoBehaviour
     private bool _animatePageJumpButton = false;
     private float _pageJumpButtonAnimationStartTime;
 
-    private void OnEnable()
-    {
-        // Add Listeners
-        //DiscussionNavigator.DiscussionPageStart += LoadPageJumpButtons;
-        //DiscussionNavigator.SectorChangeEvent += LoadPageJumpButtons;
-        //DiscussionNavigator.PageChangeEvent += UpdatePageJumpButtonOutline;
-        //DiscussionNavigator.ReadMarkerChangeEvent += UpdatePageJumpButtonColors;
-    }
-
-    private void OnDisable()
-    {
-        // Remove Listeners
-        //DiscussionNavigator.DiscussionPageStart -= LoadPageJumpButtons;
-        //DiscussionNavigator.SectorChangeEvent -= LoadPageJumpButtons;
-        //DiscussionNavigator.PageChangeEvent -= UpdatePageJumpButtonOutline;
-        //DiscussionNavigator.ReadMarkerChangeEvent -= UpdatePageJumpButtonColors;
-    }
-
     private void Update()
     {
         AnimatePageJumpButton();
