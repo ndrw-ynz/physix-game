@@ -46,6 +46,12 @@ public class TopicDiscussionManager : MonoBehaviour
         ReadIndicatorButton.ReadIndicatorClickEvent -= HandleReadIndicatorClick;
     }
 
+    private void Update()
+    {
+        Debug.Log("Current Sector Index is: "+ _currentSectorIndex);
+        Debug.Log("Current Page Index is: "+ _currentPageIndex);
+    }
+
     private void HandlePrevNextClick(Direction direction)
     {
         switch (direction) 
@@ -78,6 +84,8 @@ public class TopicDiscussionManager : MonoBehaviour
                 previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
                 readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+
+                pageJumpDisplay.LoadPageJumpButtons(_currentSectorIndex, discussionNavigator);
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
                 pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 break;
@@ -90,6 +98,8 @@ public class TopicDiscussionManager : MonoBehaviour
                 previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
                 readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+
+                pageJumpDisplay.LoadPageJumpButtons(_currentSectorIndex, discussionNavigator);
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
                 pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 break;
