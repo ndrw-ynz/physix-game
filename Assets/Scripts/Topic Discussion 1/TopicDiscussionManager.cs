@@ -4,7 +4,7 @@ public class TopicDiscussionManager : MonoBehaviour
 {
     [SerializeField] private DiscussionPagesDisplay discussionNavigator;
     [SerializeField] private ProgressDisplay progressDisplay;
-    [SerializeField] private PageJumpDisplay pageJumpDisplay;
+    [SerializeField] private PageJumpButtonsDisplay pageJumpDisplay;
     [SerializeField] private PreviousNextButtonsDisplay previousNextButtonsDisplay;
     [SerializeField] private ReadIndicatorsDisplay readIndicatorsDisplay;
 
