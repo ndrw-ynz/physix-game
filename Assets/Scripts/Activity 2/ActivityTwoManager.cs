@@ -14,6 +14,7 @@ public class ActivityTwoManager : ActivityManager
 	public static Difficulty difficultyConfiguration;
 
 	public event Action QuantitiesAreaClearEvent;
+	public event Action CartesianComponentsAreaClearEvent;
 
 	[Header("Level Data - Quantities")]
 	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelOne;
@@ -33,6 +34,8 @@ public class ActivityTwoManager : ActivityManager
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private QuantitiesSubmissionStatusDisplay quantitiesSubmissionStatusDisplay;
+	[SerializeField] private CartesianComponentsSubmissionStatusDisplay cartesianComponentsSubmissionStatusDisplay;
+
 
 	// Variables for keeping track of current number of tests
 	private int currentNumCartesianComponentsTests;
@@ -45,6 +48,11 @@ public class ActivityTwoManager : ActivityManager
 	private bool isQuantitiesSubActivityFinished;
 	private int numIncorrectQuantitiesSubmission;
 	private int numCorrectQuantitiesSubmission;
+	// Cartesian Components Sub Activity
+	private float cartesianComponentsGameplayDuration;
+	private bool isCartesianComponentsSubActivityFinished;
+	private int numIncorrectCartesianComponentsSubmission;
+	private int numCorrectCartesianComponentsSubmission;
 
 	protected override void Start()
 	{
@@ -62,6 +70,7 @@ public class ActivityTwoManager : ActivityManager
 
 		// Setup views
 		quantitiesView.SetupQuantitiesView(currentQuantitiesLevel);
+		cartesianComponentsView.UpdateNumberOfVectorsTextDisplay(currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests, currentVectorsLevel.numberOfVectors);
 		cartesianComponentsView.UpdateCartesianComponentsView(givenVectorDataList[currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests]);
 	}
 
@@ -72,6 +81,7 @@ public class ActivityTwoManager : ActivityManager
 		quantitiesSubmissionStatusDisplay.ProceedEvent += UpdateQuantitiesViewState;
 
 		cartesianComponentsView.SubmitAnswerEvent += CheckCartesianComponentsAnswer;
+		cartesianComponentsSubmissionStatusDisplay.ProceedEvent += UpdateCartesianComponentsViewState;
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -173,9 +183,50 @@ public class ActivityTwoManager : ActivityManager
 	{
 		CartesianComponentsAnswerSubmissionResults results = ActivityTwoUtilities.ValidateCartesianComponentsSubmission(answer, givenVectorDataList[currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests]);
 
-		Debug.Log(results.isVectorXComponentCorrect);
-		Debug.Log(results.isVectorYComponentCorrect);
-		Debug.Log(results.isAllCorrect());
+		if (results.isAllCorrect())
+		{
+			numCorrectCartesianComponentsSubmission++;
+			currentNumCartesianComponentsTests--;
+		}
+		else
+		{
+			numIncorrectCartesianComponentsSubmission++;
+		}
+
+		DisplayCartesianComponentsSubmissionResults(results);
+	}
+
+	private void DisplayCartesianComponentsSubmissionResults(CartesianComponentsAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			cartesianComponentsSubmissionStatusDisplay.SetSubmissionStatus(true, "Ship's vector has been readjusted. Nicely done!");
+			// missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"");
+		}
+		else
+		{
+			cartesianComponentsSubmissionStatusDisplay.SetSubmissionStatus(false, "Captain, it looks like there's an error. Let's give it another shot!");
+		}
+
+		cartesianComponentsSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResults(results);
+
+		cartesianComponentsSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateCartesianComponentsViewState()
+	{
+		if (currentNumCartesianComponentsTests > 0)
+		{
+			cartesianComponentsView.UpdateNumberOfVectorsTextDisplay(currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests, currentVectorsLevel.numberOfVectors);
+			cartesianComponentsView.UpdateCartesianComponentsView(givenVectorDataList[currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests]);
+		}
+		else
+		{
+			isCartesianComponentsSubActivityFinished = true;
+			//missionObjectiveDisplayUI.ClearMissionObjective(1);
+			cartesianComponentsView.gameObject.SetActive(false);
+			CartesianComponentsAreaClearEvent?.Invoke();
+		}
 	}
 	#endregion
 
