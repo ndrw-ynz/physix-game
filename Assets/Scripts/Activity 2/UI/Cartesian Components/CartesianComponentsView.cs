@@ -2,10 +2,26 @@ using System;
 using TMPro;
 using UnityEngine;
 
+public class CartesianComponentsAnswerSubmission
+{
+	public float? vectorXComponent;
+	public float? vectorYComponent;
+
+	public CartesianComponentsAnswerSubmission(
+		float? vectorXComponent,
+		float? vectorYComponent
+		)
+	{
+		this.vectorXComponent = vectorXComponent;
+		this.vectorYComponent = vectorYComponent;
+	}
+}
+
 public class CartesianComponentsView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
+	public event Action<CartesianComponentsAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Display Text")]
 	[SerializeField] private TextMeshProUGUI numberOfVectorsText;
@@ -17,7 +33,7 @@ public class CartesianComponentsView : MonoBehaviour
 	[SerializeField] private TMP_InputField givenMagnitude;
 	[SerializeField] private TMP_InputField givenAngleMeasure;
 
-	[Header("Vector Component Formula DIsplays")]
+	[Header("Vector Component Formula Displays")]
 	[SerializeField] private VectorComponentFormulaDisplay xComponentFormulaDisplay;
 	[SerializeField] private VectorComponentFormulaDisplay yComponentFormulaDisplay;
 
@@ -55,6 +71,16 @@ public class CartesianComponentsView : MonoBehaviour
 		lineRenderer.positionCount = 2;
 		lineRenderer.SetPosition(0, Vector3.zero);
 		lineRenderer.SetPosition(1, targetPoint);
+	}
+
+	public void OnSubmitButtonClick()
+	{
+		CartesianComponentsAnswerSubmission submission = new CartesianComponentsAnswerSubmission(
+			vectorXComponent: xComponentFormulaDisplay.resultValue,
+			vectorYComponent: yComponentFormulaDisplay.resultValue
+			);
+
+		SubmitAnswerEvent?.Invoke(submission);
 	}
 
 	public void OnQuitButtonClick()
