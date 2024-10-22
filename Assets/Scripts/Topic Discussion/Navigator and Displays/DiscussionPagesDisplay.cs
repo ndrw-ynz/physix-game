@@ -78,10 +78,10 @@ public class DiscussionPagesDisplay : MonoBehaviour
         PageChangeEvent?.Invoke(this);
         ReadMarkerChangeEvent?.Invoke(this);
     }
-    public void JumpToSector(int sectorIndex)
+    public void JumpToSector(int sectorIndex, int pageIndex)
     {
-            ShowPage(sectorIndex, 0);
-            ActivatePageAnimation(subTopicsList[sectorIndex].pages[0]);
+            ShowPage(sectorIndex, pageIndex);
+            ActivatePageAnimation(subTopicsList[sectorIndex].pages[pageIndex]);
 
             PageChangeEvent?.Invoke(this);
             SectorChangeEvent?.Invoke(this);

@@ -113,17 +113,19 @@ public class TopicDiscussionManager : MonoBehaviour
         if (_currentSectorIndex != sectorIndex)
         {
             discussionNavigator.CloseCurrentPage(_currentSectorIndex,_currentPageIndex);
-            Debug.Log("Current Sector in Topic Discussion: " + _currentSectorIndex);
-            Debug.Log("Sector to be jumped: " + sectorIndex);
 
             _currentSectorIndex = sectorIndex;
-            discussionNavigator.JumpToSector(_currentSectorIndex);
+            _currentPageIndex = 0;
+            discussionNavigator.JumpToSector(_currentSectorIndex, _currentPageIndex);
 
             previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
-            progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
+
             readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+
+            progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
             progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
             pageJumpDisplay.LoadPageJumpButtons(_currentSectorIndex, discussionNavigator);
+
             pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
             pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
         }
@@ -133,10 +135,17 @@ public class TopicDiscussionManager : MonoBehaviour
     {
         if (_currentPageIndex != pageIndex)
         {
+            Debug.Log("Current Page in Topic Discussion: " + _currentPageIndex);
+            Debug.Log("Page to be jumped: " + pageIndex);
+
+            _currentPageIndex = pageIndex;
             discussionNavigator.JumpToPage(_currentSectorIndex, pageIndex);
+
             previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
-            progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
             readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+
+            progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
+
             pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
             pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
         }
