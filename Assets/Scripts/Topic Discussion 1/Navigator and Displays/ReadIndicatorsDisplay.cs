@@ -7,7 +7,7 @@ public class ReadIndicatorsDisplay : MonoBehaviour
     [SerializeField] private ReadIndicatorButton markAsNotReadButton;
 
     #region Read Indicator Buttons
-    public void ChangeReadIndicatorButtonsState(int currentSectorIndex, int currentPageIndex, DiscussionNavigator discNav)
+    public void ChangeReadIndicatorButtonsState(int currentSectorIndex, int currentPageIndex, DiscussionPagesDisplay discNav)
     {
         if (!discNav.CurrentPageIsMarkedRead(currentSectorIndex, currentPageIndex))
         {

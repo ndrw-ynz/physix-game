@@ -13,11 +13,11 @@ public enum ReadState
     Read,
     NotRead
 }
-public class DiscussionNavigator : MonoBehaviour
+public class DiscussionPagesDisplay : MonoBehaviour
 {
-    public static event Action<DiscussionNavigator> PageChangeEvent;
-    public static event Action<DiscussionNavigator> SectorChangeEvent;
-    public static event Action<DiscussionNavigator> ReadMarkerChangeEvent;
+    public static event Action<DiscussionPagesDisplay> PageChangeEvent;
+    public static event Action<DiscussionPagesDisplay> SectorChangeEvent;
+    public static event Action<DiscussionPagesDisplay> ReadMarkerChangeEvent;
 
     [Header("Sub Topics Sectors")]
     public List<Sector> subTopicsList;

@@ -22,7 +22,7 @@ public class PreviousNextButtonsDisplay : MonoBehaviour
     }
 
     #region Previous and Next Buttons
-    public void ChangePrevNextButtonsState(int currentSectorIndex, int currentPageIndex, DiscussionNavigator discNav)
+    public void ChangePrevNextButtonsState(int currentSectorIndex, int currentPageIndex, DiscussionPagesDisplay discNav)
     {
         // All cases of page indexes
         // There's a lot considering there's also previous and next sector button activate cases

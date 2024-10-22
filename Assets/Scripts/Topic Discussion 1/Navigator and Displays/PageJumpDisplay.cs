@@ -38,7 +38,7 @@ public class PageJumpDisplay : MonoBehaviour
     }
 
     #region Page Circle Creation and Outline/Color Updates
-    public void LoadPageJumpButtons(int currentSectorIndex, DiscussionNavigator discNav)
+    public void LoadPageJumpButtons(int currentSectorIndex, DiscussionPagesDisplay discNav)
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
@@ -87,7 +87,7 @@ public class PageJumpDisplay : MonoBehaviour
             }
         }
     }
-    public void UpdatePageJumpButtonColors(int currentSectorIndex,int currentPageIndex, DiscussionNavigator discNav)
+    public void UpdatePageJumpButtonColors(int currentSectorIndex,int currentPageIndex, DiscussionPagesDisplay discNav)
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 

@@ -48,7 +48,7 @@ public class ProgressDisplay : MonoBehaviour
     }
 
     #region Loading/Updating of Progress Bar Colors, Progress Count Text, and Indicator Lines
-    public void LoadProgressBars(DiscussionNavigator discussionNavigator)
+    public void LoadProgressBars(DiscussionPagesDisplay discussionNavigator)
     {
         // Get the amount of buttons to be created
         float subtopicsCount = discussionNavigator.GetSubTopicListCount();
@@ -72,7 +72,7 @@ public class ProgressDisplay : MonoBehaviour
         newButton.name = $"Progress Button {i + 1}";
         newButton.Initialize(sectorTitle, progressCount, i);
     }
-    private void LoadProgressBarsColors(DiscussionNavigator discNavig)
+    private void LoadProgressBarsColors(DiscussionPagesDisplay discNavig)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
 
@@ -107,7 +107,7 @@ public class ProgressDisplay : MonoBehaviour
         }
     }
 
-    public void UpdateProgressBar(int currentSectorIndex, DiscussionNavigator discNavig)
+    public void UpdateProgressBar(int currentSectorIndex, DiscussionPagesDisplay discNavig)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
 
