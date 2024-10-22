@@ -5,6 +5,7 @@ public class TopicDiscussionManager : MonoBehaviour
     [SerializeField] private DiscussionNavigator discussionNavigator;
     [SerializeField] private ProgressDisplay progressDisplay;
     [SerializeField] private PageJumpDisplay pageJumpDisplay;
+    [SerializeField] private PreviousNextButtonsDisplay previousNextButtonsDisplay;
 
     private int _currentSectorIndex = 0;
     private int _currentPageIndex = 0;
@@ -13,6 +14,8 @@ public class TopicDiscussionManager : MonoBehaviour
     {
         // Add button click listeners
         discussionNavigator.LoadPage(_currentSectorIndex, _currentPageIndex);
+
+        previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
 
         progressDisplay.LoadProgressBars(discussionNavigator);
         progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
@@ -46,7 +49,7 @@ public class TopicDiscussionManager : MonoBehaviour
             case Direction.PreviousPage:
                 _currentPageIndex -= 1;
                 discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
-
+                previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex,_currentPageIndex,discussionNavigator);
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
                 pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 break;
@@ -54,6 +57,7 @@ public class TopicDiscussionManager : MonoBehaviour
             case Direction.NextPage:
                 _currentPageIndex += 1;
                 discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
+                previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
                 pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 break;
@@ -63,6 +67,7 @@ public class TopicDiscussionManager : MonoBehaviour
                 int previousSectorLastPageIndex = discussionNavigator.GetSubTopicListCount() - 1;
                 _currentPageIndex = previousSectorLastPageIndex;
                 discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
+                previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
                 pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 break;
@@ -72,6 +77,7 @@ public class TopicDiscussionManager : MonoBehaviour
                 int nextSectorFirstPageIndex = 0;
                 _currentPageIndex = nextSectorFirstPageIndex;
                 discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
+                previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
                 pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 break;
@@ -84,6 +90,7 @@ public class TopicDiscussionManager : MonoBehaviour
         {
             discussionNavigator.CloseCurrentPage(_currentSectorIndex,_currentPageIndex);
             discussionNavigator.JumpToSector(sectorIndex);
+            previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
             progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
             pageJumpDisplay.LoadPageJumpButtons(_currentSectorIndex, discussionNavigator);
             pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
@@ -96,6 +103,7 @@ public class TopicDiscussionManager : MonoBehaviour
         if (_currentPageIndex != pageIndex)
         {
             discussionNavigator.JumpToPage(_currentSectorIndex, pageIndex);
+            previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
             pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
             pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
         }
