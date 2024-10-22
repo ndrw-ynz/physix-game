@@ -1266,7 +1266,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6917629505939600850}
+      - m_Target: {fileID: 471353679309515971}
         m_TargetAssemblyTypeName: VectorComponentFormulaDisplay, Assembly-CSharp
         m_MethodName: OnValueChange
         m_Mode: 1
@@ -1643,8 +1643,9 @@ GameObject:
   - component: {fileID: 913545282693866618}
   - component: {fileID: 7656188859672941320}
   - component: {fileID: 4779074036333462215}
+  - component: {fileID: 471353679309515971}
   m_Layer: 5
-  m_Name: VectorComponentDisplay
+  m_Name: VectorComponentFormulaDisplay
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1725,6 +1726,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7652209857023992573}
   m_CullTransparentMesh: 1
+--- !u!114 &471353679309515971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7652209857023992573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b2ebff664019047ab964c4d6d36f8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  magnitudeInputField: {fileID: 8099298074056530873}
+  angleInputField: {fileID: 567959555361563245}
+  trigonometricFunctionDropdown: {fileID: 1340405772075893308}
+  resultField: {fileID: 8545882527313277769}
 --- !u!1 &8182644824985077417
 GameObject:
   m_ObjectHideFlags: 0
@@ -1736,7 +1753,6 @@ GameObject:
   - component: {fileID: 810253619608384614}
   - component: {fileID: 4859475103905861077}
   - component: {fileID: 4333114365003111208}
-  - component: {fileID: 6917629505939600850}
   m_Layer: 5
   m_Name: Equation
   m_TagString: Untagged
@@ -1817,22 +1833,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &6917629505939600850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8182644824985077417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b2ebff664019047ab964c4d6d36f8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  magnitudeInputField: {fileID: 8099298074056530873}
-  angleInputField: {fileID: 567959555361563245}
-  trigonometricFunctionDropdown: {fileID: 1340405772075893308}
-  resultField: {fileID: 8545882527313277769}
 --- !u!1 &8560742234410751735
 GameObject:
   m_ObjectHideFlags: 0
@@ -2200,7 +2200,7 @@ PrefabInstance:
     - target: {fileID: 3624996017932817652, guid: 4d62afad28e42d148888d62f68a38993, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6917629505939600850}
+      objectReference: {fileID: 471353679309515971}
     - target: {fileID: 3624996017932817652, guid: 4d62afad28e42d148888d62f68a38993, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -2389,7 +2389,7 @@ PrefabInstance:
     - target: {fileID: 3624996017932817652, guid: 4d62afad28e42d148888d62f68a38993, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6917629505939600850}
+      objectReference: {fileID: 471353679309515971}
     - target: {fileID: 3624996017932817652, guid: 4d62afad28e42d148888d62f68a38993, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
