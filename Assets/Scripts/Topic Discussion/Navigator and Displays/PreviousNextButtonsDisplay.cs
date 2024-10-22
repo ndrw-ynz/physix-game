@@ -8,19 +8,6 @@ public class PreviousNextButtonsDisplay : MonoBehaviour
     [SerializeField] private SectorPrevNextButton prevSectorButton;
     [SerializeField] private SectorPrevNextButton nextSectorButton;
 
-    private void OnEnable()
-    {
-        // Add listeners
-        //DiscussionNavigator.PageChangeEvent += ChangePrevNextButtonsState;
-        //DiscussionNavigator.ReadMarkerChangeEvent += ChangeReadIndicatorButtonsState;
-    }
-    private void OnDisable()
-    {
-        // Remove listeners
-        //DiscussionNavigator.PageChangeEvent -= ChangePrevNextButtonsState;
-        //DiscussionNavigator.ReadMarkerChangeEvent -= ChangeReadIndicatorButtonsState;
-    }
-
     #region Previous and Next Buttons
     public void ChangePrevNextButtonsState(int currentSectorIndex, int currentPageIndex, int subTopicsListCount, int currentSectorPagesCount, string previousSectorTitle, string nextSectorTitle)
     {
