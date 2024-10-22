@@ -17,6 +17,17 @@ public class QuantitiesAnswerSubmissionResults
 	}
 }
 
+public class CartesianComponentsAnswerSubmissionResults
+{
+	public bool isVectorXComponentCorrect;
+	public bool isVectorYComponentCorrect;
+
+	public bool isAllCorrect()
+	{
+		return isVectorXComponentCorrect && isVectorYComponentCorrect;
+	}
+}
+
 public static class ActivityTwoUtilities
 {
 	public static QuantitiesAnswerSubmissionResults ValidateQuantitiesSubmission(QuantitiesAnswerSubmission answer)
@@ -61,6 +72,33 @@ public static class ActivityTwoUtilities
 				results.isScalarListCorrect = false;
 				results.isVectorListCorrect = false;
 			}
+		}
+
+		return results;
+	}
+
+	public static CartesianComponentsAnswerSubmissionResults ValidateCartesianComponentsSubmission(CartesianComponentsAnswerSubmission answer, VectorData givenVectorData)
+	{
+		CartesianComponentsAnswerSubmissionResults results = new CartesianComponentsAnswerSubmissionResults();
+
+		// Compute and validate x-component
+		if (answer.vectorXComponent != null)
+		{
+			ExpressionEvaluator.Evaluate($"{givenVectorData.magnitude} * cos({givenVectorData.angleMeasure}*(pi/180))", out float computedXComponent);
+			results.isVectorXComponentCorrect = Mathf.Abs(computedXComponent - (float)answer.vectorXComponent) <= 0.0001;
+		} else
+		{
+			results.isVectorXComponentCorrect = false;
+		}
+
+		// Compute and validate y-component
+		if (answer.vectorYComponent != null)
+		{
+			ExpressionEvaluator.Evaluate($"{givenVectorData.magnitude} * sin({givenVectorData.angleMeasure}*(pi/180))", out float computedYComponent);
+			results.isVectorYComponentCorrect = Mathf.Abs(computedYComponent - (float)answer.vectorYComponent) <= 0.0001;
+		} else
+		{
+			results.isVectorYComponentCorrect = false;
 		}
 
 		return results;
