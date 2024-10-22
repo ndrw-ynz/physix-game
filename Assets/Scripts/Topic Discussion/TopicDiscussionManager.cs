@@ -125,6 +125,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
             _currentSectorIndex = sectorIndex;
             _currentPageIndex = 0;
+
             discussionNavigator.JumpToSector(_currentSectorIndex, _currentPageIndex);
 
             previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
@@ -144,13 +145,11 @@ public class TopicDiscussionManager : MonoBehaviour
     {
         if (_currentPageIndex != pageIndex)
         {
-            Debug.Log("Current Page in Topic Discussion: " + _currentPageIndex);
-            Debug.Log("Page to be jumped: " + pageIndex);
-
             _currentPageIndex = pageIndex;
             discussionNavigator.JumpToPage(_currentSectorIndex, pageIndex);
 
             previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+
             readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
 
             progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
@@ -163,8 +162,11 @@ public class TopicDiscussionManager : MonoBehaviour
     private void HandleReadIndicatorClick(ReadState readState)
     {
         discussionNavigator.ChangeReadState(readState, _currentSectorIndex, _currentPageIndex);
-        progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
-        pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+
         readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+
+        progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
+
+        pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
     }
 }
