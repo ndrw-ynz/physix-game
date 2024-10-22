@@ -78,7 +78,7 @@ public class TopicDiscussionManager : MonoBehaviour
             case Direction.PreviousSector:
                 discussionNavigator.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
                 _currentSectorIndex -= 1;
-                int previousSectorLastPageIndex = discussionNavigator.GetSubTopicListCount() - 1;
+                int previousSectorLastPageIndex = discussionNavigator.GetCurrentSectorPagesCount(_currentSectorIndex) - 1;
                 _currentPageIndex = previousSectorLastPageIndex;
                 discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
                 previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
