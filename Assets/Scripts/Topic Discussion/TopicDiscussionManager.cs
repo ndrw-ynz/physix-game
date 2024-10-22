@@ -46,12 +46,6 @@ public class TopicDiscussionManager : MonoBehaviour
         ReadIndicatorButton.ReadIndicatorClickEvent -= HandleReadIndicatorClick;
     }
 
-    private void Update()
-    {
-        //Debug.Log("Current Sector Index is: "+ _currentSectorIndex);
-        //Debug.Log("Current Page Index is: "+ _currentPageIndex);
-    }
-
     private void HandlePrevNextClick(Direction direction)
     {
         switch (direction) 
