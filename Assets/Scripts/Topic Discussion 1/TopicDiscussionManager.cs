@@ -79,17 +79,25 @@ public class TopicDiscussionManager : MonoBehaviour
 
     private void HandleProgressBarClick(int sectorIndex)
     {
-        discussionNavigator.JumpToSector(sectorIndex);
-        progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
-        pageJumpDisplay.LoadPageJumpButtons(_currentSectorIndex, discussionNavigator);
-        pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
+        if (_currentSectorIndex != sectorIndex)
+        {
+            discussionNavigator.CloseCurrentPage(_currentSectorIndex,_currentPageIndex);
+            discussionNavigator.JumpToSector(sectorIndex);
+            progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
+            pageJumpDisplay.LoadPageJumpButtons(_currentSectorIndex, discussionNavigator);
+            pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
+            pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+        }
     }
 
     private void HandlePageCircleClick(int pageIndex)
     {
-        discussionNavigator.JumpToPage(_currentSectorIndex, pageIndex);
-        pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
-        pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+        if (_currentPageIndex != pageIndex)
+        {
+            discussionNavigator.JumpToPage(_currentSectorIndex, pageIndex);
+            pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
+            pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, _currentPageIndex, discussionNavigator);
+        }
     }
 
     private void HandleReadIndicatorClick(ReadState readState)

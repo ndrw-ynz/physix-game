@@ -14,14 +14,14 @@ public class ButtonsDisplay : MonoBehaviour
     private void OnEnable()
     {
         // Add listeners
-        DiscussionNavigator.PageChangeEvent += ChangePrevNextButtonsState;
-        DiscussionNavigator.ReadMarkerChangeEvent += ChangeReadIndicatorButtonsState;
+        //DiscussionNavigator.PageChangeEvent += ChangePrevNextButtonsState;
+        //DiscussionNavigator.ReadMarkerChangeEvent += ChangeReadIndicatorButtonsState;
     }
     private void OnDisable()
     {
         // Remove listeners
-        DiscussionNavigator.PageChangeEvent -= ChangePrevNextButtonsState;
-        DiscussionNavigator.ReadMarkerChangeEvent -= ChangeReadIndicatorButtonsState;
+        //DiscussionNavigator.PageChangeEvent -= ChangePrevNextButtonsState;
+        //DiscussionNavigator.ReadMarkerChangeEvent -= ChangeReadIndicatorButtonsState;
     }
 
     #region Previous and Next Buttons
