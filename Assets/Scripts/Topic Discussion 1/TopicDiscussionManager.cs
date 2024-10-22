@@ -83,6 +83,7 @@ public class TopicDiscussionManager : MonoBehaviour
                 discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
                 previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
+                progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
                 readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
 
                 pageJumpDisplay.LoadPageJumpButtons(_currentSectorIndex, discussionNavigator);
@@ -97,6 +98,7 @@ public class TopicDiscussionManager : MonoBehaviour
                 discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
                 previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
                 progressDisplay.UpdateProgressBar(_currentSectorIndex, discussionNavigator);
+                progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
                 readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, discussionNavigator);
 
                 pageJumpDisplay.LoadPageJumpButtons(_currentSectorIndex, discussionNavigator);
