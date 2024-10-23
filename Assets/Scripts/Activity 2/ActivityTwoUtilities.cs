@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class QuantitiesAnswerSubmissionResults
 {
@@ -25,6 +23,19 @@ public class CartesianComponentsAnswerSubmissionResults
 	public bool isAllCorrect()
 	{
 		return isVectorXComponentCorrect && isVectorYComponentCorrect;
+	}
+}
+
+public class VectorAdditionAnswerSubmissionResults
+{
+	public bool isXComponentCorrect;
+	public bool isYComponentCorrect;
+	public bool isVectorMagnitudeCorrect;
+	public bool isVectorDirectionCorrect;
+
+	public bool isAllCorrect()
+	{
+		return isXComponentCorrect && isYComponentCorrect && isVectorMagnitudeCorrect && isVectorDirectionCorrect;
 	}
 }
 
@@ -101,6 +112,52 @@ public static class ActivityTwoUtilities
 		} else
 		{
 			results.isVectorYComponentCorrect = false;
+		}
+
+		return results;
+	}
+
+	public static VectorAdditionAnswerSubmissionResults ValidateVectorAdditionSubmission(VectorAdditionAnswerSubmission answer, List<VectorData> givenVectorData)
+	{
+		VectorAdditionAnswerSubmissionResults results = new VectorAdditionAnswerSubmissionResults();
+		// Compute and validated x- and y- component sum of vectors
+		float computedXComponentSum = 0;
+		float computedYComponentSum = 0;
+		foreach (VectorData vectorData in givenVectorData)
+		{
+			ExpressionEvaluator.Evaluate($"{vectorData.magnitude} * cos({vectorData.angleMeasure}*(pi/180))", out float xComponent);
+			xComponent = (float)Math.Round(xComponent, 4);
+			computedXComponentSum += xComponent;
+
+			ExpressionEvaluator.Evaluate($"{vectorData.magnitude} * sin({vectorData.angleMeasure}*(pi/180))", out float yComponent);
+			yComponent = (float)Math.Round(yComponent, 4);
+			computedYComponentSum += yComponent;
+		}
+
+		if (answer.xComponentSumValue != null)
+		{
+			results.isXComponentCorrect = Mathf.Abs((float)answer.xComponentSumValue - computedXComponentSum) <= 0.0001;
+		}
+
+		if (answer.yComponentSumValue != null)
+		{
+			results.isYComponentCorrect = Mathf.Abs((float)answer.yComponentSumValue - computedYComponentSum) <= 0.0001;
+		}
+
+		// Compute and validate magnitude of resultant vector
+		if (answer.vectorMagnitudeValue != null)
+		{
+			ExpressionEvaluator.Evaluate($"sqrt(({computedXComponentSum})^2 + ({computedYComponentSum})^2)", out float computedMagnitudeResult);
+			computedMagnitudeResult = (float)Math.Round(computedMagnitudeResult, 4);
+			results.isVectorMagnitudeCorrect = Mathf.Abs((float)answer.vectorMagnitudeValue - computedMagnitudeResult) <= 0.0001;
+		}
+
+		// Compute and validate direction of resultant vector
+		if (answer.vectorDirectionValue != null)
+		{
+			float computedDirectionResult = (float)(Math.Atan2(computedYComponentSum, computedXComponentSum) * (180 / Math.PI));
+			computedDirectionResult = (float)Math.Round((float)computedDirectionResult, 4);
+			results.isVectorDirectionCorrect = Mathf.Abs((float)answer.vectorDirectionValue - computedDirectionResult) <= 0.0001;
 		}
 
 		return results;
