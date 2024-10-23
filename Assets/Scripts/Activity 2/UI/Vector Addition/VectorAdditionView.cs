@@ -3,10 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class VectorAdditionAnswerSubmission
+{
+	public float? xComponentSumValue { get; private set; }
+	public float? yComponentSumValue { get; private set; }
+	public float? vectorMagnitudeValue { get; private set; }
+	public float? vectorDirectionValue { get; private set; }
+
+	public VectorAdditionAnswerSubmission(
+		float? xComponentSumValue,
+		float? yComponentSumValue,
+		float? vectorMagnitudeValue,
+		float? vectorDirectionValue
+		)
+	{
+		this.xComponentSumValue = xComponentSumValue;
+		this.yComponentSumValue = yComponentSumValue;
+		this.vectorMagnitudeValue = vectorMagnitudeValue;
+		this.vectorDirectionValue = vectorDirectionValue;
+	}
+}
+
 public class VectorAdditionView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
+	public event Action<VectorAdditionAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Vector Info Display Container")]
 	[SerializeField] private VerticalLayoutGroup vectorDisplayContainer;
@@ -72,6 +94,18 @@ public class VectorAdditionView : MonoBehaviour
 			rightPageButton.gameObject.SetActive(false);
 		}
 		leftPageButton.gameObject.SetActive(true);
+	}
+
+	public void OnSubmitButtonClick()
+	{
+		VectorAdditionAnswerSubmission submission = new VectorAdditionAnswerSubmission(
+			xComponentSumValue: xComponentSumDisplay.resultValue,
+			yComponentSumValue: yComponentSumDisplay.resultValue,
+			vectorMagnitudeValue: vectorMagnitudeDisplay.resultValue,
+			vectorDirectionValue: vectorDirectionDisplay.resultValue
+			);
+
+		SubmitAnswerEvent?.Invoke(submission);
 	}
 
 	public void OnQuitButtonClick()
