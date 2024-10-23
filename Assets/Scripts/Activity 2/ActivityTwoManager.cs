@@ -15,6 +15,7 @@ public class ActivityTwoManager : ActivityManager
 
 	public event Action QuantitiesAreaClearEvent;
 	public event Action CartesianComponentsAreaClearEvent;
+	public event Action VectorAdditionAreaClearEvent;
 
 	[Header("Level Data - Quantities")]
 	[SerializeField] private QuantitiesSubActivitySO quantitiesLevelOne;
@@ -54,6 +55,11 @@ public class ActivityTwoManager : ActivityManager
 	private bool isCartesianComponentsSubActivityFinished;
 	private int numIncorrectCartesianComponentsSubmission;
 	private int numCorrectCartesianComponentsSubmission;
+	// Vector Addition Sub Activity
+	private float vectorAdditionGameplayDuration;
+	private bool isVectorAdditionSubActivityFinished;
+	private int numIncorrectVectorAdditionSubmission;
+	private int numCorrectVectorAdditionSubmission;
 
 	protected override void Start()
 	{
@@ -82,10 +88,13 @@ public class ActivityTwoManager : ActivityManager
 		quantitiesView.SubmitAnswerEvent += CheckQuantitiesAnswer;
 		quantitiesSubmissionStatusDisplay.ProceedEvent += UpdateQuantitiesViewState;
 
+		// Cartesian Components Sub Activity Related Events
 		cartesianComponentsView.SubmitAnswerEvent += CheckCartesianComponentsAnswer;
 		cartesianComponentsSubmissionStatusDisplay.ProceedEvent += UpdateCartesianComponentsViewState;
 
+		// Vector Addition Sub Activity Related Events
 		vectorAdditionView.SubmitAnswerEvent += CheckVectorAdditionAnswer;
+		vectorAdditionSubmissionStatusDisplay.ProceedEvent += UpdateVectorAdditionViewState;
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -239,6 +248,13 @@ public class ActivityTwoManager : ActivityManager
 	{
 		VectorAdditionAnswerSubmissionResults results = ActivityTwoUtilities.ValidateVectorAdditionSubmission(answer, givenVectorDataList);
 
+		if (results.isAllCorrect())
+		{
+			numCorrectVectorAdditionSubmission++;
+		}  else
+		{
+			numIncorrectCartesianComponentsSubmission++;
+		}
 		DisplayVectorAdditionSubmissionResults(results);
 	}
 
@@ -259,6 +275,13 @@ public class ActivityTwoManager : ActivityManager
 		vectorAdditionSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
+	private void UpdateVectorAdditionViewState()
+	{
+		isVectorAdditionSubActivityFinished = true;
+		vectorAdditionView.gameObject.SetActive(false);
+		//missionObjectiveDisplayUI.ClearMissionObjective(0);
+		VectorAdditionAreaClearEvent?.Invoke();
+	}
 	#endregion
 
 	public override void DisplayPerformanceView()
