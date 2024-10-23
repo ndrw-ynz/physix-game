@@ -84,6 +84,8 @@ public class ActivityTwoManager : ActivityManager
 
 		cartesianComponentsView.SubmitAnswerEvent += CheckCartesianComponentsAnswer;
 		cartesianComponentsSubmissionStatusDisplay.ProceedEvent += UpdateCartesianComponentsViewState;
+
+		vectorAdditionView.SubmitAnswerEvent += CheckVectorAdditionAnswer;
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -230,6 +232,19 @@ public class ActivityTwoManager : ActivityManager
 			CartesianComponentsAreaClearEvent?.Invoke();
 		}
 	}
+	#endregion
+
+	#region Vector Addition
+	private void CheckVectorAdditionAnswer(VectorAdditionAnswerSubmission answer)
+	{
+		VectorAdditionAnswerSubmissionResults results = ActivityTwoUtilities.ValidateVectorAdditionSubmission(answer, givenVectorDataList);
+
+		Debug.Log(results.isXComponentCorrect);
+		Debug.Log(results.isYComponentCorrect);
+		Debug.Log(results.isVectorMagnitudeCorrect);
+		Debug.Log(results.isVectorDirectionCorrect);
+	}
+
 	#endregion
 
 	public override void DisplayPerformanceView()
