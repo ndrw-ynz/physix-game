@@ -36,7 +36,7 @@ public class ActivityTwoManager : ActivityManager
 	[Header("Submission Status Displays")]
 	[SerializeField] private QuantitiesSubmissionStatusDisplay quantitiesSubmissionStatusDisplay;
 	[SerializeField] private CartesianComponentsSubmissionStatusDisplay cartesianComponentsSubmissionStatusDisplay;
-
+	[SerializeField] private VectorAdditionSubmissionStatusDisplay vectorAdditionSubmissionStatusDisplay;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumCartesianComponentsTests;
@@ -239,10 +239,24 @@ public class ActivityTwoManager : ActivityManager
 	{
 		VectorAdditionAnswerSubmissionResults results = ActivityTwoUtilities.ValidateVectorAdditionSubmission(answer, givenVectorDataList);
 
-		Debug.Log(results.isXComponentCorrect);
-		Debug.Log(results.isYComponentCorrect);
-		Debug.Log(results.isVectorMagnitudeCorrect);
-		Debug.Log(results.isVectorDirectionCorrect);
+		DisplayVectorAdditionSubmissionResults(results);
+	}
+
+	private void DisplayVectorAdditionSubmissionResults(VectorAdditionAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			vectorAdditionSubmissionStatusDisplay.SetSubmissionStatus(true, "Congratulations captain! You may now initiate autopilot on the ship captain’s panel.");
+			// missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"");
+		}
+		else
+		{
+			vectorAdditionSubmissionStatusDisplay.SetSubmissionStatus(false, "Captain, it looks like there's an error. Let's give it another shot!");
+		}
+
+		vectorAdditionSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResults(results);
+
+		vectorAdditionSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
 	#endregion
