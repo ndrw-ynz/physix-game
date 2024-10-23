@@ -79,7 +79,7 @@ public class DiscussionPagesDisplay : MonoBehaviour
     #region Page Animation
     private void ActivatePageAnimation(Page page)
     {
-        // Sets the right page, activate the page animation, and records the start time of the page animation
+        // Sets the right page, activate the page animation, and record the start time of the page animation
         _page = page;
         _animatePage = true;
         _pageAnimationStartTime = Time.time;
@@ -89,7 +89,7 @@ public class DiscussionPagesDisplay : MonoBehaviour
         // Animates the desired page when the page animation is activated
         if (_animatePage)
         {
-            // Records the elapsed time of the animation
+            // Calculate elapsed time
             float elapsedTime = Time.time - _pageAnimationStartTime;
 
             if (elapsedTime < _pageAnimationDuration)

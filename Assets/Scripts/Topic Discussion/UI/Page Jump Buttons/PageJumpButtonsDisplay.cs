@@ -87,8 +87,8 @@ public class PageJumpButtonsDisplay : MonoBehaviour
     #region Page Jump Button Outline Animation
     private void ActivatePageJumpAnimation(PageJumpButton currPageJumpButton)
     {
-        /* Sets the right page jump button, right outline color, activate the page jump button, 
-         * and records the start time of the page jump button animation*/
+        /* Sets the right page jump button, right outline color, activate the page jump button animation, 
+         * and record the start time of the page jump button animation*/
         _pageJumpButton = currPageJumpButton;
         _outlineColor = Color.black;
         _animatePageJumpButton = true;
@@ -109,7 +109,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
             }
             else
             {
-                // If the elapsed time has reached the set page jump button animation duration, ensure page alpha is 1 and stop animation
+                // If the elapsed time has reached the set page jump button animation duration, ensure page jump button alpha is 1 and stop animation
                 _outlineColor.a = 1;
                 _pageJumpButton.buttonOutline.color = _outlineColor;
                 _animatePageJumpButton = false;

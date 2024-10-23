@@ -144,6 +144,7 @@ public class ProgressBarsDisplay : MonoBehaviour
     public int GetProgressBarButtonsLength()
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
+        // Get the current progress bar buttons list's length
         return progressBarButtons.Length;
     }
     #endregion
@@ -151,7 +152,8 @@ public class ProgressBarsDisplay : MonoBehaviour
     #region Progress Bar and Indicator Line Animations
     private void ActivateProgressBarButtonAnimation(Image temporaryImage, Image finalImage, Color oldColor, Color newColor)
     {
-        // Setup the progress bar button color to be animated and activates animation sequence
+        /* Sets the right temporary image, right final image, old color, new color, activate the progress bar button animation, 
+         * and records the start time of the progress bar button animation*/
         _temporaryImage = temporaryImage;
         _finalImage = finalImage;
         _oldColor = oldColor;
@@ -161,7 +163,8 @@ public class ProgressBarsDisplay : MonoBehaviour
     }
     private void ActivateIndicatorLineAnimation(ProgressBarButton indicatorLine, float currentHeight)
     {
-        // Setup the indicator line to be animated and activates animation sequence
+        /* Sets the right indicator line, current height, activate the progress bar button animation, 
+         * and record the start time of the indicator line animation*/
         _indicatorLine = indicatorLine;
         _currentHeight = currentHeight;
         _animateIndicatorLine = true;
@@ -171,10 +174,11 @@ public class ProgressBarsDisplay : MonoBehaviour
     {
         if (_animateProgressBarButton)
         {
+            // Calculate elapsed time
             float elapsedTime = Time.time - _progressBarAnimationStartTime;
             if (elapsedTime < _buttonAnimationDuration)
             {
-                // Animates the progress bar color with the given animation duration
+                // If the elapsed time is less than the set progress bar button animation duration, keep animating the fade in effect
                 float newButtonAlpha = Mathf.Lerp(0f, 1.0f, elapsedTime / _buttonAnimationDuration);
                 _newColor.a = newButtonAlpha;
 
@@ -183,11 +187,10 @@ public class ProgressBarsDisplay : MonoBehaviour
             }
             else
             {
+                // If the elapsed time has reached the set progress bar button jump button animation duration, ensure progress bar button alpha is 1 and stop animation
                 _newColor.a = 1;
                 _temporaryImage.color = _oldColor;
                 _finalImage.color = _newColor;
-
-                // After animation, set animation mode and the temporary image to false
                 _temporaryImage.gameObject.SetActive(false);
                 _animateProgressBarButton = false;
             }
@@ -195,18 +198,21 @@ public class ProgressBarsDisplay : MonoBehaviour
     }
     private void AnimateIndicatorLine()
     {
+        // Calculate elapsed time
         float elapsedTime = Time.time - _indicatorAnimationStartTime;
         if (_animateIndicatorLine)
         {
             if (elapsedTime < _indicatorAnimationDuration)
             {
-                // Animates the indicator line width with the given animation duration
+                // If the elapsed time is less than the set indicator line animation duration, keep animating the fade in effect
                 float currentWidth = Mathf.Lerp(0f, _targetWidth, elapsedTime / _indicatorAnimationDuration);
                 _indicatorLine.progressBarRectTransform.sizeDelta = new Vector2(currentWidth, _currentHeight);
             }
             else
             {
-                // After animation, set animation mode to false
+                /* If the elapsed time has reached the set indicator line jump button animation duration, ensure indicator line width is is the target width
+                 * and stop animation*/
+                _indicatorLine.progressBarRectTransform.sizeDelta = new Vector2(_targetWidth, _currentHeight);
                 _animateIndicatorLine = false;
             }
         }
