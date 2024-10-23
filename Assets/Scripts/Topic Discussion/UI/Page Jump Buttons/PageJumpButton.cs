@@ -11,8 +11,10 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public Image buttonOutline;
     public Image buttonHoverOutline;
     public Image buttonColor;
+
     [Header("Page Circle Button")]
     [SerializeField] private Button _pageCircleButton;
+
     [Header("Button Renderer")]
     [SerializeField] private SpriteRenderer _buttonRenderer;
 
@@ -23,6 +25,7 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void Initialize(int index)
     {
+        // Initialize the proper page index, starting position, and on click listener for a page jump button
         _pageIndex = index;
         _startPosition = buttonColor.transform.position;
         _pageCircleButton.onClick.AddListener(() => OnPageCircleButtonCLick());
@@ -30,11 +33,13 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private void OnDisable()
     {
+        // Remove listeners of the button when the game object has been disabled
         _pageCircleButton.onClick.RemoveAllListeners();
     }
 
     private void OnPageCircleButtonCLick()
     {
+        // Disable the button's on hover outline and invoke the page circle click event
         buttonHoverOutline.gameObject.SetActive(false);
         PageCircleClick?.Invoke(_pageIndex);
     }
@@ -43,6 +48,7 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         if(!buttonOutline.gameObject.activeSelf)
         {
+            // Activate the button's hover outline upon mouse hover only if the button outline is not active
             buttonHoverOutline.gameObject.SetActive(true);
             buttonHoverOutline.color = new Color(1f, 1f, 1f, 0.3f);
         }
@@ -50,6 +56,7 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        // Deactivate the button's hover outline
         buttonHoverOutline.gameObject.SetActive(false);
     }
 }

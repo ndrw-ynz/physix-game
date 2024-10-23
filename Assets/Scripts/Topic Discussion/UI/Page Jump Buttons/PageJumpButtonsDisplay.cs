@@ -7,7 +7,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
     [SerializeField] private PageJumpButton pageJumpButtonPrefab;
     [SerializeField] private HorizontalLayoutGroup pageJumpButtonGroup;
 
-    // Page circle outline animation properties
+    // Page jump button outline animation properties
     private PageJumpButton _pageJumpButton;
     private Color _outlineColor;
     private float _buttonOutlineAnimationDuration = 0.3f; // Duration of animation in seconds
@@ -34,16 +34,18 @@ public class PageJumpButtonsDisplay : MonoBehaviour
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
-        // Loop through the button list and activate only the current page index's button outline
+        // Loop through the button list
         for (int i =0; i < pageJumpButtons.Length; i++)
         {
             if (i == currentPageIndex)
             {
+                // Activate the current page index's button outline and animate with a fade in style animation
                 pageJumpButtons[i].buttonOutline.gameObject.SetActive(true);
                 ActivatePageJumpAnimation(pageJumpButtons[i]);
             }
             else
             {
+                // Ensure all other outlines are deactivated
                 pageJumpButtons[i].buttonOutline.gameObject.SetActive(false);
             }
         }
@@ -54,32 +56,39 @@ public class PageJumpButtonsDisplay : MonoBehaviour
 
         if (isPageMarkedRead)
         {
+            // Set the button's color to dark green if page is marked as read
             pageJumpButtons[i].buttonColor.color = new Color(0.51f, 1, 0.22f); // Darker green color
         }
         else
         {
+            // Set the button's color to white if the page is not yet marked as read
             pageJumpButtons[i].buttonColor.color = Color.white;
         }
     }
     public void DestroyImmediateAllPageJumpButtons()
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
+
+        // Loop through the current page jump button list
         for (int i = 0; i < pageJumpButtons.Length; ++i)
         {
+            // Destroy the buttons immediately to avoid concurrency issues
             DestroyImmediate(pageJumpButtons[i].gameObject);
         }
     }
     public int GetPageJumpButtonsLength()
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
+        // Get the current page jump button list's length
         return pageJumpButtons.Length;
     }
     #endregion
 
-    #region Page Circle Outline Animation
+    #region Page Jump Button Outline Animation
     private void ActivatePageJumpAnimation(PageJumpButton currPageJumpButton)
     {
-        // Setup the page jump outline to be animated and activates animation sequence
+        /* Sets the right page jump button, right outline color, activate the page jump button, 
+         * and records the start time of the page jump button animation*/
         _pageJumpButton = currPageJumpButton;
         _outlineColor = Color.black;
         _animatePageJumpButton = true;
@@ -93,16 +102,16 @@ public class PageJumpButtonsDisplay : MonoBehaviour
             float elapsedTime = Time.time - _pageJumpButtonAnimationStartTime;
             if (elapsedTime < _buttonOutlineAnimationDuration)
             {
-                // Manually change alpha value of current outline color
+                // If the elapsed time is less than the set page jump button animation duration, keep animating the fade in effect
                 float newOutlineAlpha = Mathf.Lerp(0f, 1.0f, elapsedTime / _buttonOutlineAnimationDuration);
                 _outlineColor.a = newOutlineAlpha;
                 _pageJumpButton.buttonOutline.color = _outlineColor;
             }
             else
             {
+                // If the elapsed time has reached the set page jump button animation duration, ensure page alpha is 1 and stop animation
                 _outlineColor.a = 1;
                 _pageJumpButton.buttonOutline.color = _outlineColor;
-                // After animation, set animation mode to false
                 _animatePageJumpButton = false;
             }
         }
