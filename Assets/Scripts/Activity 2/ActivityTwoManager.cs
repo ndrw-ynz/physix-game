@@ -31,6 +31,7 @@ public class ActivityTwoManager : ActivityManager
 	[Header("Views")]
 	[SerializeField] private QuantitiesView quantitiesView;
 	[SerializeField] private CartesianComponentsView cartesianComponentsView;
+	[SerializeField] private VectorAdditionView vectorAdditionView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private QuantitiesSubmissionStatusDisplay quantitiesSubmissionStatusDisplay;
@@ -72,6 +73,7 @@ public class ActivityTwoManager : ActivityManager
 		quantitiesView.SetupQuantitiesView(currentQuantitiesLevel);
 		cartesianComponentsView.UpdateNumberOfVectorsTextDisplay(currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests, currentVectorsLevel.numberOfVectors);
 		cartesianComponentsView.UpdateCartesianComponentsView(givenVectorDataList[currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests]);
+		vectorAdditionView.SetupVectorAdditionView(givenVectorDataList);
 	}
 
 	private void SubscribeViewAndDisplayEvents()
