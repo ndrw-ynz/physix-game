@@ -14,7 +14,7 @@ public class TopicDiscussionManager : MonoBehaviour
     private void Start()
     {
         // Add button click listeners
-        discussionNavigator.LoadPage(_currentSectorIndex, _currentPageIndex);
+        discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
 
         ChangePreviousAndNextButtonState();
 
@@ -131,7 +131,7 @@ public class TopicDiscussionManager : MonoBehaviour
             _currentSectorIndex = sectorIndex;
             _currentPageIndex = 0;
 
-            discussionNavigator.JumpToSector(_currentSectorIndex, _currentPageIndex);
+            discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
 
             ChangePreviousAndNextButtonState();
 
@@ -151,7 +151,7 @@ public class TopicDiscussionManager : MonoBehaviour
         if (_currentPageIndex != pageIndex)
         {
             _currentPageIndex = pageIndex;
-            discussionNavigator.JumpToPage(_currentSectorIndex, pageIndex);
+            discussionNavigator.ChangePage(_currentSectorIndex, pageIndex);
 
             ChangePreviousAndNextButtonState();
 

@@ -30,29 +30,10 @@ public class DiscussionPagesDisplay : MonoBehaviour
     }
 
     #region Sector and Page Navigation
-    public void LoadPage(int currentSectorIndex, int currentPageIndex)
+    public void ChangePage(int sectorIndex, int pageIndex)
     {
-        // Load Startup Page
-        ShowPage(currentSectorIndex, currentPageIndex);
-        ActivatePageAnimation(subTopicsList[currentSectorIndex].pages[currentPageIndex]);
-    }
-    public void ChangePage(int currentSectorIndex, int currentPageIndex)
-    {
-        ShowPage(currentSectorIndex, currentPageIndex);
-        ActivatePageAnimation(subTopicsList[currentSectorIndex].pages[currentPageIndex]);
-    }
-    public void JumpToSector(int sectorIndex, int pageIndex)
-    {
-            ShowPage(sectorIndex, pageIndex);
-            ActivatePageAnimation(subTopicsList[sectorIndex].pages[pageIndex]);
-    }
-    public void JumpToPage(int currentSectorIndex, int pageIndex)
-    {
-            // Set the page to be jumped to
-            int jumpedPageIndex = pageIndex;
-
-            ShowPage(currentSectorIndex, jumpedPageIndex);
-            ActivatePageAnimation(subTopicsList[currentSectorIndex].pages[jumpedPageIndex]);
+        ShowPage(sectorIndex, pageIndex);
+        ActivatePageAnimation(subTopicsList[sectorIndex].pages[pageIndex]);
     }
     #endregion
 
