@@ -104,50 +104,6 @@ public static class ActivityTwoUtilities
 		return results;
 	}
 
-	public static float EvaluateNumericalExpressions(DraggableNumericalExpression[] numericalExpressions)
-	{
-		float currentValue = numericalExpressions.Length > 0 ? 1 : 0;
-		foreach (DraggableNumericalExpression expression in numericalExpressions)
-		{
-			string expressionText = expression.numericalExpression;
-			expressionText = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\bsin\(([^)]+)\)", m => $"sin({m.Groups[1].Value}*pi/180)");
-			expressionText = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\bcos\(([^)]+)\)", m => $"cos({m.Groups[1].Value}*pi/180)");
-			expressionText = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\btan\(([^)]+)\)", m => $"tan({m.Groups[1].Value}*pi/180)");
-
-			bool canEvaluate = ExpressionEvaluator.Evaluate(expressionText, out float value);
-			if (canEvaluate) currentValue *= value;
-		}
-		return currentValue;
-	}
-
-	public static bool ValidateValueSubmission(string submittedText, float correctValue)
-	{
-		bool canEvaluate = ExpressionEvaluator.Evaluate(submittedText, out float value);
-		return canEvaluate && Mathf.Abs((float)(value - correctValue)) <= 0.0001;
-	}
-
-	public static bool ValidateComponentInputFields(List<float> trueComponentValues, HorizontalLayoutGroup componentContainer)
-	{
-		TMP_InputField[] inputFields = componentContainer.GetComponentsInChildren<TMP_InputField>();
-		List<float> submittedComponentValues = inputFields.Select(field =>
-		{
-			if (float.TryParse(field.text, out float value))
-			{
-				return value;
-			}
-			else
-			{
-				return 0;
-			}
-		}).ToList();
-
-		var trueComponentCounts = trueComponentValues.GroupBy(x => x).ToDictionary(g => g.Key, g => g.Count());
-		var submittedComponentCounts = submittedComponentValues.GroupBy(x => x).ToDictionary(g => g.Key, g => g.Count());
-
-		return trueComponentCounts.Count == submittedComponentCounts.Count
-			&& !trueComponentCounts.Except(submittedComponentCounts).Any();
-	}
-
 	public static bool ValidateMagnitudeSubmission(float xSum, float ySum, TMP_InputField magnitudeResultField)
 	{
 		// Evaluate magnitude result field
