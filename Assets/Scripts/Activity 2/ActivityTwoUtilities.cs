@@ -85,6 +85,7 @@ public static class ActivityTwoUtilities
 		if (answer.vectorXComponent != null)
 		{
 			ExpressionEvaluator.Evaluate($"{givenVectorData.magnitude} * cos({givenVectorData.angleMeasure}*(pi/180))", out float computedXComponent);
+			computedXComponent = (float) Math.Round(computedXComponent, 4);
 			results.isVectorXComponentCorrect = Mathf.Abs(computedXComponent - (float)answer.vectorXComponent) <= 0.0001;
 		} else
 		{
@@ -95,6 +96,7 @@ public static class ActivityTwoUtilities
 		if (answer.vectorYComponent != null)
 		{
 			ExpressionEvaluator.Evaluate($"{givenVectorData.magnitude} * sin({givenVectorData.angleMeasure}*(pi/180))", out float computedYComponent);
+			computedYComponent = (float) Math.Round(computedYComponent, 4);
 			results.isVectorYComponentCorrect = Mathf.Abs(computedYComponent - (float)answer.vectorYComponent) <= 0.0001;
 		} else
 		{
