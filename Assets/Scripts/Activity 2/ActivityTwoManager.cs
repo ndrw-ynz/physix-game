@@ -360,4 +360,30 @@ public class ActivityTwoManager : ActivityManager
 				)
 			);
 	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isQuantitiesSubActivityFinished)
+		{
+			taskText.Add($"- Interact with the ship’s Quantities Terminal to classify quantities as either scalar or vector.");
+		}
+		if (!isCartesianComponentsSubActivityFinished)
+		{
+			taskText.Add("- Interact with the ship’s Cartesian Components Terminal and determine the Cartesian components of the ship's direction vectors along its course.");
+		}
+		if (!isVectorAdditionSubActivityFinished)
+		{
+			taskText.Add("- Interact with the ship’s Vector Addition Terminal to add the ship's direction vectors and determine the magnitude and angle of the ship’s trajectory through space.");
+		}
+		taskText.Add("- Interact with the ship’s End Console Terminal to engage the ship in autopilot mode.");
+
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Pass the standardized piloting test to gain authorization for autopilot mode. ");
+
+		activityPauseMenuUI.UpdateContent("Lesson 2 - Activity 2", taskText, objectiveText);
+	}
 }
