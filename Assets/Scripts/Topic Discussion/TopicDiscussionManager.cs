@@ -21,8 +21,8 @@ public class TopicDiscussionManager : MonoBehaviour
         ChangeReadIndicatorButtonState();
 
         LoadProgressBarButtons();
-        UpdateProgressBarButtonColor();
-        progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
+        UpdateProgressBarButtonTextAndColor();
+        progressDisplay.UpdateIndicatorLinePosition(_currentSectorIndex);
 
         LoadPageJumpButtons();
         pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
@@ -58,7 +58,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 ChangeReadIndicatorButtonState();
 
-                UpdateProgressBarButtonColor();
+                UpdateProgressBarButtonTextAndColor();
 
                 pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
                 UpdatePageJumpButtonColors();
@@ -73,7 +73,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 ChangeReadIndicatorButtonState();
 
-                UpdateProgressBarButtonColor();
+                UpdateProgressBarButtonTextAndColor();
 
                 pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
                 UpdatePageJumpButtonColors();
@@ -92,8 +92,8 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 ChangeReadIndicatorButtonState();
 
-                UpdateProgressBarButtonColor();
-                progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
+                UpdateProgressBarButtonTextAndColor();
+                progressDisplay.UpdateIndicatorLinePosition(_currentSectorIndex);
 
                 LoadPageJumpButtons();
                 pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
@@ -112,8 +112,8 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 ChangeReadIndicatorButtonState();
 
-                UpdateProgressBarButtonColor();
-                progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
+                UpdateProgressBarButtonTextAndColor();
+                progressDisplay.UpdateIndicatorLinePosition(_currentSectorIndex);
 
                 LoadPageJumpButtons();
                 pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
@@ -137,8 +137,8 @@ public class TopicDiscussionManager : MonoBehaviour
 
             ChangeReadIndicatorButtonState();
 
-            UpdateProgressBarButtonColor();
-            progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
+            UpdateProgressBarButtonTextAndColor();
+            progressDisplay.UpdateIndicatorLinePosition(_currentSectorIndex);
             LoadPageJumpButtons();
 
             pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
@@ -157,7 +157,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
             ChangeReadIndicatorButtonState();
 
-            UpdateProgressBarButtonColor();
+            UpdateProgressBarButtonTextAndColor();
 
             pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
             UpdatePageJumpButtonColors();
@@ -170,7 +170,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
         ChangeReadIndicatorButtonState();
 
-        UpdateProgressBarButtonColor();
+        UpdateProgressBarButtonTextAndColor();
 
         UpdatePageJumpButtonColors();
     }
@@ -208,15 +208,15 @@ public class TopicDiscussionManager : MonoBehaviour
         {
             double currentReadPagesCount = discussionNavigator.CountReadPages(_currentSectorIndex);
             double currentTotalPagesCount = discussionNavigator.CountTotalPages(_currentSectorIndex);
-            progressDisplay.LoadProgressBarsColors(currentReadPagesCount, currentTotalPagesCount, i);
+            progressDisplay.LoadProgressBarButtonsColors(currentReadPagesCount, currentTotalPagesCount, i);
         }
     }
 
-    private void UpdateProgressBarButtonColor()
+    private void UpdateProgressBarButtonTextAndColor()
     {
         double currReadPagesCount = discussionNavigator.CountReadPages(_currentSectorIndex);
         double currSectorPagesCount = discussionNavigator.CountTotalPages(_currentSectorIndex);
-        progressDisplay.UpdateProgressBar(_currentSectorIndex, currReadPagesCount, currSectorPagesCount);
+        progressDisplay.UpdateProgressBarButtonTextAndColor(_currentSectorIndex, currReadPagesCount, currSectorPagesCount);
     }
 
     private void LoadPageJumpButtons()

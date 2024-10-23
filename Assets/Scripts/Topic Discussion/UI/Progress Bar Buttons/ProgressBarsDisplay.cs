@@ -26,7 +26,7 @@ public class ProgressBarsDisplay : MonoBehaviour
 
     private void Update()
     {
-        AnimateProgressBar();
+        AnimateProgressBarButton();
         AnimateIndicatorLine();
     }
 
@@ -39,7 +39,7 @@ public class ProgressBarsDisplay : MonoBehaviour
         newButton.name = $"Progress Button {i + 1}";
         newButton.Initialize(sectorTitle, progressCount, i);
     }
-    public void LoadProgressBarsColors(double currentReadPagesCount, double currentTotalPages, int i)
+    public void LoadProgressBarButtonsColors(double currentReadPagesCount, double currentTotalPages, int i)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
 
@@ -69,7 +69,7 @@ public class ProgressBarsDisplay : MonoBehaviour
                 progressBarButtons[i].progressBarFinalColor.color = new Color(0.764151f, 0.764151f, 0.764151f);
         }
     }
-    public void UpdateProgressBar(int currentSectorIndex, double currReadPagesCount, double currSectorPagesCount)
+    public void UpdateProgressBarButtonTextAndColor(int currentSectorIndex, double currReadPagesCount, double currSectorPagesCount)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
         
@@ -119,7 +119,7 @@ public class ProgressBarsDisplay : MonoBehaviour
             ActivateProgressBarButtonAnimation(temporaryImage, finalImage, oldColor, newColor);
         }
     }
-    public void UpdateIndicatorLine(int currentSectorIndex)
+    public void UpdateIndicatorLinePosition(int currentSectorIndex)
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
 
@@ -132,7 +132,7 @@ public class ProgressBarsDisplay : MonoBehaviour
                 progressBarButtons[i].progressBarIndicator.gameObject.SetActive(true);
 
                 float currentHeight = progressBarButtons[i].progressBarIndicator.rectTransform.rect.height;
-                ActivateProgressBarButtonAnimation(progressBarButtons[i], currentHeight);
+                ActivateIndicatorLineAnimation(progressBarButtons[i], currentHeight);
             }
             else 
             {
@@ -141,7 +141,6 @@ public class ProgressBarsDisplay : MonoBehaviour
             }
         }
     }
-
     public int GetProgressBarButtonsLength()
     {
         ProgressBarButton[] progressBarButtons = progressBarButtonGroup.GetComponentsInChildren<ProgressBarButton>();
@@ -160,7 +159,7 @@ public class ProgressBarsDisplay : MonoBehaviour
         _animateProgressBarButton = true;
         _progressBarAnimationStartTime = Time.time;
     }
-    private void ActivateProgressBarButtonAnimation(ProgressBarButton indicatorLine, float currentHeight)
+    private void ActivateIndicatorLineAnimation(ProgressBarButton indicatorLine, float currentHeight)
     {
         // Setup the indicator line to be animated and activates animation sequence
         _indicatorLine = indicatorLine;
@@ -168,7 +167,7 @@ public class ProgressBarsDisplay : MonoBehaviour
         _animateIndicatorLine = true;
         _indicatorAnimationStartTime = Time.time;
     }
-    private void AnimateProgressBar()
+    private void AnimateProgressBarButton()
     {
         if (_animateProgressBarButton)
         {

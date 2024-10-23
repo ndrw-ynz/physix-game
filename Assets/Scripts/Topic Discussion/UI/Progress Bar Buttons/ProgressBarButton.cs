@@ -22,7 +22,6 @@ public class ProgressBarButton : MonoBehaviour
     // Index to be jumped when button is pressed
     private int _sectorIndex;
 
-
     public void Initialize(string sectorTitle, string progressCount, int index)
     {
         sectorTitleText.text = sectorTitle;
