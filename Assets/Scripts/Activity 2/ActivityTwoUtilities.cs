@@ -1,54 +1,166 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
+public class QuantitiesAnswerSubmissionResults
+{
+	public bool hasUnsolvedQuantities;
+	public bool isScalarListCorrect;
+	public bool isVectorListCorrect;
+
+	public bool isAllCorrect()
+	{
+		return !hasUnsolvedQuantities && isScalarListCorrect && isVectorListCorrect;
+	}
+}
+
+public class CartesianComponentsAnswerSubmissionResults
+{
+	public bool isVectorXComponentCorrect;
+	public bool isVectorYComponentCorrect;
+
+	public bool isAllCorrect()
+	{
+		return isVectorXComponentCorrect && isVectorYComponentCorrect;
+	}
+}
+
+public class VectorAdditionAnswerSubmissionResults
+{
+	public bool isXComponentCorrect;
+	public bool isYComponentCorrect;
+	public bool isVectorMagnitudeCorrect;
+	public bool isVectorDirectionCorrect;
+
+	public bool isAllCorrect()
+	{
+		return isXComponentCorrect && isYComponentCorrect && isVectorMagnitudeCorrect && isVectorDirectionCorrect;
+	}
+}
 
 public static class ActivityTwoUtilities
 {
-	public static float EvaluateNumericalExpressions(DraggableNumericalExpression[] numericalExpressions)
+	public static QuantitiesAnswerSubmissionResults ValidateQuantitiesSubmission(QuantitiesAnswerSubmission answer)
 	{
-		float currentValue = numericalExpressions.Length > 0 ? 1 : 0;
-		foreach (DraggableNumericalExpression expression in numericalExpressions)
-		{
-			string expressionText = expression.numericalExpression;
-			expressionText = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\bsin\(([^)]+)\)", m => $"sin({m.Groups[1].Value}*pi/180)");
-			expressionText = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\bcos\(([^)]+)\)", m => $"cos({m.Groups[1].Value}*pi/180)");
-			expressionText = System.Text.RegularExpressions.Regex.Replace(expressionText, @"\btan\(([^)]+)\)", m => $"tan({m.Groups[1].Value}*pi/180)");
+		// Set initial results to correct values
+		QuantitiesAnswerSubmissionResults results = new QuantitiesAnswerSubmissionResults();
+		results.hasUnsolvedQuantities = false;
+		results.isScalarListCorrect = true;
+		results.isVectorListCorrect = true;
 
-			bool canEvaluate = ExpressionEvaluator.Evaluate(expressionText, out float value);
-			if (canEvaluate) currentValue *= value;
+		// Checking of submitted unsolved quantities.
+		foreach (DraggableQuantityText quantity in answer.unsolvedQuantities)
+		{
+			if (quantity.quantityType == QuantityType.Scalar)
+			{
+				results.isScalarListCorrect = false;
+				results.hasUnsolvedQuantities = true;
+			} else
+			{
+				results.isVectorListCorrect = false;
+				results.hasUnsolvedQuantities = true;
+			}
 		}
-		return currentValue;
-	}
 
-	public static bool ValidateValueSubmission(string submittedText, float correctValue)
-	{
-		bool canEvaluate = ExpressionEvaluator.Evaluate(submittedText, out float value);
-		return canEvaluate && Mathf.Abs((float)(value - correctValue)) <= 0.0001;
-	}
+		// count number of scalar and vector. then, check if scalar = ok , and if scalar thuz far
 
-	public static bool ValidateComponentInputFields(List<float> trueComponentValues, HorizontalLayoutGroup componentContainer)
-	{
-		TMP_InputField[] inputFields = componentContainer.GetComponentsInChildren<TMP_InputField>();
-		List<float> submittedComponentValues = inputFields.Select(field =>
+		// Checking of submitted scalar quantities.
+		foreach (DraggableQuantityText quantity in answer.scalarQuantities)
 		{
-			if (float.TryParse(field.text, out float value))
+			if (quantity.quantityType != QuantityType.Scalar)
 			{
-				return value;
+				results.isScalarListCorrect = false;
+				results.isVectorListCorrect = false;
 			}
-			else
+		}
+
+		// Checking of submitted vector quantities.
+		foreach (DraggableQuantityText quantity in answer.vectorQuantities)
+		{
+			if (quantity.quantityType != QuantityType.Vector)
 			{
-				return 0;
+				results.isScalarListCorrect = false;
+				results.isVectorListCorrect = false;
 			}
-		}).ToList();
+		}
 
-		var trueComponentCounts = trueComponentValues.GroupBy(x => x).ToDictionary(g => g.Key, g => g.Count());
-		var submittedComponentCounts = submittedComponentValues.GroupBy(x => x).ToDictionary(g => g.Key, g => g.Count());
+		return results;
+	}
 
-		return trueComponentCounts.Count == submittedComponentCounts.Count
-			&& !trueComponentCounts.Except(submittedComponentCounts).Any();
+	public static CartesianComponentsAnswerSubmissionResults ValidateCartesianComponentsSubmission(CartesianComponentsAnswerSubmission answer, VectorData givenVectorData)
+	{
+		CartesianComponentsAnswerSubmissionResults results = new CartesianComponentsAnswerSubmissionResults();
+
+		// Compute and validate x-component
+		if (answer.vectorXComponent != null)
+		{
+			ExpressionEvaluator.Evaluate($"{givenVectorData.magnitude} * cos({givenVectorData.angleMeasure}*(pi/180))", out float computedXComponent);
+			computedXComponent = (float) Math.Round(computedXComponent, 4);
+			results.isVectorXComponentCorrect = Mathf.Abs(computedXComponent - (float)answer.vectorXComponent) <= 0.0001;
+		} else
+		{
+			results.isVectorXComponentCorrect = false;
+		}
+
+		// Compute and validate y-component
+		if (answer.vectorYComponent != null)
+		{
+			ExpressionEvaluator.Evaluate($"{givenVectorData.magnitude} * sin({givenVectorData.angleMeasure}*(pi/180))", out float computedYComponent);
+			computedYComponent = (float) Math.Round(computedYComponent, 4);
+			results.isVectorYComponentCorrect = Mathf.Abs(computedYComponent - (float)answer.vectorYComponent) <= 0.0001;
+		} else
+		{
+			results.isVectorYComponentCorrect = false;
+		}
+
+		return results;
+	}
+
+	public static VectorAdditionAnswerSubmissionResults ValidateVectorAdditionSubmission(VectorAdditionAnswerSubmission answer, List<VectorData> givenVectorData)
+	{
+		VectorAdditionAnswerSubmissionResults results = new VectorAdditionAnswerSubmissionResults();
+		// Compute and validated x- and y- component sum of vectors
+		float computedXComponentSum = 0;
+		float computedYComponentSum = 0;
+		foreach (VectorData vectorData in givenVectorData)
+		{
+			ExpressionEvaluator.Evaluate($"{vectorData.magnitude} * cos({vectorData.angleMeasure}*(pi/180))", out float xComponent);
+			xComponent = (float)Math.Round(xComponent, 4);
+			computedXComponentSum += xComponent;
+
+			ExpressionEvaluator.Evaluate($"{vectorData.magnitude} * sin({vectorData.angleMeasure}*(pi/180))", out float yComponent);
+			yComponent = (float)Math.Round(yComponent, 4);
+			computedYComponentSum += yComponent;
+		}
+
+		if (answer.xComponentSumValue != null)
+		{
+			results.isXComponentCorrect = Mathf.Abs((float)answer.xComponentSumValue - computedXComponentSum) <= 0.0001;
+		}
+
+		if (answer.yComponentSumValue != null)
+		{
+			results.isYComponentCorrect = Mathf.Abs((float)answer.yComponentSumValue - computedYComponentSum) <= 0.0001;
+		}
+
+		// Compute and validate magnitude of resultant vector
+		if (answer.vectorMagnitudeValue != null)
+		{
+			ExpressionEvaluator.Evaluate($"sqrt(({computedXComponentSum})^2 + ({computedYComponentSum})^2)", out float computedMagnitudeResult);
+			computedMagnitudeResult = (float)Math.Round(computedMagnitudeResult, 4);
+			results.isVectorMagnitudeCorrect = Mathf.Abs((float)answer.vectorMagnitudeValue - computedMagnitudeResult) <= 0.0001;
+		}
+
+		// Compute and validate direction of resultant vector
+		if (answer.vectorDirectionValue != null)
+		{
+			float computedDirectionResult = (float)(Math.Atan2(computedYComponentSum, computedXComponentSum) * (180 / Math.PI));
+			computedDirectionResult = (float)Math.Round((float)computedDirectionResult, 4);
+			results.isVectorDirectionCorrect = Mathf.Abs((float)answer.vectorDirectionValue - computedDirectionResult) <= 0.0001;
+		}
+
+		return results;
 	}
 
 	public static bool ValidateMagnitudeSubmission(float xSum, float ySum, TMP_InputField magnitudeResultField)
