@@ -29,20 +29,32 @@ public class DiscussionPagesDisplay : MonoBehaviour
         AnimatePage();
     }
 
-    #region Sector and Page Navigation
+    #region Sector and Page Changing and Read State Changing Functions
     public void ChangePage(int sectorIndex, int pageIndex)
     {
         ShowPage(sectorIndex, pageIndex);
         ActivatePageAnimation(subTopicsList[sectorIndex].pages[pageIndex]);
     }
-    #endregion
-
-    #region Private Classes Used For [Sector and Page Navigation]. Open/Close of Pages and Changing Read Indicator States
     public void CloseCurrentPage(int currentSectorIndex, int currentPageIndex)
     {
         // Closes the current page
         GameObject currentSectorAndPage = subTopicsList[currentSectorIndex].pages[currentPageIndex].page;
         currentSectorAndPage.SetActive(false);
+    }
+    public void ChangeReadState(ReadState readState, int currentSectorIndex, int currentPageIndex)
+    {
+        switch (readState)
+        {
+            case ReadState.Read:
+                // Set page to have been read
+                subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedRead = true;
+                break;
+
+            case ReadState.NotRead:
+                // Set page to not yet read
+                subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedRead = false;
+                break;
+        }
     }
     private void ShowPage(int currentSector, int currentPage)
     {
@@ -58,21 +70,6 @@ public class DiscussionPagesDisplay : MonoBehaviour
                 // Ensures other pages are close
                 subTopicsList[currentSector].pages[i].page.SetActive(false);
             }
-        }
-    }
-    public void ChangeReadState(ReadState readState, int currentSectorIndex, int currentPageIndex)
-    {
-        switch (readState)
-        {
-            case ReadState.Read:
-                // Set page to read
-                subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedRead = true;
-                break;
-
-            case ReadState.NotRead:
-                // Set page to not yet read
-                subTopicsList[currentSectorIndex].pages[currentPageIndex].isMarkedRead = false;
-                break;
         }
     }
     #endregion
@@ -127,7 +124,7 @@ public class DiscussionPagesDisplay : MonoBehaviour
     }
     #endregion
 
-    #region Page's Read Checkers for Outside Script
+    #region Page's Read Checkers Used Outside Script
     public bool CurrentPageIsMarkedRead(int currentSectorIndex, int currentPageIndex)
     {
         // Check if the current page is marked as read or not
@@ -140,17 +137,7 @@ public class DiscussionPagesDisplay : MonoBehaviour
     }
     #endregion
 
-    #region Discussion Navigator Getters For Outside Script
-    //public int GetCurrentSectorIndex()
-    //{
-    //    // Get the current sector's index
-    //    return _currentSectorIndex;
-    //}
-    //public int GetCurrentPageIndex()
-    //{
-    //    // Get the current page's index
-    //    return _currentPageIndex;
-    //}
+    #region Discussion Navigator Getters Used Outside The Script
     public int GetCurrentSectorPagesCount(int currentSectorIndex)
     {
         // Get the current sector's page's total count
