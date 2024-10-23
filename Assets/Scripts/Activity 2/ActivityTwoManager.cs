@@ -33,6 +33,8 @@ public class ActivityTwoManager : ActivityManager
 	[SerializeField] private QuantitiesView quantitiesView;
 	[SerializeField] private CartesianComponentsView cartesianComponentsView;
 	[SerializeField] private VectorAdditionView vectorAdditionView;
+	[SerializeField] private EndConsoleView endConsoleView;
+	[SerializeField] private ActivityTwoPerformanceView performanceView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private QuantitiesSubmissionStatusDisplay quantitiesSubmissionStatusDisplay;
@@ -43,6 +45,11 @@ public class ActivityTwoManager : ActivityManager
 	private int currentNumCartesianComponentsTests;
 
 	private List<VectorData> givenVectorDataList;
+
+	// Variables for tracking which view is currently active
+	private bool isQuantitiesViewActive;
+	private bool isCartesianComponentsViewActive;
+	private bool isVectorAdditionViewActive;
 
 	// Gameplay performance metrics variables
 	// Quantities Sub Activity
@@ -81,20 +88,34 @@ public class ActivityTwoManager : ActivityManager
 		cartesianComponentsView.UpdateCartesianComponentsView(givenVectorDataList[currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests]);
 		vectorAdditionView.SetupVectorAdditionView(givenVectorDataList);
 	}
+	private void Update()
+	{
+		if (isQuantitiesViewActive && !isQuantitiesSubActivityFinished) quantitiesGameplayDuration += Time.deltaTime;
+		if (isCartesianComponentsViewActive && !isCartesianComponentsSubActivityFinished) cartesianComponentsGameplayDuration += Time.deltaTime;
+		if (isVectorAdditionViewActive && !isVectorAdditionSubActivityFinished) vectorAdditionGameplayDuration += Time.deltaTime;
+	}
 
 	private void SubscribeViewAndDisplayEvents()
 	{
 		// Quantities Sub Activity Related Events
+		quantitiesView.OpenViewEvent += () => isQuantitiesViewActive = true;
+		quantitiesView.QuitViewEvent += () => isQuantitiesViewActive = false;
 		quantitiesView.SubmitAnswerEvent += CheckQuantitiesAnswer;
 		quantitiesSubmissionStatusDisplay.ProceedEvent += UpdateQuantitiesViewState;
 
 		// Cartesian Components Sub Activity Related Events
+		cartesianComponentsView.OpenViewEvent += () => isCartesianComponentsViewActive = true;
+		cartesianComponentsView.QuitViewEvent += () => isCartesianComponentsViewActive = false;
 		cartesianComponentsView.SubmitAnswerEvent += CheckCartesianComponentsAnswer;
 		cartesianComponentsSubmissionStatusDisplay.ProceedEvent += UpdateCartesianComponentsViewState;
 
 		// Vector Addition Sub Activity Related Events
+		vectorAdditionView.OpenViewEvent += () => isVectorAdditionViewActive = true;
+		vectorAdditionView.QuitViewEvent += () => isVectorAdditionViewActive = false;
 		vectorAdditionView.SubmitAnswerEvent += CheckVectorAdditionAnswer;
 		vectorAdditionSubmissionStatusDisplay.ProceedEvent += UpdateVectorAdditionViewState;
+
+		endConsoleView.OpenViewEvent += DisplayPerformanceView;
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -286,7 +307,56 @@ public class ActivityTwoManager : ActivityManager
 
 	public override void DisplayPerformanceView()
 	{
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
 
+		performanceView.SetTotalTimeDisplay(quantitiesGameplayDuration + cartesianComponentsGameplayDuration + vectorAdditionGameplayDuration);
+
+		performanceView.SetQuantitiesMetricsDisplay(
+			isAccomplished: isQuantitiesSubActivityFinished,
+			numIncorrectSubmission: numIncorrectQuantitiesSubmission,
+			duration: quantitiesGameplayDuration
+			);
+
+		performanceView.SetCartesianComponentsMetricsDisplay(
+			isAccomplished: isCartesianComponentsSubActivityFinished,
+			numIncorrectSubmission: numIncorrectCartesianComponentsSubmission,
+			duration: cartesianComponentsGameplayDuration
+			);
+
+		performanceView.SetVectorAdditionMetricsDisplay(
+			isAccomplished: isVectorAdditionSubActivityFinished,
+			numIncorrectSubmission: numIncorrectVectorAdditionSubmission,
+			duration: vectorAdditionGameplayDuration
+			);
+
+		// Update its activity feedback display (three args)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "quantities",
+				isSubActivityFinished: isQuantitiesSubActivityFinished,
+				numIncorrectAnswers: numIncorrectQuantitiesSubmission,
+				numCorrectAnswers: numCorrectQuantitiesSubmission,
+				badScoreThreshold: 6,
+				averageScoreThreshold: 3
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "cartesian components",
+				isSubActivityFinished: isCartesianComponentsSubActivityFinished,
+				numIncorrectAnswers: numIncorrectCartesianComponentsSubmission,
+				numCorrectAnswers: numCorrectCartesianComponentsSubmission,
+				badScoreThreshold: 4,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "vector addition",
+				isSubActivityFinished: isVectorAdditionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectVectorAdditionSubmission,
+				numCorrectAnswers: numCorrectVectorAdditionSubmission,
+				badScoreThreshold: 4,
+				averageScoreThreshold: 2
+				)
+			);
 	}
 
 	/*[Header("Level Data")]
