@@ -36,7 +36,10 @@ public class ComponentSumEquationDisplay : MonoBehaviour
 		TMP_InputField[] numberInputFields = equationContainer.GetComponentsInChildren<TMP_InputField>();
 		foreach (TMP_InputField numberInputField in numberInputFields)
 		{
-			resultValue += float.Parse(numberInputField.text);
+			if (float.TryParse(numberInputField.text, out float result))
+			{
+				resultValue += result;
+			}
 		}
 		resultField.text = $"{resultValue}";
 	}
