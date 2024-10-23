@@ -33,6 +33,7 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 
 		activityTwoManager.QuantitiesAreaClearEvent += ClearQuantitiesTerminalEnvironmentState;
 		activityTwoManager.CartesianComponentsAreaClearEvent += ClearCartesianComponentsTerminalEnvironmentState;
+		activityTwoManager.VectorAdditionAreaClearEvent += ClearVectorAdditionTerminalEnvironmentState;
 	}
 
 	#region Quantities Terminal Area
@@ -76,5 +77,10 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 		vectorAdditionTerminalAreaCamera.gameObject.SetActive(isActive);
 	}
 
+	private void ClearVectorAdditionTerminalEnvironmentState()
+	{
+		SetVectorAdditionTerminalEnvironmentState(false);
+		vectorAdditionTerminal.SetInteractable(false);
+	}
 	#endregion
 }
