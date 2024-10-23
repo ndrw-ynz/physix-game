@@ -276,7 +276,7 @@ public class ActivityTwoManager : ActivityManager
 			numCorrectVectorAdditionSubmission++;
 		}  else
 		{
-			numIncorrectCartesianComponentsSubmission++;
+			numIncorrectVectorAdditionSubmission++;
 		}
 		DisplayVectorAdditionSubmissionResults(results);
 	}
