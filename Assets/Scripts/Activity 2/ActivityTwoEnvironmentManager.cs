@@ -45,7 +45,7 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 	private void SetQuantitiesTerminalEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
-		// activityTwoManager.SetMissionObjectiveDisplay(!isActive);
+		activityTwoManager.SetMissionObjectiveDisplay(!isActive);
 		quantitiesTerminalAreaCamera.gameObject.SetActive(isActive);
 	}
 
@@ -62,7 +62,7 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 	private void SetCartesianComponentsTerminalEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
-		// activityTwoManager.SetMissionObjectiveDisplay(!isActive);
+		activityTwoManager.SetMissionObjectiveDisplay(!isActive);
 		cartesianComponentsTerminalAreaCamera.gameObject.SetActive(isActive);
 	}
 
@@ -78,7 +78,7 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 	private void SetVectorAdditionTerminalEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
-		// activityTwoManager.SetMissionObjectiveDisplay(!isActive);
+		activityTwoManager.SetMissionObjectiveDisplay(!isActive);
 		vectorAdditionTerminalAreaCamera.gameObject.SetActive(isActive);
 	}
 
@@ -93,7 +93,7 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 	private void SetupEndEnvironmentState()
 	{
 		SetPlayerActivityState(false);
-		// activityTwoManager.SetMissionObjectiveDisplay(false);
+		activityTwoManager.SetMissionObjectiveDisplay(false);
 		endTerminalAreaCamera.gameObject.SetActive(true);
 	}
 }

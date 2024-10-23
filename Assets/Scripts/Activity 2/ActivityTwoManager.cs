@@ -87,6 +87,8 @@ public class ActivityTwoManager : ActivityManager
 		cartesianComponentsView.UpdateNumberOfVectorsTextDisplay(currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests, currentVectorsLevel.numberOfVectors);
 		cartesianComponentsView.UpdateCartesianComponentsView(givenVectorDataList[currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests]);
 		vectorAdditionView.SetupVectorAdditionView(givenVectorDataList);
+
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Determine the Cartesian components of the ship's direction vectors along its new course ({currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests}/{currentVectorsLevel.numberOfVectors})");
 	}
 	private void Update()
 	{
@@ -161,7 +163,7 @@ public class ActivityTwoManager : ActivityManager
 		if (results.isAllCorrect())
 		{
 			quantitiesSubmissionStatusDisplay.SetSubmissionStatus(true, "Quantities are correctly categorized. Fantastic work Captain!");
-			// missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Categorize the Quantities (1/1)");
 		}
 		else
 		{
@@ -177,7 +179,7 @@ public class ActivityTwoManager : ActivityManager
 	{
 		isQuantitiesSubActivityFinished = true;
 		quantitiesView.gameObject.SetActive(false);
-		//missionObjectiveDisplayUI.ClearMissionObjective(0);
+		missionObjectiveDisplayUI.ClearMissionObjective(0);
 		QuantitiesAreaClearEvent?.Invoke();
 	}
 	#endregion
@@ -235,7 +237,7 @@ public class ActivityTwoManager : ActivityManager
 		if (results.isAllCorrect())
 		{
 			cartesianComponentsSubmissionStatusDisplay.SetSubmissionStatus(true, "Ship's vector has been readjusted. Nicely done!");
-			// missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Determine the Cartesian components of the ship's direction vectors along its new course ({currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests}/{currentVectorsLevel.numberOfVectors})");
 		}
 		else
 		{
@@ -257,7 +259,7 @@ public class ActivityTwoManager : ActivityManager
 		else
 		{
 			isCartesianComponentsSubActivityFinished = true;
-			//missionObjectiveDisplayUI.ClearMissionObjective(1);
+			missionObjectiveDisplayUI.ClearMissionObjective(1);
 			cartesianComponentsView.gameObject.SetActive(false);
 			CartesianComponentsAreaClearEvent?.Invoke();
 		}
@@ -284,7 +286,7 @@ public class ActivityTwoManager : ActivityManager
 		if (results.isAllCorrect())
 		{
 			vectorAdditionSubmissionStatusDisplay.SetSubmissionStatus(true, "Congratulations captain! You may now initiate autopilot on the ship captain’s panel.");
-			// missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Add the ship's direction vectors and determine the magnitude and direction of the resultant vector (1/1)");
 		}
 		else
 		{
@@ -300,7 +302,7 @@ public class ActivityTwoManager : ActivityManager
 	{
 		isVectorAdditionSubActivityFinished = true;
 		vectorAdditionView.gameObject.SetActive(false);
-		//missionObjectiveDisplayUI.ClearMissionObjective(0);
+		missionObjectiveDisplayUI.ClearMissionObjective(2);
 		VectorAdditionAreaClearEvent?.Invoke();
 	}
 	#endregion
