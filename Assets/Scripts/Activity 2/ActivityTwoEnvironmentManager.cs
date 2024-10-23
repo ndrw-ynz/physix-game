@@ -9,16 +9,19 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private QuantitiesView quantitiesView;
 	[SerializeField] private CartesianComponentsView cartesianComponentsView;
 	[SerializeField] private VectorAdditionView vectorAdditionView;
+	[SerializeField] private EndConsoleView endConsoleView;
 
 	[Header("Environment Cameras")]
 	[SerializeField] private Camera quantitiesTerminalAreaCamera;
 	[SerializeField] private Camera cartesianComponentsTerminalAreaCamera;
 	[SerializeField] private Camera vectorAdditionTerminalAreaCamera;
+	[SerializeField] private Camera endTerminalAreaCamera;
 
 	[Header("Interactable Terminal Game Objects")]
 	[SerializeField] private InteractableViewOpenerObject quantitiesTerminal;
 	[SerializeField] private InteractableViewOpenerObject cartesianComponentsTerminal;
 	[SerializeField] private InteractableViewOpenerObject vectorAdditionTerminal;
+	[SerializeField] private InteractableViewOpenerObject endConsoleTerminal;
 
 	private void Start()
 	{
@@ -30,6 +33,8 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 
 		vectorAdditionView.OpenViewEvent += () => SetVectorAdditionTerminalEnvironmentState(true);
 		vectorAdditionView.QuitViewEvent += () => SetVectorAdditionTerminalEnvironmentState(false);
+
+		endConsoleView.OpenViewEvent += SetupEndEnvironmentState;
 
 		activityTwoManager.QuantitiesAreaClearEvent += ClearQuantitiesTerminalEnvironmentState;
 		activityTwoManager.CartesianComponentsAreaClearEvent += ClearCartesianComponentsTerminalEnvironmentState;
@@ -81,6 +86,14 @@ public class ActivityTwoEnvironmentManager : ActivityEnvironmentManager
 	{
 		SetVectorAdditionTerminalEnvironmentState(false);
 		vectorAdditionTerminal.SetInteractable(false);
+		endConsoleTerminal.SetInteractable(true);
 	}
 	#endregion
+
+	private void SetupEndEnvironmentState()
+	{
+		SetPlayerActivityState(false);
+		// activityTwoManager.SetMissionObjectiveDisplay(false);
+		endTerminalAreaCamera.gameObject.SetActive(true);
+	}
 }
