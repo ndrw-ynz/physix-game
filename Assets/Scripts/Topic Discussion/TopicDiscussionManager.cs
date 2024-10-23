@@ -21,7 +21,7 @@ public class TopicDiscussionManager : MonoBehaviour
         ChangeReadIndicatorButtonState();
 
         LoadProgressBarButtons();
-        UpdateProgressBarButtonTextAndColor();
+
         progressDisplay.UpdateIndicatorLinePosition(_currentSectorIndex);
 
         LoadPageJumpButtons();
@@ -58,10 +58,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 ChangeReadIndicatorButtonState();
 
-                UpdateProgressBarButtonTextAndColor();
-
                 pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
-                UpdatePageJumpButtonColors();
                 break;
 
             case Direction.NextPage:
@@ -73,11 +70,9 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 ChangeReadIndicatorButtonState();
 
-                UpdateProgressBarButtonTextAndColor();
-
                 pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
-                UpdatePageJumpButtonColors();
                 break;
+
             case Direction.PreviousSector:
                 discussionNavigator.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
 
@@ -92,13 +87,13 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 ChangeReadIndicatorButtonState();
 
-                UpdateProgressBarButtonTextAndColor();
                 progressDisplay.UpdateIndicatorLinePosition(_currentSectorIndex);
 
                 LoadPageJumpButtons();
                 pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
                 UpdatePageJumpButtonColors();
                 break;
+
             case Direction.NextSector:
                 discussionNavigator.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
 
@@ -112,7 +107,6 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 ChangeReadIndicatorButtonState();
 
-                UpdateProgressBarButtonTextAndColor();
                 progressDisplay.UpdateIndicatorLinePosition(_currentSectorIndex);
 
                 LoadPageJumpButtons();
@@ -137,7 +131,6 @@ public class TopicDiscussionManager : MonoBehaviour
 
             ChangeReadIndicatorButtonState();
 
-            UpdateProgressBarButtonTextAndColor();
             progressDisplay.UpdateIndicatorLinePosition(_currentSectorIndex);
             LoadPageJumpButtons();
 
@@ -157,10 +150,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
             ChangeReadIndicatorButtonState();
 
-            UpdateProgressBarButtonTextAndColor();
-
             pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
-            UpdatePageJumpButtonColors();
         }
     }
 
