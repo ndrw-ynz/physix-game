@@ -25,7 +25,7 @@ public class TopicDiscussionManager : MonoBehaviour
         progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
 
         LoadPageJumpButtons();
-        pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
+        pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
         UpdatePageJumpButtonColors();
 
         PagePrevNextButton.PagePrevNextClickEvent += HandlePrevNextClick;
@@ -60,7 +60,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 UpdateProgressBarButtonColor();
 
-                pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
+                pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
                 UpdatePageJumpButtonColors();
                 break;
 
@@ -75,7 +75,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
                 UpdateProgressBarButtonColor();
 
-                pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
+                pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
                 UpdatePageJumpButtonColors();
                 break;
             case Direction.PreviousSector:
@@ -96,7 +96,7 @@ public class TopicDiscussionManager : MonoBehaviour
                 progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
 
                 LoadPageJumpButtons();
-                pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
+                pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
                 UpdatePageJumpButtonColors();
                 break;
             case Direction.NextSector:
@@ -116,7 +116,7 @@ public class TopicDiscussionManager : MonoBehaviour
                 progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
 
                 LoadPageJumpButtons();
-                pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
+                pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
                 UpdatePageJumpButtonColors();
                 break;
         }
@@ -141,7 +141,7 @@ public class TopicDiscussionManager : MonoBehaviour
             progressDisplay.UpdateIndicatorLine(_currentSectorIndex);
             LoadPageJumpButtons();
 
-            pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
+            pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
             UpdatePageJumpButtonColors();
         }
     }
@@ -159,7 +159,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
             UpdateProgressBarButtonColor();
 
-            pageJumpDisplay.UpdatePageJumpButtonOutline(_currentPageIndex);
+            pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
             UpdatePageJumpButtonColors();
         }
     }
@@ -241,7 +241,7 @@ public class TopicDiscussionManager : MonoBehaviour
         for (int i = 0; i < pageJumpButtonsLength; i++)
         {
             bool isPageMarkedRead = discussionNavigator.IsPageMarkedRead(_currentSectorIndex, i);
-            pageJumpDisplay.UpdatePageJumpButtonColors(_currentSectorIndex, isPageMarkedRead, i);
+            pageJumpDisplay.UpdatePageJumpButtonColor(_currentSectorIndex, isPageMarkedRead, i);
         }
     }
 }

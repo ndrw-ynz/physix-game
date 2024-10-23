@@ -30,17 +30,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
         // Initialize index for jumping directly to its page upon button press
         newPageJumpButton.Initialize(buttonIndex);
     }
-
-    public void DestroyImmediateAllPageJumpButtons()
-    {
-        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
-        for (int i = 0; i < pageJumpButtons.Length; ++i)
-        {
-            DestroyImmediate(pageJumpButtons[i].gameObject);
-        }
-    }
-
-    public void UpdatePageJumpButtonOutline(int currentPageIndex)
+    public void UpdatePageJumpButtonsOutline(int currentPageIndex)
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
@@ -58,7 +48,7 @@ public class PageJumpButtonsDisplay : MonoBehaviour
             }
         }
     }
-    public void UpdatePageJumpButtonColors(int currentSectorIndex, bool isPageMarkedRead, int i)
+    public void UpdatePageJumpButtonColor(int currentSectorIndex, bool isPageMarkedRead, int i)
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
 
@@ -71,7 +61,14 @@ public class PageJumpButtonsDisplay : MonoBehaviour
             pageJumpButtons[i].buttonColor.color = Color.white;
         }
     }
-
+    public void DestroyImmediateAllPageJumpButtons()
+    {
+        PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
+        for (int i = 0; i < pageJumpButtons.Length; ++i)
+        {
+            DestroyImmediate(pageJumpButtons[i].gameObject);
+        }
+    }
     public int GetPageJumpButtonsLength()
     {
         PageJumpButton[] pageJumpButtons = pageJumpButtonGroup.GetComponentsInChildren<PageJumpButton>();
