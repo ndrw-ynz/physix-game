@@ -100,6 +100,8 @@ public class PageJumpButtonsDisplay : MonoBehaviour
             }
             else
             {
+                _outlineColor.a = 1;
+                _pageJumpButton.buttonOutline.color = _outlineColor;
                 // After animation, set animation mode to false
                 _animatePageJumpButton = false;
             }

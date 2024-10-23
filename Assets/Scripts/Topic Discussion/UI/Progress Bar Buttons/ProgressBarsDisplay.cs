@@ -183,6 +183,10 @@ public class ProgressBarsDisplay : MonoBehaviour
             }
             else
             {
+                _newColor.a = 1;
+                _temporaryImage.color = _oldColor;
+                _finalImage.color = _newColor;
+
                 // After animation, set animation mode and the temporary image to false
                 _temporaryImage.gameObject.SetActive(false);
                 _animateProgressBarButton = false;
