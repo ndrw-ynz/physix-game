@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class TopicDiscussionManager : MonoBehaviour
 {
@@ -133,7 +132,6 @@ public class TopicDiscussionManager : MonoBehaviour
                 discussionPagesDisplay.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
 
                 int previousSectorLastPageIndex = discussionPagesDisplay.GetCurrentSectorPagesCount((_currentSectorIndex)-1) - 1;
-                Debug.Log(previousSectorLastPageIndex);
                 _currentSectorIndex -= 1;
                 _currentPageIndex = previousSectorLastPageIndex;
 
@@ -228,14 +226,12 @@ public class TopicDiscussionManager : MonoBehaviour
         discussionPagesDisplay.SaveReadPagesData();
         sceneNavigationDisplay.LoadMainMenu();
     }
-
     private void HandleStartActivityClick()
     {
         // Save read pages data and load specified activity scene
         discussionPagesDisplay.SaveReadPagesData();
         sceneNavigationDisplay.LoadActivity(_topicDiscussionNumber);
     }
-
     private void HandleBackToGameClick()
     {
         // Save read pages data and close current discussion scene
