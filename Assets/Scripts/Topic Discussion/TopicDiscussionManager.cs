@@ -37,6 +37,7 @@ public class TopicDiscussionManager : MonoBehaviour
             { "sector2", new List<int> { 0 } },
         };
 
+        // Load read pages data into the sub topics list of discussion pages display
         discussionPagesDisplay.LoadReadPagesData(_readPagesMapData);
 
         // Load the current sector and page of the topic discussion
@@ -206,12 +207,14 @@ public class TopicDiscussionManager : MonoBehaviour
 
     private void HandleBackToMainMenuClick()
     {
+        // Save read pages data and load main menu scene
         discussionPagesDisplay.SaveReadPagesData();
         SceneManager.LoadScene($"Main Menu");
     }
 
     private void HandleStartActivityClick()
     {
+        // Save read pages data and load specified activity scene
         discussionPagesDisplay.SaveReadPagesData();
         SceneManager.LoadScene("Activity " + topicDiscussionNumber);
     }
