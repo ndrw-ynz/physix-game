@@ -86,8 +86,6 @@ public class DiscussionPagesDisplay : MonoBehaviour
         {
             string sectorName = sectorNames[i];
             List<int> readPagesIndexes = readPagesMapData[sectorName];
-
-            Debug.Log("Sector name: " + sectorName);
             
             // Set specified pages to have been read state based on the read pages map data
             foreach(int index in readPagesIndexes)
@@ -102,6 +100,32 @@ public class DiscussionPagesDisplay : MonoBehaviour
                 }
             }
         }
+    }
+
+    public Dictionary<string, List<int>> SaveReadPagesData()
+    {
+        Dictionary<string, List<int>> newReadPagesMapData = new Dictionary<string, List<int>>();
+
+        for (int i = 0; i < subTopicsList.Count; i++)
+        {
+            List<int> currentSectorReadPages = new List<int>();
+
+            for (int j = 0; j < subTopicsList[i].pages.Count; j++)
+            {
+
+                bool isPageMarkedRead = IsPageMarkedRead(i, j);
+                
+                if (isPageMarkedRead)
+                {
+                    currentSectorReadPages.Add(j);
+                }
+            }
+
+            string sectorKey = "sector "+(i + 1);
+            newReadPagesMapData[sectorKey] = currentSectorReadPages;
+        }
+
+        return newReadPagesMapData;
     }
 
     #region Page Animation

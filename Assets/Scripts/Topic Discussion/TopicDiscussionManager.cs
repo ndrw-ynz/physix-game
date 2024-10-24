@@ -1,14 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TopicDiscussionManager : MonoBehaviour
 {
     [Header("Game Objects with Attached Display Scripts")]
-    [SerializeField] private DiscussionPagesDisplay discussionNavigator;
+    [SerializeField] private DiscussionPagesDisplay discussionPagesDisplay;
     [SerializeField] private ProgressBarsDisplay progressDisplay;
     [SerializeField] private PageJumpButtonsDisplay pageJumpDisplay;
     [SerializeField] private PreviousNextButtonsDisplay previousNextButtonsDisplay;
     [SerializeField] private ReadIndicatorsDisplay readIndicatorsDisplay;
+
+    [SerializeField] private int topicDiscussionNumber;
 
     // Current sector and page index values
     private static int _currentSectorIndex;
@@ -25,19 +28,19 @@ public class TopicDiscussionManager : MonoBehaviour
         _currentPageIndex = 0;
 
         // Get the sub topics' list count
-        _subTopicsListCount = discussionNavigator.GetSubTopicListCount();
+        _subTopicsListCount = discussionPagesDisplay.GetSubTopicListCount();
 
         // Test data for topic discussion 9
         _readPagesMapData = new Dictionary<string, List<int>>()
         {
-            { "sector1", new List<int> { 0, 1, 2, 3, 4, 6, 8, 9} },
+            { "sector1", new List<int> { 0, 1, 2, 3, 4} },
             { "sector2", new List<int> { 0 } },
         };
 
-        discussionNavigator.LoadReadPagesData(_readPagesMapData);
+        discussionPagesDisplay.LoadReadPagesData(_readPagesMapData);
 
         // Load the current sector and page of the topic discussion
-        discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
+        discussionPagesDisplay.ChangePage(_currentSectorIndex, _currentPageIndex);
 
         // Activate the proper previous and next button(s) based from the current sector and page of the topic discussion
         ChangePreviousAndNextButtonState();
@@ -64,6 +67,8 @@ public class TopicDiscussionManager : MonoBehaviour
         ProgressBarButton.ProgressBarClickEvent += HandleProgressBarClick;
         PageJumpButton.PageCircleClick += HandlePageCircleClick;
         ReadIndicatorButton.ReadIndicatorClickEvent += HandleReadIndicatorClick;
+        DiscussionMainMenuButton.BackToMainMenuClickEvent += HandleBackToMainMenuClick;
+        DiscussionActivityButton.StartActivityClickEvent += HandleStartActivityClick;
     }
 
     private void OnDisable()
@@ -74,6 +79,8 @@ public class TopicDiscussionManager : MonoBehaviour
         ProgressBarButton.ProgressBarClickEvent -= HandleProgressBarClick;
         PageJumpButton.PageCircleClick -= HandlePageCircleClick;
         ReadIndicatorButton.ReadIndicatorClickEvent -= HandleReadIndicatorClick;
+        DiscussionMainMenuButton.BackToMainMenuClickEvent -= HandleBackToMainMenuClick;
+        DiscussionActivityButton.StartActivityClickEvent -= HandleStartActivityClick;
     }
 
     private void HandlePrevNextClick(Direction direction)
@@ -84,7 +91,7 @@ public class TopicDiscussionManager : MonoBehaviour
             case Direction.PreviousPage:
                 _currentPageIndex -= 1;
 
-                discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
+                discussionPagesDisplay.ChangePage(_currentSectorIndex, _currentPageIndex);
                 ChangePreviousAndNextButtonState();
 
                 ChangeReadIndicatorButtonState();
@@ -95,7 +102,7 @@ public class TopicDiscussionManager : MonoBehaviour
             case Direction.NextPage:
                 _currentPageIndex += 1;
 
-                discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
+                discussionPagesDisplay.ChangePage(_currentSectorIndex, _currentPageIndex);
 
                 ChangePreviousAndNextButtonState();
 
@@ -105,14 +112,14 @@ public class TopicDiscussionManager : MonoBehaviour
                 break;
 
             case Direction.PreviousSector:
-                discussionNavigator.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
+                discussionPagesDisplay.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
 
-                int previousSectorLastPageIndex = discussionNavigator.GetCurrentSectorPagesCount((_currentSectorIndex)-1) - 1;
+                int previousSectorLastPageIndex = discussionPagesDisplay.GetCurrentSectorPagesCount((_currentSectorIndex)-1) - 1;
                 Debug.Log(previousSectorLastPageIndex);
                 _currentSectorIndex -= 1;
                 _currentPageIndex = previousSectorLastPageIndex;
 
-                discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
+                discussionPagesDisplay.ChangePage(_currentSectorIndex, _currentPageIndex);
 
                 ChangePreviousAndNextButtonState();
 
@@ -126,13 +133,13 @@ public class TopicDiscussionManager : MonoBehaviour
                 break;
 
             case Direction.NextSector:
-                discussionNavigator.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
+                discussionPagesDisplay.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
 
                 int nextSectorFirstPageIndex = 0;
                 _currentSectorIndex += 1;
                 _currentPageIndex = nextSectorFirstPageIndex;
 
-                discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
+                discussionPagesDisplay.ChangePage(_currentSectorIndex, _currentPageIndex);
 
                 ChangePreviousAndNextButtonState();
 
@@ -151,12 +158,12 @@ public class TopicDiscussionManager : MonoBehaviour
         // Close current page and jump to the specified sector index if not sectorIndex is not the current sector
         if (_currentSectorIndex != sectorIndex)
         {
-            discussionNavigator.CloseCurrentPage(_currentSectorIndex,_currentPageIndex);
+            discussionPagesDisplay.CloseCurrentPage(_currentSectorIndex,_currentPageIndex);
 
             _currentSectorIndex = sectorIndex;
             _currentPageIndex = 0;
 
-            discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
+            discussionPagesDisplay.ChangePage(_currentSectorIndex, _currentPageIndex);
 
             ChangePreviousAndNextButtonState();
 
@@ -175,7 +182,7 @@ public class TopicDiscussionManager : MonoBehaviour
         if (_currentPageIndex != pageIndex)
         {
             _currentPageIndex = pageIndex;
-            discussionNavigator.ChangePage(_currentSectorIndex, pageIndex);
+            discussionPagesDisplay.ChangePage(_currentSectorIndex, pageIndex);
 
             ChangePreviousAndNextButtonState();
 
@@ -188,7 +195,7 @@ public class TopicDiscussionManager : MonoBehaviour
     {
         /* Change read state, read indicator button state. 
          * Then update progress bar text and color and page jump button colors */
-        discussionNavigator.ChangeReadState(readState, _currentSectorIndex, _currentPageIndex);
+        discussionPagesDisplay.ChangeReadState(readState, _currentSectorIndex, _currentPageIndex);
 
         ChangeReadIndicatorButtonState();
 
@@ -197,19 +204,31 @@ public class TopicDiscussionManager : MonoBehaviour
         UpdatePageJumpButtonColors();
     }
 
+    private void HandleBackToMainMenuClick()
+    {
+        discussionPagesDisplay.SaveReadPagesData();
+        SceneManager.LoadScene($"Main Menu");
+    }
+
+    private void HandleStartActivityClick()
+    {
+        discussionPagesDisplay.SaveReadPagesData();
+        SceneManager.LoadScene("Activity " + topicDiscussionNumber);
+    }
+
     private void ChangePreviousAndNextButtonState()
     {
         /* Set the current sector's pages count, previous sector title,next sector title, and update
            and update previous and next button state*/
-        int currentSectorPagesCount = discussionNavigator.GetCurrentSectorPagesCount(_currentSectorIndex);
-        string previousSectorTitle = _currentSectorIndex>0 ? discussionNavigator.GetPreviousSectorTitle(_currentSectorIndex): null;
-        string nextSectorTitle = _currentSectorIndex< _subTopicsListCount - 1 ? discussionNavigator.GetNextSectorTitle(_currentSectorIndex): null;
+        int currentSectorPagesCount = discussionPagesDisplay.GetCurrentSectorPagesCount(_currentSectorIndex);
+        string previousSectorTitle = _currentSectorIndex>0 ? discussionPagesDisplay.GetPreviousSectorTitle(_currentSectorIndex): null;
+        string nextSectorTitle = _currentSectorIndex< _subTopicsListCount - 1 ? discussionPagesDisplay.GetNextSectorTitle(_currentSectorIndex): null;
         previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, _subTopicsListCount, currentSectorPagesCount, previousSectorTitle, nextSectorTitle);
     }
     private void ChangeReadIndicatorButtonState()
     {
         // Check if page is marked as read and update read indicator state
-        bool isPageMarkedRead = discussionNavigator.CurrentPageIsMarkedRead(_currentSectorIndex, _currentPageIndex);
+        bool isPageMarkedRead = discussionPagesDisplay.CurrentPageIsMarkedRead(_currentSectorIndex, _currentPageIndex);
         readIndicatorsDisplay.ChangeReadIndicatorButtonsState(_currentSectorIndex, _currentPageIndex, isPageMarkedRead);
     }
     private void LoadProgressBarButtons()
@@ -217,8 +236,8 @@ public class TopicDiscussionManager : MonoBehaviour
         // Create progress bar buttons with corresponding titles and progress count
         for (int i = 0; i < _subTopicsListCount; i++)
         {
-            string sectorTitle = discussionNavigator.GetSectorTitle(i);
-            string progressCount = $"{discussionNavigator.CountReadPages(i).ToString()}/{discussionNavigator.CountTotalPages(i).ToString()}";
+            string sectorTitle = discussionPagesDisplay.GetSectorTitle(i);
+            string progressCount = $"{discussionPagesDisplay.CountReadPages(i).ToString()}/{discussionPagesDisplay.CountTotalPages(i).ToString()}";
             progressDisplay.GenerateProgressBarButton(i, sectorTitle, progressCount);
         }
 
@@ -226,16 +245,16 @@ public class TopicDiscussionManager : MonoBehaviour
         int progressDisplayLength = progressDisplay.GetProgressBarButtonsLength();
         for (int i = 0; i < progressDisplayLength; i++)
         {
-            double currentReadPagesCount = discussionNavigator.CountReadPages(i);
-            double currentTotalPagesCount = discussionNavigator.CountTotalPages(i);
+            double currentReadPagesCount = discussionPagesDisplay.CountReadPages(i);
+            double currentTotalPagesCount = discussionPagesDisplay.CountTotalPages(i);
             progressDisplay.LoadProgressBarButtonsColors(currentReadPagesCount, currentTotalPagesCount, i);
         }
     }
     private void UpdateProgressBarButtonTextAndColor()
     {
         // Update the current sector's progress bar button color
-        double currReadPagesCount = discussionNavigator.CountReadPages(_currentSectorIndex);
-        double currSectorPagesCount = discussionNavigator.CountTotalPages(_currentSectorIndex);
+        double currReadPagesCount = discussionPagesDisplay.CountReadPages(_currentSectorIndex);
+        double currSectorPagesCount = discussionPagesDisplay.CountTotalPages(_currentSectorIndex);
         progressDisplay.UpdateProgressBarButtonTextAndColor(_currentSectorIndex, currReadPagesCount, currSectorPagesCount);
     }
     private void LoadPageJumpButtons()
@@ -247,7 +266,7 @@ public class TopicDiscussionManager : MonoBehaviour
             pageJumpDisplay.DestroyImmediateAllPageJumpButtons();
         }
 
-        int currentSectorPagesCount = discussionNavigator.GetCurrentSectorPagesCount(_currentSectorIndex);
+        int currentSectorPagesCount = discussionPagesDisplay.GetCurrentSectorPagesCount(_currentSectorIndex);
         // Create buttons for the new sector
         for (int i = 0; i < currentSectorPagesCount; i++)
         {
@@ -260,7 +279,7 @@ public class TopicDiscussionManager : MonoBehaviour
         int pageJumpButtonsLength = pageJumpDisplay.GetPageJumpButtonsLength();
         for (int i = 0; i < pageJumpButtonsLength; i++)
         {
-            bool isPageMarkedRead = discussionNavigator.IsPageMarkedRead(_currentSectorIndex, i);
+            bool isPageMarkedRead = discussionPagesDisplay.IsPageMarkedRead(_currentSectorIndex, i);
             pageJumpDisplay.UpdatePageJumpButtonColor(_currentSectorIndex, isPageMarkedRead, i);
         }
     }

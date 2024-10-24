@@ -1,10 +1,22 @@
+using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class DiscussionMainMenuButton : MonoBehaviour
 {
-    public void OnClick()
+    public static event Action BackToMainMenuClickEvent;
+
+    [Header("Back To Main Menu Button")]
+    [SerializeField] private Button backToMainMenuButton;
+
+    private void OnEnable()
     {
-        SceneManager.LoadScene("Main Menu");
+        backToMainMenuButton.onClick.AddListener(() => BackToMainMenuClickEvent?.Invoke());
+    }
+
+    private void OnDisable()
+    {
+        backToMainMenuButton.onClick.RemoveAllListeners();
     }
 }

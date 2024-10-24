@@ -1,12 +1,21 @@
+using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class DiscussionActivityButton : MonoBehaviour
 {
-    public int activityNumber;
+    public static event Action StartActivityClickEvent;
 
-    public void OnClick()
+    [Header("Start Activity Button")]
+    [SerializeField] private Button startActivityButton;
+
+    private void OnEnable()
     {
-        SceneManager.LoadScene($"Activity {activityNumber}");
+        startActivityButton.onClick.AddListener(() => StartActivityClickEvent?.Invoke());
+    }
+
+    private void OnDisable()
+    {
+        startActivityButton.onClick.RemoveAllListeners();
     }
 }
