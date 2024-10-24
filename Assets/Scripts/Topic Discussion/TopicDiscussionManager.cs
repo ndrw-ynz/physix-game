@@ -10,8 +10,9 @@ public class TopicDiscussionManager : MonoBehaviour
     [SerializeField] private PageJumpButtonsDisplay pageJumpDisplay;
     [SerializeField] private PreviousNextButtonsDisplay previousNextButtonsDisplay;
     [SerializeField] private ReadIndicatorsDisplay readIndicatorsDisplay;
+    [SerializeField] private SceneNavigationButtons sceneNavigationDisplay;
 
-    [SerializeField] private int topicDiscussionNumber;
+    [SerializeField] private int _topicDiscussionNumber;
 
     // Current sector and page index values
     private static int _currentSectorIndex;
@@ -21,6 +22,14 @@ public class TopicDiscussionManager : MonoBehaviour
     private Dictionary<string, List<int>> _readPagesMapData;
     private void Start()
     {
+        bool isActivitySceneActive = false;
+
+        if (isActivitySceneActive)
+        {
+            sceneNavigationDisplay.ActivateBackToGameButtonOnly();
+        }
+
+
         /* Currently on the first page of the first sector. Can be modified when loading from the result screen's reccommended actions
          * Thou must be careful to load proper index values for different topic discussion scenes or else it will throw an "INDEX OUT OF BOUNDS" error
          * I might add a conditional statement for this that will load the first page instead if the error does happen */
@@ -70,6 +79,7 @@ public class TopicDiscussionManager : MonoBehaviour
         ReadIndicatorButton.ReadIndicatorClickEvent += HandleReadIndicatorClick;
         DiscussionMainMenuButton.BackToMainMenuClickEvent += HandleBackToMainMenuClick;
         DiscussionActivityButton.StartActivityClickEvent += HandleStartActivityClick;
+        DiscussionBackToActivityButton.BackToActivityClickEvent += HandleBackToGameClick;
     }
 
     private void OnDisable()
@@ -82,6 +92,7 @@ public class TopicDiscussionManager : MonoBehaviour
         ReadIndicatorButton.ReadIndicatorClickEvent -= HandleReadIndicatorClick;
         DiscussionMainMenuButton.BackToMainMenuClickEvent -= HandleBackToMainMenuClick;
         DiscussionActivityButton.StartActivityClickEvent -= HandleStartActivityClick;
+        DiscussionBackToActivityButton.BackToActivityClickEvent -= HandleBackToGameClick;
     }
 
     private void HandlePrevNextClick(Direction direction)
@@ -209,14 +220,21 @@ public class TopicDiscussionManager : MonoBehaviour
     {
         // Save read pages data and load main menu scene
         discussionPagesDisplay.SaveReadPagesData();
-        SceneManager.LoadScene($"Main Menu");
+        sceneNavigationDisplay.LoadMainMenu();
     }
 
     private void HandleStartActivityClick()
     {
         // Save read pages data and load specified activity scene
         discussionPagesDisplay.SaveReadPagesData();
-        SceneManager.LoadScene("Activity " + topicDiscussionNumber);
+        sceneNavigationDisplay.LoadActivity(_topicDiscussionNumber);
+    }
+
+    private void HandleBackToGameClick()
+    {
+        discussionPagesDisplay.SaveReadPagesData();
+        sceneNavigationDisplay.CloseCurrentDiscussion(_topicDiscussionNumber);
+
     }
 
     private void ChangePreviousAndNextButtonState()
