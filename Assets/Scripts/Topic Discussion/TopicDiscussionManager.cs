@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TopicDiscussionManager : MonoBehaviour
@@ -14,7 +15,7 @@ public class TopicDiscussionManager : MonoBehaviour
     private static int _currentPageIndex;
 
     private int _subTopicsListCount;
-
+    private Dictionary<string, List<int>> _readPagesMapData;
     private void Start()
     {
         /* Currently on the first page of the first sector. Can be modified when loading from the result screen's reccommended actions
@@ -25,6 +26,15 @@ public class TopicDiscussionManager : MonoBehaviour
 
         // Get the sub topics' list count
         _subTopicsListCount = discussionNavigator.GetSubTopicListCount();
+
+        // Test data for topic discussion 9
+        _readPagesMapData = new Dictionary<string, List<int>>()
+        {
+            { "sector1", new List<int> { 0, 1, 2, 3, 4, 6, 8, 9} },
+            { "sector2", new List<int> { 0 } },
+        };
+
+        discussionNavigator.LoadReadPagesData(_readPagesMapData);
 
         // Load the current sector and page of the topic discussion
         discussionNavigator.ChangePage(_currentSectorIndex, _currentPageIndex);
@@ -216,8 +226,8 @@ public class TopicDiscussionManager : MonoBehaviour
         int progressDisplayLength = progressDisplay.GetProgressBarButtonsLength();
         for (int i = 0; i < progressDisplayLength; i++)
         {
-            double currentReadPagesCount = discussionNavigator.CountReadPages(_currentSectorIndex);
-            double currentTotalPagesCount = discussionNavigator.CountTotalPages(_currentSectorIndex);
+            double currentReadPagesCount = discussionNavigator.CountReadPages(i);
+            double currentTotalPagesCount = discussionNavigator.CountTotalPages(i);
             progressDisplay.LoadProgressBarButtonsColors(currentReadPagesCount, currentTotalPagesCount, i);
         }
     }

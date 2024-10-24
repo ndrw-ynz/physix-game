@@ -76,6 +76,34 @@ public class DiscussionPagesDisplay : MonoBehaviour
     }
     #endregion
 
+    public void LoadReadPagesData(Dictionary<string, List<int>> readPagesMapData)
+    {
+        // Get the list of keys from dictionary
+        List<string> sectorNames = new List<string>(readPagesMapData.Keys);
+
+        // Loop through the indices of the key list
+        for (int i = 0; i < sectorNames.Count; i++)
+        {
+            string sectorName = sectorNames[i];
+            List<int> readPagesIndexes = readPagesMapData[sectorName];
+
+            Debug.Log("Sector name: " + sectorName);
+            
+            // Set specified pages to have been read state based on the read pages map data
+            foreach(int index in readPagesIndexes)
+            {
+                if (index < subTopicsList[i].pages.Count)
+                {
+                    subTopicsList[i].pages[index].isMarkedRead = true;
+                }
+                else
+                {
+                    Debug.Log("Index is out of bounds. Index is greater than the current sector's pages count");
+                }
+            }
+        }
+    }
+
     #region Page Animation
     private void ActivatePageAnimation(Page page)
     {
