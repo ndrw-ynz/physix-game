@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Level Data/GraphsSubActivitySO")]
+[CreateAssetMenu(menuName = "Level Data/Graphs")]
 public class GraphsSubActivitySO : ScriptableObject
 {
 	[Header("Graph Datasets")]
