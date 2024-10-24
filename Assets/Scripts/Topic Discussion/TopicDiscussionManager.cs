@@ -12,18 +12,24 @@ public class TopicDiscussionManager : MonoBehaviour
     [SerializeField] private ReadIndicatorsDisplay readIndicatorsDisplay;
     [SerializeField] private SceneNavigationButtons sceneNavigationDisplay;
 
+    [Header("Current Topic Discussion Number")]
     [SerializeField] private int _topicDiscussionNumber;
 
     // Current sector and page index values
     private static int _currentSectorIndex;
     private static int _currentPageIndex;
 
+    // Current topic discussion's sub topics list count
     private int _subTopicsListCount;
+
+    // Read pages map data to be loaded from cloud firestore database
     private Dictionary<string, List<int>> _readPagesMapData;
     private void Start()
     {
+        // TO DO: add a function that checks if an activity scene is currently active
         bool isActivitySceneActive = false;
 
+        // Activate only the back to game button when an activity scene is active
         if (isActivitySceneActive)
         {
             sceneNavigationDisplay.ActivateBackToGameButtonOnly();
@@ -232,6 +238,7 @@ public class TopicDiscussionManager : MonoBehaviour
 
     private void HandleBackToGameClick()
     {
+        // Save read pages data and close current discussion scene
         discussionPagesDisplay.SaveReadPagesData();
         sceneNavigationDisplay.CloseCurrentDiscussion(_topicDiscussionNumber);
 

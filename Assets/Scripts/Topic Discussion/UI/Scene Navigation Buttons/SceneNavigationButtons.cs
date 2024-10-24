@@ -19,11 +19,13 @@ public class SceneNavigationButtons : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        // Load main menu scene
         SceneManager.LoadScene($"Main Menu");
     }
 
     public void LoadActivity(int activityNumber)
     {
+        // Load specified activity scene
         SceneManager.LoadScene($"Activity {activityNumber}");
     }
 
