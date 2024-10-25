@@ -108,10 +108,13 @@ public class ActivityThreeManager : MonoBehaviour
 
 	private void InitializeCorrectGraphValues()
 	{
+		int datasetSize = currentGraphsLevel.datasets[0].dataset.Count;
+		int randomDatasetIndex = Random.Range(0, datasetSize);
+
 		foreach (GraphDataset graphDataset in currentGraphsLevel.datasets)
 		{
-			string rawStringDataValues = graphDataset.dataset[Random.Range(0, graphDataset.dataset.Count)];
-			List<int> graphPointValues = rawStringDataValues.Split(',').Select(int.Parse).ToList();
+			List<int> graphPointValues = graphDataset.dataset[randomDatasetIndex].Split(',').Select(int.Parse).ToList();
+			
 			switch (graphDataset.datasetType)
 			{
 				case DatasetType.Position:
