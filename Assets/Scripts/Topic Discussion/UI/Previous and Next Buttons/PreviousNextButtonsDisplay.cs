@@ -1,41 +1,25 @@
 using UnityEngine;
 
-public class ButtonsDisplay : MonoBehaviour
+public class PreviousNextButtonsDisplay : MonoBehaviour
 {
     [Header("Previous and Next Buttons")]
     [SerializeField] private PagePrevNextButton prevPageButton;
     [SerializeField] private PagePrevNextButton nextPageButton;
     [SerializeField] private SectorPrevNextButton prevSectorButton;
     [SerializeField] private SectorPrevNextButton nextSectorButton;
-    [Header("Read Indicator Buttons")]
-    [SerializeField] private ReadIndicatorButton markAsReadButton;
-    [SerializeField] private ReadIndicatorButton markAsNotReadButton;
-
-    private void OnEnable()
-    {
-        // Add listeners
-        DiscussionNavigator.PageChangeEvent += ChangePrevNextButtonsState;
-        DiscussionNavigator.ReadMarkerChangeEvent += ChangeReadIndicatorButtonsState;
-    }
-    private void OnDisable()
-    {
-        // Remove listeners
-        DiscussionNavigator.PageChangeEvent -= ChangePrevNextButtonsState;
-        DiscussionNavigator.ReadMarkerChangeEvent -= ChangeReadIndicatorButtonsState;
-    }
 
     #region Previous and Next Buttons
-    private void ChangePrevNextButtonsState(DiscussionNavigator discNav)
+    public void ChangePrevNextButtonsState(int currentSectorIndex, int currentPageIndex, int subTopicsListCount, int currentSectorPagesCount, string previousSectorTitle, string nextSectorTitle)
     {
         // All cases of page indexes
         // There's a lot considering there's also previous and next sector button activate cases
-        bool isOnlySinglePageInFirstSector = discNav.GetCurrentSectorIndex() == 0 && discNav.GetCurrentSectorPagesCount() == 1;
-        bool isFirstSectorFirstPage = discNav.GetCurrentSectorIndex() == 0 && discNav.GetCurrentPageIndex() == 0;
-        bool isOnlySinglePageInSector = discNav.GetCurrentSectorIndex() < discNav.GetSubTopicListCount() - 1 && discNav.GetCurrentSectorPagesCount() == 1;
-        bool isOnlySinglePageInLastSector = discNav.GetCurrentSectorIndex() == discNav.GetSubTopicListCount() - 1 && discNav.GetCurrentSectorPagesCount() == 1;
-        bool isLastSectorLastPage = discNav.GetCurrentSectorIndex() == discNav.GetSubTopicListCount() - 1 && discNav.GetCurrentPageIndex() == discNav.GetCurrentSectorPagesCount() - 1;
-        bool isNotFirstSectorFirstPage = discNav.GetCurrentSectorIndex() > 0 && discNav.GetCurrentPageIndex() == 0;
-        bool isNotLastSectorLastPage = discNav.GetCurrentSectorIndex() < discNav.GetSubTopicListCount() - 1 && discNav.GetCurrentPageIndex() == discNav.GetCurrentSectorPagesCount() - 1;
+        bool isOnlySinglePageInFirstSector = currentSectorIndex == 0 && currentSectorPagesCount == 1;
+        bool isFirstSectorFirstPage = currentSectorIndex == 0 && currentPageIndex == 0;
+        bool isOnlySinglePageInSector = currentSectorIndex < subTopicsListCount - 1 && currentSectorPagesCount == 1;
+        bool isOnlySinglePageInLastSector = currentSectorIndex == subTopicsListCount - 1 && currentSectorPagesCount == 1;
+        bool isLastSectorLastPage = currentSectorIndex == subTopicsListCount - 1 && currentPageIndex == currentSectorPagesCount - 1;
+        bool isNotFirstSectorFirstPage = currentSectorIndex > 0 && currentPageIndex == 0;
+        bool isNotLastSectorLastPage = currentSectorIndex < subTopicsListCount - 1 && currentPageIndex == currentSectorPagesCount - 1;
 
         // Change button states depending on the current sector and page index from DiscussionNavigator.cs
         if (isOnlySinglePageInFirstSector)
@@ -43,7 +27,7 @@ public class ButtonsDisplay : MonoBehaviour
             // Activate only the next sector button and attach next subtopic title to the button
             nextSectorButton.gameObject.SetActive(true);
 
-            SetNextSectorText(discNav.GetNextSectorTitle());
+            SetNextSectorText(nextSectorTitle);
 
             prevSectorButton.gameObject.SetActive(false);
             prevPageButton.gameObject.SetActive(false);
@@ -64,8 +48,8 @@ public class ButtonsDisplay : MonoBehaviour
             prevSectorButton.gameObject.SetActive(true);
             nextSectorButton.gameObject.SetActive(true);
 
-            SetPrevSectorText(discNav.GetPreviousSectorTitle());
-            SetNextSectorText(discNav.GetNextSectorTitle());
+            SetPrevSectorText(previousSectorTitle);
+            SetNextSectorText(nextSectorTitle);
 
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
@@ -75,7 +59,7 @@ public class ButtonsDisplay : MonoBehaviour
             // Activate only previous sector button and attach previous subtopic title to the button
             prevSectorButton.gameObject.SetActive(true);
 
-            SetPrevSectorText(discNav.GetPreviousSectorTitle());
+            SetPrevSectorText(previousSectorTitle);
 
             prevPageButton.gameObject.SetActive(false);
             nextPageButton.gameObject.SetActive(false);
@@ -87,7 +71,7 @@ public class ButtonsDisplay : MonoBehaviour
             prevSectorButton.gameObject.SetActive(true);
             nextPageButton.gameObject.SetActive(true);
 
-            SetPrevSectorText(discNav.GetPreviousSectorTitle());
+            SetPrevSectorText(previousSectorTitle);
 
             prevPageButton.gameObject.SetActive(false);
             nextSectorButton.gameObject.SetActive(false);
@@ -98,7 +82,7 @@ public class ButtonsDisplay : MonoBehaviour
             prevPageButton.gameObject.SetActive(true);
             nextSectorButton.gameObject.SetActive(true);
 
-            SetNextSectorText(discNav.GetNextSectorTitle());
+            SetNextSectorText(nextSectorTitle);
 
             nextPageButton.gameObject.SetActive(false);
             prevSectorButton.gameObject.SetActive(false);
@@ -133,24 +117,6 @@ public class ButtonsDisplay : MonoBehaviour
     {
         // Sets the previous sector's button title into the next sector's title
         nextSectorButton.sectorButtonText.text = nextSectorTitle;
-    }
-    #endregion
-
-    #region Read Indicator Buttons
-    public void ChangeReadIndicatorButtonsState(DiscussionNavigator discNav)
-    {
-        if (!discNav.CurrentPageIsMarkedRead())
-        {
-            // Activate the mark as read button
-            markAsReadButton.gameObject.SetActive(true);
-            markAsNotReadButton.gameObject.SetActive(false);
-        }
-        else
-        {
-            // Activate the mark as not yet read button
-            markAsReadButton.gameObject.SetActive(false);
-            markAsNotReadButton.gameObject.SetActive(true);
-        }
     }
     #endregion
 }

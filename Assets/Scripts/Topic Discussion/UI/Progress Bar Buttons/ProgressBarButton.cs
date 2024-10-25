@@ -22,12 +22,11 @@ public class ProgressBarButton : MonoBehaviour
     // Index to be jumped when button is pressed
     private int _sectorIndex;
 
-
     public void Initialize(string sectorTitle, string progressCount, int index)
     {
+        // Initialize the proper sector title text, progress count text, sector index,and on click listener for a progress bar button button
         sectorTitleText.text = sectorTitle;
         progressCountText.text = progressCount;
-
         _sectorIndex = index;
         _progressBarButton.onClick.AddListener(() => ProgressBarClickEvent?.Invoke(_sectorIndex));
     }
