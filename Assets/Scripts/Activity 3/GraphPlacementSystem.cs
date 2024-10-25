@@ -44,7 +44,7 @@ public class GraphPlacementSystem : MonoBehaviour
 			Debug.Log(gridPosition);
 
 			// Exit if gridPosition goes outside boundary.
-			if (Math.Abs(gridPosition.z) > currentGraph.gridColumnBoundary || gridPosition.x < 0 || gridPosition.x > currentGraph.gridRowBoundary)
+			if (Math.Abs(gridPosition.z) > currentGraph.gridColumnBoundary || gridPosition.x < 0 || gridPosition.x > currentGraph.graphLineRenderer.positionCount-1) // gridPosition.x > currentGraph.gridRowBundary
 			{
 				return;
 			}
@@ -56,7 +56,7 @@ public class GraphPlacementSystem : MonoBehaviour
 				Destroy(dupicatePoint);
 			}
 
-			// Update point on line renderer on current graph
+			// Update point on line renderer on current graph			
 			currentGraph.UpdateColumnPointOnGraph(gridPosition.x, gridPosition.z); 
 
 			GameObject newPoint = Instantiate(pointIndicator);

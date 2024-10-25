@@ -23,7 +23,7 @@ public class Graph : MonoBehaviour
 	{
 		graphLineRenderer.startWidth = 0.2f;
 		graphLineRenderer.endWidth = 0.2f;
-		graphLineRenderer.positionCount = 9;
+		graphLineRenderer.positionCount = pointValues.Count;
 
 		gridRecord = new GameObject[numGridRecordRows, numGridRecordCols];
 		
