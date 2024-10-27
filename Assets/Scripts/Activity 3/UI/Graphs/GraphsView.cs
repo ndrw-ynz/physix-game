@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +30,9 @@ public class GraphsView : MonoBehaviour
 	[Header("Managers")]
 	[SerializeField] private GraphManager graphManager;
 
+	[Header("Text Display")]
+	[SerializeField] private TextMeshProUGUI testCountText;
+
 	[Header("Graphs UIs")]
 	[SerializeField] private GraphEditorUI graphEditorUI;
 	[SerializeField] private GraphViewerUI graphViewerUI;
@@ -45,6 +49,11 @@ public class GraphsView : MonoBehaviour
 		positionGraphButton.onClick.AddListener(() => SwitchToGraphViewerUI(graphManager.positionVsTimeGraph));
 		velocityGraphButton.onClick.AddListener(() => SwitchToGraphEditorUI(graphManager.velocityVsTimeGraph));
 		accelerationGraphButton.onClick.AddListener(() => SwitchToGraphEditorUI(graphManager.accelerationVsTimeGraph));
+	}
+
+	public void UpdateTestCountTextDisplay(int currentNumTests, int totalNumTests)
+	{
+		testCountText.text = $"<color=yellow>Number of Tests Solved: {currentNumTests} / {totalNumTests}</color>";
 	}
 
 	private void SwitchToGraphEditorUI(Graph graph)
