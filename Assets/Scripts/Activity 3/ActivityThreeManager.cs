@@ -24,6 +24,9 @@ public class ActivityThreeManager : MonoBehaviour
 	[SerializeField] private GraphsView graphsView;
 	[SerializeField] private GraphEditorUI graphEditorUI;
 	[SerializeField] private GraphViewerUI graphViewerUI;
+	
+	[Header("Submission Status Displays")]
+	[SerializeField] private GraphsSubmissionStatusDisplay graphsSubmissionStatusDisplay;
 
 	[Header("Modal Windows")]
 	[SerializeField] private GraphSubmissionModalWindow graphSubmissionModalWindow;
@@ -34,9 +37,12 @@ public class ActivityThreeManager : MonoBehaviour
 	private List<int> correctVelocityValues;
 	private List<int> correctAccelerationValues;
 
-	[Header("Metrics for Graphs Subactivity")]
-	public bool isGraphsSubActivityFinished;
+	// Gameplay performance metrics variables
+	// Graphs Sub Activity
+	private float graphsGameplayDuration;
+	private bool isGraphsSubActivityFinished;
 	private int numIncorrectGraphsSubmission;
+	private int numCorrectGraphsSubmission;
 
 	[Header("Metrics for 1D Kinematics Subactivity")]
 	public bool isAccelerationCalculationFinished;
@@ -118,9 +124,33 @@ public class ActivityThreeManager : MonoBehaviour
 	{
 		GraphsAnswerSubmissionResults results = ActivityThreeUtilities.ValidateGraphSubmission(answer, correctPositionValues, correctVelocityValues, correctAccelerationValues);
 
-		Debug.Log(results.isPositionVsTimeGraphCorrect);
-		Debug.Log(results.isVelocityVsTimeGraphCorrect);
-		Debug.Log(results.isAccelerationVsTimeGraphCorrect);
+		if (results.isAllCorrect())
+		{
+			numCorrectGraphsSubmission++;
+		}
+		else
+		{
+			numIncorrectGraphsSubmission++;
+		}
+
+		DisplayGraphsSubmissionResults(results);
+	}
+
+	private void DisplayGraphsSubmissionResults(GraphsAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			graphsSubmissionStatusDisplay.SetSubmissionStatus(true, "Orbital 1's movement is optimal. Nice job!");
+			//missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"");
+		}
+		else
+		{
+			graphsSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+		}
+
+		graphsSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResults(results);
+
+		graphsSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 	#endregion
 
