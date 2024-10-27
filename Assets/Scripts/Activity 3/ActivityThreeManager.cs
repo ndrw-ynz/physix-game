@@ -5,35 +5,31 @@ using static GraphsSubActivitySO;
 
 public class ActivityThreeManager : MonoBehaviour
 {
+	public static Difficulty difficultyConfiguration;
+
 	[Header("Level Data - Graphs")]
 	[SerializeField] private GraphsSubActivitySO graphsLevelOne;
 	[SerializeField] private GraphsSubActivitySO graphsLevelTwo;
 	[SerializeField] private GraphsSubActivitySO graphsLevelThree;
-	public GraphsSubActivitySO currentGraphsLevel;
+	private GraphsSubActivitySO currentGraphsLevel;
 
 	[Header("Level Data - 1D Kinematics")]
 	[SerializeField] private Kinematics1DSubActivitySO kinematics1DLevelOne;
-	public Kinematics1DSubActivitySO currentKinematics1DLevel;
+	private Kinematics1DSubActivitySO currentKinematics1DLevel;
 
 	[Header("Managers")]
 	[SerializeField] private GraphManager graphManager;
 
-    [Header("Cameras")]
-	[SerializeField] private Camera mainCamera;
-	[SerializeField] private Camera positionVsTimeGraphCamera;
-	[SerializeField] private Camera velocityVsTimeGraphCamera;
-	[SerializeField] private Camera accelerationVsTimeGraphCamera;
-
 	[Header("Views")]
-    [SerializeField] private ViewGraphs viewGraphs;
-    [SerializeField] private ViewGraphEdit viewGraphEdit;
-	[SerializeField] private View1DKinematics view1DKinematics;
-	[SerializeField] private ViewActivityThreePerformance viewActivityThreePerformance;
+	[SerializeField] private GraphsView graphsView;
+	[SerializeField] private GraphEditorUI graphEditorUI;
+	[SerializeField] private GraphViewerUI graphViewerUI;
 
 	[Header("Modal Windows")]
 	[SerializeField] private GraphSubmissionModalWindow graphSubmissionModalWindow;
 	[SerializeField] private Kinematics1DSubmissionModalWindow kinematics1DSubmissionModalWindow;
 
+	// Given graph values
 	private List<int> correctPositionValues;
 	private List<int> correctVelocityValues;
 	private List<int> correctAccelerationValues;
@@ -55,6 +51,70 @@ public class ActivityThreeManager : MonoBehaviour
 	private int totalTimeValueTwo;
 
 	private void Start()
+	{
+		ConfigureLevelData(Difficulty.Easy);
+
+		SubscribeViewAndDisplayEvents();
+
+		InitializeCorrectGraphValues();
+		graphManager.SetupGraphs(correctPositionValues, correctVelocityValues, correctAccelerationValues);
+	}
+
+	private void ConfigureLevelData(Difficulty difficulty)
+	{
+		difficultyConfiguration = difficulty;
+
+		switch (difficulty)
+		{
+			case Difficulty.Easy:
+				currentGraphsLevel = graphsLevelOne;
+				// currentKinematics1DLevel = kinematics1DLevelOne;
+				break;
+			case Difficulty.Medium:
+				currentGraphsLevel = graphsLevelTwo;
+				// currentKinematics1DLevel = kinematics1DLevelTwo;
+				break;
+			case Difficulty.Hard:
+				currentGraphsLevel = graphsLevelThree;
+				// currentKinematics1DLevel = kinematics1DLevelThree;
+				break;
+		}
+	}
+
+	private void SubscribeViewAndDisplayEvents()
+	{
+		graphEditorUI.QuitGraphEditorEvent += () => graphsView.gameObject.SetActive(true);
+		graphViewerUI.QuitGraphViewerEvent += () => graphsView.gameObject.SetActive(true);
+	}
+
+	#region Graphs
+	private void InitializeCorrectGraphValues()
+	{
+		int datasetSize = currentGraphsLevel.datasets[0].dataset.Count;
+		int randomDatasetIndex = Random.Range(0, datasetSize);
+
+		foreach (GraphDataset graphDataset in currentGraphsLevel.datasets)
+		{
+			List<int> graphPointValues = graphDataset.dataset[randomDatasetIndex].Split(',').Select(int.Parse).ToList();
+
+			switch (graphDataset.datasetType)
+			{
+				case DatasetType.Position:
+					correctPositionValues = graphPointValues;
+					break;
+				case DatasetType.Velocity:
+					correctVelocityValues = graphPointValues;
+					break;
+				case DatasetType.Acceleration:
+					correctAccelerationValues = graphPointValues;
+					break;
+			}
+		}
+	}
+	#endregion
+
+
+	/*private void Start()
 	{
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
 		ViewGraphEdit.InitiateGraphViewSwitch += ChangeViewToGraphView;
@@ -253,5 +313,5 @@ public class ActivityThreeManager : MonoBehaviour
 
 		view.FreeFallProblemStatusText.text += isFreeFallCalculationFinished ? "Accomplished" : "Not accomplished";
 		view.FreeFallProblemIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectFreeFallSubmission}";
-	}
+	}*/
 }
