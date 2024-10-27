@@ -83,8 +83,10 @@ public class ActivityThreeManager : MonoBehaviour
 
 	private void SubscribeViewAndDisplayEvents()
 	{
+		// Graphs Sub Activity Related Events
 		graphEditorUI.QuitGraphEditorEvent += () => graphsView.gameObject.SetActive(true);
 		graphViewerUI.QuitGraphViewerEvent += () => graphsView.gameObject.SetActive(true);
+		graphsView.SubmitAnswerEvent += CheckGraphsAnswer;
 	}
 
 	#region Graphs
@@ -110,6 +112,15 @@ public class ActivityThreeManager : MonoBehaviour
 					break;
 			}
 		}
+	}
+
+	private void CheckGraphsAnswer(GraphsAnswerSubmission answer)
+	{
+		GraphsAnswerSubmissionResults results = ActivityThreeUtilities.ValidateGraphSubmission(answer, correctPositionValues, correctVelocityValues, correctAccelerationValues);
+
+		Debug.Log(results.isPositionVsTimeGraphCorrect);
+		Debug.Log(results.isVelocityVsTimeGraphCorrect);
+		Debug.Log(results.isAccelerationVsTimeGraphCorrect);
 	}
 	#endregion
 
