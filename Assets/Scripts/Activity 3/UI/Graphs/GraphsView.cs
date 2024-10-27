@@ -36,6 +36,7 @@ public class GraphsView : MonoBehaviour
 		graphViewerUI.gameObject.SetActive(false);
 
 		graphManager.DisplayGraph(graph);
+		graphManager.canEditGraph = true;
 	}
 
 	private void SwitchToGraphViewerUI(Graph graph)
@@ -46,6 +47,7 @@ public class GraphsView : MonoBehaviour
 		graphViewerUI.gameObject.SetActive(true);
 
 		graphManager.DisplayGraph(graph);
+		graphManager.canEditGraph = false;
 	}
 
 	public void OnQuitButtonClick()

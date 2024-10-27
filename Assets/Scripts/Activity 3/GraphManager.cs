@@ -6,6 +6,8 @@ public class GraphManager : MonoBehaviour
 {
     public event Action OnMouseClick;
 
+    public bool canEditGraph;
+
     [Header("Graph")]
     public Graph positionVsTimeGraph;
     public Graph velocityVsTimeGraph;
@@ -55,6 +57,7 @@ public class GraphManager : MonoBehaviour
     {
         currentGraph.interactiveGraphCamera.enabled = false;
         currentGraph = null;
+        canEditGraph = false;
     }
 
 	public Vector3 GetSelectedMapPosition()

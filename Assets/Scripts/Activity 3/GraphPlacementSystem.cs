@@ -20,7 +20,8 @@ public class GraphPlacementSystem : MonoBehaviour
 
 	private void Update()
 	{
-		if (graphManager.currentGraph)
+
+		if (graphManager.currentGraph && graphManager.canEditGraph)
 		{
 			Vector3 mousePosition = graphManager.GetSelectedMapPosition();
 			Vector3Int gridPosition = graphManager.currentGraph.graphGrid.WorldToCell(mousePosition);
@@ -35,16 +36,15 @@ public class GraphPlacementSystem : MonoBehaviour
 
 	private void PlacePoint()
 	{
-		if (graphManager.currentGraph)
+		if (graphManager.currentGraph && graphManager.canEditGraph)
 		{
 			Graph currentGraph = graphManager.currentGraph;
 
 			Vector3 mousePosition = graphManager.GetSelectedMapPosition();
 			Vector3Int gridPosition = currentGraph.graphGrid.WorldToCell(mousePosition);
-			Debug.Log(gridPosition);
 
 			// Exit if gridPosition goes outside boundary.
-			if (Math.Abs(gridPosition.z) > currentGraph.gridColumnBoundary || gridPosition.x < 0 || gridPosition.x > currentGraph.graphLineRenderer.positionCount-1) // gridPosition.x > currentGraph.gridRowBundary
+			if (Math.Abs(gridPosition.z) > currentGraph.gridColumnBoundary || gridPosition.x < 0 || gridPosition.x > currentGraph.graphLineRenderer.positionCount-1)
 			{
 				return;
 			}
