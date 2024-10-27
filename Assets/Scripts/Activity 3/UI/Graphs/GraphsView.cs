@@ -2,10 +2,29 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class GraphsAnswerSubmission
+{
+	public Graph positionVsTimeGraph { get; private set; }
+	public Graph velocityVsTimeGraph {get; private set;}
+	public Graph accelerationVsTimeGraph {get; private set;}
+
+	public GraphsAnswerSubmission(
+		Graph positionVsTimeGraph,
+		Graph velocityVsTimeGraph,
+		Graph accelerationVsTimeGraph
+		)
+	{
+		this.positionVsTimeGraph = positionVsTimeGraph;
+		this.velocityVsTimeGraph = velocityVsTimeGraph;
+		this.accelerationVsTimeGraph = accelerationVsTimeGraph;
+	}
+}
+
 public class GraphsView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
+	public event Action<GraphsAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Managers")]
 	[SerializeField] private GraphManager graphManager;
@@ -48,6 +67,17 @@ public class GraphsView : MonoBehaviour
 
 		graphManager.DisplayGraph(graph);
 		graphManager.canEditGraph = false;
+	}
+
+	public void OnSubmitButtonClick()
+	{
+		GraphsAnswerSubmission submission = new GraphsAnswerSubmission(
+			positionVsTimeGraph: graphManager.positionVsTimeGraph,
+			velocityVsTimeGraph: graphManager.velocityVsTimeGraph,
+			accelerationVsTimeGraph: graphManager.accelerationVsTimeGraph
+			);
+
+		SubmitAnswerEvent?.Invoke(submission);
 	}
 
 	public void OnQuitButtonClick()
