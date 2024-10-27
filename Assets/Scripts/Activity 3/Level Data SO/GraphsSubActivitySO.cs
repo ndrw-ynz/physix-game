@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Level Data/Graphs")]
 public class GraphsSubActivitySO : ScriptableObject
 {
+	[Header("Number of Tests")]
+	public int numberOfTests;
 	[Header("Graph Datasets")]
 	public List<GraphDataset> datasets;
 
