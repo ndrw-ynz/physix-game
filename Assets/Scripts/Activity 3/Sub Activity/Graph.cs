@@ -39,6 +39,26 @@ public class Graph : MonoBehaviour
 		}
 	}
 
+	public void UpdateGraphPoints(List<int> pointValues)
+	{
+		for (int i = 0; i < pointValues.Count; i++)
+		{
+			// Remove duplicate point
+			GameObject dupicatePoint = GetDuplicatePointOnColumn(i);
+			if (dupicatePoint)
+			{
+				Destroy(dupicatePoint);
+			}
+
+			// Update point on line renderer on current graph			
+			UpdateColumnPointOnGraph(i, pointValues[i]);
+
+			GameObject newPoint = Instantiate(pointIndicator);
+			newPoint.transform.position = graphGrid.CellToWorld(new Vector3Int(i, 0, pointValues[i]));
+			gridRecord[gridColumnBoundary, i] = newPoint;
+		}
+	}
+
 	public void UpdateColumnPointOnGraph(int columnValue, int rowValue)
 	{
 		graphLineRenderer.SetPosition(columnValue, new Vector3(columnValue, 0, rowValue));
