@@ -57,7 +57,7 @@ public class ActivityThreeManager : MonoBehaviour
 		SubscribeViewAndDisplayEvents();
 
 		InitializeCorrectGraphValues();
-		graphManager.SetupGraphs(correctPositionValues, correctVelocityValues, correctAccelerationValues);
+		graphManager.SetupGraphs(correctPositionValues);
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)

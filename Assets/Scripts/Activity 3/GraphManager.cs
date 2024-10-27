@@ -27,11 +27,11 @@ public class GraphManager : MonoBehaviour
         graphViewerUI.QuitGraphViewerEvent += ClearGraph;
 	}
 
-	public void SetupGraphs(List<int> positionValues, List<int> velocityValues, List<int> accelerationValues)
+	public void SetupGraphs(List<int> positionValues)
     {
         positionVsTimeGraph.InitializeGraph(positionValues);
-		velocityVsTimeGraph.InitializeGraph(velocityValues);
-		accelerationVsTimeGraph.InitializeGraph(accelerationValues);
+		velocityVsTimeGraph.InitializeGraph(new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 });
+		accelerationVsTimeGraph.InitializeGraph(new List<int> { 0, 0, 0, 0, 0, 0, 0 });
     }
 
 	private void Update()
