@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static GraphsSubActivitySO;
+using Random = UnityEngine.Random;
 
 public class ActivityThreeManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
+
+	public event Action GraphsAreaClearEvent;
 
 	[Header("Level Data - Graphs")]
 	[SerializeField] private GraphsSubActivitySO graphsLevelOne;
@@ -32,10 +36,13 @@ public class ActivityThreeManager : MonoBehaviour
 	[SerializeField] private GraphSubmissionModalWindow graphSubmissionModalWindow;
 	[SerializeField] private Kinematics1DSubmissionModalWindow kinematics1DSubmissionModalWindow;
 
+	// Variables for keeping track of current number of tests
+	private int currentNumGraphsTests;
+
 	// Given graph values
-	private List<int> correctPositionValues;
-	private List<int> correctVelocityValues;
-	private List<int> correctAccelerationValues;
+	private List<List<int>> correctPositionValues;
+	private List<List<int>> correctVelocityValues;
+	private List<List<int>> correctAccelerationValues;
 
 	// Gameplay performance metrics variables
 	// Graphs Sub Activity
@@ -63,7 +70,12 @@ public class ActivityThreeManager : MonoBehaviour
 		SubscribeViewAndDisplayEvents();
 
 		InitializeCorrectGraphValues();
-		graphManager.SetupGraphs(correctPositionValues);
+
+		currentNumGraphsTests = currentGraphsLevel.numberOfTests;
+
+		graphManager.SetupGraphs(correctPositionValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests]);
+
+		graphsView.UpdateTestCountTextDisplay(currentGraphsLevel.numberOfTests - currentNumGraphsTests, currentGraphsLevel.numberOfTests);
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -93,40 +105,55 @@ public class ActivityThreeManager : MonoBehaviour
 		graphEditorUI.QuitGraphEditorEvent += () => graphsView.gameObject.SetActive(true);
 		graphViewerUI.QuitGraphViewerEvent += () => graphsView.gameObject.SetActive(true);
 		graphsView.SubmitAnswerEvent += CheckGraphsAnswer;
+		graphsSubmissionStatusDisplay.ProceedEvent += UpdateGraphsViewState;
 	}
 
 	#region Graphs
 	private void InitializeCorrectGraphValues()
 	{
+		correctPositionValues = new List<List<int>>();
+		correctVelocityValues = new List<List<int>>();
+		correctAccelerationValues = new List<List<int>>();
+
 		int datasetSize = currentGraphsLevel.datasets[0].dataset.Count;
-		int randomDatasetIndex = Random.Range(0, datasetSize);
 
-		foreach (GraphDataset graphDataset in currentGraphsLevel.datasets)
+		for (int i = 0; i < currentGraphsLevel.numberOfTests; i++)
 		{
-			List<int> graphPointValues = graphDataset.dataset[randomDatasetIndex].Split(',').Select(int.Parse).ToList();
+			int randomDatasetIndex = Random.Range(0, datasetSize);
 
-			switch (graphDataset.datasetType)
+			foreach (GraphDataset graphDataset in currentGraphsLevel.datasets)
 			{
-				case DatasetType.Position:
-					correctPositionValues = graphPointValues;
-					break;
-				case DatasetType.Velocity:
-					correctVelocityValues = graphPointValues;
-					break;
-				case DatasetType.Acceleration:
-					correctAccelerationValues = graphPointValues;
-					break;
+				List<int> graphPointValues = graphDataset.dataset[randomDatasetIndex].Split(',').Select(int.Parse).ToList();
+
+				switch (graphDataset.datasetType)
+				{
+					case DatasetType.Position:
+						correctPositionValues.Add(graphPointValues);
+						break;
+					case DatasetType.Velocity:
+						correctVelocityValues.Add(graphPointValues);
+						break;
+					case DatasetType.Acceleration:
+						correctAccelerationValues.Add(graphPointValues);
+						break;
+				}
 			}
 		}
 	}
 
 	private void CheckGraphsAnswer(GraphsAnswerSubmission answer)
 	{
-		GraphsAnswerSubmissionResults results = ActivityThreeUtilities.ValidateGraphSubmission(answer, correctPositionValues, correctVelocityValues, correctAccelerationValues);
+		GraphsAnswerSubmissionResults results = ActivityThreeUtilities.ValidateGraphSubmission(
+			answer, 
+			correctPositionValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests], 
+			correctVelocityValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests], 
+			correctAccelerationValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests]
+			);
 
 		if (results.isAllCorrect())
 		{
 			numCorrectGraphsSubmission++;
+			currentNumGraphsTests--;
 		}
 		else
 		{
@@ -151,6 +178,22 @@ public class ActivityThreeManager : MonoBehaviour
 		graphsSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResults(results);
 
 		graphsSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateGraphsViewState()
+	{
+		if (currentNumGraphsTests > 0)
+		{
+			graphsView.UpdateTestCountTextDisplay(currentGraphsLevel.numberOfTests - currentNumGraphsTests, currentGraphsLevel.numberOfTests);
+			graphManager.UpdateGraphs(correctPositionValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests]);
+		}
+		else
+		{
+			isGraphsSubActivityFinished = true;
+			// missionObjectiveDisplayUI.ClearMissionObjective(0);
+			graphsView.gameObject.SetActive(false);
+			GraphsAreaClearEvent?.Invoke();
+		}
 	}
 	#endregion
 
