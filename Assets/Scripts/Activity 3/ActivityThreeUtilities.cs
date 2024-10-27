@@ -1,22 +1,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class GraphsAnswerSubmissionResults
+{
+    public bool isPositionVsTimeGraphCorrect;
+    public bool isVelocityVsTimeGraphCorrect;
+    public bool isAccelerationVsTimeGraphCorrect;
+
+	public bool isAllCorrect()
+	{
+		return isPositionVsTimeGraphCorrect && isVelocityVsTimeGraphCorrect && isAccelerationVsTimeGraphCorrect;
+	}
+}
+
 public static class ActivityThreeUtilities
 {
-    public static bool ValidateGraphSubmission(List<int> correctGraphPoints, Graph graph)
+    public static GraphsAnswerSubmissionResults ValidateGraphSubmission(GraphsAnswerSubmission answer, List<int> correctPositionValues, List<int> correctVelocityValues, List<int> correctAccelerationValues)
+    {
+		GraphsAnswerSubmissionResults results = new GraphsAnswerSubmissionResults();
+		results.isPositionVsTimeGraphCorrect = ValidateGraphSubmission(answer.positionVsTimeGraph, correctPositionValues);
+		results.isVelocityVsTimeGraphCorrect = ValidateGraphSubmission(answer.velocityVsTimeGraph, correctVelocityValues);
+		results.isAccelerationVsTimeGraphCorrect = ValidateGraphSubmission(answer.accelerationVsTimeGraph, correctAccelerationValues);
+
+		return results;
+    }
+
+    private static bool ValidateGraphSubmission(Graph graph, List<int> correctGraphPoints)
     {
 		Vector3[] graphPoints = graph.GetGraphPoints();
 
-        for (int i = 0; i < graphPoints.Length; i++)
-        {
-            if (correctGraphPoints[i] != graphPoints[i].z)
-            {
-                return false;
-            }
-        }
+		for (int i = 0; i < graphPoints.Length; i++)
+		{
+			if (correctGraphPoints[i] != graphPoints[i].z)
+			{
+				return false;
+			}
+		}
 
-        return true;
-    }
+		return true;
+	}
 
     public static bool ValidateAccelerationSubmission(float submittedAcceleration, float initialVelocity, float finalVelocity, float totalTime)
     {
