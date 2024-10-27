@@ -50,7 +50,7 @@ public class GraphPlacementSystem : MonoBehaviour
 			}
 			
 			// Remove duplicate point
-			GameObject dupicatePoint = DuplicatePointOnColumn(currentGraph, gridPosition.x);
+			GameObject dupicatePoint = currentGraph.GetDuplicatePointOnColumn(gridPosition.x);
 			if (dupicatePoint)
 			{
 				Destroy(dupicatePoint);
@@ -63,17 +63,5 @@ public class GraphPlacementSystem : MonoBehaviour
 			newPoint.transform.position = currentGraph.graphGrid.CellToWorld(gridPosition);
 			currentGraph.gridRecord[gridPosition.z + currentGraph.gridColumnBoundary, gridPosition.x] = newPoint;
 		}
-	}
-
-	private GameObject DuplicatePointOnColumn(Graph graph, int column)
-	{
-		for (int y = 0; y < graph.numGridRecordRows; y++)
-		{
-			if (graph.gridRecord[y, column])
-			{
-				return graph.gridRecord[y, column];
-			}
-		}
-		return null;
 	}
 }

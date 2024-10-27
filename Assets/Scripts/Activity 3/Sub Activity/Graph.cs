@@ -56,4 +56,16 @@ public class Graph : MonoBehaviour
 
 		return positions;
 	}
+
+	public GameObject GetDuplicatePointOnColumn(int column)
+	{
+		for (int y = 0; y < numGridRecordRows; y++)
+		{
+			if (gridRecord[y, column])
+			{
+				return gridRecord[y, column];
+			}
+		}
+		return null;
+	}
 }
