@@ -34,6 +34,13 @@ public class GraphManager : MonoBehaviour
 		accelerationVsTimeGraph.InitializeGraph(new List<int> { 0, 0, 0, 0, 0, 0, 0 });
     }
 
+    public void UpdateGraphs(List<int> positionValues)
+    {
+        positionVsTimeGraph.UpdateGraphPoints(positionValues);
+        velocityVsTimeGraph.UpdateGraphPoints(new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 });
+        accelerationVsTimeGraph.UpdateGraphPoints(new List<int> { 0, 0, 0, 0, 0, 0, 0 });
+	}
+
 	private void Update()
 	{
 		if (Input.GetMouseButtonDown(0))
