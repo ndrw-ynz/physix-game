@@ -11,12 +11,21 @@ public class GraphManager : MonoBehaviour
     public Graph velocityVsTimeGraph;
     public Graph accelerationVsTimeGraph;
     public Graph currentGraph;
-    [Header("Layer Mask")]
+    [Header("Views")]
+    [SerializeField] private GraphEditorUI graphEditorUI;
+    [SerializeField] private GraphViewerUI graphViewerUI;
+	[Header("Layer Mask")]
     [SerializeField] private LayerMask placementLayerMask;
 
     private Vector3 lastMousePosition;
 
-    public void SetupGraphs(List<int> positionValues, List<int> velocityValues, List<int> accelerationValues)
+	private void Start()
+	{
+        graphEditorUI.QuitGraphEditorEvent += ClearGraph;
+        graphViewerUI.QuitGraphViewerEvent += ClearGraph;
+	}
+
+	public void SetupGraphs(List<int> positionValues, List<int> velocityValues, List<int> accelerationValues)
     {
         positionVsTimeGraph.InitializeGraph(positionValues);
 		velocityVsTimeGraph.InitializeGraph(velocityValues);
@@ -30,6 +39,23 @@ public class GraphManager : MonoBehaviour
             OnMouseClick?.Invoke();
         }
 	}
+
+    public void DisplayGraph(Graph graph)
+    {
+        // Disable all graph cameras
+		positionVsTimeGraph.interactiveGraphCamera.enabled = false;
+		velocityVsTimeGraph.interactiveGraphCamera.enabled = false;
+		accelerationVsTimeGraph.interactiveGraphCamera.enabled = false;
+
+        graph.interactiveGraphCamera.enabled = true;
+        currentGraph = graph;
+    }
+
+    public void ClearGraph()
+    {
+        currentGraph.interactiveGraphCamera.enabled = false;
+        currentGraph = null;
+    }
 
 	public Vector3 GetSelectedMapPosition()
     {
