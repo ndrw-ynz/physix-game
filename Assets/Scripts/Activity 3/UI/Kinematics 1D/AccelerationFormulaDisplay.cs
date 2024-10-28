@@ -29,4 +29,18 @@ public class AccelerationFormulaDisplay : MonoBehaviour
 			resultField.text = "N/A";
 		}
 	}
+
+	public void ResetState()
+	{
+		// Clear all number input fields.
+		finalVelocityField.text = "0";
+		initialVelocityField.text = "0";
+		timeField.text = "0";
+
+		// Clear result field
+		resultField.text = "";
+
+		// Set result value to null.
+		resultValue = null;
+	}
 }

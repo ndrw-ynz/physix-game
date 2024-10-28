@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -31,5 +29,21 @@ public class TotalDepthFormulaDisplay : MonoBehaviour
 			resultValue = null;
 			resultField.text = "N/A";
 		}
+	}
+
+	public void ResetState()
+	{
+		// Clear all number input fields.
+		initialVelocityField.text = "0";
+		timeFieldOne.text = "0";
+		gravitationalConstantField.text = "0";
+		timeFieldTwo.text = "0";
+		denominatorField.text = "0";
+
+		// Clear result field
+		resultField.text = "";
+
+		// Set result value to null.
+		resultValue = null;
 	}
 }
