@@ -70,12 +70,14 @@ public class MainMenuManager : MonoBehaviour
 
         LessonSelectButton.LessonSelectClick += OpenLessonComponentsScreen;
         TopicDiscussionButton.TopicDiscussionClick += OpenTopicDiscussionScene;
+        ActivityButton.ActivityClick += OpenDifficultySelectOverlay;
 	}
 
     private void OnDisable()
     {
         LessonSelectButton.LessonSelectClick -= OpenLessonComponentsScreen;
         TopicDiscussionButton.TopicDiscussionClick -= OpenTopicDiscussionScene;
+        ActivityButton.ActivityClick -= OpenDifficultySelectOverlay;
     }
 
     private void OpenLessonComponentsScreen(int keyValue)
@@ -87,5 +89,10 @@ public class MainMenuManager : MonoBehaviour
     private void OpenTopicDiscussionScene(int topicDiscussionNumber)
     {
         SceneManager.LoadScene(topicDiscussionNumber);
+    }
+
+    private void OpenDifficultySelectOverlay(int keyValue)
+    {
+        lessonDifficultyKeyValuePairs[keyValue].SetActive(true);
     }
 }
