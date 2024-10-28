@@ -49,10 +49,6 @@ public class ActivityThreeManager : MonoBehaviour
 	[SerializeField] private GraphsSubmissionStatusDisplay graphsSubmissionStatusDisplay;
 	[SerializeField] private Kinematics1DSubmissionStatusDisplay kinematics1DSubmissionStatusDisplay;
 
-	[Header("Modal Windows")]
-	[SerializeField] private GraphSubmissionModalWindow graphSubmissionModalWindow;
-	[SerializeField] private Kinematics1DSubmissionModalWindow kinematics1DSubmissionModalWindow;
-
 	// Variables for keeping track of current number of tests
 	private int currentNumGraphsTests;
 	private int currentNumAccelerationTests;
@@ -84,12 +80,6 @@ public class ActivityThreeManager : MonoBehaviour
 	private bool isTotalDepthCalcFinished;
 	private int numIncorrectTotalDepthSubmission;
 	private int numCorrectTotalDepthSubmission;
-
-	[Header("Generated Given Values")]
-	private int initialVelocityValue;
-	private int finalVelocityValue;
-	private int totalTimeValueOne;
-	private int totalTimeValueTwo;
 
 	private void Start()
 	{
