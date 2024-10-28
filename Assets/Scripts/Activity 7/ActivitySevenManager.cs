@@ -195,14 +195,6 @@ public class ElasticInelasticCollisionAnswerSubmissionResults
 	}
 }
 
-// TEMPORARILY STORE HERE. TRANSFER ENUM TO FUTURE CLASS HANDLING DIFFICULTY SELECTION
-public enum Difficulty
-{
-	Easy,
-	Medium,
-	Hard
-}
-
 public class ActivitySevenManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
