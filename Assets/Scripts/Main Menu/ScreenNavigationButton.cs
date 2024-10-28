@@ -1,15 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ScreenNavigationButton : MonoBehaviour
 {
-    public Canvas canvasToActivate;
-    public Canvas canvasToDeactivate;
+    public GameObject screenToActivate;
+    public GameObject screenToDeactivate;
 
     public void OnClick()
     {
-        canvasToActivate.gameObject.SetActive(true);
-        canvasToDeactivate.gameObject.SetActive(false);
+        screenToActivate.gameObject.SetActive(true);
+        screenToDeactivate.gameObject.SetActive(false);
     }
 }
