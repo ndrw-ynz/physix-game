@@ -18,7 +18,7 @@ public class TotalDepthCalculationData
 	public float totalTime;
 }
 
-public class ActivityThreeManager : MonoBehaviour
+public class ActivityThreeManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
 
@@ -44,7 +44,8 @@ public class ActivityThreeManager : MonoBehaviour
 	[SerializeField] private GraphEditorUI graphEditorUI;
 	[SerializeField] private GraphViewerUI graphViewerUI;
 	[SerializeField] private Kinematics1DView kinematics1DView;
-	
+	[SerializeField] private ActivityThreePerformanceView performanceView;
+
 	[Header("Submission Status Displays")]
 	[SerializeField] private GraphsSubmissionStatusDisplay graphsSubmissionStatusDisplay;
 	[SerializeField] private Kinematics1DSubmissionStatusDisplay kinematics1DSubmissionStatusDisplay;
@@ -63,6 +64,10 @@ public class ActivityThreeManager : MonoBehaviour
 	private AccelerationCalculationData givenAccelerationData;
 	private TotalDepthCalculationData givenTotalDepthData;
 
+	// Variables for tracking which view is currently active
+	private bool isGraphsViewActive;
+	private bool isKinematics1DViewActive;
+
 	// Gameplay performance metrics variables
 	// Graphs Sub Activity
 	private float graphsGameplayDuration;
@@ -70,20 +75,21 @@ public class ActivityThreeManager : MonoBehaviour
 	private int numIncorrectGraphsSubmission;
 	private int numCorrectGraphsSubmission;
 	// Kinematics 1D Sub Activity
+	private float kinematics1DGameplayDuration;
 	// Acceleration Solving
-	private float accelerationCalcGameplayDuration;
 	private bool isAccelerationCalcFinished;
 	private int numIncorrectAccelerationSubmission;
 	private int numCorrectAccelerationSubmission;
 	// Total Depth Solving
-	private float totalDepthCalcGameplayDuration;
 	private bool isTotalDepthCalcFinished;
 	private int numIncorrectTotalDepthSubmission;
 	private int numCorrectTotalDepthSubmission;
 
-	private void Start()
+	protected override void Start()
 	{
-		ConfigureLevelData(Difficulty.Medium);
+		base.Start();
+
+		ConfigureLevelData(Difficulty.Easy);
 
 		SubscribeViewAndDisplayEvents();
 
@@ -101,6 +107,13 @@ public class ActivityThreeManager : MonoBehaviour
 		kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests, currentKinematics1DLevel.numberOfAccelerationProblems);
 		kinematics1DView.UpdateAccelerationInfo(givenAccelerationData);
 		kinematics1DView.UpdateTotalDepthInfo(givenTotalDepthData);
+	}
+
+	private void Update()
+	{
+		if (isGraphsViewActive && !isGraphsSubActivityFinished) graphsGameplayDuration += Time.deltaTime;
+		if (isKinematics1DViewActive && !isAccelerationCalcFinished && !isTotalDepthCalcFinished) kinematics1DGameplayDuration += Time.deltaTime;
+		if (isGraphsSubActivityFinished && isAccelerationCalcFinished && isTotalDepthCalcFinished) DisplayPerformanceView();
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -129,10 +142,14 @@ public class ActivityThreeManager : MonoBehaviour
 		// Graphs Sub Activity Related Events
 		graphEditorUI.QuitGraphEditorEvent += () => graphsView.gameObject.SetActive(true);
 		graphViewerUI.QuitGraphViewerEvent += () => graphsView.gameObject.SetActive(true);
+		graphsView.OpenViewEvent += () => isGraphsViewActive = true;
+		graphsView.QuitViewEvent += () => isGraphsViewActive = false;
 		graphsView.SubmitAnswerEvent += CheckGraphsAnswer;
 		graphsSubmissionStatusDisplay.ProceedEvent += UpdateGraphsViewState;
 
 		// 1D Kinematics Sub Activity Related Events
+		kinematics1DView.OpenViewEvent += () => isKinematics1DViewActive = true;
+		kinematics1DView.QuitViewEvent += () => isKinematics1DViewActive = false;
 		kinematics1DView.SubmitAccelerationAnswerEvent += CheckAccelerationAnswer;
 		kinematics1DView.SubmitTotalDepthAnswerEvent += CheckTotalDepthAnswer;
 		kinematics1DSubmissionStatusDisplay.ProceedEvent += UpdateKinematics1DViewState;
@@ -348,6 +365,56 @@ public class ActivityThreeManager : MonoBehaviour
 		}
 	}
 	#endregion
+
+	public override void DisplayPerformanceView()
+	{
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
+
+		performanceView.SetTotalTimeDisplay(graphsGameplayDuration + kinematics1DGameplayDuration);
+
+		performanceView.SetGraphsMetricsDisplay(
+			isAccomplished: isGraphsSubActivityFinished,
+			numIncorrectSubmission: numIncorrectGraphsSubmission,
+			duration: graphsGameplayDuration
+			);
+
+		performanceView.SetKinematics1DMetricsDisplay(
+			isAccelerationAccomplished: isAccelerationCalcFinished,
+			isTotalDepthAccomplished: isTotalDepthCalcFinished,
+			numIncorrectAcceleration: numIncorrectAccelerationSubmission,
+			numIncorrectTotalDepth: numIncorrectTotalDepthSubmission,
+			duration: kinematics1DGameplayDuration
+			);
+
+		// Update its activity feedback display (three args)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "graphs",
+				isSubActivityFinished: isGraphsSubActivityFinished,
+				numIncorrectAnswers: numIncorrectGraphsSubmission,
+				numCorrectAnswers: numCorrectGraphsSubmission,
+				badScoreThreshold: 5,
+				averageScoreThreshold: 3
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "1D Kinematics - acceleration",
+				isSubActivityFinished: isAccelerationCalcFinished,
+				numIncorrectAnswers: numIncorrectAccelerationSubmission,
+				numCorrectAnswers: numCorrectAccelerationSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "1D Kinematics - total depth",
+				isSubActivityFinished: isTotalDepthCalcFinished,
+				numIncorrectAnswers: numIncorrectTotalDepthSubmission,
+				numCorrectAnswers: numCorrectTotalDepthSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				)
+			);
+	}
 	/*private void Start()
 	{
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
