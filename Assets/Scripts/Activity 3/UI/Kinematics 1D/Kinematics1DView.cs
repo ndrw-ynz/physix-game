@@ -6,6 +6,8 @@ public class Kinematics1DView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
+	public event Action<float?> SubmitAccelerationAnswerEvent;
+	public event Action<float?> SubmitTotalDepthAnswerEvent;
 
 	[Header("Text Displays")]
 	[SerializeField] private TextMeshProUGUI accelerationHeaderText;
@@ -71,6 +73,17 @@ public class Kinematics1DView : MonoBehaviour
 	private void OnEnable()
 	{
 		OpenViewEvent?.Invoke();
+	}
+
+	public void OnSubmitButtonClick()
+	{
+		if (accelerationCalcDisplay.activeSelf)
+		{
+			SubmitAccelerationAnswerEvent?.Invoke(accelerationFormulaDisplay.resultValue);
+		} else
+		{
+			SubmitTotalDepthAnswerEvent?.Invoke(totalDepthFormulaDisplay.resultValue);
+		}
 	}
 
 	public void OnQuitButtonClick()
