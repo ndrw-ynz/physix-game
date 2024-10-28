@@ -72,12 +72,17 @@ public class ActivityThreeManager : MonoBehaviour
 	private bool isGraphsSubActivityFinished;
 	private int numIncorrectGraphsSubmission;
 	private int numCorrectGraphsSubmission;
-
-	[Header("Metrics for 1D Kinematics Subactivity")]
-	public bool isAccelerationCalculationFinished;
-	public bool isFreeFallCalculationFinished;
+	// Kinematics 1D Sub Activity
+	// Acceleration Solving
+	private float accelerationCalcGameplayDuration;
+	private bool isAccelerationCalcFinished;
 	private int numIncorrectAccelerationSubmission;
-	private int numIncorrectFreeFallSubmission;
+	private int numCorrectAccelerationSubmission;
+	// Total Depth Solving
+	private float totalDepthCalcGameplayDuration;
+	private bool isTotalDepthCalcFinished;
+	private int numIncorrectTotalDepthSubmission;
+	private int numCorrectTotalDepthSubmission;
 
 	[Header("Generated Given Values")]
 	private int initialVelocityValue;
@@ -135,6 +140,10 @@ public class ActivityThreeManager : MonoBehaviour
 		graphViewerUI.QuitGraphViewerEvent += () => graphsView.gameObject.SetActive(true);
 		graphsView.SubmitAnswerEvent += CheckGraphsAnswer;
 		graphsSubmissionStatusDisplay.ProceedEvent += UpdateGraphsViewState;
+
+		// 1D Kinematics Sub Activity Related Events
+		kinematics1DView.SubmitAccelerationAnswerEvent += CheckAccelerationAnswer;
+		kinematics1DView.SubmitTotalDepthAnswerEvent += CheckTotalDepthAnswer;
 	}
 
 	#region Graphs
@@ -242,6 +251,38 @@ public class ActivityThreeManager : MonoBehaviour
 		data.initialVelocity = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
 		data.totalTime = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
 		givenTotalDepthData = data;
+	}
+
+	private void CheckAccelerationAnswer(float? answer)
+	{
+		bool isAccelerationCorrect = ActivityThreeUtilities.ValidateAccelerationSubmission(answer, givenAccelerationData);
+
+		if (isAccelerationCorrect)
+		{
+			numCorrectAccelerationSubmission++;
+			currentNumAccelerationTests--;
+		}
+		else
+		{
+			numIncorrectAccelerationSubmission++;
+		}
+
+	}
+
+	private void CheckTotalDepthAnswer(float? answer)
+	{
+		bool isTotalDepth = ActivityThreeUtilities.ValidateTotalDepthSubmission(answer, givenTotalDepthData);
+
+		if (isTotalDepth)
+		{
+			numCorrectTotalDepthSubmission++;
+			currentNumTotalDepthTests--;
+		}
+		else
+		{
+			numIncorrectTotalDepthSubmission++;
+		}
+
 	}
 
 	#endregion
