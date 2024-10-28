@@ -37,7 +37,7 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 	private void SetGraphsTerminalEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
-		// activityThreeManager.SetMissionObjectiveDisplay(!isActive);
+		activityThreeManager.SetMissionObjectiveDisplay(!isActive);
 		graphsEnvironmentCamera.gameObject.SetActive(isActive);
 	}
 
@@ -53,7 +53,7 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 	private void SetKinematics1DTerminalEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
-		// activityThreeManager.SetMissionObjectiveDisplay(!isActive);
+		activityThreeManager.SetMissionObjectiveDisplay(!isActive);
 		kinematics1DEnvironmentCamera.gameObject.SetActive(isActive);
 	}
 	#endregion

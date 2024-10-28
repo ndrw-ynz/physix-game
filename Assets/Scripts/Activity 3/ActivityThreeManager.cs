@@ -93,20 +93,29 @@ public class ActivityThreeManager : ActivityManager
 
 		SubscribeViewAndDisplayEvents();
 
+		// Initialize correct given values
 		InitializeCorrectGraphValues();
 		GenerateAccelerationGivenData();
 		GenerateTotalDepthGivenData();
 
+		// Determine number of tests
 		currentNumGraphsTests = currentGraphsLevel.numberOfTests;
 		currentNumAccelerationTests = currentKinematics1DLevel.numberOfAccelerationProblems;
 		currentNumTotalDepthTests = currentKinematics1DLevel.numberOfTotalDepthProblems;
 
+		// Setup graph manager
 		graphManager.SetupGraphs(correctPositionValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests]);
 
+		// Setup views
 		graphsView.UpdateTestCountTextDisplay(currentGraphsLevel.numberOfTests - currentNumGraphsTests, currentGraphsLevel.numberOfTests);
 		kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests, currentKinematics1DLevel.numberOfAccelerationProblems);
 		kinematics1DView.UpdateAccelerationInfo(givenAccelerationData);
 		kinematics1DView.UpdateTotalDepthInfo(givenTotalDepthData);
+
+		// Update mission objective display
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Re-calibrate the ship's navigation system in the Graphs terminal ({currentGraphsLevel.numberOfTests - currentNumGraphsTests}/{currentGraphsLevel.numberOfTests})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the ship's acceleration on its journey on the 1D Kinematics terminal ({currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests}/{currentKinematics1DLevel.numberOfAccelerationProblems})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Calculate the ship's total depth in arriving on planet Nakalais in the 1D Kinematics terminal ({currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests}/{currentKinematics1DLevel.numberOfTotalDepthProblems})");
 	}
 
 	private void Update()
@@ -215,7 +224,7 @@ public class ActivityThreeManager : ActivityManager
 		if (results.isAllCorrect())
 		{
 			graphsSubmissionStatusDisplay.SetSubmissionStatus(true, "Orbital 1's movement is optimal. Nice job!");
-			//missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Re-calibrate the ship's navigation system in the Graphs terminal ({currentGraphsLevel.numberOfTests - currentNumGraphsTests}/{currentGraphsLevel.numberOfTests})");
 		}
 		else
 		{
@@ -237,7 +246,7 @@ public class ActivityThreeManager : ActivityManager
 		else
 		{
 			isGraphsSubActivityFinished = true;
-			// missionObjectiveDisplayUI.ClearMissionObjective(0);
+			missionObjectiveDisplayUI.ClearMissionObjective(0);
 			graphsView.gameObject.SetActive(false);
 			GraphsAreaClearEvent?.Invoke();
 		}
@@ -301,7 +310,7 @@ public class ActivityThreeManager : ActivityManager
 		if (result)
 		{
 			kinematics1DSubmissionStatusDisplay.SetSubmissionStatus(true, "Orbital 1's acceleration is stable. Great work!");
-			//missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the ship's acceleration on its journey on the 1D Kinematics terminal ({currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests}/{currentKinematics1DLevel.numberOfAccelerationProblems})");
 		}
 		else
 		{
@@ -318,7 +327,7 @@ public class ActivityThreeManager : ActivityManager
 		if (result)
 		{
 			kinematics1DSubmissionStatusDisplay.SetSubmissionStatus(true, "Calculations complete. Calculated total depth is correct. Great job!");
-			//missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Calculate the ship's total depth in arriving on planet Nakalais in the 1D Kinematics terminal ({currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests}/{currentKinematics1DLevel.numberOfTotalDepthProblems})");
 		}
 		else
 		{
@@ -344,7 +353,7 @@ public class ActivityThreeManager : ActivityManager
 			{
 				isAccelerationCalcFinished = true;
 				kinematics1DView.DisplayTotalDepthInfo();
-				// missionObjectiveDisplayUI.ClearMissionObjective(0);
+				missionObjectiveDisplayUI.ClearMissionObjective(1);
 				// INSERT EVENT FOR ENV ANIMATION
 			}
 		} else
@@ -358,7 +367,7 @@ public class ActivityThreeManager : ActivityManager
 			else
 			{
 				isTotalDepthCalcFinished = true;
-				// missionObjectiveDisplayUI.ClearMissionObjective(0);
+				missionObjectiveDisplayUI.ClearMissionObjective(2);
 				kinematics1DView.gameObject.SetActive(false);
 				// INSERT EVENT FOR ENV ANIMATION
 			}
@@ -415,6 +424,7 @@ public class ActivityThreeManager : ActivityManager
 				)
 			);
 	}
+
 	/*private void Start()
 	{
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
