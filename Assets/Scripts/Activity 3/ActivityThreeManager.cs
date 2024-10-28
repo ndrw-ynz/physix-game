@@ -47,6 +47,7 @@ public class ActivityThreeManager : MonoBehaviour
 	
 	[Header("Submission Status Displays")]
 	[SerializeField] private GraphsSubmissionStatusDisplay graphsSubmissionStatusDisplay;
+	[SerializeField] private Kinematics1DSubmissionStatusDisplay kinematics1DSubmissionStatusDisplay;
 
 	[Header("Modal Windows")]
 	[SerializeField] private GraphSubmissionModalWindow graphSubmissionModalWindow;
@@ -92,7 +93,7 @@ public class ActivityThreeManager : MonoBehaviour
 
 	private void Start()
 	{
-		ConfigureLevelData(Difficulty.Easy);
+		ConfigureLevelData(Difficulty.Medium);
 
 		SubscribeViewAndDisplayEvents();
 
@@ -144,6 +145,7 @@ public class ActivityThreeManager : MonoBehaviour
 		// 1D Kinematics Sub Activity Related Events
 		kinematics1DView.SubmitAccelerationAnswerEvent += CheckAccelerationAnswer;
 		kinematics1DView.SubmitTotalDepthAnswerEvent += CheckTotalDepthAnswer;
+		kinematics1DSubmissionStatusDisplay.ProceedEvent += UpdateKinematics1DViewState;
 	}
 
 	#region Graphs
@@ -267,13 +269,14 @@ public class ActivityThreeManager : MonoBehaviour
 			numIncorrectAccelerationSubmission++;
 		}
 
+		DisplayAccelerationSubmissionResults(isAccelerationCorrect);
 	}
 
 	private void CheckTotalDepthAnswer(float? answer)
 	{
-		bool isTotalDepth = ActivityThreeUtilities.ValidateTotalDepthSubmission(answer, givenTotalDepthData);
+		bool isTotalDepthCorrect = ActivityThreeUtilities.ValidateTotalDepthSubmission(answer, givenTotalDepthData);
 
-		if (isTotalDepth)
+		if (isTotalDepthCorrect)
 		{
 			numCorrectTotalDepthSubmission++;
 			currentNumTotalDepthTests--;
@@ -283,8 +286,77 @@ public class ActivityThreeManager : MonoBehaviour
 			numIncorrectTotalDepthSubmission++;
 		}
 
+		DisplayTotalDepthSubmissionResults(isTotalDepthCorrect);
 	}
 
+	private void DisplayAccelerationSubmissionResults(bool result)
+	{
+		if (result)
+		{
+			kinematics1DSubmissionStatusDisplay.SetSubmissionStatus(true, "Orbital 1's acceleration is stable. Great work!");
+			//missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"");
+		}
+		else
+		{
+			kinematics1DSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+		}
+
+		kinematics1DSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
+
+		kinematics1DSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void DisplayTotalDepthSubmissionResults(bool result)
+	{
+		if (result)
+		{
+			kinematics1DSubmissionStatusDisplay.SetSubmissionStatus(true, "Calculations complete. Calculated total depth is correct. Great job!");
+			//missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"");
+		}
+		else
+		{
+			kinematics1DSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+		}
+
+		kinematics1DSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
+
+		kinematics1DSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateKinematics1DViewState()
+	{
+		if (!isAccelerationCalcFinished)
+		{
+			if (currentNumAccelerationTests > 0)
+			{
+				GenerateAccelerationGivenData();
+				kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests, currentKinematics1DLevel.numberOfAccelerationProblems);
+				kinematics1DView.UpdateAccelerationInfo(givenAccelerationData);
+			}
+			else
+			{
+				isAccelerationCalcFinished = true;
+				kinematics1DView.DisplayTotalDepthInfo();
+				// missionObjectiveDisplayUI.ClearMissionObjective(0);
+				// INSERT EVENT FOR ENV ANIMATION
+			}
+		} else
+		{
+			if (currentNumTotalDepthTests > 0)
+			{
+				GenerateTotalDepthGivenData();
+				kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests, currentKinematics1DLevel.numberOfTotalDepthProblems);
+				kinematics1DView.UpdateTotalDepthInfo(givenTotalDepthData);
+			}
+			else
+			{
+				isTotalDepthCalcFinished = true;
+				// missionObjectiveDisplayUI.ClearMissionObjective(0);
+				kinematics1DView.gameObject.SetActive(false);
+				// INSERT EVENT FOR ENV ANIMATION
+			}
+		}
+	}
 	#endregion
 	/*private void Start()
 	{
