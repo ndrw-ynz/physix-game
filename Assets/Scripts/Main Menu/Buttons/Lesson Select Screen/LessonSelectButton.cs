@@ -24,6 +24,4 @@ public class LessonSelectButton : MonoBehaviour
         // Unsubscribe Button Click Listeners
         lessonSelectButton.onClick.RemoveAllListeners();
     }
-
-
 }

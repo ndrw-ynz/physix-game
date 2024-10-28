@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
@@ -68,17 +69,23 @@ public class MainMenuManager : MonoBehaviour
         };
 
         LessonSelectButton.LessonSelectClick += OpenLessonComponentsScreen;
+        TopicDiscussionButton.TopicDiscussionClick += OpenTopicDiscussionScene;
 	}
 
     private void OnDisable()
     {
         LessonSelectButton.LessonSelectClick -= OpenLessonComponentsScreen;
+        TopicDiscussionButton.TopicDiscussionClick -= OpenTopicDiscussionScene;
     }
 
     private void OpenLessonComponentsScreen(int keyValue)
     {
-        Debug.Log("HELLO");
         lessonSelectScreen.SetActive(false);
         lessonComponentKeyValuePairs[keyValue].SetActive(true);
+    }
+
+    private void OpenTopicDiscussionScene(int topicDiscussionNumber)
+    {
+        SceneManager.LoadScene(topicDiscussionNumber);
     }
 }

@@ -977,6 +977,7 @@ GameObject:
   - component: {fileID: 6740413951137054371}
   - component: {fileID: 9213146392081530240}
   - component: {fileID: 47150092449320211}
+  - component: {fileID: 5940725422184141202}
   m_Layer: 5
   m_Name: Topic Discussion Button
   m_TagString: Untagged
@@ -1086,6 +1087,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5940725422184141202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7441439480134234116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23b69b9d62ea6224f9347459d8d59878, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topicDiscussionPanel: {fileID: 7441439480134234116}
+  topicDiscussionButton: {fileID: 47150092449320211}
+  topicDiscussionNumber: 0
 --- !u!1 &9058436766941755125
 GameObject:
   m_ObjectHideFlags: 0
