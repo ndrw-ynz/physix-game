@@ -5,6 +5,19 @@ using UnityEngine;
 using static GraphsSubActivitySO;
 using Random = UnityEngine.Random;
 
+public class AccelerationCalculationData
+{
+	public float initialVelocity;
+	public float finalVelocity;
+	public float totalTime;
+}
+
+public class TotalDepthCalculationData
+{
+	public float initialVelocity;
+	public float totalTime;
+}
+
 public class ActivityThreeManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
@@ -19,6 +32,8 @@ public class ActivityThreeManager : MonoBehaviour
 
 	[Header("Level Data - 1D Kinematics")]
 	[SerializeField] private Kinematics1DSubActivitySO kinematics1DLevelOne;
+	[SerializeField] private Kinematics1DSubActivitySO kinematics1DLevelTwo;
+	[SerializeField] private Kinematics1DSubActivitySO kinematics1DLevelThree;
 	private Kinematics1DSubActivitySO currentKinematics1DLevel;
 
 	[Header("Managers")]
@@ -28,6 +43,7 @@ public class ActivityThreeManager : MonoBehaviour
 	[SerializeField] private GraphsView graphsView;
 	[SerializeField] private GraphEditorUI graphEditorUI;
 	[SerializeField] private GraphViewerUI graphViewerUI;
+	[SerializeField] private Kinematics1DView kinematics1DView;
 	
 	[Header("Submission Status Displays")]
 	[SerializeField] private GraphsSubmissionStatusDisplay graphsSubmissionStatusDisplay;
@@ -38,11 +54,17 @@ public class ActivityThreeManager : MonoBehaviour
 
 	// Variables for keeping track of current number of tests
 	private int currentNumGraphsTests;
+	private int currentNumAccelerationTests;
+	private int currentNumTotalDepthTests;
 
 	// Given graph values
 	private List<List<int>> correctPositionValues;
 	private List<List<int>> correctVelocityValues;
 	private List<List<int>> correctAccelerationValues;
+
+	// Given 1D Kinematics values
+	private AccelerationCalculationData givenAccelerationData;
+	private TotalDepthCalculationData givenTotalDepthData;
 
 	// Gameplay performance metrics variables
 	// Graphs Sub Activity
@@ -70,12 +92,19 @@ public class ActivityThreeManager : MonoBehaviour
 		SubscribeViewAndDisplayEvents();
 
 		InitializeCorrectGraphValues();
+		GenerateAccelerationGivenData();
+		GenerateTotalDepthGivenData();
 
 		currentNumGraphsTests = currentGraphsLevel.numberOfTests;
+		currentNumAccelerationTests = currentKinematics1DLevel.numberOfAccelerationProblems;
+		currentNumTotalDepthTests = currentKinematics1DLevel.numberOfTotalDepthProblems;
 
 		graphManager.SetupGraphs(correctPositionValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests]);
 
 		graphsView.UpdateTestCountTextDisplay(currentGraphsLevel.numberOfTests - currentNumGraphsTests, currentGraphsLevel.numberOfTests);
+		kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests, currentKinematics1DLevel.numberOfAccelerationProblems);
+		kinematics1DView.UpdateAccelerationInfo(givenAccelerationData);
+		kinematics1DView.UpdateTotalDepthInfo(givenTotalDepthData);
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -86,15 +115,15 @@ public class ActivityThreeManager : MonoBehaviour
 		{
 			case Difficulty.Easy:
 				currentGraphsLevel = graphsLevelOne;
-				// currentKinematics1DLevel = kinematics1DLevelOne;
+				currentKinematics1DLevel = kinematics1DLevelOne;
 				break;
 			case Difficulty.Medium:
 				currentGraphsLevel = graphsLevelTwo;
-				// currentKinematics1DLevel = kinematics1DLevelTwo;
+				currentKinematics1DLevel = kinematics1DLevelTwo;
 				break;
 			case Difficulty.Hard:
 				currentGraphsLevel = graphsLevelThree;
-				// currentKinematics1DLevel = kinematics1DLevelThree;
+				currentKinematics1DLevel = kinematics1DLevelThree;
 				break;
 		}
 	}
@@ -197,7 +226,25 @@ public class ActivityThreeManager : MonoBehaviour
 	}
 	#endregion
 
+	#region 1D Kinematics
+	private void GenerateAccelerationGivenData()
+	{
+		AccelerationCalculationData data = new AccelerationCalculationData();
+		data.initialVelocity = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
+		data.finalVelocity = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
+		data.totalTime = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
+		givenAccelerationData = data;
+	}
 
+	private void GenerateTotalDepthGivenData()
+	{
+		TotalDepthCalculationData data = new TotalDepthCalculationData();
+		data.initialVelocity = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
+		data.totalTime = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
+		givenTotalDepthData = data;
+	}
+
+	#endregion
 	/*private void Start()
 	{
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
