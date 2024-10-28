@@ -40,15 +40,19 @@ public static class ActivityThreeUtilities
 		return true;
 	}
 
-    public static bool ValidateAccelerationSubmission(float submittedAcceleration, float initialVelocity, float finalVelocity, float totalTime)
+    public static bool ValidateAccelerationSubmission(float? accelerationAnswer, AccelerationCalculationData givenData)
     {
-		ExpressionEvaluator.Evaluate($"({finalVelocity} - {initialVelocity}) / ({totalTime} * (1/60))", out float computationResult);
-        return Mathf.Abs(submittedAcceleration - computationResult) <= 0.0001;
+		if (accelerationAnswer == null) return false;
+
+		ExpressionEvaluator.Evaluate($"({givenData.finalVelocity} - {givenData.initialVelocity}) / {givenData.totalTime}", out float computationResult);
+        return Mathf.Abs((float) accelerationAnswer - computationResult) <= 0.0001;
 	}
 
-    public static bool ValidateFreeFallSubmission(float submittedFreeFall, float totalTime)
+    public static bool ValidateTotalDepthSubmission(float? totalDepthAnswer, TotalDepthCalculationData givenData)
     {
-        ExpressionEvaluator.Evaluate($"-9.81*({totalTime}*60)^2 / 2", out float computationResult);
-        return Mathf.Abs(submittedFreeFall - computationResult) <= 0.0001;
+		if (totalDepthAnswer == null) return false;
+
+        ExpressionEvaluator.Evaluate($"{givenData.initialVelocity} * {givenData.totalTime} + ( (-9.81 * {givenData.totalTime}^2) / 2 )", out float computationResult);
+        return Mathf.Abs((float) totalDepthAnswer - computationResult) <= 0.0001;
     }
 }
