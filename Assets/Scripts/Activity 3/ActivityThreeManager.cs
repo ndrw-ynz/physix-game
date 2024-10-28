@@ -425,6 +425,30 @@ public class ActivityThreeManager : ActivityManager
 			);
 	}
 
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isGraphsSubActivityFinished)
+		{
+			taskText.Add($"-  Interact with the ship’s Graphs Terminal and plot data from position vs. time graphs to velocity and acceleration vs. time graphs to re-calibrate the ship's navigation system.");
+		}
+		if (!isAccelerationCalcFinished)
+		{
+			taskText.Add("-  Interact with the ship’s 1D Kinematics Terminal and adjust the Orbital 1’s acceleration traveling in space.");
+		}
+		if (!isTotalDepthCalcFinished)
+		{
+			taskText.Add("-  Interact with the ship’s 1D Kinematics Terminal and determine the total depth of the ship from the Nakalais surface to ensure a safe landing.");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Safely navigate Orbital 1 through the vastness of space while adjusting its acceleration and determining the total depth from the Nakalais surface to ensure a safe landing.");
+
+		activityPauseMenuUI.UpdateContent("Lesson 3 - Activity 3", taskText, objectiveText);
+	}
+
 	/*private void Start()
 	{
         GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
