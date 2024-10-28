@@ -7,9 +7,11 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 
 	[Header("Views")]
 	[SerializeField] private GraphsView graphsView;
+	[SerializeField] private Kinematics1DView kinematics1DView;
 
 	[Header("Environment Cameras")]
 	[SerializeField] private Camera graphsEnvironmentCamera;
+	[SerializeField] private Camera kinematics1DEnvironmentCamera;
 
 	[Header("Interactable Terminal Game Objects")]
 	[SerializeField] private InteractableViewOpenerObject graphsTerminal;
@@ -21,6 +23,9 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 	{
 		graphsView.OpenViewEvent += () => SetGraphsTerminalEnvironmentState(true);
 		graphsView.QuitViewEvent += () => SetGraphsTerminalEnvironmentState(false);
+
+		kinematics1DView.OpenViewEvent += () => SetKinematics1DTerminalEnvironmentState(true);
+		kinematics1DView.QuitViewEvent += () => SetKinematics1DTerminalEnvironmentState(false);
 
 		activityThreeManager.GraphsAreaClearEvent += ClearGraphsTerminalEnvironmentState;
 
@@ -41,6 +46,15 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 		SetGraphsTerminalEnvironmentState(false);
 		graphsTerminal.SetInteractable(false);
 		graphsTransitionDoor.GetComponent<Animator>().SetBool("door_open", true);
+	}
+	#endregion
+
+	#region Kinematics 1D Terminal Area
+	private void SetKinematics1DTerminalEnvironmentState(bool isActive)
+	{
+		SetPlayerActivityState(!isActive);
+		// activityThreeManager.SetMissionObjectiveDisplay(!isActive);
+		kinematics1DEnvironmentCamera.gameObject.SetActive(isActive);
 	}
 	#endregion
 }
