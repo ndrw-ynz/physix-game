@@ -1,254 +1,454 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static GraphsSubActivitySO;
+using Random = UnityEngine.Random;
 
-public class ActivityThreeManager : MonoBehaviour
+public class AccelerationCalculationData
 {
+	public float initialVelocity;
+	public float finalVelocity;
+	public float totalTime;
+}
+
+public class TotalDepthCalculationData
+{
+	public float initialVelocity;
+	public float totalTime;
+}
+
+public class ActivityThreeManager : ActivityManager
+{
+	public static Difficulty difficultyConfiguration;
+
+	public event Action GraphsAreaClearEvent;
+	public event Action AccelerationProblemClearEvent;
+	public event Action TotalDepthProblemClearEvent;
+
 	[Header("Level Data - Graphs")]
 	[SerializeField] private GraphsSubActivitySO graphsLevelOne;
 	[SerializeField] private GraphsSubActivitySO graphsLevelTwo;
 	[SerializeField] private GraphsSubActivitySO graphsLevelThree;
-	public GraphsSubActivitySO currentGraphsLevel;
+	private GraphsSubActivitySO currentGraphsLevel;
 
 	[Header("Level Data - 1D Kinematics")]
 	[SerializeField] private Kinematics1DSubActivitySO kinematics1DLevelOne;
-	public Kinematics1DSubActivitySO currentKinematics1DLevel;
+	[SerializeField] private Kinematics1DSubActivitySO kinematics1DLevelTwo;
+	[SerializeField] private Kinematics1DSubActivitySO kinematics1DLevelThree;
+	private Kinematics1DSubActivitySO currentKinematics1DLevel;
 
 	[Header("Managers")]
 	[SerializeField] private GraphManager graphManager;
 
-    [Header("Cameras")]
-	[SerializeField] private Camera mainCamera;
-	[SerializeField] private Camera positionVsTimeGraphCamera;
-	[SerializeField] private Camera velocityVsTimeGraphCamera;
-	[SerializeField] private Camera accelerationVsTimeGraphCamera;
-
 	[Header("Views")]
-    [SerializeField] private ViewGraphs viewGraphs;
-    [SerializeField] private ViewGraphEdit viewGraphEdit;
-	[SerializeField] private View1DKinematics view1DKinematics;
-	[SerializeField] private ViewActivityThreePerformance viewActivityThreePerformance;
+	[SerializeField] private GraphsView graphsView;
+	[SerializeField] private GraphEditorUI graphEditorUI;
+	[SerializeField] private GraphViewerUI graphViewerUI;
+	[SerializeField] private Kinematics1DView kinematics1DView;
+	[SerializeField] private ActivityThreePerformanceView performanceView;
 
-	[Header("Modal Windows")]
-	[SerializeField] private GraphSubmissionModalWindow graphSubmissionModalWindow;
-	[SerializeField] private Kinematics1DSubmissionModalWindow kinematics1DSubmissionModalWindow;
+	[Header("Submission Status Displays")]
+	[SerializeField] private GraphsSubmissionStatusDisplay graphsSubmissionStatusDisplay;
+	[SerializeField] private Kinematics1DSubmissionStatusDisplay kinematics1DSubmissionStatusDisplay;
 
-	private List<int> correctPositionValues;
-	private List<int> correctVelocityValues;
-	private List<int> correctAccelerationValues;
+	// Variables for keeping track of current number of tests
+	private int currentNumGraphsTests;
+	private int currentNumAccelerationTests;
+	private int currentNumTotalDepthTests;
 
-	[Header("Metrics for Graphs Subactivity")]
-	public bool isGraphsSubActivityFinished;
+	// Given graph values
+	private List<List<int>> correctPositionValues;
+	private List<List<int>> correctVelocityValues;
+	private List<List<int>> correctAccelerationValues;
+
+	// Given 1D Kinematics values
+	private AccelerationCalculationData givenAccelerationData;
+	private TotalDepthCalculationData givenTotalDepthData;
+
+	// Variables for tracking which view is currently active
+	private bool isGraphsViewActive;
+	private bool isKinematics1DViewActive;
+
+	// Gameplay performance metrics variables
+	// Graphs Sub Activity
+	private float graphsGameplayDuration;
+	private bool isGraphsSubActivityFinished;
 	private int numIncorrectGraphsSubmission;
-
-	[Header("Metrics for 1D Kinematics Subactivity")]
-	public bool isAccelerationCalculationFinished;
-	public bool isFreeFallCalculationFinished;
+	private int numCorrectGraphsSubmission;
+	// Kinematics 1D Sub Activity
+	private float kinematics1DGameplayDuration;
+	// Acceleration Solving
+	private bool isAccelerationCalcFinished;
 	private int numIncorrectAccelerationSubmission;
-	private int numIncorrectFreeFallSubmission;
+	private int numCorrectAccelerationSubmission;
+	// Total Depth Solving
+	private bool isTotalDepthCalcFinished;
+	private int numIncorrectTotalDepthSubmission;
+	private int numCorrectTotalDepthSubmission;
 
-	[Header("Generated Given Values")]
-	private int initialVelocityValue;
-	private int finalVelocityValue;
-	private int totalTimeValueOne;
-	private int totalTimeValueTwo;
-
-	private void Start()
+	protected override void Start()
 	{
-        GraphEditButton.InitiateGraphEditViewSwitch += ChangeViewToGraphEditView;
-		ViewGraphEdit.InitiateGraphViewSwitch += ChangeViewToGraphView;
-		ViewGraphs.SubmitGraphsAnswerEvent += CheckGraphsAnswer;
-		GraphSubmissionModalWindow.RetryGraphSubmission += RestoreGraphViewState;
-		GraphSubmissionModalWindow.InitiateNextSubActivity += ChangeViewToCalculatorView;
+		base.Start();
 
-		View1DKinematics.SubmitAccelerationAnswerEvent += CheckAccelerationAnswer;
-		View1DKinematics.SubmitFreeFallAnswerEvent += CheckFreeFallAnswer;
-		Kinematics1DSubmissionModalWindow.RetrySubmission += Restore1DKinematicsViewState;
-		Kinematics1DSubmissionModalWindow.InitiateNext += Update1DKinematicsView;
+		ConfigureLevelData(Difficulty.Easy);
 
-		ViewActivityThreePerformance.OpenViewEvent += OnOpenViewActivityThreePerformance;
+		SubscribeViewAndDisplayEvents();
 
-		currentGraphsLevel = graphsLevelOne; // alter in the future, on changing upon submission in loading of scene.
-		currentKinematics1DLevel = kinematics1DLevelOne;
-
+		// Initialize correct given values
 		InitializeCorrectGraphValues();
-		graphManager.SetupGraphs(correctPositionValues, correctVelocityValues, correctAccelerationValues);
+		GenerateAccelerationGivenData();
+		GenerateTotalDepthGivenData();
 
-		Initialize1DKinematicsGiven();
-		view1DKinematics.SetupAccelerationGivenText(initialVelocityValue, finalVelocityValue, totalTimeValueOne);
-		view1DKinematics.SetupFreeFallGivenText(totalTimeValueTwo);
+		// Determine number of tests
+		currentNumGraphsTests = currentGraphsLevel.numberOfTests;
+		currentNumAccelerationTests = currentKinematics1DLevel.numberOfAccelerationProblems;
+		currentNumTotalDepthTests = currentKinematics1DLevel.numberOfTotalDepthProblems;
+
+		// Setup graph manager
+		graphManager.SetupGraphs(correctPositionValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests]);
+
+		// Setup views
+		graphsView.UpdateTestCountTextDisplay(currentGraphsLevel.numberOfTests - currentNumGraphsTests, currentGraphsLevel.numberOfTests);
+		kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests, currentKinematics1DLevel.numberOfAccelerationProblems);
+		kinematics1DView.UpdateAccelerationInfo(givenAccelerationData);
+		kinematics1DView.UpdateTotalDepthInfo(givenTotalDepthData);
+
+		// Update mission objective display
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Re-calibrate the ship's navigation system in the Graphs terminal ({currentGraphsLevel.numberOfTests - currentNumGraphsTests}/{currentGraphsLevel.numberOfTests})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the ship's acceleration on its journey on the 1D Kinematics terminal ({currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests}/{currentKinematics1DLevel.numberOfAccelerationProblems})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Calculate the ship's total depth in arriving on planet Nakalais in the 1D Kinematics terminal ({currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests}/{currentKinematics1DLevel.numberOfTotalDepthProblems})");
 	}
 
-	#region Graphs Sub Activity
-	private void ChangeViewToGraphEditView(Graph graph)
-    {
-		mainCamera.enabled = false;
-		viewGraphEdit.gameObject.SetActive(true);
-		viewGraphEdit.interactiveGraphCamera = graph.interactiveGraphCamera;
-		viewGraphs.gameObject.SetActive(false);
-		graphManager.currentGraph = graph;
-    }
-
-	private void ChangeViewToGraphView()
+	private void Update()
 	{
-		mainCamera.enabled = true;
-		viewGraphEdit.gameObject.SetActive(false);
-		viewGraphEdit.interactiveGraphCamera = null;
-		viewGraphs.gameObject.SetActive(true);
-		graphManager.currentGraph = null;
+		if (isGraphsViewActive && !isGraphsSubActivityFinished) graphsGameplayDuration += Time.deltaTime;
+		if (isKinematics1DViewActive && !isAccelerationCalcFinished && !isTotalDepthCalcFinished) kinematics1DGameplayDuration += Time.deltaTime;
+		if (isGraphsSubActivityFinished && isAccelerationCalcFinished && isTotalDepthCalcFinished) DisplayPerformanceView();
 	}
 
-	private void ChangeViewToCalculatorView()
+	private void ConfigureLevelData(Difficulty difficulty)
 	{
-		viewGraphs.gameObject.SetActive(false);
-		graphSubmissionModalWindow.gameObject.SetActive(false);
-		view1DKinematics.gameObject.SetActive(true);
+		difficultyConfiguration = difficulty;
+
+		switch (difficulty)
+		{
+			case Difficulty.Easy:
+				currentGraphsLevel = graphsLevelOne;
+				currentKinematics1DLevel = kinematics1DLevelOne;
+				break;
+			case Difficulty.Medium:
+				currentGraphsLevel = graphsLevelTwo;
+				currentKinematics1DLevel = kinematics1DLevelTwo;
+				break;
+			case Difficulty.Hard:
+				currentGraphsLevel = graphsLevelThree;
+				currentKinematics1DLevel = kinematics1DLevelThree;
+				break;
+		}
 	}
 
+	private void SubscribeViewAndDisplayEvents()
+	{
+		// Graphs Sub Activity Related Events
+		graphEditorUI.QuitGraphEditorEvent += () => graphsView.gameObject.SetActive(true);
+		graphViewerUI.QuitGraphViewerEvent += () => graphsView.gameObject.SetActive(true);
+		graphsView.OpenViewEvent += () => isGraphsViewActive = true;
+		graphsView.QuitViewEvent += () => isGraphsViewActive = false;
+		graphsView.SubmitAnswerEvent += CheckGraphsAnswer;
+		graphsSubmissionStatusDisplay.ProceedEvent += UpdateGraphsViewState;
+
+		// 1D Kinematics Sub Activity Related Events
+		kinematics1DView.OpenViewEvent += () => isKinematics1DViewActive = true;
+		kinematics1DView.QuitViewEvent += () => isKinematics1DViewActive = false;
+		kinematics1DView.SubmitAccelerationAnswerEvent += CheckAccelerationAnswer;
+		kinematics1DView.SubmitTotalDepthAnswerEvent += CheckTotalDepthAnswer;
+		kinematics1DSubmissionStatusDisplay.ProceedEvent += UpdateKinematics1DViewState;
+	}
+
+	#region Graphs
 	private void InitializeCorrectGraphValues()
 	{
-		foreach (GraphDataset graphDataset in currentGraphsLevel.datasets)
+		correctPositionValues = new List<List<int>>();
+		correctVelocityValues = new List<List<int>>();
+		correctAccelerationValues = new List<List<int>>();
+
+		int datasetSize = currentGraphsLevel.datasets[0].dataset.Count;
+
+		for (int i = 0; i < currentGraphsLevel.numberOfTests; i++)
 		{
-			string rawStringDataValues = graphDataset.dataset[Random.Range(0, graphDataset.dataset.Count)];
-			List<int> graphPointValues = rawStringDataValues.Split(',').Select(int.Parse).ToList();
-			switch (graphDataset.datasetType)
+			int randomDatasetIndex = Random.Range(0, datasetSize);
+
+			foreach (GraphDataset graphDataset in currentGraphsLevel.datasets)
 			{
-				case DatasetType.Position:
-					correctPositionValues = graphPointValues;
-					break;
-				case DatasetType.Velocity:
-					correctVelocityValues = graphPointValues;
-					break;
-				case DatasetType.Acceleration:
-					correctAccelerationValues = graphPointValues;
-					break;
+				List<int> graphPointValues = graphDataset.dataset[randomDatasetIndex].Split(',').Select(int.Parse).ToList();
+
+				switch (graphDataset.datasetType)
+				{
+					case DatasetType.Position:
+						correctPositionValues.Add(graphPointValues);
+						break;
+					case DatasetType.Velocity:
+						correctVelocityValues.Add(graphPointValues);
+						break;
+					case DatasetType.Acceleration:
+						correctAccelerationValues.Add(graphPointValues);
+						break;
+				}
 			}
 		}
 	}
 
-	private void CheckGraphsAnswer()
+	private void CheckGraphsAnswer(GraphsAnswerSubmission answer)
 	{
-		Graph positionVsTimeGraph = graphManager.positionVsTimeGraph;
-		Graph velocityVsTimeGraph = graphManager.velocityVsTimeGraph;
-		Graph accelerationVsTimeGraph = graphManager.accelerationVsTimeGraph;
+		GraphsAnswerSubmissionResults results = ActivityThreeUtilities.ValidateGraphSubmission(
+			answer, 
+			correctPositionValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests], 
+			correctVelocityValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests], 
+			correctAccelerationValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests]
+			);
 
-		bool isPositionVsTimeGraphCorrect = ActivityThreeUtilities.ValidateGraphSubmission(correctPositionValues, positionVsTimeGraph);
-		bool isVelocityVsTimeGraphCorrect = ActivityThreeUtilities.ValidateGraphSubmission(correctVelocityValues, velocityVsTimeGraph);
-		bool isAccelerationVsTimeGraphCorrect = ActivityThreeUtilities.ValidateGraphSubmission(correctAccelerationValues, accelerationVsTimeGraph);
+		if (results.isAllCorrect())
+		{
+			numCorrectGraphsSubmission++;
+			currentNumGraphsTests--;
+			graphsView.UpdateTestCountTextDisplay(currentGraphsLevel.numberOfTests - currentNumGraphsTests, currentGraphsLevel.numberOfTests);
+		}
+		else
+		{
+			numIncorrectGraphsSubmission++;
+		}
 
-		if (isPositionVsTimeGraphCorrect && isVelocityVsTimeGraphCorrect && isAccelerationVsTimeGraphCorrect)
+		DisplayGraphsSubmissionResults(results);
+	}
+
+	private void DisplayGraphsSubmissionResults(GraphsAnswerSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			graphsSubmissionStatusDisplay.SetSubmissionStatus(true, "Orbital 1's movement is optimal. Nice job!");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Re-calibrate the ship's navigation system in the Graphs terminal ({currentGraphsLevel.numberOfTests - currentNumGraphsTests}/{currentGraphsLevel.numberOfTests})");
+		}
+		else
+		{
+			graphsSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+		}
+
+		graphsSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResults(results);
+
+		graphsSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateGraphsViewState()
+	{
+		if (currentNumGraphsTests > 0)
+		{
+			graphManager.UpdateGraphs(correctPositionValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests]);
+		}
+		else
 		{
 			isGraphsSubActivityFinished = true;
+			missionObjectiveDisplayUI.ClearMissionObjective(0);
+			graphsView.gameObject.SetActive(false);
+			GraphsAreaClearEvent?.Invoke();
 		}
-
-		if (!isPositionVsTimeGraphCorrect)
-		{
-			numIncorrectGraphsSubmission++;
-		}
-
-		if (!isVelocityVsTimeGraphCorrect)
-		{
-			numIncorrectGraphsSubmission++;
-		}
-
-		if (!isAccelerationVsTimeGraphCorrect)
-		{
-			numIncorrectGraphsSubmission++;
-		}
-
-		Debug.Log(isPositionVsTimeGraphCorrect);
-		Debug.Log(isVelocityVsTimeGraphCorrect);
-		Debug.Log(isAccelerationVsTimeGraphCorrect);
-
-		// Showing overlay and graph submission modal window.
-		viewGraphs.overlay.gameObject.SetActive(true);
-		graphSubmissionModalWindow.gameObject.SetActive(true);
-		graphSubmissionModalWindow.SetDisplayFromSubmissionResult(isPositionVsTimeGraphCorrect, isVelocityVsTimeGraphCorrect, isAccelerationVsTimeGraphCorrect);
 	}
-
-	private void RestoreGraphViewState()
-	{
-		viewGraphs.overlay.gameObject.SetActive(false);
-		graphSubmissionModalWindow.gameObject.SetActive(false);
-	}
-
 	#endregion
 
-	#region 1D Kinematics Sub Activity
-	private void Initialize1DKinematicsGiven()
+	#region 1D Kinematics
+	private void GenerateAccelerationGivenData()
 	{
-		initialVelocityValue = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
-		finalVelocityValue = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
-		totalTimeValueOne = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
-		totalTimeValueTwo = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
+		AccelerationCalculationData data = new AccelerationCalculationData();
+		data.initialVelocity = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
+		data.finalVelocity = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
+		data.totalTime = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
+		givenAccelerationData = data;
 	}
 
-	private void CheckAccelerationAnswer(float accelerationAnswer)
+	private void GenerateTotalDepthGivenData()
 	{
-		bool isAccelerationCorrect = ActivityThreeUtilities.ValidateAccelerationSubmission(accelerationAnswer, initialVelocityValue, finalVelocityValue, totalTimeValueOne);
+		TotalDepthCalculationData data = new TotalDepthCalculationData();
+		data.initialVelocity = Random.Range(currentKinematics1DLevel.minimumVelocityValue, currentKinematics1DLevel.maximumVelocityValue);
+		data.totalTime = Random.Range(currentKinematics1DLevel.minimumTimeValue, currentKinematics1DLevel.maximumTimeValue);
+		givenTotalDepthData = data;
+	}
+
+	private void CheckAccelerationAnswer(float? answer)
+	{
+		bool isAccelerationCorrect = ActivityThreeUtilities.ValidateAccelerationSubmission(answer, givenAccelerationData);
+
 		if (isAccelerationCorrect)
 		{
-			isAccelerationCalculationFinished = true;
-		} else
+			numCorrectAccelerationSubmission++;
+			currentNumAccelerationTests--;
+			kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests, currentKinematics1DLevel.numberOfAccelerationProblems);
+		}
+		else
 		{
 			numIncorrectAccelerationSubmission++;
 		}
 
-		view1DKinematics.overlay.gameObject.SetActive(true);
-		kinematics1DSubmissionModalWindow.gameObject.SetActive(true);
-		kinematics1DSubmissionModalWindow.SetDisplayFromSubmissionResult(isAccelerationCorrect, "Acceleration");
+		DisplayAccelerationSubmissionResults(isAccelerationCorrect);
 	}
 
-	private void CheckFreeFallAnswer(float freeFallAnswer)
+	private void CheckTotalDepthAnswer(float? answer)
 	{
-		bool isFreeFallCorrect = ActivityThreeUtilities.ValidateFreeFallSubmission(freeFallAnswer, totalTimeValueTwo);
-		if (isFreeFallCorrect)
+		bool isTotalDepthCorrect = ActivityThreeUtilities.ValidateTotalDepthSubmission(answer, givenTotalDepthData);
+
+		if (isTotalDepthCorrect)
 		{
-			isFreeFallCalculationFinished = true;
+			numCorrectTotalDepthSubmission++;
+			currentNumTotalDepthTests--;
+			kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests, currentKinematics1DLevel.numberOfTotalDepthProblems);
+		}
+		else
+		{
+			numIncorrectTotalDepthSubmission++;
+		}
+
+		DisplayTotalDepthSubmissionResults(isTotalDepthCorrect);
+	}
+
+	private void DisplayAccelerationSubmissionResults(bool result)
+	{
+		if (result)
+		{
+			kinematics1DSubmissionStatusDisplay.SetSubmissionStatus(true, "Orbital 1's acceleration is stable. Great work!");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the ship's acceleration on its journey on the 1D Kinematics terminal ({currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests}/{currentKinematics1DLevel.numberOfAccelerationProblems})");
+		}
+		else
+		{
+			kinematics1DSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+		}
+
+		kinematics1DSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
+
+		kinematics1DSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void DisplayTotalDepthSubmissionResults(bool result)
+	{
+		if (result)
+		{
+			kinematics1DSubmissionStatusDisplay.SetSubmissionStatus(true, "Calculations complete. Calculated total depth is correct. Great job!");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Calculate the ship's total depth in arriving on planet Nakalais in the 1D Kinematics terminal ({currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests}/{currentKinematics1DLevel.numberOfTotalDepthProblems})");
+		}
+		else
+		{
+			kinematics1DSubmissionStatusDisplay.SetSubmissionStatus(false, "Engineer, there seems to be a mistake. Let's try again!");
+		}
+
+		kinematics1DSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
+
+		kinematics1DSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateKinematics1DViewState()
+	{
+		if (!isAccelerationCalcFinished)
+		{
+			if (currentNumAccelerationTests > 0)
+			{
+				GenerateAccelerationGivenData();
+				kinematics1DView.UpdateAccelerationInfo(givenAccelerationData);
+			}
+			else
+			{
+				isAccelerationCalcFinished = true;
+				kinematics1DView.DisplayTotalDepthInfo();
+				kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests, currentKinematics1DLevel.numberOfTotalDepthProblems);
+				missionObjectiveDisplayUI.ClearMissionObjective(1);
+				AccelerationProblemClearEvent?.Invoke();
+			}
 		} else
 		{
-			numIncorrectFreeFallSubmission++;
+			if (currentNumTotalDepthTests > 0)
+			{
+				GenerateTotalDepthGivenData();
+				kinematics1DView.UpdateTotalDepthInfo(givenTotalDepthData);
+			}
+			else
+			{
+				isTotalDepthCalcFinished = true;
+				missionObjectiveDisplayUI.ClearMissionObjective(2);
+				kinematics1DView.gameObject.SetActive(false);
+				TotalDepthProblemClearEvent?.Invoke();
+			}
 		}
-
-		view1DKinematics.overlay.gameObject.SetActive(true);
-		kinematics1DSubmissionModalWindow.gameObject.SetActive(true);
-		kinematics1DSubmissionModalWindow.SetDisplayFromSubmissionResult(isFreeFallCorrect, "Free Fall");
 	}
-
-	private void Restore1DKinematicsViewState()
-	{
-		view1DKinematics.overlay.gameObject.SetActive(false);
-		kinematics1DSubmissionModalWindow.gameObject.SetActive(false);
-	}
-
-	private void Update1DKinematicsView()
-	{
-		if (isAccelerationCalculationFinished && isFreeFallCalculationFinished)
-		{
-			viewActivityThreePerformance.gameObject.SetActive(true);
-		} else if (isAccelerationCalculationFinished && !isFreeFallCalculationFinished)
-		{
-			view1DKinematics.SwitchToFreeFallView();
-		}
-
-		view1DKinematics.overlay.gameObject.SetActive(false);
-		kinematics1DSubmissionModalWindow.gameObject.SetActive(false);
-	}
-
 	#endregion
 
-	private void OnOpenViewActivityThreePerformance(ViewActivityThreePerformance view)
+	public override void DisplayPerformanceView()
 	{
-		view.GraphsStatusText.text += isGraphsSubActivityFinished ? "Accomplished" : "Not accomplished";
-		view.GraphsIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectGraphsSubmission}";
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
 
-		view.Kinematics1DStatusText.text += isAccelerationCalculationFinished && isFreeFallCalculationFinished ? "Accomplished" : "Not accmplished";
+		performanceView.SetTotalTimeDisplay(graphsGameplayDuration + kinematics1DGameplayDuration);
 
-		view.AccelerationProblemStatusText.text += isAccelerationCalculationFinished ? "Accomplished" : "Not accomplished";
-		view.AccelerationProblemIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectAccelerationSubmission}";
+		performanceView.SetGraphsMetricsDisplay(
+			isAccomplished: isGraphsSubActivityFinished,
+			numIncorrectSubmission: numIncorrectGraphsSubmission,
+			duration: graphsGameplayDuration
+			);
 
-		view.FreeFallProblemStatusText.text += isFreeFallCalculationFinished ? "Accomplished" : "Not accomplished";
-		view.FreeFallProblemIncorrectNumText.text = $"Number of Incorrect Submissions: {numIncorrectFreeFallSubmission}";
+		performanceView.SetKinematics1DMetricsDisplay(
+			isAccelerationAccomplished: isAccelerationCalcFinished,
+			isTotalDepthAccomplished: isTotalDepthCalcFinished,
+			numIncorrectAcceleration: numIncorrectAccelerationSubmission,
+			numIncorrectTotalDepth: numIncorrectTotalDepthSubmission,
+			duration: kinematics1DGameplayDuration
+			);
+
+		// Update its activity feedback display (three args)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "graphs",
+				isSubActivityFinished: isGraphsSubActivityFinished,
+				numIncorrectAnswers: numIncorrectGraphsSubmission,
+				numCorrectAnswers: numCorrectGraphsSubmission,
+				badScoreThreshold: 5,
+				averageScoreThreshold: 3
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "1D Kinematics - acceleration",
+				isSubActivityFinished: isAccelerationCalcFinished,
+				numIncorrectAnswers: numIncorrectAccelerationSubmission,
+				numCorrectAnswers: numCorrectAccelerationSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "1D Kinematics - total depth",
+				isSubActivityFinished: isTotalDepthCalcFinished,
+				numIncorrectAnswers: numIncorrectTotalDepthSubmission,
+				numCorrectAnswers: numCorrectTotalDepthSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				)
+			);
+	}
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isGraphsSubActivityFinished)
+		{
+			taskText.Add($"-  Interact with the ship’s Graphs Terminal and plot data from position vs. time graphs to velocity and acceleration vs. time graphs to re-calibrate the ship's navigation system.");
+		}
+		if (!isAccelerationCalcFinished)
+		{
+			taskText.Add("-  Interact with the ship’s 1D Kinematics Terminal and adjust the Orbital 1’s acceleration traveling in space.");
+		}
+		if (!isTotalDepthCalcFinished)
+		{
+			taskText.Add("-  Interact with the ship’s 1D Kinematics Terminal and determine the total depth of the ship from the Nakalais surface to ensure a safe landing.");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Safely navigate Orbital 1 through the vastness of space while adjusting its acceleration and determining the total depth from the Nakalais surface to ensure a safe landing.");
+
+		activityPauseMenuUI.UpdateContent("Lesson 3 - Activity 3", taskText, objectiveText);
 	}
 }
