@@ -19,6 +19,9 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 	[Header("Doors")]
 	[SerializeField] private GameObject graphsTransitionDoor;
 
+	[Header("Planet Environment Game Objects")]
+	[SerializeField] private NakalaisPlanetAnimate planetNakalais;
+
 	private void Start()
 	{
 		graphsView.OpenViewEvent += () => SetGraphsTerminalEnvironmentState(true);
@@ -28,6 +31,7 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 		kinematics1DView.QuitViewEvent += () => SetKinematics1DTerminalEnvironmentState(false);
 
 		activityThreeManager.GraphsAreaClearEvent += ClearGraphsTerminalEnvironmentState;
+		activityThreeManager.AccelerationProblemClearEvent += MovePlanetNakalais;
 
 		// Close door on start
 		graphsTransitionDoor.GetComponent<Animator>().SetBool("door_open", false);
@@ -55,6 +59,11 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 		SetPlayerActivityState(!isActive);
 		activityThreeManager.SetMissionObjectiveDisplay(!isActive);
 		kinematics1DEnvironmentCamera.gameObject.SetActive(isActive);
+	}
+
+	private void MovePlanetNakalais()
+	{
+		planetNakalais.IncreaseXPosition(-30f);
 	}
 	#endregion
 }

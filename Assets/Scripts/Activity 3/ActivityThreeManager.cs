@@ -23,6 +23,7 @@ public class ActivityThreeManager : ActivityManager
 	public static Difficulty difficultyConfiguration;
 
 	public event Action GraphsAreaClearEvent;
+	public event Action AccelerationProblemClearEvent;
 
 	[Header("Level Data - Graphs")]
 	[SerializeField] private GraphsSubActivitySO graphsLevelOne;
@@ -354,7 +355,7 @@ public class ActivityThreeManager : ActivityManager
 				isAccelerationCalcFinished = true;
 				kinematics1DView.DisplayTotalDepthInfo();
 				missionObjectiveDisplayUI.ClearMissionObjective(1);
-				// INSERT EVENT FOR ENV ANIMATION
+				AccelerationProblemClearEvent?.Invoke();
 			}
 		} else
 		{
