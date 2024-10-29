@@ -34,7 +34,7 @@ public class ActivityThreeFeedbackDisplay : ActivityFeedbackDisplay
 	{
 		switch (metric.subActivityName)
 		{
-			case "quantities":
+			case "graphs":
 				currentLessonDisplay = graphsLessonDisplay;
 				break;
 			case "1D Kinematics - acceleration":
