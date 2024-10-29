@@ -24,6 +24,7 @@ public class ActivityThreeManager : ActivityManager
 
 	public event Action GraphsAreaClearEvent;
 	public event Action AccelerationProblemClearEvent;
+	public event Action TotalDepthProblemClearEvent;
 
 	[Header("Level Data - Graphs")]
 	[SerializeField] private GraphsSubActivitySO graphsLevelOne;
@@ -370,7 +371,7 @@ public class ActivityThreeManager : ActivityManager
 				isTotalDepthCalcFinished = true;
 				missionObjectiveDisplayUI.ClearMissionObjective(2);
 				kinematics1DView.gameObject.SetActive(false);
-				// INSERT EVENT FOR ENV ANIMATION
+				TotalDepthProblemClearEvent?.Invoke();
 			}
 		}
 	}

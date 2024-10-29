@@ -11,10 +11,12 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 
 	[Header("Environment Cameras")]
 	[SerializeField] private Camera graphsEnvironmentCamera;
+	[SerializeField] private Camera kinematics1DTerminalCamera;
 	[SerializeField] private Camera kinematics1DEnvironmentCamera;
 
 	[Header("Interactable Terminal Game Objects")]
 	[SerializeField] private InteractableViewOpenerObject graphsTerminal;
+	[SerializeField] private InteractableViewOpenerObject kinematics1DTerminal;
 
 	[Header("Doors")]
 	[SerializeField] private GameObject graphsTransitionDoor;
@@ -32,6 +34,7 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 
 		activityThreeManager.GraphsAreaClearEvent += ClearGraphsTerminalEnvironmentState;
 		activityThreeManager.AccelerationProblemClearEvent += MovePlanetNakalais;
+		activityThreeManager.TotalDepthProblemClearEvent += ClearKinematics1DTerminalEnvironmentState;
 
 		// Close door on start
 		graphsTransitionDoor.GetComponent<Animator>().SetBool("door_open", false);
@@ -59,6 +62,13 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 		SetPlayerActivityState(!isActive);
 		activityThreeManager.SetMissionObjectiveDisplay(!isActive);
 		kinematics1DEnvironmentCamera.gameObject.SetActive(isActive);
+	}
+
+	private void ClearKinematics1DTerminalEnvironmentState()
+	{
+		kinematics1DTerminal.SetInteractable(false);
+		kinematics1DEnvironmentCamera.gameObject.SetActive(false);
+		kinematics1DTerminalCamera.gameObject.SetActive(true);
 	}
 
 	private void MovePlanetNakalais()
