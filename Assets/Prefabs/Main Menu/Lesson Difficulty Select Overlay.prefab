@@ -336,6 +336,7 @@ GameObject:
   - component: {fileID: 3230148107660988203}
   - component: {fileID: 5566536010781038855}
   - component: {fileID: 7112282095548320840}
+  - component: {fileID: 381326169707023723}
   m_Layer: 5
   m_Name: Text (Easy)
   m_TagString: Untagged
@@ -503,6 +504,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &381326169707023723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4657977504983033344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8174c56a85902da41be673409b381ed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficultyText: {fileID: 5566536010781038855}
+  difficultyButton: {fileID: 7112282095548320840}
+  activityName: 0
+  difficultyType: 0
 --- !u!1 &6582155740740764947
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,6 +888,7 @@ GameObject:
   - component: {fileID: 88203765516589444}
   - component: {fileID: 3994175028045967376}
   - component: {fileID: 7961871434069078096}
+  - component: {fileID: 8227803713747412294}
   m_Layer: 5
   m_Name: Text (Medium)
   m_TagString: Untagged
@@ -1038,6 +1056,22 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8227803713747412294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7525567640226422221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8174c56a85902da41be673409b381ed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficultyText: {fileID: 3994175028045967376}
+  difficultyButton: {fileID: 7961871434069078096}
+  activityName: 0
+  difficultyType: 0
 --- !u!1 &7594294579847257443
 GameObject:
   m_ObjectHideFlags: 0
@@ -1050,6 +1084,7 @@ GameObject:
   - component: {fileID: 5122287042576304681}
   - component: {fileID: 3245923096342357353}
   - component: {fileID: 3674550677711568299}
+  - component: {fileID: 3132875983230626279}
   m_Layer: 5
   m_Name: Text (Hard)
   m_TagString: Untagged
@@ -1217,3 +1252,19 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3132875983230626279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7594294579847257443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8174c56a85902da41be673409b381ed5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficultyText: {fileID: 3245923096342357353}
+  difficultyButton: {fileID: 3674550677711568299}
+  activityName: 0
+  difficultyType: 0

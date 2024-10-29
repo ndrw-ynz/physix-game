@@ -71,6 +71,7 @@ public class MainMenuManager : MonoBehaviour
         LessonSelectButton.LessonSelectClick += OpenLessonComponentsScreen;
         TopicDiscussionButton.TopicDiscussionClick += OpenTopicDiscussionScene;
         ActivityButton.ActivityClick += OpenDifficultySelectOverlay;
+        ActivityDifficultyButton.DifficultyClick += OpenActivityWithDifficultyType;
 	}
 
     private void OnDisable()
@@ -78,6 +79,7 @@ public class MainMenuManager : MonoBehaviour
         LessonSelectButton.LessonSelectClick -= OpenLessonComponentsScreen;
         TopicDiscussionButton.TopicDiscussionClick -= OpenTopicDiscussionScene;
         ActivityButton.ActivityClick -= OpenDifficultySelectOverlay;
+        ActivityDifficultyButton.DifficultyClick -= OpenActivityWithDifficultyType;
     }
 
     private void OpenLessonComponentsScreen(int keyValue)
@@ -94,5 +96,58 @@ public class MainMenuManager : MonoBehaviour
     private void OpenDifficultySelectOverlay(int keyValue)
     {
         lessonDifficultyKeyValuePairs[keyValue].SetActive(true);
+    }
+
+    private void OpenActivityWithDifficultyType(Activity activity, Difficulty difficulty)
+    {
+        switch (activity)
+        {
+            case Activity.ActivityOne:
+                ActivityOneManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 1");
+                break;
+
+            case Activity.ActivityTwo:
+                ActivityTwoManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 2");
+                break;
+
+            case Activity.ActivityThree:
+                //ActivityThreeManager.difficultyConfiguration = difficulty;
+                //SceneManager.LoadScene("Activity 3");
+                Debug.Log("Activity Three Development is still in Progress");
+                break;
+
+            case Activity.ActivityFour:
+                //ActivityFourManager.difficultyConfiguration = difficulty;
+                //SceneManager.LoadScene("Activity 4");
+                Debug.Log("Activity Four Development is still in Progress");
+                break;
+
+            case Activity.ActivityFive:
+                ActivityFiveManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 5");
+                break;
+
+            case Activity.ActivitySix:
+                ActivitySixManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 6");
+                break;
+
+            case Activity.ActivitySeven:
+                ActivitySevenManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 7");
+                break;
+
+            case Activity.ActivityEight:
+                ActivityEightManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 8");
+                break;
+
+            case Activity.ActivityNine:
+                ActivityNineManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 9");
+                break;
+        }
     }
 }
