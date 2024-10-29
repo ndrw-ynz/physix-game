@@ -212,6 +212,7 @@ public class ActivityThreeManager : ActivityManager
 		{
 			numCorrectGraphsSubmission++;
 			currentNumGraphsTests--;
+			graphsView.UpdateTestCountTextDisplay(currentGraphsLevel.numberOfTests - currentNumGraphsTests, currentGraphsLevel.numberOfTests);
 		}
 		else
 		{
@@ -242,7 +243,6 @@ public class ActivityThreeManager : ActivityManager
 	{
 		if (currentNumGraphsTests > 0)
 		{
-			graphsView.UpdateTestCountTextDisplay(currentGraphsLevel.numberOfTests - currentNumGraphsTests, currentGraphsLevel.numberOfTests);
 			graphManager.UpdateGraphs(correctPositionValues[currentGraphsLevel.numberOfTests - currentNumGraphsTests]);
 		}
 		else
@@ -281,6 +281,7 @@ public class ActivityThreeManager : ActivityManager
 		{
 			numCorrectAccelerationSubmission++;
 			currentNumAccelerationTests--;
+			kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests, currentKinematics1DLevel.numberOfAccelerationProblems);
 		}
 		else
 		{
@@ -298,6 +299,7 @@ public class ActivityThreeManager : ActivityManager
 		{
 			numCorrectTotalDepthSubmission++;
 			currentNumTotalDepthTests--;
+			kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests, currentKinematics1DLevel.numberOfTotalDepthProblems);
 		}
 		else
 		{
@@ -348,13 +350,13 @@ public class ActivityThreeManager : ActivityManager
 			if (currentNumAccelerationTests > 0)
 			{
 				GenerateAccelerationGivenData();
-				kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests, currentKinematics1DLevel.numberOfAccelerationProblems);
 				kinematics1DView.UpdateAccelerationInfo(givenAccelerationData);
 			}
 			else
 			{
 				isAccelerationCalcFinished = true;
 				kinematics1DView.DisplayTotalDepthInfo();
+				kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests, currentKinematics1DLevel.numberOfTotalDepthProblems);
 				missionObjectiveDisplayUI.ClearMissionObjective(1);
 				AccelerationProblemClearEvent?.Invoke();
 			}
@@ -363,7 +365,6 @@ public class ActivityThreeManager : ActivityManager
 			if (currentNumTotalDepthTests > 0)
 			{
 				GenerateTotalDepthGivenData();
-				kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests, currentKinematics1DLevel.numberOfTotalDepthProblems);
 				kinematics1DView.UpdateTotalDepthInfo(givenTotalDepthData);
 			}
 			else
