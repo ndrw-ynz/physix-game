@@ -27,6 +27,13 @@ public class OverlayCloseButton : MonoBehaviour, IPointerEnterHandler, IPointerE
     {
         // Unsubscribe Button Click Listeners
         closeOverlayButton.onClick.RemoveAllListeners();
+
+        // Ensure hover color is removed and set back to normal on disable
+        if (isHovered)
+        {
+            buttonHoverOutline.gameObject.SetActive(false);
+            isHovered = false;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)

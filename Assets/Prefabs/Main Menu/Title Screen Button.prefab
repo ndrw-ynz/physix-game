@@ -220,7 +220,6 @@ GameObject:
   - component: {fileID: 7681791353949587422}
   - component: {fileID: 443156194541808797}
   - component: {fileID: 8640809654719201725}
-  - component: {fileID: 2786475338710907918}
   - component: {fileID: 1589024418796229321}
   m_Layer: 5
   m_Name: Title Screen Button
@@ -302,7 +301,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2786475338710907918}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: SwitchCanvasButton, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
@@ -314,20 +313,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2786475338710907918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6354724181277110965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7b897a37f2e4f14dbdc588004b3db0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  screenToActivate: {fileID: 0}
-  screenToDeactivate: {fileID: 0}
 --- !u!114 &1589024418796229321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,5 +325,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ef1870cf8ea8b64497aec591aa5ceef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  screenToActivate: {fileID: 0}
+  screenToDeactivate: {fileID: 6354724181277110965}
+  titleScreenButton: {fileID: 8640809654719201725}
   titleScreenButtonImage: {fileID: 2506522203026549598}
   titleScreenButtonText: {fileID: 7768226977076072167}
