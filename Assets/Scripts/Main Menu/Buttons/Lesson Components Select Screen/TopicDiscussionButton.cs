@@ -49,7 +49,7 @@ public class TopicDiscussionButton : MonoBehaviour, IPointerEnterHandler, IPoint
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        // Change panel color to white and text to black on hover for current hovered button
+        // Change panel color to white and text to black on unhover for current hovered button
         if (isHovered)
         {
             topicDiscussionPanel.color = Color.white;

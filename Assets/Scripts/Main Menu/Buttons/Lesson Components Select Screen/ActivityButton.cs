@@ -29,10 +29,19 @@ public class ActivityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         // Unsubscribe Button Click Listeners
         activityButton.onClick.RemoveAllListeners();
+
+        // Ensure hover color is removed and set back to normal on disable
+        if (isHovered)
+        {
+            activityPanel.color = Color.white;
+            panelText.color = Color.black;
+            isHovered = false;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        // Change panel color to black and text to white on hover for activity button
         activityPanel.color = Color.black;
         panelText.color = Color.white;
         isHovered = true;
@@ -40,8 +49,12 @@ public class ActivityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        activityPanel.color = Color.white;
-        panelText.color = Color.black;
-        isHovered = false;
+        // Change panel color to white and text to black on unhover for current hovered button
+        if (isHovered)
+        {
+            activityPanel.color = Color.white;
+            panelText.color = Color.black;
+            isHovered = false;
+        }
     }
 }
