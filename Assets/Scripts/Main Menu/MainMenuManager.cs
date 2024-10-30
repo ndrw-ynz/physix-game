@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -72,6 +73,7 @@ public class MainMenuManager : MonoBehaviour
         TopicDiscussionButton.TopicDiscussionClick += OpenTopicDiscussionScene;
         ActivityButton.ActivityClick += OpenDifficultySelectOverlay;
         ActivityDifficultyButton.DifficultyClick += OpenActivityWithDifficultyType;
+        OverlayCloseButton.OverlayCloseClicked += CloseDifficultySelectOverlay;
 	}
 
     private void OnDisable()
@@ -80,6 +82,7 @@ public class MainMenuManager : MonoBehaviour
         TopicDiscussionButton.TopicDiscussionClick -= OpenTopicDiscussionScene;
         ActivityButton.ActivityClick -= OpenDifficultySelectOverlay;
         ActivityDifficultyButton.DifficultyClick -= OpenActivityWithDifficultyType;
+        OverlayCloseButton.OverlayCloseClicked -= CloseDifficultySelectOverlay;
     }
 
     private void OpenLessonComponentsScreen(int keyValue)
@@ -148,6 +151,18 @@ public class MainMenuManager : MonoBehaviour
                 ActivityNineManager.difficultyConfiguration = difficulty;
                 SceneManager.LoadScene("Activity 9");
                 break;
+        }
+    }
+
+    private void CloseDifficultySelectOverlay(int lessonNumber)
+    {
+        if (lessonDifficultyKeyValuePairs[lessonNumber].gameObject.activeSelf)
+        {
+            lessonDifficultyKeyValuePairs[lessonNumber].gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.Log(lessonDifficultyKeyValuePairs[lessonNumber].gameObject + "is already not active. Maybe there's something wrong with the indexing?");
         }
     }
 }

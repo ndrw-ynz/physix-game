@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &453947750860524366
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4275680698369047772}
+  - component: {fileID: 5413011196012350094}
+  - component: {fileID: 4295686210690681319}
+  m_Layer: 5
+  m_Name: X Button Holder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &4275680698369047772
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453947750860524366}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5343086091076793525}
+  - {fileID: 2719883849631755842}
+  m_Father: {fileID: 8045346306531492984}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 830, y: 250.99997}
+  m_SizeDelta: {x: 104.8706, y: 104.8706}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5413011196012350094
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453947750860524366}
+  m_CullTransparentMesh: 1
+--- !u!114 &4295686210690681319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453947750860524366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3445468fbda9b5d4e937f6a88836c2f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  closeOverlayButton: {fileID: 7006934095958952732}
+  buttonHoverOutline: {fileID: 4276122360976330402}
+  lessonNumber: 0
 --- !u!1 &2125744217149998417
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,7 +367,7 @@ RectTransform:
   m_Children:
   - {fileID: 1336218887938667389}
   - {fileID: 407070379181423896}
-  - {fileID: 2719883849631755842}
+  - {fileID: 4275680698369047772}
   - {fileID: 3491754435445327805}
   - {fileID: 7717183551080850109}
   - {fileID: 8197233933387504957}
@@ -522,6 +584,81 @@ MonoBehaviour:
   buttonText: {fileID: 5566536010781038855}
   activityName: 0
   difficultyType: 0
+--- !u!1 &4973628586009296810
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5343086091076793525}
+  - component: {fileID: 4944744116113884933}
+  - component: {fileID: 4276122360976330402}
+  m_Layer: 5
+  m_Name: X Button Hover Color
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &5343086091076793525
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4973628586009296810}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4275680698369047772}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0.000030517578}
+  m_SizeDelta: {x: 104.8706, y: 104.8706}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &4944744116113884933
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4973628586009296810}
+  m_CullTransparentMesh: 1
+--- !u!114 &4276122360976330402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4973628586009296810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.78867924, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &6582155740740764947
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,10 +670,9 @@ GameObject:
   - component: {fileID: 2719883849631755842}
   - component: {fileID: 4667568558551716745}
   - component: {fileID: 1950802171567744099}
-  - component: {fileID: 5453809840586857536}
-  - component: {fileID: 182662585661171369}
+  - component: {fileID: 7006934095958952732}
   m_Layer: 5
-  m_Name: X Button
+  m_Name: X Button Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -554,11 +690,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8045346306531492984}
+  m_Father: {fileID: 4275680698369047772}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1811.3, y: -66.4}
+  m_AnchoredPosition: {x: 52.435, y: -52.435}
   m_SizeDelta: {x: 87.6665, y: 87.6665}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4667568558551716745
@@ -599,7 +735,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5453809840586857536
+--- !u!114 &7006934095958952732
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -642,33 +778,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1950802171567744099}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 182662585661171369}
-        m_TargetAssemblyTypeName: SwitchCanvasButton, Assembly-CSharp
-        m_MethodName: OnClick
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &182662585661171369
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6582155740740764947}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7b897a37f2e4f14dbdc588004b3db0e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  screenToActivate: {fileID: 0}
-  screenToDeactivate: {fileID: 0}
+      m_Calls: []
 --- !u!1 &7240738386681893806
 GameObject:
   m_ObjectHideFlags: 0
