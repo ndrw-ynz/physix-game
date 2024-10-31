@@ -40,7 +40,7 @@ public class MainMenuManager : MonoBehaviour
         // Setup current user's mock highest lesson unlocked level and load all lesson's difficulties
         // 1 is the lowest unlocked difficulty(Easy) and 3 is the highest unlocked difficulty(Hard)
         // Change into the loaded user highest highest lesson unlocked difficulties value in the future
-        highestLessonUnlockedDifficulties = 1;
+        highestLessonUnlockedDifficulties = 3;
         if (highestLessonUnlockedDifficulties > 0)
         {
             difficultySelectOverlays.LockAllDifficulty();

@@ -35,10 +35,15 @@ public class ActivityDifficultyButton : MonoBehaviour, IPointerEnterHandler, IPo
     [SerializeField] private TextMeshProUGUI difficultyText;
     [SerializeField] private Button difficultyButton;
     [SerializeField] private TextMeshProUGUI buttonText;
+    [SerializeField] private TextMeshProUGUI difficultyDescription;
 
     [Header("Activity and Difficulty Type")]
     [SerializeField] private Activity activityName;
     [SerializeField] private Difficulty difficultyType;
+
+    private string easyDescription = "<b>Basic problem set</b>\nIn this level, you'll encounter less problems designed to help you grasp the foundational concepts of the lesson.";
+    private string mediumDescription = "<b>Increased number of problems</b>\nAt this level, you'll tackle additional problems, offering more opportunities for practice and occasionally requiring unit conversions or extra steps to solve.";
+    private string hardDescription = "<b>Even more problem sets</b>\nHere, you'll face even more problem sets, and you will not have access to helpful tools, encouraging you to rely on your current understanding of the lesson.";
 
     // Boolean to check if button is being hovered or not
     private bool isHovered;
@@ -55,10 +60,11 @@ public class ActivityDifficultyButton : MonoBehaviour, IPointerEnterHandler, IPo
         // Unsubscribe Button Click Listeners
         difficultyButton.onClick.RemoveAllListeners();
 
-        // Ensure hover color is removed and set back to normal on disable
+        // Ensure hover color is removed, description text is blank, and set back to normal on disable
         if (isHovered)
         {
             buttonText.color = Color.black;
+            difficultyDescription.text = "";
             isHovered = false;
         }
     }
@@ -87,12 +93,15 @@ public class ActivityDifficultyButton : MonoBehaviour, IPointerEnterHandler, IPo
             {
                 case Difficulty.Easy:
                     buttonText.color = new Color(0.1292156f, 0.6981132f, 0);
+                    difficultyDescription.text = easyDescription;
                     break;
                 case Difficulty.Medium:
                     buttonText.color = new Color(0.7735849f, 0.7114157f, 0.004378719f);
+                    difficultyDescription.text = mediumDescription;
                     break;
                 case Difficulty.Hard:
                     buttonText.color = Color.red;
+                    difficultyDescription.text = hardDescription;
                     break;
             }
             isHovered = true;
@@ -105,6 +114,7 @@ public class ActivityDifficultyButton : MonoBehaviour, IPointerEnterHandler, IPo
         if (isHovered)
         {
             buttonText.color = Color.black;
+            difficultyDescription.text = "";
             isHovered = false;
         }
     }
