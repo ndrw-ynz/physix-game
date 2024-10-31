@@ -18,6 +18,8 @@ public class ActivityFourEnvironmentManager : ActivityEnvironmentManager
 	{
 		projectileMotionView.OpenViewEvent += () => SetProjectileTerminalEnvironmentState(true);
 		projectileMotionView.QuitViewEvent += () => SetProjectileTerminalEnvironmentState(false);
+
+		activityFourManager.ProjectileMotionTerminalClearEvent += ClearProjectileTerminalEnvironmentState;
 	}
 
 	#region Projectile Motion
@@ -26,6 +28,12 @@ public class ActivityFourEnvironmentManager : ActivityEnvironmentManager
 		SetPlayerActivityState(!isActive);
 		// activityFourManager.SetMissionObjectiveDisplay(!isActive);
 		projectileTerminalEnvCamera.gameObject.SetActive(isActive);
+	}
+
+	private void ClearProjectileTerminalEnvironmentState()
+	{
+		SetProjectileTerminalEnvironmentState(false);
+		projectileMotionTerminal.SetInteractable(false);
 	}
 	#endregion
 }
