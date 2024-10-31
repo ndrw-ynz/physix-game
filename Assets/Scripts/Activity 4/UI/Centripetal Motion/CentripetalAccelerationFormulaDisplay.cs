@@ -18,7 +18,7 @@ public class CentripetalAccelerationFormulaDisplay : MonoBehaviour
 	public void OnValueChange()
 	{
 		bool canEvaluate = ExpressionEvaluator.Evaluate($"({numeratorConstantField.text} * ({piField.text})^2 * {radiusField.text}) / ({periodField.text}^2)", out float result);
-		result = (float) Math.Round(result, 2);
+		result = (float) Math.Round(result, 4);
 		if (canEvaluate)
 		{
 			resultValue = result;
