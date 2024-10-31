@@ -4,10 +4,29 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+public class ProjectileMotionAnswerSubmission {
+
+	public float? maximumHeight { get; private set; }
+	public float? horizontalRange { get; private set; }
+	public float? timeOfFlight { get; private set; }
+
+	public ProjectileMotionAnswerSubmission(
+		float? maximumHeight,
+		float? horizontalRange,
+		float? timeOfFlight
+		)
+	{
+		this.maximumHeight = maximumHeight;
+		this.horizontalRange = horizontalRange;
+		this.timeOfFlight = timeOfFlight;
+	}
+}
+
 public class ProjectileMotionView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
+	public event Action<ProjectileMotionAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Text Displays")]
 	[SerializeField] private TextMeshProUGUI testCountText;
@@ -91,6 +110,17 @@ public class ProjectileMotionView : MonoBehaviour
 			rightPageButton.gameObject.SetActive(false);
 		}
 		leftPageButton.gameObject.SetActive(true);
+	}
+
+	public void OnSubmitButtonClick()
+	{
+		ProjectileMotionAnswerSubmission submission = new ProjectileMotionAnswerSubmission(
+			maximumHeight: maximumHeightFormulaDisplay.resultValue,
+			horizontalRange: horizontalRangeFormulaDisplay.resultValue,
+			timeOfFlight: timeOfFlightFormulaDisplay.resultValue
+			);
+
+		SubmitAnswerEvent?.Invoke(submission);
 	}
 
 	public void OnQuitButtonClick()
