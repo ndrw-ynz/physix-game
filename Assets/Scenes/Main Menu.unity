@@ -2460,7 +2460,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Section 1
+  m_text: Section #
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bbaeff12220005b4785820803e5dc745, type: 2}
   m_sharedMaterial: {fileID: 3304999427633749247, guid: bbaeff12220005b4785820803e5dc745, type: 2}
@@ -3215,7 +3215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad222a84a0c9c54cacfddfece72333d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  titleScreen: {fileID: 1810268104}
+  titleScreen: {fileID: 1810268106}
   lessonSelectScreen: {fileID: 1688671535}
   optionsScreen: {fileID: 260199141}
   creditsScreen: {fileID: 1594949093}
@@ -7250,6 +7250,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1810268105}
+  - component: {fileID: 1810268106}
   m_Layer: 5
   m_Name: Title Screen
   m_TagString: Untagged
@@ -7280,6 +7281,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1810268106
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810268104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd940e7dfbae51d45b0d5685ee344cf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fullName: {fileID: 1880628803}
+  section: {fileID: 741866849}
 --- !u!1001 &1877491910
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7496,8 +7511,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 77.30835, y: -5.5}
-  m_SizeDelta: {x: 332.1497, y: 32.3293}
+  m_AnchoredPosition: {x: 5.8812, y: -0.1171}
+  m_SizeDelta: {x: 475.0058, y: 43.0951}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1880628803
 MonoBehaviour:
@@ -7519,7 +7534,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Kenneth Balatayo
+  m_text: FirstName LastName
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bbaeff12220005b4785820803e5dc745, type: 2}
   m_sharedMaterial: {fileID: 3304999427633749247, guid: bbaeff12220005b4785820803e5dc745, type: 2}
@@ -7546,10 +7561,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.1
+  m_fontSize: 34.35
   m_fontSizeBase: 32.1
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0

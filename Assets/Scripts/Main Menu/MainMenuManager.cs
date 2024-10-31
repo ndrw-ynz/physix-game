@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class MainMenuManager : MonoBehaviour
 {
     [Header("Main Menu Screens")]
-    [SerializeField] private GameObject titleScreen;
+    [SerializeField] private TitleScreen titleScreen;
     [SerializeField] private GameObject lessonSelectScreen;
     [SerializeField] private GameObject optionsScreen;
     [SerializeField] private GameObject creditsScreen;
@@ -38,6 +38,11 @@ public class MainMenuManager : MonoBehaviour
     // Lesson Difficulty Select Overlays Dictionary
     private Dictionary<int, GameObject> lessonDifficultyKeyValuePairs;
 
+
+    private string firstName;
+    private string lastName;
+    private string section;
+
     private void Start()
 	{
 
@@ -68,6 +73,11 @@ public class MainMenuManager : MonoBehaviour
             {8, lessonEightDifficultySelectOverlay},
             {9, lessonNineDifficultySelectOverlay}
         };
+
+        firstName = "Superman";
+        lastName = "Balatayo";
+        section = "4";
+        titleScreen.SetUserProfile(firstName, lastName, section);
 
         LessonSelectButton.LessonSelectClick += OpenLessonComponentsScreen;
         TopicDiscussionButton.TopicDiscussionClick += OpenTopicDiscussionScene;
