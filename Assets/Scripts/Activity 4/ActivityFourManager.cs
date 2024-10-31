@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,6 +7,12 @@ public class ProjectileMotionCalculationData
 	public float initialVelocity;
 	public float initialHeight;
 	public float angleMeasure;
+}
+
+public class CircularMotionCalculationData
+{
+	public float radius;
+	public float period;
 }
 
 public class ActivityFourManager : MonoBehaviour
@@ -30,15 +35,18 @@ public class ActivityFourManager : MonoBehaviour
 
 	[Header("Views")]
 	[SerializeField] private ProjectileMotionView projectileMotionView;
+	[SerializeField] private CircularMotionView circularMotionView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private ProjectileMotionSubmissionStatusDisplay projectileMotionSubmissionStatusDisplay;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumProjectileMotionTests;
+	private int currentNumCircularMotionTests;
 
 	// Given projectile motion calculation data
 	private ProjectileMotionCalculationData givenProjectileMotionData;
+	private CircularMotionCalculationData givenCircularMotionData;
 
 	// Gameplay performance metrics variables
 	// Projectile Motion Sub Activity
@@ -86,13 +94,19 @@ public class ActivityFourManager : MonoBehaviour
 
 		// Initialize correct given values
 		GenerateProjectileGivenData();
+		GenerateCircularMotionGivenData();
 
 		// Determine number of tests
 		currentNumProjectileMotionTests = currentProjectileMotionLevel.numberOfTests;
+		currentNumCircularMotionTests = currentCircularMotionLevel.numberOfTests;
 
 		// Setup views
+		// Projectile motion view
 		projectileMotionView.UpdateTestCountTextDisplay(currentProjectileMotionLevel.numberOfTests - currentNumProjectileMotionTests, currentProjectileMotionLevel.numberOfTests);
 		projectileMotionView.SetupProjectileMotionView(givenProjectileMotionData);
+		// Circular motion view
+		circularMotionView.UpdateTestCountTextDisplay(currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests, currentCircularMotionLevel.numberOfTests);
+		circularMotionView.SetupCircularMotionView(givenCircularMotionData);
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -123,7 +137,7 @@ public class ActivityFourManager : MonoBehaviour
 		projectileMotionSubmissionStatusDisplay.ProceedEvent += UpdateProjectileMotionViewState;
 	}
 
-	#region ProjectileMotion
+	#region Projectile Motion
 	private void GenerateProjectileGivenData()
 	{
 		ProjectileMotionCalculationData data = new ProjectileMotionCalculationData();
@@ -191,6 +205,16 @@ public class ActivityFourManager : MonoBehaviour
 			// missionObjectiveDisplayUI.ClearMissionObjective(1);
 			ProjectileMotionTerminalClearEvent?.Invoke();
 		}
+	}
+	#endregion
+
+	#region Circular Motion
+	private void GenerateCircularMotionGivenData()
+	{
+		CircularMotionCalculationData data = new CircularMotionCalculationData();
+		data.radius = Random.Range(currentCircularMotionLevel.minimumRadiusValue, currentCircularMotionLevel.maximumRadiusValue);
+		data.period = Random.Range(currentCircularMotionLevel.minimumTimePeriodValue, currentCircularMotionLevel.maximumTimePeriodValue);
+		givenCircularMotionData = data;
 	}
 	#endregion
 
