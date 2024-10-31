@@ -57,11 +57,12 @@ public static class ActivityFourUtilities
 		return results;
 	}
 
-	public static bool ValidateCentripetalAccelerationSubmission(float centripetalAcceleration, float satelliteRadius, float satelliteTimePeriod)
+	public static bool ValidateCentripetalAccelerationSubmission(float? centripetalAccelerationAnswer, CircularMotionCalculationData givenData)
 	{
-		ExpressionEvaluator.Evaluate($"(4*(pi^2)*{satelliteRadius})/({satelliteTimePeriod}^2)", out float computationResult);
-		Debug.Log($"Submitted: {centripetalAcceleration}");
-		Debug.Log($"Computed Result: {computationResult}");
-		return Mathf.Abs(centripetalAcceleration - computationResult) <= 0.0001;
+		if (centripetalAccelerationAnswer == null) return false;
+
+		ExpressionEvaluator.Evaluate($"(4*(pi^2)*{givenData.radius*1000})/({givenData.period}^2)", out float computedCentripetalAcceleration);
+		computedCentripetalAcceleration = (float)Math.Round(computedCentripetalAcceleration, 4);
+		return Mathf.Abs((float)centripetalAccelerationAnswer - computedCentripetalAcceleration) <= 0.0001;
 	}
 }
