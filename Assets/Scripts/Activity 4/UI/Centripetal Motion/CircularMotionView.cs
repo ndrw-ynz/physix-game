@@ -31,7 +31,7 @@ public class CircularMotionView : MonoBehaviour
 	public void SetupCircularMotionView(CircularMotionCalculationData data)
 	{
 		// Update given value text fields
-		givenRadius.text = $"{data.radius} meters";
+		givenRadius.text = $"{data.radius} kilometers";
 		givenPeriod.text = $"{data.period} seconds";
 
 		// Reset state of formula displays
