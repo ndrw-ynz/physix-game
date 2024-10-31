@@ -7,17 +7,23 @@ public class ActivityFourEnvironmentManager : ActivityEnvironmentManager
 
 	[Header("Views")]
 	[SerializeField] private ProjectileMotionView projectileMotionView;
+	[SerializeField] private CircularMotionView circularMotionView;
 
 	[Header("Environment Cameras")]
 	[SerializeField] private Camera projectileTerminalEnvCamera;
+	[SerializeField] private Camera circularMotionTerminalEnvCamera;
 
 	[Header("Interactable Terminal Game Objects")]
 	[SerializeField] private InteractableViewOpenerObject projectileMotionTerminal;
+	[SerializeField] private InteractableViewOpenerObject circularMotionTerminal;
 
 	private void Start()
 	{
 		projectileMotionView.OpenViewEvent += () => SetProjectileTerminalEnvironmentState(true);
 		projectileMotionView.QuitViewEvent += () => SetProjectileTerminalEnvironmentState(false);
+
+		circularMotionView.OpenViewEvent += () => SetCircularMotionTerminalEnvironmentState(true);
+		circularMotionView.QuitViewEvent += () => SetCircularMotionTerminalEnvironmentState(false);
 
 		activityFourManager.ProjectileMotionTerminalClearEvent += ClearProjectileTerminalEnvironmentState;
 	}
@@ -34,6 +40,15 @@ public class ActivityFourEnvironmentManager : ActivityEnvironmentManager
 	{
 		SetProjectileTerminalEnvironmentState(false);
 		projectileMotionTerminal.SetInteractable(false);
+	}
+	#endregion
+
+	#region Circular Motion
+	private void SetCircularMotionTerminalEnvironmentState(bool isActive)
+	{
+		SetPlayerActivityState(!isActive);
+		// activityFourManager.SetMissionObjectiveDisplay(!isActive);
+		circularMotionTerminalEnvCamera.gameObject.SetActive(isActive);
 	}
 	#endregion
 }
