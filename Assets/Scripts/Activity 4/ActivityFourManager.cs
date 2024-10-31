@@ -31,6 +31,14 @@ public class ActivityFourManager : MonoBehaviour
 
 	// Given projectile motion calculation data
 	private ProjectileMotionCalculationData givenProjectileMotionData;
+
+	// Gameplay performance metrics variables
+	// Projectile Motion Sub Activity
+	private float projectileMotionGameplayDuration;
+	private bool isProjectileMotionSubActivityFinished;
+	private int numIncorrectProjectileMotionSubmission;
+	private int numCorrectProjectileMotionSubmission;
+
 	/*[SerializeField] private ViewProjectileMotion viewProjectileMotion;
 	[SerializeField] private ViewCircularMotion viewCircularMotion;
 	[SerializeField] private ViewActivityFourPerformance viewActivityFourPerformance;*/
@@ -66,6 +74,8 @@ public class ActivityFourManager : MonoBehaviour
 	{
 		ConfigureLevelData(Difficulty.Easy);
 
+		SubscribeViewAndDisplayEvents();
+
 		// Initialize correct given values
 		GenerateProjectileGivenData();
 
@@ -98,6 +108,12 @@ public class ActivityFourManager : MonoBehaviour
 		}
 	}
 
+	private void SubscribeViewAndDisplayEvents()
+	{
+		// Projectile Motion Sub Activity Related Events
+		projectileMotionView.SubmitAnswerEvent += CheckProjectileMotionAnswer;
+	}
+
 	#region ProjectileMotion
 	private void GenerateProjectileGivenData()
 	{
@@ -115,6 +131,22 @@ public class ActivityFourManager : MonoBehaviour
 				break;
 		}
 		givenProjectileMotionData = data;
+	}
+
+	private void CheckProjectileMotionAnswer(ProjectileMotionAnswerSubmission answer)
+	{
+		ProjectileMotionSubmissionResults results = ActivityFourUtilities.ValidateProjectileMotionSubmission(answer, givenProjectileMotionData);
+
+		if (results.isAllCorrect())
+		{
+			numCorrectProjectileMotionSubmission++;
+			currentNumProjectileMotionTests--;
+			projectileMotionView.UpdateTestCountTextDisplay(currentProjectileMotionLevel.numberOfTests - currentNumProjectileMotionTests, currentProjectileMotionLevel.numberOfTests);
+		}
+		else
+		{
+			numIncorrectProjectileMotionSubmission++;
+		}
 	}
 	#endregion
 
