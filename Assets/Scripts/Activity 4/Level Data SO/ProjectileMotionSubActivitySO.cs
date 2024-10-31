@@ -6,9 +6,11 @@ public enum ProjectileAngleType
 	Full90Angle
 }
 
-[CreateAssetMenu(menuName = "Level Data/ProjectileMotionSubActivitySO")]
+[CreateAssetMenu(menuName = "Level Data/Projectile Motion")]
 public class ProjectileMotionSubActivitySO : ScriptableObject
 {
+	[Header("Number of Tests")]
+	public int numberOfTests;
 	[Header("Velocity Value Range")]
     public int minimumVelocityValue;
 	public int maximumVelocityValue;
