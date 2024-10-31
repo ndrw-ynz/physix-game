@@ -1,9 +1,17 @@
-using TMPro;
 using UnityEngine;
+
+public class ProjectileMotionCalculationData
+{
+	public float initialVelocity;
+	public float initialHeight;
+	public float angleMeasure;
+}
 
 public class ActivityFourManager : MonoBehaviour
 {
-    [Header("Level Data - Projectile Motion")]
+	public static Difficulty difficultyConfiguration;
+
+	[Header("Level Data - Projectile Motion")]
     [SerializeField] private ProjectileMotionSubActivitySO projectileMotionLevelOne;
 	[SerializeField] private ProjectileMotionSubActivitySO projectileMotionLevelTwo;
 	[SerializeField] private ProjectileMotionSubActivitySO projectileMotionLevelThree;
@@ -16,17 +24,24 @@ public class ActivityFourManager : MonoBehaviour
 	private CircularMotionSubActivitySO currentCircularMotionLevel;
 
 	[Header("Views")]
-	[SerializeField] private ViewProjectileMotion viewProjectileMotion;
+	[SerializeField] private ProjectileMotionView projectileMotionView;
+
+	// Variables for keeping track of current number of tests
+	private int currentNumProjectileMotionTests;
+
+	// Given projectile motion calculation data
+	private ProjectileMotionCalculationData givenProjectileMotionData;
+	/*[SerializeField] private ViewProjectileMotion viewProjectileMotion;
 	[SerializeField] private ViewCircularMotion viewCircularMotion;
-	[SerializeField] private ViewActivityFourPerformance viewActivityFourPerformance;
+	[SerializeField] private ViewActivityFourPerformance viewActivityFourPerformance;*/
 
-	[Header("Problem Display Content")]
-	[SerializeField] private TextMeshProUGUI problemText;
+	/*[Header("Problem Display Content")]
+	[SerializeField] private TextMeshProUGUI problemText;*/
 
-	[Header("Modal Window")]
-	[SerializeField] private CalcSubmissionModalWindow submissionModalWindow;
+	/*[Header("Modal Window")]
+	[SerializeField] private CalcSubmissionModalWindow submissionModalWindow;*/
 
-	[Header("Given Values - Projectile Motion")]
+	/*[Header("Given Values - Projectile Motion")]
 	private int initialProjectileVelocityValue;
 	private int projectileHeightValue;
 	private int projectileAngleValue;
@@ -45,30 +60,65 @@ public class ActivityFourManager : MonoBehaviour
 
 	[Header("Metrics - Circular Motion")]
 	private bool isCentripetalAccelerationCalculationFinished;
-	private int numIncorrectCentripetalAccelerationSubmission;
+	private int numIncorrectCentripetalAccelerationSubmission;*/
 
 	private void Start()
 	{
-		ViewProjectileMotion.SubmitMaximumHeightAnswerEvent += CheckMaximumHeightAnswer;
-		ViewProjectileMotion.SubmitHorizontalRangeAnswerEvent += CheckHorizontalRangeAnswer;
-		ViewProjectileMotion.SubmitTimeOfFlightAnswerEvent += CheckTimeOfFlightAnswer;
-		ViewCircularMotion.SubmitCentripetalAccelerationAnswerEvent += CheckCentripetalAccelerationAnswer;
+		ConfigureLevelData(Difficulty.Easy);
 
-		ViewActivityFourPerformance.OpenViewEvent += OnOpenViewActivityFourerformance;
+		// Initialize correct given values
+		GenerateProjectileGivenData();
 
-		CalcSubmissionModalWindow.RetrySubmission += RestoreViewState;
-		CalcSubmissionModalWindow.InitiateNext += UpdateViewState;
+		// Determine number of tests
+		currentNumProjectileMotionTests = currentProjectileMotionLevel.numberOfTests;
 
-		currentProjectileMotionLevel = projectileMotionLevelOne; // modify this in the future, to add change of level
-		currentCircularMotionLevel = circularMotionLevelOne; // modify in future, to add change of level
-
-		InitializeProjectileMotionGiven(currentProjectileMotionLevel);
-		InitializeCircularMotionGiven(currentCircularMotionLevel);
-
-		viewProjectileMotion.SetupProjectileMotionProblemDisplay(initialProjectileVelocityValue, projectileHeightValue, projectileAngleValue);
+		// Setup views
+		projectileMotionView.UpdateTestCountTextDisplay(currentProjectileMotionLevel.numberOfTests - currentNumProjectileMotionTests, currentProjectileMotionLevel.numberOfTests);
+		projectileMotionView.SetupProjectileMotionView(givenProjectileMotionData);
 	}
 
-	#region Projectile Motion
+	private void ConfigureLevelData(Difficulty difficulty)
+	{
+		difficultyConfiguration = difficulty;
+
+		switch (difficulty)
+		{
+			case Difficulty.Easy:
+				currentProjectileMotionLevel = projectileMotionLevelOne;
+				currentCircularMotionLevel = circularMotionLevelOne;
+				break;
+			case Difficulty.Medium:
+				currentProjectileMotionLevel = projectileMotionLevelTwo;
+				currentCircularMotionLevel = circularMotionLevelTwo;
+				break;
+			case Difficulty.Hard:
+				currentProjectileMotionLevel = projectileMotionLevelThree;
+				currentCircularMotionLevel = circularMotionLevelThree;
+				break;
+		}
+	}
+
+	#region ProjectileMotion
+	private void GenerateProjectileGivenData()
+	{
+		ProjectileMotionCalculationData data = new ProjectileMotionCalculationData();
+		data.initialVelocity = Random.Range(currentProjectileMotionLevel.minimumVelocityValue, currentProjectileMotionLevel.maximumVelocityValue);
+		data.initialHeight = Random.Range(currentProjectileMotionLevel.minimumHeightValue, currentProjectileMotionLevel.maximumHeightValue); 
+		switch (currentProjectileMotionLevel.projectileAngleType)
+		{
+			case ProjectileAngleType.Standard90Angle:
+				int[] standard90AngleValues = new int[] { 30, 45, 60, 90 };
+				data.angleMeasure = standard90AngleValues[Random.Range(0, standard90AngleValues.Length)];
+				break;
+			case ProjectileAngleType.Full90Angle:
+				data.angleMeasure = Random.Range(1, 90);
+				break;
+		}
+		givenProjectileMotionData = data;
+	}
+	#endregion
+
+	/*#region Projectile Motion
 
 	private void InitializeProjectileMotionGiven(ProjectileMotionSubActivitySO projectileMotionSO)
 	{
@@ -217,5 +267,5 @@ public class ActivityFourManager : MonoBehaviour
 		}
 
 		RestoreViewState();
-	}
+	}*/
 }
