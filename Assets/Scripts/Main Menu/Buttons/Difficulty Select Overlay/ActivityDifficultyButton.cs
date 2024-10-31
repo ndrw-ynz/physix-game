@@ -26,7 +26,6 @@ public enum Activity
 
 public class ActivityDifficultyButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    public static event Action<Difficulty> DifficultyHover;
     public static event Action<Activity, Difficulty> DifficultyClick;
 
     [Header("Availability of Difficulty")]

@@ -2,15 +2,15 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ScreenNavigationButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class BackButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Screen Game Objects")]
     public GameObject screenToActivate;
     public GameObject screenToDeactivate;
 
-    [Header("Screen Navigation Button Properties")]
+    [Header("Back Button Properties")]
     [SerializeField] private Image buttonHoverOutline;
-    [SerializeField] private Button closeScreenButton;
+    [SerializeField] private Button backButton;
 
     // Boolean to check if button is being hovered or not
     private bool isHovered;
@@ -18,13 +18,13 @@ public class ScreenNavigationButton : MonoBehaviour, IPointerEnterHandler, IPoin
     private void OnEnable()
     {
         // Subscribe Button Click Listeners
-        closeScreenButton.onClick.AddListener(() => CloseScreen(screenToActivate, screenToDeactivate));
+        backButton.onClick.AddListener(() => CloseScreen(screenToActivate, screenToDeactivate));
     }
 
     private void OnDisable()
     {
         // Unsubscribe Button Click Listeners
-        closeScreenButton.onClick.RemoveAllListeners();
+        backButton.onClick.RemoveAllListeners();
 
         // Ensure hover color is removed and set back to normal on disable
         if (isHovered)
