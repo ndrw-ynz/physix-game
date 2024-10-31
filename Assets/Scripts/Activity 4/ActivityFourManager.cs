@@ -1,4 +1,7 @@
+using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ProjectileMotionCalculationData
 {
@@ -10,6 +13,8 @@ public class ProjectileMotionCalculationData
 public class ActivityFourManager : MonoBehaviour
 {
 	public static Difficulty difficultyConfiguration;
+
+	public event Action ProjectileMotionTerminalClearEvent;
 
 	[Header("Level Data - Projectile Motion")]
     [SerializeField] private ProjectileMotionSubActivitySO projectileMotionLevelOne;
@@ -25,6 +30,9 @@ public class ActivityFourManager : MonoBehaviour
 
 	[Header("Views")]
 	[SerializeField] private ProjectileMotionView projectileMotionView;
+
+	[Header("Submission Status Displays")]
+	[SerializeField] private ProjectileMotionSubmissionStatusDisplay projectileMotionSubmissionStatusDisplay;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumProjectileMotionTests;
@@ -112,6 +120,7 @@ public class ActivityFourManager : MonoBehaviour
 	{
 		// Projectile Motion Sub Activity Related Events
 		projectileMotionView.SubmitAnswerEvent += CheckProjectileMotionAnswer;
+		projectileMotionSubmissionStatusDisplay.ProceedEvent += UpdateProjectileMotionViewState;
 	}
 
 	#region ProjectileMotion
@@ -146,6 +155,41 @@ public class ActivityFourManager : MonoBehaviour
 		else
 		{
 			numIncorrectProjectileMotionSubmission++;
+		}
+
+		DisplayProjectileMotionSubmissionResults(results);
+	}
+
+	private void DisplayProjectileMotionSubmissionResults(ProjectileMotionSubmissionResults results)
+	{
+		if (results.isAllCorrect())
+		{
+			projectileMotionSubmissionStatusDisplay.SetSubmissionStatus(true, "The system has precisely calibrated the satellite's trajectory. Amazing work!");
+			//missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Re-calibrate the ship's navigation system in the Graphs terminal ({currentGraphsLevel.numberOfTests - currentNumGraphsTests}/{currentGraphsLevel.numberOfTests})");
+		}
+		else
+		{
+			projectileMotionSubmissionStatusDisplay.SetSubmissionStatus(false, "Doctor, it seems there's a misstep in your calculations. Let's take another look!");
+		}
+
+		projectileMotionSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResults(results);
+
+		projectileMotionSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateProjectileMotionViewState()
+	{
+		if (currentNumProjectileMotionTests > 0)
+		{
+			GenerateProjectileGivenData();
+			projectileMotionView.SetupProjectileMotionView(givenProjectileMotionData);
+		}
+		else
+		{
+			isProjectileMotionSubActivityFinished = true;
+			projectileMotionView.gameObject.SetActive(false);
+			// missionObjectiveDisplayUI.ClearMissionObjective(1);
+			ProjectileMotionTerminalClearEvent?.Invoke();
 		}
 	}
 	#endregion
