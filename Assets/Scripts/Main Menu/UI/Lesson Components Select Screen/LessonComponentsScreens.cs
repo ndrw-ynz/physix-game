@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LessonComponentsScreen : MonoBehaviour
+public class LessonComponentsScreens : MonoBehaviour
 {
     [Header("Lesson Components Screens")]
     [SerializeField] private GameObject lessonOneComponentsScreen;

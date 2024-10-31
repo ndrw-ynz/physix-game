@@ -59,8 +59,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3445468fbda9b5d4e937f6a88836c2f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeOverlayButton: {fileID: 7006934095958952732}
   buttonHoverOutline: {fileID: 4276122360976330402}
+  closeOverlayButton: {fileID: 7006934095958952732}
   lessonNumber: 0
 --- !u!1 &2125744217149998417
 GameObject:
@@ -72,6 +72,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8197233933387504957}
   - component: {fileID: 8647808849541204360}
+  - component: {fileID: 685806523119595525}
   m_Layer: 5
   m_Name: Difficulty Text Buttons
   m_TagString: Untagged
@@ -127,6 +128,22 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &685806523119595525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125744217149998417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1269b6cceb91b64ea40ec7a641d9496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficultyButtons:
+  - {fileID: 381326169707023723}
+  - {fileID: 8227803713747412294}
+  - {fileID: 3132875983230626279}
 --- !u!1 &2287584064280765265
 GameObject:
   m_ObjectHideFlags: 0

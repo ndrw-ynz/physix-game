@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,56 +6,48 @@ public class MainMenuManager : MonoBehaviour
     [Header("Main Menu Screens")]
     [SerializeField] private TitleScreen titleScreen;
     [SerializeField] private LessonSelectScreen lessonSelectScreen;
-    [SerializeField] private LessonComponentsScreen lessonComponentsScreen;
+    [SerializeField] private LessonComponentsScreens lessonComponentsScreens;
+    [SerializeField] private DifficultySelectOverlays difficultySelectOverlays;
     [SerializeField] private GameObject optionsScreen;
     [SerializeField] private GameObject creditsScreen;
 
-    [Header("Lesson Difficulty Select Overlays")]
-    [SerializeField] private GameObject lessonOneDifficultySelectOverlay;
-    [SerializeField] private GameObject lessonTwoDifficultySelectOverlay;
-    [SerializeField] private GameObject lessonThreeDifficultySelectOverlay;
-    [SerializeField] private GameObject lessonFourDifficultySelectOverlay;
-    [SerializeField] private GameObject lessonFiveDifficultySelectOverlay;
-    [SerializeField] private GameObject lessonSixDifficultySelectOverlay;
-    [SerializeField] private GameObject lessonSevenDifficultySelectOverlay;
-    [SerializeField] private GameObject lessonEightDifficultySelectOverlay;
-    [SerializeField] private GameObject lessonNineDifficultySelectOverlay;
-
-    // Lesson Difficulty Select Overlays Dictionary
-    private Dictionary<int, GameObject> lessonDifficultyKeyValuePairs;
-
-
+    // User values to be loaded from firestore database
     private string firstName;
     private string lastName;
     private string section;
     private int highestUnlockedLesson;
-
+    private int highestLessonUnlockedDifficulties;
     private void Start()
 	{
-        // Initialize Lesson Difficulty Select Screens Key Value Pairs
-        lessonDifficultyKeyValuePairs = new Dictionary<int, GameObject>()
-        {
-            {1, lessonOneDifficultySelectOverlay },
-            {2, lessonTwoDifficultySelectOverlay },
-            {3, lessonThreeDifficultySelectOverlay },
-            {4, lessonFourDifficultySelectOverlay },
-            {5, lessonFiveDifficultySelectOverlay},
-            {6, lessonSixDifficultySelectOverlay},
-            {7, lessonSevenDifficultySelectOverlay},
-            {8, lessonEightDifficultySelectOverlay},
-            {9, lessonNineDifficultySelectOverlay}
-        };
 
         // Setup mock user profile and set it up in the title screen
+        // Change first name, last name, and section into the loaded user value in the future
         firstName = "Superman";
         lastName = "Balatayo";
         section = "4";
         titleScreen.SetUserProfile(firstName, lastName, section);
 
-        highestUnlockedLesson = 3;
-        lessonSelectScreen.LockAllLessons();
-        lessonSelectScreen.LoadUnlockedLessons(highestUnlockedLesson);
+        // Setup current user's mock highest unlocked lesson and load all unlocked lessons
+        // 1 is the lowest unlocked lesson and 9 is the highest unlocked lesson
+        // Change into the loaded user highest unlocked lesson value in the future
+        highestUnlockedLesson = 1;
+        if (highestUnlockedLesson > 0)
+        {
+            lessonSelectScreen.LockAllLessons();
+            lessonSelectScreen.LoadUnlockedLessons(highestUnlockedLesson);
+        }
 
+        // Setup current user's mock highest lesson unlocked level and load all lesson's difficulties
+        // 1 is the lowest unlocked difficulty(Easy) and 3 is the highest unlocked difficulty(Hard)
+        // Change into the loaded user highest highest lesson unlocked difficulties value in the future
+        highestLessonUnlockedDifficulties = 1;
+        if (highestLessonUnlockedDifficulties > 0)
+        {
+            difficultySelectOverlays.LockAllDifficulty();
+            difficultySelectOverlays.LoadLessonDifficultyButtons(highestUnlockedLesson, highestLessonUnlockedDifficulties);
+        }
+
+        // Add event listeners
         LessonSelectButton.LessonSelectClick += OpenLessonComponentsScreen;
         TopicDiscussionButton.TopicDiscussionClick += OpenTopicDiscussionScene;
         ActivityButton.ActivityClick += OpenDifficultySelectOverlay;
@@ -67,6 +57,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnDisable()
     {
+        // Remove event listeners
         LessonSelectButton.LessonSelectClick -= OpenLessonComponentsScreen;
         TopicDiscussionButton.TopicDiscussionClick -= OpenTopicDiscussionScene;
         ActivityButton.ActivityClick -= OpenDifficultySelectOverlay;
@@ -76,22 +67,26 @@ public class MainMenuManager : MonoBehaviour
 
     private void OpenLessonComponentsScreen(int keyValue)
     {
+        // Close lesson select screen and open specified lesson components screen
         lessonSelectScreen.gameObject.SetActive(false);
-        lessonComponentsScreen.LoadLessonComponentsScreen(keyValue);
+        lessonComponentsScreens.LoadLessonComponentsScreen(keyValue);
     }
 
     private void OpenTopicDiscussionScene(int topicDiscussionNumber)
     {
+        // Load specified topic discussion
         SceneManager.LoadScene(topicDiscussionNumber);
     }
 
     private void OpenDifficultySelectOverlay(int keyValue)
     {
-        lessonDifficultyKeyValuePairs[keyValue].SetActive(true);
+        // Load specified lesson's difficulty select overlay
+        difficultySelectOverlays.LoadActivityDifficultyOverlay(keyValue);
     }
 
     private void OpenActivityWithDifficultyType(Activity activity, Difficulty difficulty)
     {
+        // Set proper difficulty of the activity manager and load scene of the specified activity
         switch (activity)
         {
             case Activity.ActivityOne:
@@ -145,13 +140,7 @@ public class MainMenuManager : MonoBehaviour
 
     private void CloseDifficultySelectOverlay(int lessonNumber)
     {
-        if (lessonDifficultyKeyValuePairs[lessonNumber].gameObject.activeSelf)
-        {
-            lessonDifficultyKeyValuePairs[lessonNumber].gameObject.SetActive(false);
-        }
-        else
-        {
-            Debug.Log(lessonDifficultyKeyValuePairs[lessonNumber].gameObject + "is already not active. Maybe there's something wrong with the indexing?");
-        }
+        // Close current difficulty select overlay
+        difficultySelectOverlays.CloseDifficultySelectOverlay(lessonNumber);
     }
 }
