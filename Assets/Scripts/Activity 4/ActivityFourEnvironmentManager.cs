@@ -32,7 +32,7 @@ public class ActivityFourEnvironmentManager : ActivityEnvironmentManager
 	private void SetProjectileTerminalEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
-		// activityFourManager.SetMissionObjectiveDisplay(!isActive);
+		activityFourManager.SetMissionObjectiveDisplay(!isActive);
 		projectileTerminalEnvCamera.gameObject.SetActive(isActive);
 	}
 
@@ -48,7 +48,7 @@ public class ActivityFourEnvironmentManager : ActivityEnvironmentManager
 	private void SetCircularMotionTerminalEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
-		// activityFourManager.SetMissionObjectiveDisplay(!isActive);
+		activityFourManager.SetMissionObjectiveDisplay(!isActive);
 		circularMotionTerminalEnvCamera.gameObject.SetActive(isActive);
 	}
 	#endregion

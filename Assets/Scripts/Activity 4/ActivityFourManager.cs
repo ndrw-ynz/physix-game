@@ -1,5 +1,4 @@
 using System;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -121,6 +120,10 @@ public class ActivityFourManager : ActivityManager
 		// Circular motion view
 		circularMotionView.UpdateTestCountTextDisplay(currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests, currentCircularMotionLevel.numberOfTests);
 		circularMotionView.SetupCircularMotionView(givenCircularMotionData);
+
+		// Update mission objective display
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Calculate the Projectile Motion of the Satellite ({currentProjectileMotionLevel.numberOfTests - currentNumProjectileMotionTests}/{currentProjectileMotionLevel.numberOfTests})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the Centripetal Acceleration of the Satellite ({currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests}/{currentCircularMotionLevel.numberOfTests})");
 	}
 
 	private void Update()
@@ -208,7 +211,7 @@ public class ActivityFourManager : ActivityManager
 		if (results.isAllCorrect())
 		{
 			projectileMotionSubmissionStatusDisplay.SetSubmissionStatus(true, "The system has precisely calibrated the satellite's trajectory. Amazing work!");
-			//missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Re-calibrate the ship's navigation system in the Graphs terminal ({currentGraphsLevel.numberOfTests - currentNumGraphsTests}/{currentGraphsLevel.numberOfTests})");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Calculate the Projectile Motion of the Satellite ({currentProjectileMotionLevel.numberOfTests - currentNumProjectileMotionTests}/{currentProjectileMotionLevel.numberOfTests})");
 		}
 		else
 		{
@@ -231,7 +234,7 @@ public class ActivityFourManager : ActivityManager
 		{
 			isProjectileMotionSubActivityFinished = true;
 			projectileMotionView.gameObject.SetActive(false);
-			// missionObjectiveDisplayUI.ClearMissionObjective(1);
+			missionObjectiveDisplayUI.ClearMissionObjective(0);
 			ProjectileMotionTerminalClearEvent?.Invoke();
 		}
 	}
@@ -269,7 +272,7 @@ public class ActivityFourManager : ActivityManager
 		if (result)
 		{
 			circularMotionSubmissionStatusDisplay.SetSubmissionStatus(true, "The system has accurately calculated the satellite's trajectory data. Fantastic job!");
-			//missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Re-calibrate the ship's navigation system in the Graphs terminal ({currentGraphsLevel.numberOfTests - currentNumGraphsTests}/{currentGraphsLevel.numberOfTests})");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the Centripetal Acceleration of the Satellite ({currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests}/{currentCircularMotionLevel.numberOfTests})");
 		}
 		else
 		{
@@ -292,7 +295,7 @@ public class ActivityFourManager : ActivityManager
 		{
 			isCircularMotionSubActivityFinished = true;
 			circularMotionView.gameObject.SetActive(false);
-			// missionObjectiveDisplayUI.ClearMissionObjective(1);
+			missionObjectiveDisplayUI.ClearMissionObjective(1);
 			//ProjectileMotionTerminalClearEvent?.Invoke();
 		}
 	}
