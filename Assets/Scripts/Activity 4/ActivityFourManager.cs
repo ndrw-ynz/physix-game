@@ -39,6 +39,7 @@ public class ActivityFourManager : MonoBehaviour
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private ProjectileMotionSubmissionStatusDisplay projectileMotionSubmissionStatusDisplay;
+	[SerializeField] private CircularMotionSubmissionStatusDisplay circularMotionSubmissionStatusDisplay;
 
 	// Variables for keeping track of current number of tests
 	private int currentNumProjectileMotionTests;
@@ -54,6 +55,11 @@ public class ActivityFourManager : MonoBehaviour
 	private bool isProjectileMotionSubActivityFinished;
 	private int numIncorrectProjectileMotionSubmission;
 	private int numCorrectProjectileMotionSubmission;
+	// Circular Motion Sub Activity
+	private float circularMotionGameplayDuration;
+	private bool isCircularMotionSubActivityFinished;
+	private int numIncorrectCircularMotionSubmission;
+	private int numCorrectCircularMotionSubmission;
 
 	/*[SerializeField] private ViewProjectileMotion viewProjectileMotion;
 	[SerializeField] private ViewCircularMotion viewCircularMotion;
@@ -135,6 +141,10 @@ public class ActivityFourManager : MonoBehaviour
 		// Projectile Motion Sub Activity Related Events
 		projectileMotionView.SubmitAnswerEvent += CheckProjectileMotionAnswer;
 		projectileMotionSubmissionStatusDisplay.ProceedEvent += UpdateProjectileMotionViewState;
+
+		// Circular Motion Sub Activity Related Events
+		circularMotionView.SubmitAnswerEvent += CheckCentripetalAccelerationAnswer;
+		circularMotionSubmissionStatusDisplay.ProceedEvent += UpdateCircularMotionViewState;
 	}
 
 	#region Projectile Motion
@@ -215,6 +225,57 @@ public class ActivityFourManager : MonoBehaviour
 		data.radius = Random.Range(currentCircularMotionLevel.minimumRadiusValue, currentCircularMotionLevel.maximumRadiusValue);
 		data.period = Random.Range(currentCircularMotionLevel.minimumTimePeriodValue, currentCircularMotionLevel.maximumTimePeriodValue);
 		givenCircularMotionData = data;
+	}
+
+	private void CheckCentripetalAccelerationAnswer(float? answer)
+	{
+		bool isCentripetalAccelerationCorrect = ActivityFourUtilities.ValidateCentripetalAccelerationSubmission(answer, givenCircularMotionData);
+
+		if (isCentripetalAccelerationCorrect)
+		{
+			numCorrectCircularMotionSubmission++;
+			currentNumCircularMotionTests--;
+			circularMotionView.UpdateTestCountTextDisplay(currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests, currentCircularMotionLevel.numberOfTests);
+		}
+		else
+		{
+			numIncorrectCircularMotionSubmission++;
+		}
+
+		DisplayCircularMotionSubmissionResults(isCentripetalAccelerationCorrect);
+	}
+
+	private void DisplayCircularMotionSubmissionResults(bool result)
+	{
+		if (result)
+		{
+			circularMotionSubmissionStatusDisplay.SetSubmissionStatus(true, "The system has accurately calculated the satellite's trajectory data. Fantastic job!");
+			//missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Re-calibrate the ship's navigation system in the Graphs terminal ({currentGraphsLevel.numberOfTests - currentNumGraphsTests}/{currentGraphsLevel.numberOfTests})");
+		}
+		else
+		{
+			circularMotionSubmissionStatusDisplay.SetSubmissionStatus(false, "Doctor, it seems there's a misstep in your calculations. Let's take another look!");
+		}
+
+		circularMotionSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
+
+		circularMotionSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateCircularMotionViewState()
+	{
+		if (currentNumCircularMotionTests > 0)
+		{
+			GenerateCircularMotionGivenData();
+			circularMotionView.SetupCircularMotionView(givenCircularMotionData);
+		}
+		else
+		{
+			isCircularMotionSubActivityFinished = true;
+			circularMotionView.gameObject.SetActive(false);
+			// missionObjectiveDisplayUI.ClearMissionObjective(1);
+			//ProjectileMotionTerminalClearEvent?.Invoke();
+		}
 	}
 	#endregion
 
