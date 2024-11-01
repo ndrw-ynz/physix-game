@@ -317,9 +317,25 @@ public class ActivitySevenManager : ActivityManager
 		momentumImpulseForceView.UpdateCalibrationTestTextDisplay(0, currentMomentumImpulseForceLevel.numberOfTests);
 		elasticInelasticCollisionView.SetupElasicInelasticCollisionView(elasticInelasticCollisionData);
 		elasticInelasticCollisionView.UpdateCalibrationTestTextDisplay(0, currentElasticInelasticCollisionLevel.numberOfTests);
+
+		inputReader.SetGameplay();
 	}
 
-	private void Update()
+    private void OnDisable()
+    {
+        CenterOfMassView.SubmitAnswerEvent -= CheckCenterOfMassAnswers;
+        CenterOfMassSubmissionStatusDisplay.ProceedEvent -= GenerateNewCenterOfMassTest;
+        CenterOfMassSubmissionStatusDisplay.ProceedEvent -= CloseCenterOfMassView;
+        MomentumImpulseForceView.SubmitAnswerEvent -= CheckMomentumImpulseForceAnswers;
+        MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent -= GenerateNewMomentumImpulseForceTest;
+        MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent -= CloseMomentumImpulseForceView;
+        ElasticInelasticCollisionView.SubmitAnswerEvent -= CheckElasticInelasticCollisionAnswers;
+        ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent -= GenerateNewElasticInelasticCollisionTest;
+        ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent -= CloseElasticInelasticCollisionView;
+        DataModuleCube.RetrieveEvent -= DisplayPerformanceView;
+    }
+
+    private void Update()
 	{
 		gameplayTime += Time.deltaTime;
 	}

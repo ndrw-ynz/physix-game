@@ -43,8 +43,22 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
         ActivitySevenManager.RoomThreeClearEvent += ReleaseDataModuleCube;
     }
 
-	#region Room One
-	private void ReleasePowerCube()
+    private void OnDisable()
+    {
+        // Room One Environment Events
+        ActivitySevenManager.RoomOneClearEvent -= ReleasePowerCube;
+        PowerSourceCube.RetrieveEvent -= () => canPlayerPlaceCube = true;
+        PowerSourceCubeContainer.InteractEvent -= UpdateRoomOneGateState;
+
+        // Room Two Environment Events
+        ActivitySevenManager.RoomTwoClearEvent -= UpdateRoomTwoGateState;
+
+        // Room Three Environment Events
+        ActivitySevenManager.RoomThreeClearEvent -= ReleaseDataModuleCube;
+    }
+
+    #region Room One
+    private void ReleasePowerCube()
     {
         powerSourceCubeOne.SetInteractable(true);
         powerContainer.SetInteractable(true);
