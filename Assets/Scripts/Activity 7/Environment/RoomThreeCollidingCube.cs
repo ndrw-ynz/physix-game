@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RoomThreeCollidingCube : MonoBehaviour
 {
-	public static event Action ResetPosition;
+	public event Action ResetPosition;
 
 	public float velocityBeforeCollision = 1f;
 	public float velocityAfterCollision = 1f;
