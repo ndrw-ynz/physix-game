@@ -75,7 +75,7 @@ public class ActivityOneManager : ActivityManager
 	{
 		base.Start();
 
-		ConfigureLevelData(Difficulty.Easy);
+		ConfigureLevelData(difficultyConfiguration);
 
         SubscribeViewAndDisplayEvents();
 
