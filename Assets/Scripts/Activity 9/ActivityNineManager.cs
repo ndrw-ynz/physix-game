@@ -94,9 +94,18 @@ public class ActivityNineManager : ActivityManager
 
 		gravityView.SetupGravityView(gravityGivenData);
 		gravityView.UpdateCalibrationTestTextDisplay(0, currentGravityLevel.numberOfTests);
+
+		inputReader.SetGameplay();
 	}
 
-	private void Update()
+    private void OnDisable()
+    {
+        GravityView.SubmitAnswerEvent -= CheckGravityAnswers;
+        GravitySubmissionStatusDisplay.ProceedEvent -= GenerateNewGravityTest;
+        GravitySubmissionStatusDisplay.ProceedEvent -= CloseGravityView;
+    }
+
+    private void Update()
 	{
 		gameplayTime += Time.deltaTime;
 	}
