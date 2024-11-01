@@ -196,7 +196,7 @@ public class ActivityEightManager : ActivityManager
     {
 		base.Start();
 		// Set level data based from difficulty configuration.
-		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		ConfigureLevelData(difficultyConfiguration); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
 		// Subscribing to view events
 		MomentOfInertiaView.SubmitAnswerEvent += CheckMomentOfInertiaAnswers;
