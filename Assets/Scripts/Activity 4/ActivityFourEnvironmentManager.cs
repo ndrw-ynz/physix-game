@@ -40,6 +40,7 @@ public class ActivityFourEnvironmentManager : ActivityEnvironmentManager
 	{
 		SetProjectileTerminalEnvironmentState(false);
 		projectileMotionTerminal.SetInteractable(false);
+		circularMotionTerminal.SetInteractable(true);
 	}
 	#endregion
 
