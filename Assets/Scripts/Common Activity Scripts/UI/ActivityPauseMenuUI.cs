@@ -32,7 +32,14 @@ public class ActivityPauseMenuUI : MonoBehaviour
 		InitializeInteractableButtons();
 	}
 
-	private void InitializeInteractableButtons()
+    private void OnDestroy()
+    {
+        inputReader.ResumeGameplayEvent -= ResumeActivity;
+        inputReader.PauseMenuNavigationEvent -= HandleButtonNavigationChange;
+        inputReader.PauseMenuSelectChoiceEvent -= HandleMenuSelectChoice;
+    }
+
+    private void InitializeInteractableButtons()
 	{
 		interactableButtons = new List<Button>
 		{
