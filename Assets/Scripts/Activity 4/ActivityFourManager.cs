@@ -1,4 +1,5 @@
 using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -15,7 +16,7 @@ public class CircularMotionCalculationData
 	public float period;
 }
 
-public class ActivityFourManager : MonoBehaviour
+public class ActivityFourManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
 
@@ -36,6 +37,7 @@ public class ActivityFourManager : MonoBehaviour
 	[Header("Views")]
 	[SerializeField] private ProjectileMotionView projectileMotionView;
 	[SerializeField] private CircularMotionView circularMotionView;
+	[SerializeField] private ActivityFourPerformanceView performanceView;
 
 	[Header("Submission Status Displays")]
 	[SerializeField] private ProjectileMotionSubmissionStatusDisplay projectileMotionSubmissionStatusDisplay;
@@ -48,6 +50,10 @@ public class ActivityFourManager : MonoBehaviour
 	// Given projectile motion calculation data
 	private ProjectileMotionCalculationData givenProjectileMotionData;
 	private CircularMotionCalculationData givenCircularMotionData;
+
+	// Variables for tracking which view is currently active
+	private bool isProjectileMotionViewActive;
+	private bool isCircularMotionViewActive;
 
 	// Gameplay performance metrics variables
 	// Projectile Motion Sub Activity
@@ -92,8 +98,10 @@ public class ActivityFourManager : MonoBehaviour
 	private bool isCentripetalAccelerationCalculationFinished;
 	private int numIncorrectCentripetalAccelerationSubmission;*/
 
-	private void Start()
+	protected override void Start()
 	{
+		base.Start();
+
 		ConfigureLevelData(Difficulty.Easy);
 
 		SubscribeViewAndDisplayEvents();
@@ -113,6 +121,13 @@ public class ActivityFourManager : MonoBehaviour
 		// Circular motion view
 		circularMotionView.UpdateTestCountTextDisplay(currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests, currentCircularMotionLevel.numberOfTests);
 		circularMotionView.SetupCircularMotionView(givenCircularMotionData);
+	}
+
+	private void Update()
+	{
+		if (isProjectileMotionViewActive && !isProjectileMotionSubActivityFinished) projectileMotionGameplayDuration += Time.deltaTime;
+		if (isCircularMotionViewActive && !isCircularMotionSubActivityFinished) circularMotionGameplayDuration += Time.deltaTime;
+		if (isProjectileMotionSubActivityFinished && isCircularMotionSubActivityFinished) DisplayPerformanceView();
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -139,10 +154,14 @@ public class ActivityFourManager : MonoBehaviour
 	private void SubscribeViewAndDisplayEvents()
 	{
 		// Projectile Motion Sub Activity Related Events
+		projectileMotionView.OpenViewEvent += () => isProjectileMotionViewActive = true;
+		projectileMotionView.QuitViewEvent += () => isProjectileMotionViewActive = false;
 		projectileMotionView.SubmitAnswerEvent += CheckProjectileMotionAnswer;
 		projectileMotionSubmissionStatusDisplay.ProceedEvent += UpdateProjectileMotionViewState;
 
 		// Circular Motion Sub Activity Related Events
+		circularMotionView.OpenViewEvent += () => isCircularMotionViewActive = true;
+		circularMotionView.QuitViewEvent += () => isCircularMotionViewActive = false;
 		circularMotionView.SubmitAnswerEvent += CheckCentripetalAccelerationAnswer;
 		circularMotionSubmissionStatusDisplay.ProceedEvent += UpdateCircularMotionViewState;
 	}
@@ -276,6 +295,46 @@ public class ActivityFourManager : MonoBehaviour
 			// missionObjectiveDisplayUI.ClearMissionObjective(1);
 			//ProjectileMotionTerminalClearEvent?.Invoke();
 		}
+	}
+
+	public override void DisplayPerformanceView()
+	{
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
+
+		performanceView.SetTotalTimeDisplay(projectileMotionGameplayDuration + circularMotionGameplayDuration);
+
+		performanceView.SetProjectileMotionMetricsDisplay(
+			isAccomplished: isProjectileMotionSubActivityFinished,
+			numIncorrectSubmission: numIncorrectProjectileMotionSubmission,
+			duration: projectileMotionGameplayDuration
+			);
+
+		performanceView.SetCircularMotionMetricsDisplay(
+			isAccomplished: isCircularMotionSubActivityFinished,
+			numIncorrectSubmission: numIncorrectCircularMotionSubmission,
+			duration: circularMotionGameplayDuration
+			);
+
+		// Update its activity feedback display (two args)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "projectile motion",
+				isSubActivityFinished: isProjectileMotionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectProjectileMotionSubmission,
+				numCorrectAnswers: numCorrectProjectileMotionSubmission,
+				badScoreThreshold: 4,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "circular motion",
+				isSubActivityFinished: isCircularMotionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectCircularMotionSubmission,
+				numCorrectAnswers: numCorrectCircularMotionSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				)
+			);
 	}
 	#endregion
 
