@@ -89,6 +89,8 @@ public class ActivityTwoManager : ActivityManager
 		vectorAdditionView.SetupVectorAdditionView(givenVectorDataList);
 
 		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Determine the Cartesian components of the ship's direction vectors along its new course ({currentVectorsLevel.numberOfVectors - currentNumCartesianComponentsTests}/{currentVectorsLevel.numberOfVectors})");
+
+		inputReader.SetGameplay();
 	}
 	private void Update()
 	{
