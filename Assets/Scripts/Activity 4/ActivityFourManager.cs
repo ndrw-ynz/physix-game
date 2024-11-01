@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -299,6 +300,7 @@ public class ActivityFourManager : ActivityManager
 			//ProjectileMotionTerminalClearEvent?.Invoke();
 		}
 	}
+	#endregion
 
 	public override void DisplayPerformanceView()
 	{
@@ -339,7 +341,26 @@ public class ActivityFourManager : ActivityManager
 				)
 			);
 	}
-	#endregion
+
+	protected override void HandleGameplayPause()
+	{
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isProjectileMotionSubActivityFinished)
+		{
+			taskText.Add($"-  Interact with the ship’s Projectile Motion Terminal to analyze the satellite’s projectile motion in Nakalai’s orbit and mitigate measurement errors to prevent a crash during launch.");
+		}
+		if (!isCircularMotionSubActivityFinished)
+		{
+			taskText.Add("-  Interact with the ship’s Circular Motion Terminal and determine the satellite’s centripetal acceleration to monitor its revolution around Nakalais.");
+		}
+
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Use Orbital 1’s projectile motion terminal and circular motion terminal to launch the satellite into Nakalai’s orbit successfully, ensuring it maintains a stable trajectory.");
+
+		activityPauseMenuUI.UpdateContent("Lesson 4 - Activity 4", taskText, objectiveText);
+	}
 
 	/*#region Projectile Motion
 
