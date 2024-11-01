@@ -30,7 +30,7 @@ public class MainMenuManager : MonoBehaviour
         // Setup current user's mock highest unlocked lesson and load all unlocked lessons
         // 1 is the lowest unlocked lesson and 9 is the highest unlocked lesson
         // Change into the loaded user highest unlocked lesson value in the future
-        highestUnlockedLesson = 1; // [1-9] Lessons
+        highestUnlockedLesson = 9; // [1-9] Lessons
         if (highestUnlockedLesson > 0)
         {
             lessonSelectScreen.LockAllLessons();
