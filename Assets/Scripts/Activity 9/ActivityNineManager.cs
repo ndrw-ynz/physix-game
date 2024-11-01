@@ -81,7 +81,7 @@ public class ActivityNineManager : ActivityManager
 		base.Start();
 
 		// Set level data based from difficulty configuration.
-		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		ConfigureLevelData(difficultyConfiguration); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
 		// Subscribe to view events
 		GravityView.SubmitAnswerEvent += CheckGravityAnswers;
