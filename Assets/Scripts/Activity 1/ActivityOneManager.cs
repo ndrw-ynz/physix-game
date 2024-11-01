@@ -88,6 +88,8 @@ public class ActivityOneManager : ActivityManager
 
         // Setup views
         scientificNotationView.UpdateNumberOfContainersTextDisplay(0, currentNumSNTests);
+
+		inputReader.SetGameplay();
 	}
 
 	private void Update()
