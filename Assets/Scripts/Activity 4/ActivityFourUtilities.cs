@@ -61,7 +61,7 @@ public static class ActivityFourUtilities
 	{
 		if (centripetalAccelerationAnswer == null) return false;
 
-		ExpressionEvaluator.Evaluate($"(4*(pi^2)*{givenData.radius*1000})/({givenData.period}^2)", out float computedCentripetalAcceleration);
+		ExpressionEvaluator.Evaluate($"(4*(pi^2)*({givenData.radius}*1000))/({givenData.period}^2)", out float computedCentripetalAcceleration);
 		computedCentripetalAcceleration = (float)Math.Round(computedCentripetalAcceleration, 4);
 		return Mathf.Abs((float)centripetalAccelerationAnswer - computedCentripetalAcceleration) <= 0.01;
 	}
