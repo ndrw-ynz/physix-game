@@ -17,6 +17,10 @@ public class ActivityFourEnvironmentManager : ActivityEnvironmentManager
 	[SerializeField] private InteractableViewOpenerObject projectileMotionTerminal;
 	[SerializeField] private InteractableViewOpenerObject circularMotionTerminal;
 
+	[Header("Environment Area Game Objects")]
+	[SerializeField] private GameObject satelliteLaunchArea;
+	[SerializeField] private GameObject outerSpaceArea;
+
 	private void Start()
 	{
 		projectileMotionView.OpenViewEvent += () => SetProjectileTerminalEnvironmentState(true);
@@ -34,6 +38,7 @@ public class ActivityFourEnvironmentManager : ActivityEnvironmentManager
 		SetPlayerActivityState(!isActive);
 		activityFourManager.SetMissionObjectiveDisplay(!isActive);
 		projectileTerminalEnvCamera.gameObject.SetActive(isActive);
+		satelliteLaunchArea.SetActive(isActive);
 	}
 
 	private void ClearProjectileTerminalEnvironmentState()
@@ -50,6 +55,7 @@ public class ActivityFourEnvironmentManager : ActivityEnvironmentManager
 		SetPlayerActivityState(!isActive);
 		activityFourManager.SetMissionObjectiveDisplay(!isActive);
 		circularMotionTerminalEnvCamera.gameObject.SetActive(isActive);
+		outerSpaceArea.SetActive(isActive);
 	}
 	#endregion
 }
