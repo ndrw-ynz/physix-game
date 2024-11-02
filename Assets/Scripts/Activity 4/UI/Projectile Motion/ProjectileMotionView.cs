@@ -78,12 +78,15 @@ public class ProjectileMotionView : MonoBehaviour
 
 	private void ResetViewDisplayState()
 	{
-		currentPageIndex = 0;
-		for (int i = 0; i < calculationPages.Count; i++)
+		calculationPages[0].gameObject.SetActive(true);
+		for (int i = 1; i < calculationPages.Count; i++)
 		{
-			calculationPages[i].SetActive(false);
+			calculationPages[i].gameObject.SetActive(false);
 		}
-		calculationPages[0].SetActive(true);
+		currentPageIndex = 0;
+
+		leftPageButton.gameObject.SetActive(false);
+		rightPageButton.gameObject.SetActive(true);
 	}
 
 	public void OnLeftPageButtonClick()
