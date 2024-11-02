@@ -1,9 +1,28 @@
-using TMPro;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class ActivityFourManager : MonoBehaviour
+public class ProjectileMotionCalculationData
 {
-    [Header("Level Data - Projectile Motion")]
+	public float initialVelocity;
+	public float initialHeight;
+	public float angleMeasure;
+}
+
+public class CircularMotionCalculationData
+{
+	public float radius;
+	public float period;
+}
+
+public class ActivityFourManager : ActivityManager
+{
+	public static Difficulty difficultyConfiguration;
+
+	public event Action ProjectileMotionTerminalClearEvent;
+
+	[Header("Level Data - Projectile Motion")]
     [SerializeField] private ProjectileMotionSubActivitySO projectileMotionLevelOne;
 	[SerializeField] private ProjectileMotionSubActivitySO projectileMotionLevelTwo;
 	[SerializeField] private ProjectileMotionSubActivitySO projectileMotionLevelThree;
@@ -16,206 +35,299 @@ public class ActivityFourManager : MonoBehaviour
 	private CircularMotionSubActivitySO currentCircularMotionLevel;
 
 	[Header("Views")]
-	[SerializeField] private ViewProjectileMotion viewProjectileMotion;
-	[SerializeField] private ViewCircularMotion viewCircularMotion;
-	[SerializeField] private ViewActivityFourPerformance viewActivityFourPerformance;
+	[SerializeField] private ProjectileMotionView projectileMotionView;
+	[SerializeField] private CircularMotionView circularMotionView;
+	[SerializeField] private ActivityFourPerformanceView performanceView;
 
-	[Header("Problem Display Content")]
-	[SerializeField] private TextMeshProUGUI problemText;
+	[Header("Submission Status Displays")]
+	[SerializeField] private ProjectileMotionSubmissionStatusDisplay projectileMotionSubmissionStatusDisplay;
+	[SerializeField] private CircularMotionSubmissionStatusDisplay circularMotionSubmissionStatusDisplay;
 
-	[Header("Modal Window")]
-	[SerializeField] private CalcSubmissionModalWindow submissionModalWindow;
+	// Variables for keeping track of current number of tests
+	private int currentNumProjectileMotionTests;
+	private int currentNumCircularMotionTests;
 
-	[Header("Given Values - Projectile Motion")]
-	private int initialProjectileVelocityValue;
-	private int projectileHeightValue;
-	private int projectileAngleValue;
+	// Given projectile motion calculation data
+	private ProjectileMotionCalculationData givenProjectileMotionData;
+	private CircularMotionCalculationData givenCircularMotionData;
 
-	[Header("Given Values - Circular Motion")]
-	private int satelliteRadiusValue;
-	private int satelliteTimePeriodValue;
+	// Variables for tracking which view is currently active
+	private bool isProjectileMotionViewActive;
+	private bool isCircularMotionViewActive;
 
-	[Header("Metrics - Projectile Motion")]
-	private bool isMaximumHeightCalculationFinished;
-	private bool isHorizontalRangeCalculationFinished;
-	private bool isTimeOfFlightCalculationFinished;
-	private int numIncorrectMaximumHeightSubmission;
-	private int numIncorrectHorizontalRangeSubmission;
-	private int numIncorrectTimeOfFlightSubmission;
+	// Gameplay performance metrics variables
+	// Projectile Motion Sub Activity
+	private float projectileMotionGameplayDuration;
+	private bool isProjectileMotionSubActivityFinished;
+	private int numIncorrectProjectileMotionSubmission;
+	private int numCorrectProjectileMotionSubmission;
+	// Circular Motion Sub Activity
+	private float circularMotionGameplayDuration;
+	private bool isCircularMotionSubActivityFinished;
+	private int numIncorrectCircularMotionSubmission;
+	private int numCorrectCircularMotionSubmission;
 
-	[Header("Metrics - Circular Motion")]
-	private bool isCentripetalAccelerationCalculationFinished;
-	private int numIncorrectCentripetalAccelerationSubmission;
-
-	private void Start()
+	protected override void Start()
 	{
-		ViewProjectileMotion.SubmitMaximumHeightAnswerEvent += CheckMaximumHeightAnswer;
-		ViewProjectileMotion.SubmitHorizontalRangeAnswerEvent += CheckHorizontalRangeAnswer;
-		ViewProjectileMotion.SubmitTimeOfFlightAnswerEvent += CheckTimeOfFlightAnswer;
-		ViewCircularMotion.SubmitCentripetalAccelerationAnswerEvent += CheckCentripetalAccelerationAnswer;
+		base.Start();
 
-		ViewActivityFourPerformance.OpenViewEvent += OnOpenViewActivityFourerformance;
+		ConfigureLevelData(Difficulty.Easy);
 
-		CalcSubmissionModalWindow.RetrySubmission += RestoreViewState;
-		CalcSubmissionModalWindow.InitiateNext += UpdateViewState;
+		SubscribeViewAndDisplayEvents();
 
-		currentProjectileMotionLevel = projectileMotionLevelOne; // modify this in the future, to add change of level
-		currentCircularMotionLevel = circularMotionLevelOne; // modify in future, to add change of level
+		// Initialize correct given values
+		GenerateProjectileGivenData();
+		GenerateCircularMotionGivenData();
 
-		InitializeProjectileMotionGiven(currentProjectileMotionLevel);
-		InitializeCircularMotionGiven(currentCircularMotionLevel);
+		// Determine number of tests
+		currentNumProjectileMotionTests = currentProjectileMotionLevel.numberOfTests;
+		currentNumCircularMotionTests = currentCircularMotionLevel.numberOfTests;
 
-		viewProjectileMotion.SetupProjectileMotionProblemDisplay(initialProjectileVelocityValue, projectileHeightValue, projectileAngleValue);
+		// Setup views
+		// Projectile motion view
+		projectileMotionView.UpdateTestCountTextDisplay(currentProjectileMotionLevel.numberOfTests - currentNumProjectileMotionTests, currentProjectileMotionLevel.numberOfTests);
+		projectileMotionView.SetupProjectileMotionView(givenProjectileMotionData);
+		// Circular motion view
+		circularMotionView.UpdateTestCountTextDisplay(currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests, currentCircularMotionLevel.numberOfTests);
+		circularMotionView.SetupCircularMotionView(givenCircularMotionData);
+
+		// Update mission objective display
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Calculate the Projectile Motion of the Satellite in the Projectile Motion Terminal ({currentProjectileMotionLevel.numberOfTests - currentNumProjectileMotionTests}/{currentProjectileMotionLevel.numberOfTests})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the Centripetal Acceleration of the Satellite in the Circular Motion Terminal ({currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests}/{currentCircularMotionLevel.numberOfTests})");
+	}
+
+	private void Update()
+	{
+		if (isProjectileMotionViewActive && !isProjectileMotionSubActivityFinished) projectileMotionGameplayDuration += Time.deltaTime;
+		if (isCircularMotionViewActive && !isCircularMotionSubActivityFinished) circularMotionGameplayDuration += Time.deltaTime;
+		if (isProjectileMotionSubActivityFinished && isCircularMotionSubActivityFinished) DisplayPerformanceView();
+	}
+
+	private void ConfigureLevelData(Difficulty difficulty)
+	{
+		difficultyConfiguration = difficulty;
+
+		switch (difficulty)
+		{
+			case Difficulty.Easy:
+				currentProjectileMotionLevel = projectileMotionLevelOne;
+				currentCircularMotionLevel = circularMotionLevelOne;
+				break;
+			case Difficulty.Medium:
+				currentProjectileMotionLevel = projectileMotionLevelTwo;
+				currentCircularMotionLevel = circularMotionLevelTwo;
+				break;
+			case Difficulty.Hard:
+				currentProjectileMotionLevel = projectileMotionLevelThree;
+				currentCircularMotionLevel = circularMotionLevelThree;
+				break;
+		}
+	}
+
+	private void SubscribeViewAndDisplayEvents()
+	{
+		// Projectile Motion Sub Activity Related Events
+		projectileMotionView.OpenViewEvent += () => isProjectileMotionViewActive = true;
+		projectileMotionView.QuitViewEvent += () => isProjectileMotionViewActive = false;
+		projectileMotionView.SubmitAnswerEvent += CheckProjectileMotionAnswer;
+		projectileMotionSubmissionStatusDisplay.ProceedEvent += UpdateProjectileMotionViewState;
+
+		// Circular Motion Sub Activity Related Events
+		circularMotionView.OpenViewEvent += () => isCircularMotionViewActive = true;
+		circularMotionView.QuitViewEvent += () => isCircularMotionViewActive = false;
+		circularMotionView.SubmitAnswerEvent += CheckCentripetalAccelerationAnswer;
+		circularMotionSubmissionStatusDisplay.ProceedEvent += UpdateCircularMotionViewState;
 	}
 
 	#region Projectile Motion
-
-	private void InitializeProjectileMotionGiven(ProjectileMotionSubActivitySO projectileMotionSO)
+	private void GenerateProjectileGivenData()
 	{
-		initialProjectileVelocityValue = Random.Range(projectileMotionSO.minimumVelocityValue, projectileMotionSO.maximumVelocityValue);
-		projectileHeightValue = Random.Range(projectileMotionSO.minimumHeightValue, projectileMotionSO.maximumHeightValue);
-
-		switch (projectileMotionSO.projectileAngleType)
+		ProjectileMotionCalculationData data = new ProjectileMotionCalculationData();
+		data.initialVelocity = Random.Range(currentProjectileMotionLevel.minimumVelocityValue, currentProjectileMotionLevel.maximumVelocityValue);
+		data.initialHeight = Random.Range(currentProjectileMotionLevel.minimumHeightValue, currentProjectileMotionLevel.maximumHeightValue); 
+		switch (currentProjectileMotionLevel.projectileAngleType)
 		{
 			case ProjectileAngleType.Standard90Angle:
-				int[] standard90AngleValues = new int[] { 30, 45, 60, 90};
-				projectileAngleValue = standard90AngleValues[Random.Range(0, standard90AngleValues.Length)];
+				int[] standard90AngleValues = new int[] { 30, 45, 60, 90 };
+				data.angleMeasure = standard90AngleValues[Random.Range(0, standard90AngleValues.Length)];
 				break;
 			case ProjectileAngleType.Full90Angle:
-				projectileAngleValue = Random.Range(1, 90);
+				data.angleMeasure = Random.Range(1, 90);
 				break;
 		}
+		givenProjectileMotionData = data;
 	}
 
-	private void CheckMaximumHeightAnswer(float maximumHeightAnswer)
+	private void CheckProjectileMotionAnswer(ProjectileMotionAnswerSubmission answer)
 	{
-		bool isMaximumHeightCorrect = ActivityFourUtilities.ValidateMaximumHeightSubmission(maximumHeightAnswer, initialProjectileVelocityValue, projectileAngleValue);
-		if (isMaximumHeightCorrect)
-		{
-			isMaximumHeightCalculationFinished = true;
+		ProjectileMotionSubmissionResults results = ActivityFourUtilities.ValidateProjectileMotionSubmission(answer, givenProjectileMotionData);
 
-			problemText.text = "What is the horizontal range of the projectile?";
+		if (results.isAllCorrect())
+		{
+			numCorrectProjectileMotionSubmission++;
+			currentNumProjectileMotionTests--;
+			projectileMotionView.UpdateTestCountTextDisplay(currentProjectileMotionLevel.numberOfTests - currentNumProjectileMotionTests, currentProjectileMotionLevel.numberOfTests);
 		}
 		else
 		{
-			numIncorrectMaximumHeightSubmission++;
+			numIncorrectProjectileMotionSubmission++;
 		}
 
-		viewProjectileMotion.SetOverlays(true);
-		viewProjectileMotion.ResetState();
-		submissionModalWindow.gameObject.SetActive(true);
-		submissionModalWindow.SetDisplayFromSubmissionResult(isMaximumHeightCalculationFinished, "Maximum Height");
+		DisplayProjectileMotionSubmissionResults(results);
 	}
 
-	private void CheckHorizontalRangeAnswer(float horizontalRangeAnswer)
+	private void DisplayProjectileMotionSubmissionResults(ProjectileMotionSubmissionResults results)
 	{
-		bool isHorizontalRangeCorrect = ActivityFourUtilities.ValidateHorizontalRangeSubmission(horizontalRangeAnswer, initialProjectileVelocityValue);
-		if (isHorizontalRangeCorrect)
+		if (results.isAllCorrect())
 		{
-			isHorizontalRangeCalculationFinished = true;
-
-			problemText.text = "What is the time of flight of the projectile?";
+			projectileMotionSubmissionStatusDisplay.SetSubmissionStatus(true, "The system has precisely calibrated the satellite's trajectory. Amazing work!");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Calculate the Projectile Motion of the Satellite in the Projectile Motion Terminal ({currentProjectileMotionLevel.numberOfTests - currentNumProjectileMotionTests}/{currentProjectileMotionLevel.numberOfTests})");
 		}
 		else
 		{
-			numIncorrectHorizontalRangeSubmission++;
+			projectileMotionSubmissionStatusDisplay.SetSubmissionStatus(false, "Doctor, it seems there's a misstep in your calculations. Let's take another look!");
 		}
 
-		viewProjectileMotion.SetOverlays(true);
-		viewProjectileMotion.ResetState();
-		submissionModalWindow.gameObject.SetActive(true);
-		submissionModalWindow.SetDisplayFromSubmissionResult(isHorizontalRangeCalculationFinished, "Horizontal Range");
+		projectileMotionSubmissionStatusDisplay.UpdateStatusBorderDisplaysFromResults(results);
+
+		projectileMotionSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
-	private void CheckTimeOfFlightAnswer(float timeOfFlightAnswer)
+	private void UpdateProjectileMotionViewState()
 	{
-		bool isTimeOfFlightCorrect = ActivityFourUtilities.ValidateTimeOfFlightSubmission(timeOfFlightAnswer, initialProjectileVelocityValue, projectileAngleValue);
-		if (isTimeOfFlightCorrect)
+		if (currentNumProjectileMotionTests > 0)
 		{
-			isTimeOfFlightCalculationFinished = true;
-
-			viewProjectileMotion.gameObject.SetActive(false);
-			viewCircularMotion.gameObject.SetActive(true);
-
-			viewCircularMotion.SetupCentripetalAccelerationProblemDisplay(satelliteRadiusValue, satelliteTimePeriodValue);
+			GenerateProjectileGivenData();
+			projectileMotionView.SetupProjectileMotionView(givenProjectileMotionData);
 		}
 		else
 		{
-			numIncorrectTimeOfFlightSubmission++;
+			isProjectileMotionSubActivityFinished = true;
+			projectileMotionView.gameObject.SetActive(false);
+			missionObjectiveDisplayUI.ClearMissionObjective(0);
+			ProjectileMotionTerminalClearEvent?.Invoke();
 		}
-
-		viewProjectileMotion.SetOverlays(true);
-		viewProjectileMotion.ResetState();
-		submissionModalWindow.gameObject.SetActive(true);
-		submissionModalWindow.SetDisplayFromSubmissionResult(isTimeOfFlightCalculationFinished, "Time of Flight");
 	}
-
 	#endregion
 
 	#region Circular Motion
-
-	private void InitializeCircularMotionGiven(CircularMotionSubActivitySO circularMotionSO)
+	private void GenerateCircularMotionGivenData()
 	{
-		satelliteRadiusValue = Random.Range(circularMotionSO.minimumRadiusValue, circularMotionSO.maximumRadiusValue);
-		satelliteTimePeriodValue = Random.Range(circularMotionSO.minimumTimePeriodValue, circularMotionSO.maximumTimePeriodValue);
+		CircularMotionCalculationData data = new CircularMotionCalculationData();
+		data.radius = Random.Range(currentCircularMotionLevel.minimumRadiusValue, currentCircularMotionLevel.maximumRadiusValue);
+		data.period = Random.Range(currentCircularMotionLevel.minimumTimePeriodValue, currentCircularMotionLevel.maximumTimePeriodValue);
+		givenCircularMotionData = data;
 	}
 
-	private void CheckCentripetalAccelerationAnswer(float centripetalAccelerationAnswer)
+	private void CheckCentripetalAccelerationAnswer(float? answer)
 	{
-		bool isCentripetalAccelerationCorrect = ActivityFourUtilities.ValidateCentripetalAccelerationSubmission(centripetalAccelerationAnswer, satelliteRadiusValue, satelliteTimePeriodValue);
+		bool isCentripetalAccelerationCorrect = ActivityFourUtilities.ValidateCentripetalAccelerationSubmission(answer, givenCircularMotionData);
+
 		if (isCentripetalAccelerationCorrect)
 		{
-			isCentripetalAccelerationCalculationFinished = true;
-		} else
+			numCorrectCircularMotionSubmission++;
+			currentNumCircularMotionTests--;
+			circularMotionView.UpdateTestCountTextDisplay(currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests, currentCircularMotionLevel.numberOfTests);
+		}
+		else
 		{
-			numIncorrectCentripetalAccelerationSubmission++;
+			numIncorrectCircularMotionSubmission++;
 		}
 
-		viewCircularMotion.SetOverlays(true);
-		viewCircularMotion.ResetState();
-		submissionModalWindow.gameObject.SetActive(true);
-		submissionModalWindow.SetDisplayFromSubmissionResult(isCentripetalAccelerationCalculationFinished, "Centripetal Acceleration");
+		DisplayCircularMotionSubmissionResults(isCentripetalAccelerationCorrect);
 	}
 
+	private void DisplayCircularMotionSubmissionResults(bool result)
+	{
+		if (result)
+		{
+			circularMotionSubmissionStatusDisplay.SetSubmissionStatus(true, "The system has accurately calculated the satellite's trajectory data. Fantastic job!");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the Centripetal Acceleration of the Satellite in the Circular Motion Terminal ({currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests}/{currentCircularMotionLevel.numberOfTests})");
+		}
+		else
+		{
+			circularMotionSubmissionStatusDisplay.SetSubmissionStatus(false, "Doctor, it seems there's a misstep in your calculations. Let's take another look!");
+		}
+
+		circularMotionSubmissionStatusDisplay.UpdateStatusBorderDisplayFromResult(result);
+
+		circularMotionSubmissionStatusDisplay.gameObject.SetActive(true);
+	}
+
+	private void UpdateCircularMotionViewState()
+	{
+		if (currentNumCircularMotionTests > 0)
+		{
+			GenerateCircularMotionGivenData();
+			circularMotionView.SetupCircularMotionView(givenCircularMotionData);
+		}
+		else
+		{
+			isCircularMotionSubActivityFinished = true;
+			circularMotionView.gameObject.SetActive(false);
+			missionObjectiveDisplayUI.ClearMissionObjective(1);
+			//ProjectileMotionTerminalClearEvent?.Invoke();
+		}
+	}
 	#endregion
 
-	private void OnOpenViewActivityFourerformance(ViewActivityFourPerformance view)
+	public override void DisplayPerformanceView()
 	{
-		view.MaximumHeightProblemStatusText.text += isMaximumHeightCalculationFinished ? "Accomplished" : "Not accomplished";
-		view.MaximumHeightProblemIncorrectNumText.text += numIncorrectMaximumHeightSubmission;
+		inputReader.SetUI();
+		performanceView.gameObject.SetActive(true);
 
-		view.HorizontalRangeProblemStatusText.text += isHorizontalRangeCalculationFinished ? "Accomplished" : "Not accomplished";
-		view.HorizontalRangeProblemIncorrectNumText.text += numIncorrectHorizontalRangeSubmission;
+		performanceView.SetTotalTimeDisplay(projectileMotionGameplayDuration + circularMotionGameplayDuration);
 
-		view.TimeOfFlightProblemStatusText.text += isTimeOfFlightCalculationFinished ? "Accomplished" : "Not accomplished";
-		view.TimeOfFlightProblemIncorrectNumText.text += numIncorrectTimeOfFlightSubmission;
+		performanceView.SetProjectileMotionMetricsDisplay(
+			isAccomplished: isProjectileMotionSubActivityFinished,
+			numIncorrectSubmission: numIncorrectProjectileMotionSubmission,
+			duration: projectileMotionGameplayDuration
+			);
 
-		view.CentripetalAccelerationProblemStatusText.text += isCentripetalAccelerationCalculationFinished ? "Accomplished" : "Not accomplished";
-		view.CentripetalAccelerationProblemIncorrectNumText.text += numIncorrectCentripetalAccelerationSubmission;
+		performanceView.SetCircularMotionMetricsDisplay(
+			isAccomplished: isCircularMotionSubActivityFinished,
+			numIncorrectSubmission: numIncorrectCircularMotionSubmission,
+			duration: circularMotionGameplayDuration
+			);
+
+		// Update its activity feedback display (two args)
+		performanceView.UpdateActivityFeedbackDisplay(
+			new SubActivityPerformanceMetric(
+				subActivityName: "projectile motion",
+				isSubActivityFinished: isProjectileMotionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectProjectileMotionSubmission,
+				numCorrectAnswers: numCorrectProjectileMotionSubmission,
+				badScoreThreshold: 4,
+				averageScoreThreshold: 2
+				),
+			new SubActivityPerformanceMetric(
+				subActivityName: "circular motion",
+				isSubActivityFinished: isCircularMotionSubActivityFinished,
+				numIncorrectAnswers: numIncorrectCircularMotionSubmission,
+				numCorrectAnswers: numCorrectCircularMotionSubmission,
+				badScoreThreshold: 3,
+				averageScoreThreshold: 2
+				)
+			);
 	}
 
-	private void RestoreViewState()
+	protected override void HandleGameplayPause()
 	{
-		submissionModalWindow.gameObject.SetActive(false);
-		viewProjectileMotion.SetOverlays(false);
-		viewCircularMotion.SetOverlays(false);
-	}
-
-	private void UpdateViewState()
-	{
-		if (isCentripetalAccelerationCalculationFinished)
+		base.HandleGameplayPause();
+		// Update content of activity pause menu UI
+		List<string> taskText = new List<string>();
+		if (!isProjectileMotionSubActivityFinished)
 		{
-			viewActivityFourPerformance.gameObject.SetActive(true);
-		} else if (isMaximumHeightCalculationFinished && isHorizontalRangeCalculationFinished && !isTimeOfFlightCalculationFinished)
+			taskText.Add($"-  Interact with the ship’s Projectile Motion Terminal to analyze the satellite’s projectile motion in Nakalai’s orbit and mitigate measurement errors to prevent a crash during launch.");
+		}
+		if (!isCircularMotionSubActivityFinished)
 		{
-			// All solved except time of flight
-			viewProjectileMotion.SetSubmissionButtonStates(false, false, true);
-		} else if (isMaximumHeightCalculationFinished && !isHorizontalRangeCalculationFinished)
-		{
-			// Maximum height solved but not horizontal range
-			viewProjectileMotion.SetSubmissionButtonStates(false, true, false);
+			taskText.Add("-  Interact with the ship’s Circular Motion Terminal and determine the satellite’s centripetal acceleration to monitor its revolution around Nakalais.");
 		}
 
-		RestoreViewState();
+		List<string> objectiveText = new List<string>();
+		objectiveText.Add("Use Orbital 1’s projectile motion terminal and circular motion terminal to launch the satellite into Nakalai’s orbit successfully, ensuring it maintains a stable trajectory.");
+
+		activityPauseMenuUI.UpdateContent("Lesson 4 - Activity 4", taskText, objectiveText);
 	}
 }
