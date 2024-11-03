@@ -71,7 +71,7 @@ public class ActivityFourManager : ActivityManager
 	{
 		base.Start();
 
-		ConfigureLevelData(Difficulty.Easy);
+		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeViewAndDisplayEvents();
 
