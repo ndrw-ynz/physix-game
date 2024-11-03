@@ -30,7 +30,7 @@ public class MainMenuManager : MonoBehaviour
         // Setup current user's mock highest unlocked lesson and load all unlocked lessons
         // 1 is the lowest unlocked lesson and 9 is the highest unlocked lesson
         // Change into the loaded user highest unlocked lesson value in the future
-        highestUnlockedLesson = 9; // [1-9] Lessons
+        highestUnlockedLesson = 4; // [1-9] Lessons
         if (highestUnlockedLesson > 0)
         {
             lessonSelectScreen.LockAllLessons();
@@ -49,16 +49,21 @@ public class MainMenuManager : MonoBehaviour
 
         // Add event listeners
         LessonSelectButton.LessonSelectClick += OpenLessonComponentsScreen;
+        LessonSelectButton.LessonLockedClick += OpenLessonLockedWarningOverlay;
+        LockedWarningOverlay.OkClickEvent += CloseLessonLockedWarningOverlay;
         TopicDiscussionButton.TopicDiscussionClick += OpenTopicDiscussionScene;
         ActivityButton.ActivityClick += OpenDifficultySelectOverlay;
         ActivityDifficultyButton.DifficultyClick += OpenActivityWithDifficultyType;
         OverlayCloseButton.OverlayCloseClicked += CloseDifficultySelectOverlay;
+
 	}
 
     private void OnDisable()
     {
         // Remove event listeners
         LessonSelectButton.LessonSelectClick -= OpenLessonComponentsScreen;
+        LessonSelectButton.LessonLockedClick -= OpenLessonLockedWarningOverlay;
+        LockedWarningOverlay.OkClickEvent -= CloseLessonLockedWarningOverlay;
         TopicDiscussionButton.TopicDiscussionClick -= OpenTopicDiscussionScene;
         ActivityButton.ActivityClick -= OpenDifficultySelectOverlay;
         ActivityDifficultyButton.DifficultyClick -= OpenActivityWithDifficultyType;
@@ -70,6 +75,16 @@ public class MainMenuManager : MonoBehaviour
         // Close lesson select screen and open specified lesson components screen
         lessonSelectScreen.gameObject.SetActive(false);
         lessonComponentsScreens.LoadLessonComponentsScreen(keyValue);
+    }
+
+    private void OpenLessonLockedWarningOverlay()
+    {
+        lessonSelectScreen.ActivateWarningOverlay();
+    }
+
+    private void CloseLessonLockedWarningOverlay()
+    {
+        lessonSelectScreen.DeactivateWarningOverlay();
     }
 
     private void OpenTopicDiscussionScene(int topicDiscussionNumber)

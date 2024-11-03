@@ -6,6 +6,9 @@ public class LessonSelectScreen : MonoBehaviour
     [Header("Lesson Select Buttons List")]
     [SerializeField] List<LessonSelectButton> lessonSelectButtons;
 
+    [Header("Lesson Locked Message Warning Overlay")]
+    [SerializeField] GameObject lessonLockedWarningOverlay;
+
     public void LoadUnlockedLessons(int highestUnlockedLesson)
     {
         // Load all unlocked lessons based until the highest unlocked lesson only
@@ -30,5 +33,15 @@ public class LessonSelectScreen : MonoBehaviour
         {
             lessonSelectButtons[i].isUnlocked = false;
         }
+    }
+
+    public void ActivateWarningOverlay()
+    {
+        lessonLockedWarningOverlay.SetActive(true);
+    }
+
+    public void DeactivateWarningOverlay()
+    {
+        lessonLockedWarningOverlay.SetActive(false);
     }
 }
