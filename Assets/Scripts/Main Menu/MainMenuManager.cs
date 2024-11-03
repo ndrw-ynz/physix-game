@@ -100,15 +100,13 @@ public class MainMenuManager : MonoBehaviour
                 break;
 
             case Activity.ActivityThree:
-                //ActivityThreeManager.difficultyConfiguration = difficulty;
-                //SceneManager.LoadScene("Activity 3");
-                Debug.Log("Activity Three Development is still in Progress");
+                ActivityThreeManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 3");
                 break;
 
             case Activity.ActivityFour:
-                //ActivityFourManager.difficultyConfiguration = difficulty;
-                //SceneManager.LoadScene("Activity 4");
-                Debug.Log("Activity Four Development is still in Progress");
+                ActivityFourManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 4");
                 break;
 
             case Activity.ActivityFive:
