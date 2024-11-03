@@ -91,7 +91,7 @@ public class ActivityThreeManager : ActivityManager
 	{
 		base.Start();
 
-		ConfigureLevelData(Difficulty.Easy);
+		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeViewAndDisplayEvents();
 
