@@ -118,6 +118,8 @@ public class ActivityThreeManager : ActivityManager
 		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Re-calibrate the ship's navigation system in the Graphs terminal ({currentGraphsLevel.numberOfTests - currentNumGraphsTests}/{currentGraphsLevel.numberOfTests})");
 		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the ship's acceleration on its journey on the 1D Kinematics terminal ({currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests}/{currentKinematics1DLevel.numberOfAccelerationProblems})");
 		missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Calculate the ship's total depth in arriving on planet Nakalais in the 1D Kinematics terminal ({currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests}/{currentKinematics1DLevel.numberOfTotalDepthProblems})");
+
+		inputReader.SetGameplay();
 	}
 
 	private void Update()
