@@ -55,6 +55,7 @@ public class ActivityThreePerformanceView : ActivityPerformanceView
 
 	public override void GoToSelectionScreen()
 	{
-		// IN THE FUTURE, ADD SCENE FOR SELECTION
-	}
+        MainMenuManager.selectionScreenToOpen = LessonSelectionScreen.LessonThreeSelectionScreen;
+        SceneManager.LoadScene("Main Menu");
+    }
 }
