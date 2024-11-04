@@ -196,7 +196,7 @@ public class ActivityEightManager : ActivityManager
     {
 		base.Start();
 		// Set level data based from difficulty configuration.
-		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		ConfigureLevelData(difficultyConfiguration); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
 		// Subscribing to view events
 		MomentOfInertiaView.SubmitAnswerEvent += CheckMomentOfInertiaAnswers;
@@ -227,9 +227,26 @@ public class ActivityEightManager : ActivityManager
 		torqueView.UpdateCalibrationTestTextDisplay(0, currentTorqueLevel.numberOfTests);
 		equilibriumView.SetupEquilibriumView(equilibriumGivenData);
 		equilibriumView.UpdateCalibrationTestTextDisplay(0, currentEquilibriumLevel.numberOfTests);
+
+		inputReader.SetGameplay();
 	}
 
-	private void Update()
+    private void OnDisable()
+    {
+        // Unsubscribing to view events
+        MomentOfInertiaView.SubmitAnswerEvent -= CheckMomentOfInertiaAnswers;
+        MomentOfInertiaSubmissionStatusDisplay.ProceedEvent -= GenerateNewMomentOfInertiaTest;
+        MomentOfInertiaSubmissionStatusDisplay.ProceedEvent -= CloseMomentOfInertiaView;
+        TorqueView.SubmitAnswerEvent -= CheckTorqueAnswers;
+        TorqueSubmissionStatusDisplay.ProceedEvent -= GenerateNewTorqueTest;
+        TorqueSubmissionStatusDisplay.ProceedEvent -= CloseTorqueView;
+        EquilibriumView.SubmitAnswerEvent -= CheckEquilibriumAnswers;
+        EquilibriumSubmissionStatusDisplay.ProceedEvent -= GenerateNewEquilibriumTest;
+        EquilibriumSubmissionStatusDisplay.ProceedEvent -= CloseEquilibriumView;
+        RebootButton.PressRebootButtonEvent -= DisplayPerformanceView;
+    }
+
+    private void Update()
 	{
 		gameplayTime += Time.deltaTime;
 	}

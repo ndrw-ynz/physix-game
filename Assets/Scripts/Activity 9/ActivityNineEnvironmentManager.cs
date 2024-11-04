@@ -24,7 +24,15 @@ public class ActivityNineEnvironmentManager : MonoBehaviour
 		GravityView.UpdateDisplayedOrbittingObjectEvent += ActivateRTCamera;
 	}
 
-	private void SwitchCameraToTargetCamera(Camera targetCamera)
+    private void OnDisable()
+    {
+        InteractableControlPanel.SwitchToTargetCameraEvent -= SwitchCameraToTargetCamera;
+
+        GravityView.QuitViewEvent -= () => SwitchCameraToPlayerCamera(planetCamera);
+        GravityView.UpdateDisplayedOrbittingObjectEvent -= ActivateRTCamera;
+    }
+
+    private void SwitchCameraToTargetCamera(Camera targetCamera)
 	{
 		if (player != null && targetCamera != null)
 		{

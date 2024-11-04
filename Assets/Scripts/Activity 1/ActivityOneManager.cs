@@ -75,7 +75,7 @@ public class ActivityOneManager : ActivityManager
 	{
 		base.Start();
 
-		ConfigureLevelData(Difficulty.Easy);
+		ConfigureLevelData(difficultyConfiguration);
 
         SubscribeViewAndDisplayEvents();
 
@@ -88,6 +88,8 @@ public class ActivityOneManager : ActivityManager
 
         // Setup views
         scientificNotationView.UpdateNumberOfContainersTextDisplay(0, currentNumSNTests);
+
+		inputReader.SetGameplay();
 	}
 
 	private void Update()

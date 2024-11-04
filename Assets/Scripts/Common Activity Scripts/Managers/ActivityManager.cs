@@ -13,7 +13,14 @@ public abstract class ActivityManager : MonoBehaviour
 		inputReader.ResumeGameplayEvent += HandleGameplayResume;
 	}
 
-	protected virtual void HandleGameplayPause()
+    private void OnDestroy()
+    {
+        inputReader.PauseGameplayEvent -= HandleGameplayPause;
+        inputReader.PauseGameplayUIEvent -= HandleGameplayPause;
+        inputReader.ResumeGameplayEvent -= HandleGameplayResume;
+    }
+
+    protected virtual void HandleGameplayPause()
 	{
 		activityPauseMenuUI.gameObject.SetActive(true);
 	}

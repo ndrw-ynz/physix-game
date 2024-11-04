@@ -33,6 +33,11 @@ public class PlayerMovement : MonoBehaviour
         _controller = GetComponent<CharacterController>();
     }
 
+    private void OnDestroy()
+    {
+        _input.JumpEvent -= HandleJump;
+    }
+
     void Update()
     {
         Look();

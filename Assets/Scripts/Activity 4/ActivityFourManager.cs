@@ -71,7 +71,7 @@ public class ActivityFourManager : ActivityManager
 	{
 		base.Start();
 
-		ConfigureLevelData(Difficulty.Easy);
+		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeViewAndDisplayEvents();
 
@@ -94,6 +94,8 @@ public class ActivityFourManager : ActivityManager
 		// Update mission objective display
 		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Calculate the Projectile Motion of the Satellite in the Projectile Motion Terminal ({currentProjectileMotionLevel.numberOfTests - currentNumProjectileMotionTests}/{currentProjectileMotionLevel.numberOfTests})");
 		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Calculate the Centripetal Acceleration of the Satellite in the Circular Motion Terminal ({currentCircularMotionLevel.numberOfTests - currentNumCircularMotionTests}/{currentCircularMotionLevel.numberOfTests})");
+
+		inputReader.SetGameplay();
 	}
 
 	private void Update()

@@ -57,6 +57,7 @@ public class ActivityEightPerformanceView : ActivityPerformanceView
 
 	public override void GoToSelectionScreen()
 	{
-		// IN THE FUTURE, ADD SCENE FOR SELECTION
-	}
+        MainMenuManager.selectionScreenToOpen = LessonSelectionScreen.LessonEightSelectionScreen;
+        SceneManager.LoadScene("Main Menu");
+    }
 }

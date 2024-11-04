@@ -70,7 +70,25 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 		EquilibriumView.QuitViewEvent += () => SwitchCameraToPlayerCamera(weighingScaleCamera);
 	}
 
-	private void UpdateGeneratorRoomState()
+    private void OnDisable()
+    {
+        ActivityEightManager.GeneratorRoomClearEvent -= UpdateGeneratorRoomState;
+        ActivityEightManager.WeighingScaleRoomClearEvent -= UpdateWeighingScaleRoomState;
+        ActivityEightManager.RebootRoomClearEvent -= UpdateRebootRoomState;
+
+        ActivityEightManager.GeneratorRoomClearEvent -= () => SwitchCameraToPlayerCamera(generatorCamera);
+        ActivityEightManager.WeighingScaleRoomClearEvent -= () => SwitchCameraToPlayerCamera(fulcrumCamera);
+        ActivityEightManager.RebootRoomClearEvent -= () => SwitchCameraToPlayerCamera(weighingScaleCamera);
+
+        InteractableControlPanel.SwitchToTargetCameraEvent -= SwitchCameraToTargetCamera;
+
+        MomentOfInertiaView.QuitViewEvent -= () => SwitchCameraToPlayerCamera(generatorCamera);
+        MomentOfInertiaView.UpdateObjectDisplayEvent -= UpdateDisplayedMomentOfInertiaObject;
+        TorqueView.QuitViewEvent -= () => SwitchCameraToPlayerCamera(fulcrumCamera);
+        EquilibriumView.QuitViewEvent -= () => SwitchCameraToPlayerCamera(weighingScaleCamera);
+    }
+
+    private void UpdateGeneratorRoomState()
 	{
 		generatorControlPanel.SetInteractable(false);
 		OpenGate(weighingScaleRoomGate, weighingScaleRoomGateBlocker);

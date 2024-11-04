@@ -129,7 +129,7 @@ public class ActivityFiveManager : ActivityManager
 	{
 		base.Start();
 
-		ConfigureLevelData(Difficulty.Easy);
+		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeForceMotionEvents();
 	

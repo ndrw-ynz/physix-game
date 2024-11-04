@@ -81,7 +81,7 @@ public class ActivityNineManager : ActivityManager
 		base.Start();
 
 		// Set level data based from difficulty configuration.
-		ConfigureLevelData(Difficulty.Easy); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		ConfigureLevelData(difficultyConfiguration); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
 		// Subscribe to view events
 		GravityView.SubmitAnswerEvent += CheckGravityAnswers;
@@ -94,9 +94,18 @@ public class ActivityNineManager : ActivityManager
 
 		gravityView.SetupGravityView(gravityGivenData);
 		gravityView.UpdateCalibrationTestTextDisplay(0, currentGravityLevel.numberOfTests);
+
+		inputReader.SetGameplay();
 	}
 
-	private void Update()
+    private void OnDisable()
+    {
+        GravityView.SubmitAnswerEvent -= CheckGravityAnswers;
+        GravitySubmissionStatusDisplay.ProceedEvent -= GenerateNewGravityTest;
+        GravitySubmissionStatusDisplay.ProceedEvent -= CloseGravityView;
+    }
+
+    private void Update()
 	{
 		gameplayTime += Time.deltaTime;
 	}

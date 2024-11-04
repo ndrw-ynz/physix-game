@@ -48,11 +48,16 @@ public class MomentOfInertiaView : MonoBehaviour
 		InertiaObjectTypeButton.UpdateInertiaObjectTypeEvent += UpdateFormulaDisplay;
 	}
 
-	/// <summary>
-	/// Setup state of <c>MomentOfInertiaView</c> in displaying information related to Moment of Inertia.
-	/// </summary>
-	/// <param name="data"></param>
-	public void SetupMomentOfInertiaView(MomentOfInertiaData data)
+    private void OnDisable()
+    {
+        InertiaObjectTypeButton.UpdateInertiaObjectTypeEvent -= UpdateFormulaDisplay;
+    }
+
+    /// <summary>
+    /// Setup state of <c>MomentOfInertiaView</c> in displaying information related to Moment of Inertia.
+    /// </summary>
+    /// <param name="data"></param>
+    public void SetupMomentOfInertiaView(MomentOfInertiaData data)
 	{
 		// Update object type text
 		objectTypeText.text = $"{data.inertiaObjectType}"; // CHANGE IN THE FUTURE TO MORE PROPER DISPLAY TEXT.

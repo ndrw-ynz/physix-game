@@ -195,14 +195,6 @@ public class ElasticInelasticCollisionAnswerSubmissionResults
 	}
 }
 
-// TEMPORARILY STORE HERE. TRANSFER ENUM TO FUTURE CLASS HANDLING DIFFICULTY SELECTION
-public enum Difficulty
-{
-	Easy,
-	Medium,
-	Hard
-}
-
 public class ActivitySevenManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
@@ -275,7 +267,7 @@ public class ActivitySevenManager : ActivityManager
     {
 		base.Start();
 		// Difficulty selection
-		difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		//difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
         
 		// Setting level data
 		switch (difficultyConfiguration)
@@ -325,9 +317,25 @@ public class ActivitySevenManager : ActivityManager
 		momentumImpulseForceView.UpdateCalibrationTestTextDisplay(0, currentMomentumImpulseForceLevel.numberOfTests);
 		elasticInelasticCollisionView.SetupElasicInelasticCollisionView(elasticInelasticCollisionData);
 		elasticInelasticCollisionView.UpdateCalibrationTestTextDisplay(0, currentElasticInelasticCollisionLevel.numberOfTests);
+
+		inputReader.SetGameplay();
 	}
 
-	private void Update()
+    private void OnDisable()
+    {
+        CenterOfMassView.SubmitAnswerEvent -= CheckCenterOfMassAnswers;
+        CenterOfMassSubmissionStatusDisplay.ProceedEvent -= GenerateNewCenterOfMassTest;
+        CenterOfMassSubmissionStatusDisplay.ProceedEvent -= CloseCenterOfMassView;
+        MomentumImpulseForceView.SubmitAnswerEvent -= CheckMomentumImpulseForceAnswers;
+        MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent -= GenerateNewMomentumImpulseForceTest;
+        MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent -= CloseMomentumImpulseForceView;
+        ElasticInelasticCollisionView.SubmitAnswerEvent -= CheckElasticInelasticCollisionAnswers;
+        ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent -= GenerateNewElasticInelasticCollisionTest;
+        ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent -= CloseElasticInelasticCollisionView;
+        DataModuleCube.RetrieveEvent -= DisplayPerformanceView;
+    }
+
+    private void Update()
 	{
 		gameplayTime += Time.deltaTime;
 	}

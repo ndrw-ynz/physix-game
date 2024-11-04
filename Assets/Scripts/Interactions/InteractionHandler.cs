@@ -28,7 +28,12 @@ public class InteractionHandler : MonoBehaviour
 		_input.InteractEvent += HandleInteract;
 	}
 
-	private void Update()
+    private void OnDestroy()
+    {
+        _input.InteractEvent -= HandleInteract;
+    }
+
+    private void Update()
 	{
 		// Update for displaying interactionUI
 		Vector2 screenCenter = new Vector2(Screen.width / 2f, Screen.height / 2f);
