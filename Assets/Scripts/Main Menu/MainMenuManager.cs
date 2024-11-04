@@ -11,6 +11,8 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private GameObject optionsScreen;
     [SerializeField] private GameObject creditsScreen;
 
+    public static LessonSelectionScreen selectionScreenToOpen;
+
     // User values to be loaded from firestore database
     private string firstName;
     private string lastName;
@@ -47,6 +49,13 @@ public class MainMenuManager : MonoBehaviour
             difficultySelectOverlays.LoadLessonDifficultyButtons(highestUnlockedLesson, highestLessonUnlockedDifficulties);
         }
 
+        // Open the proper lesson selection screen based on a specific lesson activity performance view "Lesson # Selection Screen"
+        if (selectionScreenToOpen != LessonSelectionScreen.NoSelectionScreen)
+        {
+            titleScreen.gameObject.SetActive(false);
+            lessonComponentsScreens.LoadLessonComponentsScreen(selectionScreenToOpen);
+        }
+
         // Add event listeners
         LessonSelectButton.LessonSelectClick += OpenLessonComponentsScreen;
         LessonSelectButton.LessonLockedClick += OpenLessonLockedWarningOverlay;
@@ -60,6 +69,9 @@ public class MainMenuManager : MonoBehaviour
 
     private void OnDisable()
     {
+        // Reset lesson selection screen to open to no selection screen
+        selectionScreenToOpen = LessonSelectionScreen.NoSelectionScreen;
+
         // Remove event listeners
         LessonSelectButton.LessonSelectClick -= OpenLessonComponentsScreen;
         LessonSelectButton.LessonLockedClick -= OpenLessonLockedWarningOverlay;
@@ -74,7 +86,7 @@ public class MainMenuManager : MonoBehaviour
     {
         // Close lesson select screen and open specified lesson components screen
         lessonSelectScreen.gameObject.SetActive(false);
-        lessonComponentsScreens.LoadLessonComponentsScreen(keyValue);
+        lessonComponentsScreens.OpenLessonComponentsScreen(keyValue);
     }
 
     private void OpenLessonLockedWarningOverlay()

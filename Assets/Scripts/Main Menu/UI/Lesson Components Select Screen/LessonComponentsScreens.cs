@@ -1,6 +1,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum LessonSelectionScreen
+{
+    NoSelectionScreen,
+    LessonOneSelectionScreen,
+    LessonTwoSelectionScreen,
+    LessonThreeSelectionScreen,
+    LessonFourSelectionScreen,
+    LessonFiveSelectionScreen,
+    LessonSixSelectionScreen,
+    LessonSevenSelectionScreen,
+    LessonEightSelectionScreen,
+    LessonNineSelectionScreen,
+}
+
 public class LessonComponentsScreens : MonoBehaviour
 {
     [Header("Lesson Components Screens")]
@@ -34,9 +48,53 @@ public class LessonComponentsScreens : MonoBehaviour
         };
     }
 
-    public void LoadLessonComponentsScreen(int keyValue)
+    public void LoadLessonComponentsScreen(LessonSelectionScreen lessonSelectionScreen)
+    {
+        switch (lessonSelectionScreen)
+        {
+            case LessonSelectionScreen.LessonOneSelectionScreen:
+                lessonOneComponentsScreen.gameObject.SetActive(true);
+                break;
+
+            case LessonSelectionScreen.LessonTwoSelectionScreen:
+                lessonTwoComponentsScreen.gameObject.SetActive(true);
+                break;
+
+            case LessonSelectionScreen.LessonThreeSelectionScreen:
+                lessonThreeComponentsScreen.gameObject.SetActive(true);
+                break;
+
+            case LessonSelectionScreen.LessonFourSelectionScreen:
+                lessonFourComponentsScreen.gameObject.SetActive(true);
+                break;
+
+            case LessonSelectionScreen.LessonFiveSelectionScreen:
+                lessonFiveComponentsScreen.gameObject.SetActive(true);
+                break;
+
+            case LessonSelectionScreen.LessonSixSelectionScreen:
+                lessonSixComponentsScreen.gameObject.SetActive(true);
+                break;
+
+            case LessonSelectionScreen.LessonSevenSelectionScreen:
+                lessonSevenComponentsScreen.gameObject.SetActive(true);
+                break;
+
+            case LessonSelectionScreen.LessonEightSelectionScreen:
+                lessonEightComponentsScreen.gameObject.SetActive(true);
+                break;
+
+            case LessonSelectionScreen.LessonNineSelectionScreen:
+                lessonNineComponentsScreen.gameObject.SetActive(true);
+                break;
+        }
+    }
+
+    public void OpenLessonComponentsScreen(int keyValue)
     {
         // Open the specified lesson components screen
         lessonComponentKeyValuePairs[keyValue].SetActive(true);
     }
+
+
 }
