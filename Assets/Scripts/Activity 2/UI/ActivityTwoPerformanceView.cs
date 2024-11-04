@@ -56,7 +56,6 @@ public class ActivityTwoPerformanceView : ActivityPerformanceView
 
 	public override void GoToSelectionScreen()
 	{
-        MainMenuManager.selectionScreenToOpen = LessonSelectionScreen.LessonTwoSelectionScreen;
-        SceneManager.LoadScene("Main Menu");
-    }
+		// IN THE FUTURE, ADD SCENE FOR SELECTION
+	}
 }
