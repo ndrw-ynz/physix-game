@@ -34,6 +34,7 @@ public class ActivityNinePerformanceView : ActivityPerformanceView
 
 	public override void GoToSelectionScreen()
 	{
-		// IN THE FUTURE, ADD SCENE FOR SELECTION
-	}
+        MainMenuManager.selectionScreenToOpen = LessonSelectionScreen.LessonNineSelectionScreen;
+        SceneManager.LoadScene("Main Menu");
+    }
 }
