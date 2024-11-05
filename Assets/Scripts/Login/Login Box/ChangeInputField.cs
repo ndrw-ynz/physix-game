@@ -4,12 +4,14 @@ using UnityEngine.EventSystems;
 
 public class ChangeInputField : MonoBehaviour
 {
+    // Event system for tab, tab+lshift operations
     EventSystem eventSystem;
 
     [Header("First Input Field")]
     [SerializeField] Selectable firstInput;
     void Start()
     {
+        // Assign event system and select the first input field to be typed on
         eventSystem = EventSystem.current;
         firstInput.Select();
     }
