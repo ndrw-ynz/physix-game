@@ -39,7 +39,7 @@ public class LoginBox : MonoBehaviour
         {
             errorMessage.text = "Input fields cannot be blank. Please enter email and password.";
         }
-        else if (email == mockEmail || password == mockPassword) 
+        else if (email == mockEmail && password == mockPassword) 
         { 
             isUserAuthenticated = true;
         }

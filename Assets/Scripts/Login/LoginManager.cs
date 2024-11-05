@@ -12,6 +12,7 @@ public class LoginManager : MonoBehaviour
         // Subscribe all listeners
         LoginButton.LoginButtonClick += ValidateUserLogin;
         LoginXButton.LoginXButtonClicked += OpenCloseMessagePrompt;
+        PromptChoice.ChoiceButtonClick += CheckUserChoice;
     }
 
     private void OnDisable()
@@ -19,6 +20,7 @@ public class LoginManager : MonoBehaviour
         // Unsubscribe all listeners on disable
         LoginButton.LoginButtonClick -= ValidateUserLogin;
         LoginXButton.LoginXButtonClicked -= OpenCloseMessagePrompt;
+        PromptChoice.ChoiceButtonClick -= CheckUserChoice;
     }
 
     private void ValidateUserLogin()
@@ -38,5 +40,27 @@ public class LoginManager : MonoBehaviour
     {
         // Open the "are you sure you want to close?" message prompt
         closeMessagePrompt.SetActive(true);
+    }
+
+    private void CheckUserChoice(ClosePromptChoice choice)
+    {
+        switch (choice)
+        {
+            case ClosePromptChoice.Yes:
+                // Quits application in build mode, not in editor
+                Application.Quit();
+
+#if UNITY_EDITOR
+                // Only for showcasing quit application function in unity editor
+                UnityEditor.EditorApplication.isPlaying = false;
+#endif
+                break;
+            case ClosePromptChoice.No:
+                if (closeMessagePrompt.activeSelf)
+                {
+                    closeMessagePrompt.SetActive(false);
+                }
+                break;
+        }
     }
 }
