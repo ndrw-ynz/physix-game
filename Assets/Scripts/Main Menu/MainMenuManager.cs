@@ -64,6 +64,7 @@ public class MainMenuManager : MonoBehaviour
         ActivityButton.ActivityClick += OpenDifficultySelectOverlay;
         ActivityDifficultyButton.DifficultyClick += OpenActivityWithDifficultyType;
         OverlayCloseButton.OverlayCloseClicked += CloseDifficultySelectOverlay;
+        LogoutButton.LogoutButtonClick += LogoutUser;
 
 	}
 
@@ -80,6 +81,7 @@ public class MainMenuManager : MonoBehaviour
         ActivityButton.ActivityClick -= OpenDifficultySelectOverlay;
         ActivityDifficultyButton.DifficultyClick -= OpenActivityWithDifficultyType;
         OverlayCloseButton.OverlayCloseClicked -= CloseDifficultySelectOverlay;
+        LogoutButton.LogoutButtonClick += LogoutUser;
     }
 
     private void OpenLessonComponentsScreen(int keyValue)
@@ -167,5 +169,11 @@ public class MainMenuManager : MonoBehaviour
     {
         // Close current difficulty select overlay
         difficultySelectOverlays.CloseDifficultySelectOverlay(lessonNumber);
+    }
+
+    private void LogoutUser()
+    {
+        // In the future, remove user data and UID session
+        SceneManager.LoadScene("Login");
     }
 }
