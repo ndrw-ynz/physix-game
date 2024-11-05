@@ -33,6 +33,14 @@ public class LoginButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Return))
+        {
+            LoginButtonClick?.Invoke();
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Set color to darker blue when hovered
