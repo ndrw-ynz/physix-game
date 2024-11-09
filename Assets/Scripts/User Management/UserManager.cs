@@ -66,9 +66,20 @@ public class UserManager : MonoBehaviour
 		if (request.result == UnityWebRequest.Result.Success)
 		{
 			CurrentUser = JsonConvert.DeserializeObject<FirebaseAuthResponse>(request.downloadHandler.text);
-			Debug.Log("Sign-in successful!");
-			yield return StartCoroutine(GetDocument(CurrentUser.localId, CurrentUser.idToken));
-			callback(true);
+			yield return StartCoroutine(GetDocument(CurrentUser.localId, CurrentUser.idToken, (success) =>
+			{
+				if (success)
+				{
+					Debug.Log("User signed in successfully.");
+					callback(true);
+				}
+				else
+				{
+					Debug.LogError("Sign-in failed: " + request.downloadHandler.text);
+					CurrentUser = null;
+					callback(false);
+				}
+			}));
 		}
 		else
 		{
@@ -78,7 +89,7 @@ public class UserManager : MonoBehaviour
 	}
 
 	// Method to retrieve user document from Firestore
-	public IEnumerator GetDocument(string documentId, string idToken)
+	public IEnumerator GetDocument(string documentId, string idToken, System.Action<bool> callback)
 	{
 		string url = FirestoreBaseURL + documentId;
 		UnityWebRequest request = UnityWebRequest.Get(url);
@@ -90,10 +101,12 @@ public class UserManager : MonoBehaviour
 		{
 			UserData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
 			Debug.Log("Document retrieved successfully!");
+			callback(true);
 		}
 		else
 		{
 			Debug.LogError("Failed to retrieve document: " + request.downloadHandler.text);
+			callback(false);
 		}
 	}
 
