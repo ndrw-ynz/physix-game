@@ -13,7 +13,9 @@ public class LoginManager : MonoBehaviour
         LoginButton.LoginButtonClick += ValidateUserLogin;
         LoginXButton.LoginXButtonClicked += OpenCloseMessagePrompt;
         PromptChoice.ChoiceButtonClick += CheckUserChoice;
-    }
+        loginBox.OnAuthenticationCompleted += LoadMainScene;
+
+	}
 
     private void OnDisable()
     {
@@ -27,16 +29,15 @@ public class LoginManager : MonoBehaviour
     {
         // Process the login based on the text fields' input and if user gets autheticated, load main menu.
         // In the future maybe there should be a function that records user data for loading in main menu such us UID, names, etc.
-        loginBox.ProcessLogin();
-        bool isUserAuthenticated = loginBox.GetUserAuthentication();
-
-        if (isUserAuthenticated)
-        {
-            SceneManager.LoadScene("Main Menu");
-        }
+        loginBox.ProcessLogin();       
     }
 
-    private void OpenCloseMessagePrompt()
+    private void LoadMainScene(bool isAuthenticated)
+    {
+        if (isAuthenticated) SceneManager.LoadScene("Main Menu");
+	}
+
+	private void OpenCloseMessagePrompt()
     {
         // Open the "are you sure you want to close?" message prompt
         closeMessagePrompt.SetActive(true);
