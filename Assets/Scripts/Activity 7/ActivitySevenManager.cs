@@ -199,6 +199,9 @@ public class ActivitySevenManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
 
+	public event Action CenterOfMassTerminalClearEvent;
+	public event Action MomentumImpulseTerminalClearEvent;
+	public event Action CollisionTerminalClearEvent;
 	public static event Action RoomOneClearEvent;
 	public static event Action RoomTwoClearEvent;
 	public static event Action RoomThreeClearEvent;
@@ -433,6 +436,7 @@ public class ActivitySevenManager : ActivityManager
 		{
 			inputReader.SetGameplay();
 			centerOfMassView.gameObject.SetActive(false);
+			CenterOfMassTerminalClearEvent?.Invoke();
 			RoomOneClearEvent?.Invoke();
 		}
 	}
@@ -623,6 +627,7 @@ public class ActivitySevenManager : ActivityManager
 		{
 			inputReader.SetGameplay();
 			momentumImpulseForceView.gameObject.SetActive(false);
+			MomentumImpulseTerminalClearEvent?.Invoke();
 			RoomTwoClearEvent?.Invoke();
 		}
 	}
@@ -758,6 +763,7 @@ public class ActivitySevenManager : ActivityManager
 		{
 			inputReader.SetGameplay();
 			elasticInelasticCollisionView.gameObject.SetActive(false);
+			CollisionTerminalClearEvent?.Invoke();
 			RoomThreeClearEvent?.Invoke();
 		}
 	}
