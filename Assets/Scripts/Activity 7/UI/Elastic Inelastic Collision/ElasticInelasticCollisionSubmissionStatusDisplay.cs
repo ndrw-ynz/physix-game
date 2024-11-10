@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ElasticInelasticCollisionSubmissionStatusDisplay : SubmissionStatusDisplay
 {
-	public static event Action ProceedEvent;
+	public event Action ProceedEvent;
 
 	[Header("Elastic Inelastic Collision Info Displays")]
 	[SerializeField] private GameObject leftPageInfo;

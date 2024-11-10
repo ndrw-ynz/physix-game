@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class MomentumImpulseForceSubmissionStatusDisplay : SubmissionStatusDisplay
 {
-	public static event Action ProceedEvent;
+	public event Action ProceedEvent;
 
 	[Header("Momentum-Impulse Force Status Border Displays")]
 	[SerializeField] private Image momentumStatusBorderDisplay;

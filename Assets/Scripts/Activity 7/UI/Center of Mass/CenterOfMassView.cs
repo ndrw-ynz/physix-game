@@ -53,7 +53,7 @@ public class CenterOfMassView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
-	public static event Action<CenterOfMassAnswerSubmission> SubmitAnswerEvent;
+	public event Action<CenterOfMassAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Graph Coordinate Plotter")]
 	[SerializeField] private GraphCoordinatePlotter graphCoordinatePlotter;

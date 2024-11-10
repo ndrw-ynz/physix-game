@@ -37,7 +37,7 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
-	public static event Action<ElasticInelasticCollisionAnswerSubmission> SubmitAnswerEvent;
+	public event Action<ElasticInelasticCollisionAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;

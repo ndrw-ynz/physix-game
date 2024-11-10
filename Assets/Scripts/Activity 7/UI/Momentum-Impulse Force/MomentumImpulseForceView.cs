@@ -44,7 +44,7 @@ public class MomentumImpulseForceView : MonoBehaviour
 {
 	public event Action OpenViewEvent;
 	public event Action QuitViewEvent;
-	public static event Action<MomentumImpulseForceAnswerSubmission> SubmitAnswerEvent;
+	public event Action<MomentumImpulseForceAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
