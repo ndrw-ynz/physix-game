@@ -22,12 +22,14 @@ public class TutorialOverlayDisplay : MonoBehaviour
         // Subscribe listeners
         TutorialNavigationButton.TutorialNavigationButtonClick += NavigatePage;
         TutorialSectorJumpButton.SectorJumpButtonClick += ChangeTutorialSector;
+        TutorialCloseButton.CloseButtonClicked += CloseTutorialOverlay;
     }
     private void OnDisable()
     {
         // Unsubscribe listeners
         TutorialNavigationButton.TutorialNavigationButtonClick -= NavigatePage;
         TutorialSectorJumpButton.SectorJumpButtonClick -= ChangeTutorialSector;
+        TutorialCloseButton.CloseButtonClicked -= CloseTutorialOverlay;
     }
 
     private void NavigatePage(TutorialNavigation direction)
@@ -114,6 +116,14 @@ public class TutorialOverlayDisplay : MonoBehaviour
         {
             previousTutorialPageButton.gameObject.SetActive(true);
             nextTutorialPageButton.gameObject.gameObject.SetActive(true);
+        }
+    }
+
+    private void CloseTutorialOverlay()
+    {
+        if (this.gameObject.activeSelf)
+        {
+            this.gameObject.SetActive(false);
         }
     }
 }
