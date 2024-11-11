@@ -418,7 +418,6 @@ public class ActivitySevenManager : ActivityManager
 			}
 			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
 
-			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Retrieve the power cube by computing for its center of mass on the Center of Mass Terminal ({currentCenterOfMassLevel.numberOfTests - currentNumCenterOfMassTests}/{currentCenterOfMassLevel.numberOfTests})");
 		}
 		else
 		{
@@ -434,6 +433,8 @@ public class ActivitySevenManager : ActivityManager
 
 	private void UpdateCenterOfMassViewState()
 	{
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Retrieve the power cube by computing for its center of mass on the Center of Mass Terminal ({currentCenterOfMassLevel.numberOfTests - currentNumCenterOfMassTests}/{currentCenterOfMassLevel.numberOfTests})");
+
 		if (currentNumCenterOfMassTests > 0)
 		{
 			GenerateMassCoordinatePairs(currentCenterOfMassLevel);
@@ -577,8 +578,6 @@ public class ActivitySevenManager : ActivityManager
 				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
 
 				momentumImpulseForceView.UpdateCalibrationTestTextDisplay(currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests, currentMomentumImpulseForceLevel.numberOfTests);
-
-				missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Unlock the impulse momentum mechanism of the door containing the ships' data module on the Impulse-Momentum Terminal ({currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests}/{currentMomentumImpulseForceLevel.numberOfTests})");
 			}
 			else
 			{
@@ -623,7 +622,9 @@ public class ActivitySevenManager : ActivityManager
 
 	private void UpdateMomentumImpulseForceViewState()
 	{
-		if (currentNumCenterOfMassTests > 0)
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Unlock the impulse momentum mechanism of the door containing the ships' data module on the Impulse-Momentum Terminal ({currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests}/{currentMomentumImpulseForceLevel.numberOfTests})");
+
+		if (currentNumMomentumImpulseForceTests > 0)
 		{
 			GenerateMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
 			momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
@@ -739,8 +740,6 @@ public class ActivitySevenManager : ActivityManager
 			elasticInelasticCollisionSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
 
 			elasticInelasticCollisionView.UpdateCalibrationTestTextDisplay(currentElasticInelasticCollisionLevel.numberOfTests - currentNumElasticInelasticCollisionTests, currentElasticInelasticCollisionLevel.numberOfTests);
-
-			missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Release the ships' data module from its container by overriding the Collisions Terminal ({currentElasticInelasticCollisionLevel.numberOfTests - currentNumElasticInelasticCollisionTests}/{currentElasticInelasticCollisionLevel.numberOfTests})");
 		}
 		else
 		{
@@ -756,7 +755,9 @@ public class ActivitySevenManager : ActivityManager
 
 	private void UpdateElasticInelasticCollisionViewState()
 	{
-		if (currentNumCenterOfMassTests > 0)
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Release the ships' data module from its container by overriding the Collisions Terminal ({currentElasticInelasticCollisionLevel.numberOfTests - currentNumElasticInelasticCollisionTests}/{currentElasticInelasticCollisionLevel.numberOfTests})");
+
+		if (currentNumElasticInelasticCollisionTests > 0)
 		{
 			GenerateElasticInelasticCollisionData(currentElasticInelasticCollisionLevel);
 			elasticInelasticCollisionView.SetupElasicInelasticCollisionView(elasticInelasticCollisionData);
