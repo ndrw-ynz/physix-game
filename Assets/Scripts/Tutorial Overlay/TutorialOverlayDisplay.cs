@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class TutorialOverlayDisplay : MonoBehaviour
 {
+    public static event Action TutorialOverlayClose;
+
     [Header("Tutorial Sectors List")]
     [SerializeField] private List<TutorialSector> tutorialSectors;
 
@@ -15,13 +18,13 @@ public class TutorialOverlayDisplay : MonoBehaviour
     [SerializeField] private TextMeshProUGUI pageNumberText;
 
     // Sector and page index values
-    private int _currentSectorIndex;
+    public int _currentSectorIndex;
     private int _currentPageIndex;
 
     private void OnEnable()
     {
         // On start, change the page according to the current sector and page indexes assigned
-        ChangeTutorialSector(_currentSectorIndex);
+        SetupSpecificTutorialSector(_currentSectorIndex);
         UpdatePageNumberText();
 
         // Subscribe listeners
@@ -31,6 +34,10 @@ public class TutorialOverlayDisplay : MonoBehaviour
     }
     private void OnDisable()
     {
+        // Reset index values
+        _currentSectorIndex = 0;
+        _currentPageIndex = 0;
+
         // Unsubscribe listeners
         TutorialNavigationButton.TutorialNavigationButtonClick -= NavigatePage;
         TutorialSectorJumpButton.SectorJumpButtonClick -= ChangeTutorialSector;
@@ -112,11 +119,43 @@ public class TutorialOverlayDisplay : MonoBehaviour
         }
     }
 
+    private void SetupSpecificTutorialSector(int sectorToSetup)
+    {
+        for (int i = 0; i < tutorialSectors.Count; i++)
+        {
+            if (i == sectorToSetup)
+            {
+                // Opens the current sector and its first page if i is the current sector
+                tutorialSectors[i].gameObject.SetActive(true);
+                tutorialSectors[i].pages[0].gameObject.SetActive(true);
+
+                // Reset the current page index to the first page index
+                _currentSectorIndex = i;
+                _currentPageIndex = 0;
+
+                // Update navigation button states
+                UpdateNavigationButtons();
+                UpdatePageNumberText();
+            }
+            else
+            {
+                // Ensure that all other sector's game object are closed
+                tutorialSectors[i].gameObject.SetActive(false);
+                for (int j = 0; j < tutorialSectors[i].pages.Count; j++)
+                {
+                    tutorialSectors[i].pages[j].gameObject.SetActive(false);
+                }
+            }
+        }
+    }
+
     private void CloseTutorialOverlay()
     {
         // Close tutorial overlay
         if (this.gameObject.activeSelf)
         {
+            TutorialOverlayClose?.Invoke();
+
             this.gameObject.SetActive(false);
         }
     }
