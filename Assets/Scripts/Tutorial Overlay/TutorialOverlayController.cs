@@ -4,14 +4,14 @@ using UnityEngine;
 public class TutorialOverlayController : MonoBehaviour
 {
     [System.Serializable]
-    public class TerminalResultsScreenGroup
+    public class TerminalStatusScreenGroup
     {
         public GameObject terminalUI;
         public GameObject terminalStatusScreenUI;
     }
 
-    [SerializeField] private List<TerminalResultsScreenGroup> terminalResultScreenGroup;
-    [SerializeField] private List<GameObject> noResultScreenTerminals;
+    [SerializeField] private List<TerminalStatusScreenGroup> terminalStatusScreenGroup;
+    [SerializeField] private List<GameObject> noStatusScreenTerminals;
     [SerializeField] private TutorialOverlayDisplay tutorialDisplay;
 
     [SerializeField] private GameObject pauseMenuUI;
@@ -54,13 +54,13 @@ public class TutorialOverlayController : MonoBehaviour
             }
 
             // If no results screen terminals list count is more than 0, loop through list
-            if (noResultScreenTerminals.Count > 0)
+            if (noStatusScreenTerminals.Count > 0)
             {
                 // Check if there's an active no results screen terminal, if yes, open tutorial overlay
                 // I might have only done this for activity one since it has a container picker terminal
-                for (int i = 0; i < noResultScreenTerminals.Count; i++)
+                for (int i = 0; i < noStatusScreenTerminals.Count; i++)
                 {
-                    if (noResultScreenTerminals[i].gameObject.activeSelf)
+                    if (noStatusScreenTerminals[i].gameObject.activeSelf)
                     {
                         tutorialDisplay._currentSectorIndex = 5;
                         tutorialDisplay.gameObject.SetActive(true);
@@ -70,16 +70,16 @@ public class TutorialOverlayController : MonoBehaviour
             }
 
             // Loop through the terminaal results screen group
-            for (int i = 0; i < terminalResultScreenGroup.Count; i++)
+            for (int i = 0; i < terminalStatusScreenGroup.Count; i++)
             {
                 // If a sub activity terminal is active, and its results screen is not active,
                 // open the tutorial overlay to the solvings section's first page
-                if (terminalResultScreenGroup[i].terminalStatusScreenUI.activeSelf)
+                if (terminalStatusScreenGroup[i].terminalStatusScreenUI.activeSelf)
                 {
                     return;
                 }
 
-                if (terminalResultScreenGroup[i].terminalUI.activeSelf)
+                if (terminalStatusScreenGroup[i].terminalUI.activeSelf)
                 {
                     // Load the solving's tutorial first sector page
                     tutorialDisplay._currentSectorIndex = 5;
@@ -99,13 +99,13 @@ public class TutorialOverlayController : MonoBehaviour
     private void ResumeGameplay()
     {
         // If no results screen terminals list count is more than 0, loop through list
-        if (noResultScreenTerminals.Count > 0)
+        if (noStatusScreenTerminals.Count > 0)
         {
             // Loop through list
-            for (int i = 0; i < noResultScreenTerminals.Count; i++)
+            for (int i = 0; i < noStatusScreenTerminals.Count; i++)
             {
                 // If there is an active terminal that does not have a result screen, do not go back to gameplay mode
-                if (noResultScreenTerminals[i].gameObject.activeSelf)
+                if (noStatusScreenTerminals[i].gameObject.activeSelf)
                 {
                     return;
                 }
@@ -113,10 +113,10 @@ public class TutorialOverlayController : MonoBehaviour
         }
 
         // Loop through list
-        for (int i = 0; i < terminalResultScreenGroup.Count; i++)
+        for (int i = 0; i < terminalStatusScreenGroup.Count; i++)
         {
             // If there is an active sub activity terminal, do not go back to gameplay mode
-            if (terminalResultScreenGroup[i].terminalUI.activeSelf)
+            if (terminalStatusScreenGroup[i].terminalUI.activeSelf)
             {
                 return;
             }
