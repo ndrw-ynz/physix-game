@@ -78,6 +78,11 @@ public class TutorialOverlayDisplay : MonoBehaviour
 
     private void ChangeTutorialSector(int newSector)
     {
+        if (_currentSectorIndex == newSector)
+        {
+            // Ignore code below if current sector is the sector passed as an argument
+            return;
+        }
         // Loop through the whole current sector
         for (int i = 0; i < tutorialSectors.Count; i++)
         {
