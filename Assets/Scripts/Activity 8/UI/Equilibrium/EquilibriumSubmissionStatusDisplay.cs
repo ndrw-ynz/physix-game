@@ -4,7 +4,7 @@ using System;
 
 public class EquilibriumSubmissionStatusDisplay : SubmissionStatusDisplay
 {
-	public static event Action ProceedEvent;
+	public event Action ProceedEvent;
 
 	[Header("Equilibrium Status Border Displays")]
 	[SerializeField] private Image forceEquilibriumStatusBorderDisplay;

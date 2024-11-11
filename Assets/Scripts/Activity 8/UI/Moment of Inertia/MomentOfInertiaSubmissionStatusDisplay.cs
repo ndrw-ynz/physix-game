@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// </summary>
 public class MomentOfInertiaSubmissionStatusDisplay : SubmissionStatusDisplay
 {
-	public static event Action ProceedEvent;
+	public event Action ProceedEvent;
 
 	[Header("Moment of Inertia Status Border Displays")]
 	[SerializeField] private Image objectTypeStatusBorderDisplay;

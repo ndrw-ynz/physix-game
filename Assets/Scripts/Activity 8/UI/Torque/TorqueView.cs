@@ -25,8 +25,9 @@ public class TorqueAnswerSubmission
 /// </summary>
 public class TorqueView : MonoBehaviour
 {
-	public static event Action QuitViewEvent;
-	public static event Action<List<TorqueAnswerSubmission>> SubmitAnswerEvent;
+	public event Action OpenViewEvent;
+	public event Action QuitViewEvent;
+	public event Action<List<TorqueAnswerSubmission>> SubmitAnswerEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
@@ -46,6 +47,11 @@ public class TorqueView : MonoBehaviour
 
 	[Header("Torque Direction Button Containers")]
 	[SerializeField] private List<HorizontalLayoutGroup> torqueDirectionButtonContainers;
+
+	private void OnEnable()
+	{
+		OpenViewEvent?.Invoke();
+	}
 
 	/// <summary>
 	/// Setup state of <c>TorqueView</c> in displaying bolt information
