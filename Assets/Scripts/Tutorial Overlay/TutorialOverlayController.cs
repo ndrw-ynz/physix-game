@@ -7,7 +7,7 @@ public class TutorialOverlayController : MonoBehaviour
     public class TerminalResultsScreenGroup
     {
         public GameObject terminalUI;
-        public GameObject terminalResultScreenUI;
+        public GameObject terminalStatusScreenUI;
     }
 
     [SerializeField] private List<TerminalResultsScreenGroup> terminalResultScreenGroup;
@@ -74,7 +74,12 @@ public class TutorialOverlayController : MonoBehaviour
             {
                 // If a sub activity terminal is active, and its results screen is not active,
                 // open the tutorial overlay to the solvings section's first page
-                if (terminalResultScreenGroup[i].terminalUI.activeSelf && !terminalResultScreenGroup[i].terminalResultScreenUI.activeSelf)
+                if (terminalResultScreenGroup[i].terminalStatusScreenUI.activeSelf)
+                {
+                    return;
+                }
+
+                if (terminalResultScreenGroup[i].terminalUI.activeSelf)
                 {
                     // Load the solving's tutorial first sector page
                     tutorialDisplay._currentSectorIndex = 5;
