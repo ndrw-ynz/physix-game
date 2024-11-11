@@ -1,14 +1,15 @@
 using UnityEngine;
 
-public class ActivityNineEnvironmentManager : MonoBehaviour
+public class ActivityNineEnvironmentManager : ActivityEnvironmentManager
 {
-	[Header("Input Reader")]
-	[SerializeField] private InputReader inputReader;
+	[Header("Activity Manager")]
+	[SerializeField] private ActivityNineManager activityNineManager;
 
+	[Header("Views")]
+	[SerializeField] private GravityView gravityView;
 
-	[Header("Player")]
-	[SerializeField] private GameObject player;
-
+	[Header("Interactable Terminals")]
+	[SerializeField] private InteractableViewOpenerObject gravityControlTerminal;
 
 	[Header("Cameras")]
 	[SerializeField] private Camera planetCamera;
@@ -18,38 +19,24 @@ public class ActivityNineEnvironmentManager : MonoBehaviour
 
 	private void Start()
 	{
-		InteractableControlPanel.SwitchToTargetCameraEvent += SwitchCameraToTargetCamera;
-
-		GravityView.QuitViewEvent += () => SwitchCameraToPlayerCamera(planetCamera);
-		GravityView.UpdateDisplayedOrbittingObjectEvent += ActivateRTCamera;
+		// Gravity Terminal Environment Events
+		gravityView.OpenViewEvent += () => SetGravityTerminalEnvironmentState(true);
+		gravityView.QuitViewEvent += () => SetGravityTerminalEnvironmentState(false);
+		gravityView.UpdateDisplayedOrbittingObjectEvent += ActivateRTCamera;
 	}
 
     private void OnDisable()
     {
-        InteractableControlPanel.SwitchToTargetCameraEvent -= SwitchCameraToTargetCamera;
-
-        GravityView.QuitViewEvent -= () => SwitchCameraToPlayerCamera(planetCamera);
-        GravityView.UpdateDisplayedOrbittingObjectEvent -= ActivateRTCamera;
-    }
-
-    private void SwitchCameraToTargetCamera(Camera targetCamera)
-	{
-		if (player != null && targetCamera != null)
-		{
-			player.gameObject.SetActive(false);
-			targetCamera.gameObject.SetActive(true);
-		}
-		inputReader.SetUI();
+		gravityView.OpenViewEvent -= () => SetGravityTerminalEnvironmentState(true);
+		gravityView.QuitViewEvent -= () => SetGravityTerminalEnvironmentState(false);
+		gravityView.UpdateDisplayedOrbittingObjectEvent -= ActivateRTCamera;
 	}
 
-	public void SwitchCameraToPlayerCamera(Camera targetCamera)
+	private void SetGravityTerminalEnvironmentState(bool isActive)
 	{
-		if (player != null && targetCamera != null)
-		{
-			player.gameObject.SetActive(true);
-			targetCamera.gameObject.SetActive(false);
-		}
-		inputReader.SetGameplay();
+		SetPlayerActivityState(!isActive);
+		activityNineManager.SetMissionObjectiveDisplay(!isActive);
+		planetCamera.gameObject.SetActive(isActive);
 	}
 
 	private void ActivateRTCamera(OrbittingObjectType orbittingObjectType)

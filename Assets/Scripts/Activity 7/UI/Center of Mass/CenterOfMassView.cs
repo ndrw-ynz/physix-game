@@ -51,7 +51,9 @@ public class CenterOfMassAnswerSubmission
 
 public class CenterOfMassView : MonoBehaviour
 {
-	public static event Action<CenterOfMassAnswerSubmission> SubmitAnswerEvent;
+	public event Action OpenViewEvent;
+	public event Action QuitViewEvent;
+	public event Action<CenterOfMassAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Graph Coordinate Plotter")]
 	[SerializeField] private GraphCoordinatePlotter graphCoordinatePlotter;
@@ -103,6 +105,11 @@ public class CenterOfMassView : MonoBehaviour
 	[Header("Interactive Buttons")]
     [SerializeField] private Button leftPageButton;
 	[SerializeField] private Button rightPageButton;
+
+	private void OnEnable()
+	{
+		OpenViewEvent?.Invoke();
+	}
 
 	#region View Setup
 	public void SetupCenterOfMassView(List<MassCoordinatePair> massCoordinatePairs)
@@ -213,6 +220,12 @@ public class CenterOfMassView : MonoBehaviour
 	#endregion
 
 	#region Buttons
+	public void OnQuitButtonClick()
+	{
+		gameObject.SetActive(false);
+		QuitViewEvent?.Invoke();
+	}
+
 	public void OnLeftPageButtonClick()
 	{
 		leftPageButton.gameObject.SetActive(false);

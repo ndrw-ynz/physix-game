@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// </summary>
 public class TorqueSubmissionStatusDisplay : SubmissionStatusDisplay
 {
-	public static event Action ProceedEvent;
+	public event Action ProceedEvent;
 
 	[Header("Torque Status Border Displays")]
 	[SerializeField] private Image torqueMagnitudeStatusBorderDisplay;

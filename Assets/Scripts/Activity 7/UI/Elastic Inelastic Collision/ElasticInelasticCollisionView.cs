@@ -35,7 +35,9 @@ public class ElasticInelasticCollisionAnswerSubmission
 
 public class ElasticInelasticCollisionView : MonoBehaviour
 {
-	public static event Action<ElasticInelasticCollisionAnswerSubmission> SubmitAnswerEvent;
+	public event Action OpenViewEvent;
+	public event Action QuitViewEvent;
+	public event Action<ElasticInelasticCollisionAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
@@ -99,6 +101,12 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 	[SerializeField] private CollisionTypeButton inelasticButton;
 	[SerializeField] private Button leftPageButton;
 	[SerializeField] private Button rightPageButton;
+
+	private void OnEnable()
+	{
+		OpenViewEvent?.Invoke();
+	}
+
 
 	#region View Setup
 	public void SetupElasicInelasticCollisionView(CollisionData collisionData)
@@ -169,6 +177,12 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 
 		netMomentumCalculations.gameObject.SetActive(true);
 		collisionTypeChoice.gameObject.SetActive(true);
+	}
+
+	public void OnQuitButtonClick()
+	{
+		gameObject.SetActive(false);
+		QuitViewEvent?.Invoke();
 	}
 
 	public void OnSubmitButtonClick()

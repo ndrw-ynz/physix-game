@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PowerSourceCube : IInteractableObject
 {
-	public static event Action RetrieveEvent;
+	public event Action RetrieveEvent;
 
 	public float rotationSpeed = 45.0f;
 

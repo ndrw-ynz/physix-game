@@ -199,9 +199,9 @@ public class ActivitySevenManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
 
-	public static event Action RoomOneClearEvent;
-	public static event Action RoomTwoClearEvent;
-	public static event Action RoomThreeClearEvent;
+	public event Action CenterOfMassTerminalClearEvent;
+	public event Action MomentumImpulseTerminalClearEvent;
+	public event Action CollisionTerminalClearEvent;
 
     [Header("Level Data - Center of Mass")]
     [SerializeField] CenterOfMassSubActivitySO centerOfMassLevelOne;
@@ -266,40 +266,10 @@ public class ActivitySevenManager : ActivityManager
 	protected override void Start()
     {
 		base.Start();
-		// Difficulty selection
-		//difficultyConfiguration = Difficulty.Easy; // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
-        
-		// Setting level data
-		switch (difficultyConfiguration)
-		{
-			case Difficulty.Easy:
-				currentCenterOfMassLevel = centerOfMassLevelOne;
-				currentMomentumImpulseForceLevel = momentumImpulseForceLevelOne;
-				currentElasticInelasticCollisionLevel = elasticInelasticCollisionLevelOne;
-				break;
-			case Difficulty.Medium:
-				currentCenterOfMassLevel = centerOfMassLevelTwo;
-				currentMomentumImpulseForceLevel = momentumImpulseForceLevelTwo;
-				currentElasticInelasticCollisionLevel = elasticInelasticCollisionLevelTwo;
-				break;
-			case Difficulty.Hard:
-				currentCenterOfMassLevel = centerOfMassLevelThree;
-				currentMomentumImpulseForceLevel = momentumImpulseForceLevelThree;
-				currentElasticInelasticCollisionLevel = elasticInelasticCollisionLevelThree;
-				break;
-		}
 
-		// Subscribing to view events
-        CenterOfMassView.SubmitAnswerEvent += CheckCenterOfMassAnswers;
-		CenterOfMassSubmissionStatusDisplay.ProceedEvent += GenerateNewCenterOfMassTest;
-		CenterOfMassSubmissionStatusDisplay.ProceedEvent += CloseCenterOfMassView;
-		MomentumImpulseForceView.SubmitAnswerEvent += CheckMomentumImpulseForceAnswers;
-		MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent += GenerateNewMomentumImpulseForceTest;
-		MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent += CloseMomentumImpulseForceView;
-		ElasticInelasticCollisionView.SubmitAnswerEvent += CheckElasticInelasticCollisionAnswers;
-		ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent += GenerateNewElasticInelasticCollisionTest;
-		ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent += CloseElasticInelasticCollisionView;
-		DataModuleCube.RetrieveEvent += DisplayPerformanceView;
+		ConfigureLevelData(difficultyConfiguration);
+
+		SubscribeViewAndDisplayEvents();
 
 		// Initializing given values
 		GenerateMassCoordinatePairs(currentCenterOfMassLevel);
@@ -318,26 +288,69 @@ public class ActivitySevenManager : ActivityManager
 		elasticInelasticCollisionView.SetupElasicInelasticCollisionView(elasticInelasticCollisionData);
 		elasticInelasticCollisionView.UpdateCalibrationTestTextDisplay(0, currentElasticInelasticCollisionLevel.numberOfTests);
 
+		// Update mission objective display
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Retrieve the power cube by computing for its center of mass on the Center of Mass Terminal ({currentCenterOfMassLevel.numberOfTests - currentNumCenterOfMassTests}/{currentCenterOfMassLevel.numberOfTests})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Unlock the impulse momentum mechanism of the door containing the ships' data module on the Impulse-Momentum Terminal ({currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests}/{currentMomentumImpulseForceLevel.numberOfTests})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Release the ships' data module from its container by overriding the Collisions Terminal ({currentElasticInelasticCollisionLevel.numberOfTests - currentNumElasticInelasticCollisionTests}/{currentElasticInelasticCollisionLevel.numberOfTests})");
+
 		inputReader.SetGameplay();
 	}
 
     private void OnDisable()
     {
-        CenterOfMassView.SubmitAnswerEvent -= CheckCenterOfMassAnswers;
-        CenterOfMassSubmissionStatusDisplay.ProceedEvent -= GenerateNewCenterOfMassTest;
-        CenterOfMassSubmissionStatusDisplay.ProceedEvent -= CloseCenterOfMassView;
-        MomentumImpulseForceView.SubmitAnswerEvent -= CheckMomentumImpulseForceAnswers;
-        MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent -= GenerateNewMomentumImpulseForceTest;
-        MomentumImpulseForceSubmissionStatusDisplay.ProceedEvent -= CloseMomentumImpulseForceView;
-        ElasticInelasticCollisionView.SubmitAnswerEvent -= CheckElasticInelasticCollisionAnswers;
-        ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent -= GenerateNewElasticInelasticCollisionTest;
-        ElasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent -= CloseElasticInelasticCollisionView;
+        centerOfMassView.SubmitAnswerEvent -= CheckCenterOfMassAnswers;
+        centerOfMassSubmissionStatusDisplay.ProceedEvent -= UpdateCenterOfMassViewState;
+		momentumImpulseForceView.SubmitAnswerEvent -= CheckMomentumImpulseForceAnswers;
+        momentumImpulseForceSubmissionStatusDisplay.ProceedEvent -= UpdateMomentumImpulseForceViewState;
+        elasticInelasticCollisionView.SubmitAnswerEvent -= CheckElasticInelasticCollisionAnswers;
+        elasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent -= UpdateElasticInelasticCollisionViewState;
         DataModuleCube.RetrieveEvent -= DisplayPerformanceView;
     }
 
     private void Update()
 	{
 		gameplayTime += Time.deltaTime;
+	}
+
+	private void ConfigureLevelData(Difficulty difficulty)
+	{
+		difficultyConfiguration = difficulty;
+
+		switch (difficultyConfiguration)
+		{
+			case Difficulty.Easy:
+				currentCenterOfMassLevel = centerOfMassLevelOne;
+				currentMomentumImpulseForceLevel = momentumImpulseForceLevelOne;
+				currentElasticInelasticCollisionLevel = elasticInelasticCollisionLevelOne;
+				break;
+			case Difficulty.Medium:
+				currentCenterOfMassLevel = centerOfMassLevelTwo;
+				currentMomentumImpulseForceLevel = momentumImpulseForceLevelTwo;
+				currentElasticInelasticCollisionLevel = elasticInelasticCollisionLevelTwo;
+				break;
+			case Difficulty.Hard:
+				currentCenterOfMassLevel = centerOfMassLevelThree;
+				currentMomentumImpulseForceLevel = momentumImpulseForceLevelThree;
+				currentElasticInelasticCollisionLevel = elasticInelasticCollisionLevelThree;
+				break;
+		}
+	}
+
+	private void SubscribeViewAndDisplayEvents()
+	{
+		// Center of Mass Sub Activity Related Events
+		centerOfMassView.SubmitAnswerEvent += CheckCenterOfMassAnswers;
+		centerOfMassSubmissionStatusDisplay.ProceedEvent += UpdateCenterOfMassViewState;
+
+		// Momentum Impulse Force Sub Activity Related Events
+		momentumImpulseForceView.SubmitAnswerEvent += CheckMomentumImpulseForceAnswers;
+		momentumImpulseForceSubmissionStatusDisplay.ProceedEvent += UpdateMomentumImpulseForceViewState;
+
+		// Collision Sub Activity Related Events
+		elasticInelasticCollisionView.SubmitAnswerEvent += CheckElasticInelasticCollisionAnswers;
+		elasticInelasticCollisionSubmissionStatusDisplay.ProceedEvent += UpdateElasticInelasticCollisionViewState;
+
+		DataModuleCube.RetrieveEvent += DisplayPerformanceView;
 	}
 
 	#region Center of Mass
@@ -404,6 +417,7 @@ public class ActivitySevenManager : ActivityManager
 				displayText = "Calculations correct. Loaded next test.";
 			}
 			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
+
 		}
 		else
 		{
@@ -417,25 +431,24 @@ public class ActivitySevenManager : ActivityManager
 		centerOfMassSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
-	private void GenerateNewCenterOfMassTest()
+	private void UpdateCenterOfMassViewState()
 	{
-		// Generate new given values and update center of mass view
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Retrieve the power cube by computing for its center of mass on the Center of Mass Terminal ({currentCenterOfMassLevel.numberOfTests - currentNumCenterOfMassTests}/{currentCenterOfMassLevel.numberOfTests})");
+
 		if (currentNumCenterOfMassTests > 0)
 		{
 			GenerateMassCoordinatePairs(currentCenterOfMassLevel);
 			centerOfMassView.SetupCenterOfMassView(massCoordinatePairs);
 		}
-	}
-
-	private void CloseCenterOfMassView()
-	{
-		if (currentNumCenterOfMassTests <= 0)
+		else
 		{
 			inputReader.SetGameplay();
 			centerOfMassView.gameObject.SetActive(false);
-			RoomOneClearEvent?.Invoke();
+			CenterOfMassTerminalClearEvent?.Invoke();
+			missionObjectiveDisplayUI.ClearMissionObjective(0);
 		}
 	}
+
 	#endregion
 
 	#region Impulse-Momentum
@@ -607,23 +620,21 @@ public class ActivitySevenManager : ActivityManager
 		}
 	}
 
-	private void GenerateNewMomentumImpulseForceTest()
+	private void UpdateMomentumImpulseForceViewState()
 	{
-		// Generate new given data for momentum-impulse and force subactivity, and update momentum-impulse force view
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Unlock the impulse momentum mechanism of the door containing the ships' data module on the Impulse-Momentum Terminal ({currentMomentumImpulseForceLevel.numberOfTests - currentNumMomentumImpulseForceTests}/{currentMomentumImpulseForceLevel.numberOfTests})");
+
 		if (currentNumMomentumImpulseForceTests > 0)
 		{
 			GenerateMomentumImpulseForceGivenData(currentMomentumImpulseForceLevel);
 			momentumImpulseForceView.SetupMomentumImpulseForceView(momentumImpulseForceGivenData);
 		}
-	}
-
-	private void CloseMomentumImpulseForceView()
-	{
-		if (currentNumMomentumImpulseForceTests <= 0)
+		else
 		{
 			inputReader.SetGameplay();
 			momentumImpulseForceView.gameObject.SetActive(false);
-			RoomTwoClearEvent?.Invoke();
+			MomentumImpulseTerminalClearEvent?.Invoke();
+			missionObjectiveDisplayUI.ClearMissionObjective(1);
 		}
 	}
 	#endregion
@@ -742,29 +753,30 @@ public class ActivitySevenManager : ActivityManager
 		elasticInelasticCollisionSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
-	private void GenerateNewElasticInelasticCollisionTest()
+	private void UpdateElasticInelasticCollisionViewState()
 	{
-		// Generate new given data for elastic inelastic collision subactivity, and update elastic inelastic collision view
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Release the ships' data module from its container by overriding the Collisions Terminal ({currentElasticInelasticCollisionLevel.numberOfTests - currentNumElasticInelasticCollisionTests}/{currentElasticInelasticCollisionLevel.numberOfTests})");
+
 		if (currentNumElasticInelasticCollisionTests > 0)
 		{
 			GenerateElasticInelasticCollisionData(currentElasticInelasticCollisionLevel);
 			elasticInelasticCollisionView.SetupElasicInelasticCollisionView(elasticInelasticCollisionData);
 		}
-	}
-
-	private void CloseElasticInelasticCollisionView()
-	{
-		if (currentNumElasticInelasticCollisionTests <= 0)
+		else
 		{
 			inputReader.SetGameplay();
 			elasticInelasticCollisionView.gameObject.SetActive(false);
-			RoomThreeClearEvent?.Invoke();
+			CollisionTerminalClearEvent?.Invoke();
+			missionObjectiveDisplayUI.ClearMissionObjective(2);
 		}
 	}
 	#endregion
 
 	public override void DisplayPerformanceView()
 	{
+		missionObjectiveDisplayUI.ClearMissionObjective(3);
+		SetMissionObjectiveDisplay(false);
+
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
 

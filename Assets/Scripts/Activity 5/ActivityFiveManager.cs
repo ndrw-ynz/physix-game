@@ -200,7 +200,11 @@ public class ActivityFiveManager : ActivityManager
 	private void SubscribeForceMotionEvents()
 	{
 		// Apple Force Motion related events
-		appleMotionView.OpenViewEvent += () => isAppleMotionViewActive = true;
+		appleMotionView.OpenViewEvent += () =>
+		{
+			isAppleMotionViewActive = true;
+			SetMissionObjectiveDisplay(false);
+		};
 		appleMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
 			appleForceMotionSubActivityStateMachine,
 			appleForceMotionSubActivityStateQueue,
@@ -208,7 +212,11 @@ public class ActivityFiveManager : ActivityManager
 			ref appleForceGivenData,
 			ref isAppleMotionSubActivityFinished
 			);
-		appleMotionView.QuitViewEvent += () => isAppleMotionViewActive = false;
+		appleMotionView.QuitViewEvent += () =>
+		{
+			isAppleMotionViewActive = false;
+			SetMissionObjectiveDisplay(true);
+		};
 		appleMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
 			answer,
 			appleForceGivenData,
@@ -227,7 +235,11 @@ public class ActivityFiveManager : ActivityManager
 		appleForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateAppleForceDiagramStateQueue;
 
 		// Rock Force Motion related events
-		rockMotionView.OpenViewEvent += () => isRockMotionViewActive = true;
+		rockMotionView.OpenViewEvent += () =>
+		{
+			isRockMotionViewActive = true;
+			SetMissionObjectiveDisplay(false);
+		};
 		rockMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
 			rockForceMotionSubActivityStateMachine,
 			rockForceMotionSubActivityStateQueue,
@@ -235,7 +247,11 @@ public class ActivityFiveManager : ActivityManager
 			ref rockForceGivenData,
 			ref isRockMotionSubActivityFinished
 			);
-		rockMotionView.QuitViewEvent += () => isRockMotionViewActive = false;
+		rockMotionView.QuitViewEvent += () =>
+		{
+			isRockMotionViewActive = false;
+			SetMissionObjectiveDisplay(true);
+		};
 		rockMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
 			answer,
 			rockForceGivenData,
@@ -254,7 +270,11 @@ public class ActivityFiveManager : ActivityManager
 		rockForceDiagramSubmissionStatusDisplay.ProceedEvent += UpdateRockForceDiagramStateQueue;
 
 		// Boat Force Motion related events
-		boatMotionView.OpenViewEvent += () => isBoatMotionViewActive = true;
+		boatMotionView.OpenViewEvent += () =>
+		{
+			isBoatMotionViewActive = true;
+			SetMissionObjectiveDisplay(false);
+		};
 		boatMotionView.OpenViewEvent += () => UpdateSubActivityStateMachine(
 			boatForceMotionSubActivityStateMachine,
 			boatForceMotionSubActivityStateQueue,
@@ -262,7 +282,11 @@ public class ActivityFiveManager : ActivityManager
 			ref boatForceGivenData,
 			ref isBoatMotionSubActivityFinished
 			);
-		boatMotionView.QuitViewEvent += () => isBoatMotionViewActive = false;
+		boatMotionView.QuitViewEvent += () =>
+		{
+			isBoatMotionViewActive = false;
+			SetMissionObjectiveDisplay(true);
+		};
 		boatMotionView.SubmitForceAnswerEvent += (answer) => CheckForceAnswer(
 			answer,
 			boatForceGivenData,
@@ -443,6 +467,7 @@ public class ActivityFiveManager : ActivityManager
 		if (subactivityStateQueue.Count == 0)
 		{
 			forceSubActivityStateMachine.TransitionToState(ActivityFiveSubActivityState.None);
+			forceMotionView.gameObject.SetActive(false);
 			isSubActivityFinished = true;
 		}
 		else
@@ -463,6 +488,7 @@ public class ActivityFiveManager : ActivityManager
 
 			forceSubActivityStateMachine.TransitionToState(queueSubActivityHead);
 		}
+		UpdateMissionObjectiveDisplayUI();
 	}
 
 	#region Apple Motion
@@ -527,6 +553,8 @@ public class ActivityFiveManager : ActivityManager
 
 	public override void DisplayPerformanceView()
 	{
+		SetMissionObjectiveDisplay(false);
+
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
 
@@ -604,6 +632,13 @@ public class ActivityFiveManager : ActivityManager
 				averageScoreThreshold: 2
 				)
 			);
+	}
+
+	private void UpdateMissionObjectiveDisplayUI()
+	{
+		if (isAppleMotionSubActivityFinished) missionObjectiveDisplayUI.ClearMissionObjective(0);
+		if (isRockMotionSubActivityFinished) missionObjectiveDisplayUI.ClearMissionObjective(1);
+		if (isBoatMotionSubActivityFinished) missionObjectiveDisplayUI.ClearMissionObjective(2);
 	}
 
 	protected override void HandleGameplayPause()

@@ -20,9 +20,10 @@ public class GravityAnswerSubmission
 
 public class GravityView : MonoBehaviour
 {
-	public static event Action QuitViewEvent;
-	public static event Action<GravityAnswerSubmission> SubmitAnswerEvent;
-	public static event Action<OrbittingObjectType> UpdateDisplayedOrbittingObjectEvent;
+	public event Action OpenViewEvent;
+	public event Action QuitViewEvent;
+	public event Action<GravityAnswerSubmission> SubmitAnswerEvent;
+	public event Action<OrbittingObjectType> UpdateDisplayedOrbittingObjectEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
@@ -48,6 +49,11 @@ public class GravityView : MonoBehaviour
 	[Header("Interactive Buttons")]
 	[SerializeField] private Button leftPageButton;
 	[SerializeField] private Button rightPageButton;
+
+	private void OnEnable()
+	{
+		OpenViewEvent?.Invoke();
+	}
 
 	public void SetupGravityView(GravityData data)
 	{

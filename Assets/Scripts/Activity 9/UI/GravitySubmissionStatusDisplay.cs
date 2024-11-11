@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class GravitySubmissionStatusDisplay : SubmissionStatusDisplay
 {
-	public static event Action ProceedEvent;
+	public event Action ProceedEvent;
 
 	[Header("Gravity Status Border Displays")]
 	[SerializeField] private Image gravitationalForceStatusBorderDisplay;

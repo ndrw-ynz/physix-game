@@ -128,9 +128,9 @@ public class ActivityEightManager : ActivityManager
 {
 	public static Difficulty difficultyConfiguration;
 
-	public static event Action GeneratorRoomClearEvent;
-	public static event Action WeighingScaleRoomClearEvent;
-	public static event Action RebootRoomClearEvent;
+	public event Action GeneratorRoomClearEvent;
+	public event Action WeighingScaleRoomClearEvent;
+	public event Action RebootRoomClearEvent;
 
 	[Header("Level Data - Moment of Inertia")]
 	[SerializeField] private MomentOfInertiaSubActivitySO momentOfInertiaLevelOne;
@@ -195,21 +195,11 @@ public class ActivityEightManager : ActivityManager
 	protected override void Start()
     {
 		base.Start();
-		// Set level data based from difficulty configuration.
-		ConfigureLevelData(difficultyConfiguration); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
 
-		// Subscribing to view events
-		MomentOfInertiaView.SubmitAnswerEvent += CheckMomentOfInertiaAnswers;
-		MomentOfInertiaSubmissionStatusDisplay.ProceedEvent += GenerateNewMomentOfInertiaTest;
-		MomentOfInertiaSubmissionStatusDisplay.ProceedEvent += CloseMomentOfInertiaView;
-		TorqueView.SubmitAnswerEvent += CheckTorqueAnswers;
-		TorqueSubmissionStatusDisplay.ProceedEvent += GenerateNewTorqueTest;
-		TorqueSubmissionStatusDisplay.ProceedEvent += CloseTorqueView;
-		EquilibriumView.SubmitAnswerEvent += CheckEquilibriumAnswers;
-		EquilibriumSubmissionStatusDisplay.ProceedEvent += GenerateNewEquilibriumTest;
-		EquilibriumSubmissionStatusDisplay.ProceedEvent += CloseEquilibriumView;
-		RebootButton.PressRebootButtonEvent += DisplayPerformanceView;
+		ConfigureLevelData(difficultyConfiguration);
 
+		SubscribeViewAndDisplayEvents();
+		
 		// Initializing given values
 		GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
 		GenerateTorqueGivenData(currentTorqueLevel);
@@ -228,21 +218,25 @@ public class ActivityEightManager : ActivityManager
 		equilibriumView.SetupEquilibriumView(equilibriumGivenData);
 		equilibriumView.UpdateCalibrationTestTextDisplay(0, currentEquilibriumLevel.numberOfTests);
 
+		// Update mission objective display
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Fix the ship's generator by calibrating its moment of inertia calculation module on the Generator Control Terminal ({currentMomentOfInertiaLevel.numberOfTests - currentNumMomentOfInertiaTests}/{currentMomentOfInertiaLevel.numberOfTests})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Fix the bolts of the weighing scale's fulcrum by calibrating its torque calculation module on the Weighing Scale Terminal ({currentTorqueLevel.numberOfTests - currentNumOfTorqueTests}/{currentTorqueLevel.numberOfTests})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Ensure power equilibrium on switch by calibrating the equilibrium calculation module of the Equilibrium Control Terminal ({currentEquilibriumLevel.numberOfTests - currentNumOfEquilibriumTests}/{currentEquilibriumLevel.numberOfTests})");
+
 		inputReader.SetGameplay();
 	}
 
     private void OnDisable()
     {
         // Unsubscribing to view events
-        MomentOfInertiaView.SubmitAnswerEvent -= CheckMomentOfInertiaAnswers;
-        MomentOfInertiaSubmissionStatusDisplay.ProceedEvent -= GenerateNewMomentOfInertiaTest;
-        MomentOfInertiaSubmissionStatusDisplay.ProceedEvent -= CloseMomentOfInertiaView;
-        TorqueView.SubmitAnswerEvent -= CheckTorqueAnswers;
-        TorqueSubmissionStatusDisplay.ProceedEvent -= GenerateNewTorqueTest;
-        TorqueSubmissionStatusDisplay.ProceedEvent -= CloseTorqueView;
-        EquilibriumView.SubmitAnswerEvent -= CheckEquilibriumAnswers;
-        EquilibriumSubmissionStatusDisplay.ProceedEvent -= GenerateNewEquilibriumTest;
-        EquilibriumSubmissionStatusDisplay.ProceedEvent -= CloseEquilibriumView;
+        momentOfInertiaView.SubmitAnswerEvent -= CheckMomentOfInertiaAnswers;
+		momentOfInertiaSubmissionStatusDisplay.ProceedEvent -= UpdateMomentOfInertiaViewState;
+
+        torqueView.SubmitAnswerEvent -= CheckTorqueAnswers;
+        torqueSubmissionStatusDisplay.ProceedEvent -= UpdateTorqueViewState;
+
+        equilibriumView.SubmitAnswerEvent -= CheckEquilibriumAnswers;
+        equilibriumSubmissionStatusDisplay.ProceedEvent -= UpdateEquilibriumViewState;
         RebootButton.PressRebootButtonEvent -= DisplayPerformanceView;
     }
 
@@ -278,6 +272,23 @@ public class ActivityEightManager : ActivityManager
 				currentEquilibriumLevel = equilibriumLevelThree;
 				break;
 		}
+	}
+
+	private void SubscribeViewAndDisplayEvents()
+	{
+		// Moment of Inertia Sub Activity Related Events
+		momentOfInertiaView.SubmitAnswerEvent += CheckMomentOfInertiaAnswers;
+		momentOfInertiaSubmissionStatusDisplay.ProceedEvent += UpdateMomentOfInertiaViewState;
+
+		// Torque Sub Activity Related Events
+		torqueView.SubmitAnswerEvent += CheckTorqueAnswers;
+		torqueSubmissionStatusDisplay.ProceedEvent += UpdateTorqueViewState;
+
+		// Equilibrium Sub Activity Related Events
+		equilibriumView.SubmitAnswerEvent += CheckEquilibriumAnswers;
+		equilibriumSubmissionStatusDisplay.ProceedEvent += UpdateEquilibriumViewState;
+
+		RebootButton.PressRebootButtonEvent += DisplayPerformanceView;
 	}
 
 	#region Moment of Inertia
@@ -396,32 +407,23 @@ public class ActivityEightManager : ActivityManager
 		momentOfInertiaSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
-	/// <summary>
-	/// Generates new given data for Moment of Inertia, and sets up <c>MomentOfInertiaView</c>
-	/// for display of newly generated given data.
-	/// </summary>
-	private void GenerateNewMomentOfInertiaTest()
+	private void UpdateMomentOfInertiaViewState()
 	{
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Fix the ship's generator by calibrating its moment of inertia calculation module on the Generator Control Terminal ({currentMomentOfInertiaLevel.numberOfTests - currentNumMomentOfInertiaTests}/{currentMomentOfInertiaLevel.numberOfTests})");
+
 		if (currentNumMomentOfInertiaTests > 0)
 		{
 			GenerateMomentOfInertiaGivenData(currentMomentOfInertiaLevel);
 			momentOfInertiaView.SetupMomentOfInertiaView(momentOfInertiaGivenData);
 		}
-	}
-
-	/// <summary>
-	/// Closes <c>MomentOfInertiaView</c>.
-	/// </summary>
-	private void CloseMomentOfInertiaView()
-	{
-		if (currentNumMomentOfInertiaTests <= 0)
+		else
 		{
 			inputReader.SetGameplay();
 			momentOfInertiaView.gameObject.SetActive(false);
 			GeneratorRoomClearEvent?.Invoke();
+			missionObjectiveDisplayUI.ClearMissionObjective(0);
 		}
 	}
-
 	#endregion
 
 	#region Torque
@@ -513,29 +515,21 @@ public class ActivityEightManager : ActivityManager
 		torqueSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
-	/// <summary>
-	/// Generates new given data for Torque, and sets up <c>TorqueView</c>
-	/// for display of newly generated given data.
-	/// </summary>
-	private void GenerateNewTorqueTest()
+	private void UpdateTorqueViewState()
 	{
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Fix the bolts of the weighing scale's fulcrum by calibrating its torque calculation module on the Weighing Scale Terminal ({currentTorqueLevel.numberOfTests - currentNumOfTorqueTests}/{currentTorqueLevel.numberOfTests})");
+
 		if (currentNumOfTorqueTests > 0)
 		{
 			GenerateTorqueGivenData(currentTorqueLevel);
 			torqueView.SetupTorqueView(torqueGivenData);
 		}
-	}
-
-	/// <summary>
-	/// Closes <c>TorqueView</c>.
-	/// </summary>
-	private void CloseTorqueView()
-	{
-		if (currentNumOfTorqueTests <= 0)
+		else
 		{
 			inputReader.SetGameplay();
 			torqueView.gameObject.SetActive(false);
 			WeighingScaleRoomClearEvent?.Invoke();
+			missionObjectiveDisplayUI.ClearMissionObjective(1);
 		}
 	}
 	#endregion
@@ -623,35 +617,30 @@ public class ActivityEightManager : ActivityManager
 		equilibriumSubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
-	/// <summary>
-	/// Generates new given data for Equilibrium, and sets up <c>EquilibriumView</c>
-	/// for display of newly generated given data.
-	/// </summary>
-	private void GenerateNewEquilibriumTest()
+	private void UpdateEquilibriumViewState()
 	{
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Ensure power equilibrium on switch by calibrating the equilibrium calculation module of the Equilibrium Control Terminal ({currentEquilibriumLevel.numberOfTests - currentNumOfEquilibriumTests}/{currentEquilibriumLevel.numberOfTests})");
+
 		if (currentNumOfEquilibriumTests > 0)
 		{
 			GenerateEquilibriumGivenData(currentEquilibriumLevel);
 			equilibriumView.SetupEquilibriumView(equilibriumGivenData);
 		}
-	}
-
-	/// <summary>
-	/// Closes <c>EquilibriumView</c>.
-	/// </summary>
-	private void CloseEquilibriumView()
-	{
-		if (currentNumOfEquilibriumTests <= 0)
+		else
 		{
 			inputReader.SetGameplay();
 			equilibriumView.gameObject.SetActive(false);
 			RebootRoomClearEvent?.Invoke();
+			missionObjectiveDisplayUI.ClearMissionObjective(2);
 		}
 	}
 	#endregion
 
 	public override void DisplayPerformanceView()
 	{
+		missionObjectiveDisplayUI.ClearMissionObjective(3);
+		SetMissionObjectiveDisplay(false);
+
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
 

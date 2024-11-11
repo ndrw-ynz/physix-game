@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class CenterOfMassSubmissionStatusDisplay : SubmissionStatusDisplay
 {
-	public static event Action ProceedEvent;
+	public event Action ProceedEvent;
 
 	[Header("Center Of Mass Info Displays")]
 	[SerializeField] private GameObject centerOfMassXInfo;

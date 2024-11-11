@@ -75,6 +75,7 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 			Difficulty.Easy => 1,
 			Difficulty.Medium => 2,
 			Difficulty.Hard => 3,
+			_ => 0
 		};
 		for (int i = 0; i < numCycles; i++)
 		{
@@ -87,6 +88,7 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 	private void SetSatelliteEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
+		activitySixManager.SetMissionObjectiveDisplay(!isActive);
 		satelliteEnvironmentCamera.gameObject.SetActive(isActive);
 		mainSatelliteCamera.gameObject.SetActive(isActive);
 		targetObjectCamera.gameObject.SetActive(isActive);
@@ -126,6 +128,8 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 			satelliteTruckAreaIndicatorEffect.gameObject.SetActive(false);
 			satelliteTruck.SetInteractable(false);
 
+			activitySixManager.SetMissionObjectiveDisplay(true);
+
 			desertEnvironmentStateMachine.TransitionToState(DesertEnvironmentState.None);
 
 			// Set crashed drone area active, and teleport player to specified spawn point on said area
@@ -142,6 +146,7 @@ public class ActivitySixEnvironmentManager : ActivityEnvironmentManager
 	private void SetCrashedDroneEnvironmentState(bool isActive)
 	{
 		SetPlayerActivityState(!isActive);
+		activitySixManager.SetMissionObjectiveDisplay(!isActive);
 		crashedDroneEnvironmentAreaCamera.gameObject.SetActive(isActive);
 	}
 }

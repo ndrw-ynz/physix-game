@@ -70,6 +70,7 @@ public class ActivitySixManager : ActivityManager
 	// Variables for keeping track of current number of tests
 	private int currentNumDotProductTests;
 	private int currentNumWorkGraphTests;
+	private int totalWorkGraphTests;
 
 	// Variables for tracking which view is currently active
 	private bool isDotProductViewActive;
@@ -122,11 +123,17 @@ public class ActivitySixManager : ActivityManager
 			Difficulty.Hard => 3,
 			_ => 0
 		};
+		totalWorkGraphTests = currentNumWorkGraphTests;
 
 		// Setting up views
 		dotProductView.SetupDotProductView(dotProductGivenData);
 		workView.SetupWorkView(workSubActivityGivenData, workSubActivityStateQueue.Peek());
 		workGraphInterpretationView.SetupWorkGraphInterpretationView(forceDisplacementGraphData, currentGraphTypeDisplayed);
+
+		// Update mission objective display
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Monitor the Satellite's Direction by Computing for the Dot Product on the Satellite Control Panel ({currentDotProductLevel.numberOfTests - currentNumDotProductTests}/{currentDotProductLevel.numberOfTests})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Embark on the Satellite Truck and Monitor the Work Exerted by the Vehicle ({currentWorkLevel.numberOfRepetitions * 3 - workSubActivityStateQueue.Count}/{currentWorkLevel.numberOfRepetitions * 3})");
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Find the Crashed Drone and Determine the Net Work Exerted from its Force vs. Displacement Graph Data ({totalWorkGraphTests - currentNumWorkGraphTests}/{totalWorkGraphTests})");
 	}
 
 	private void Update()
@@ -166,8 +173,16 @@ public class ActivitySixManager : ActivityManager
 		dotProductSubmissionStatusDisplay.ProceedEvent += UpdateDotProductViewState;
 
 		workView.OpenViewEvent += UpdateWorkSubActivityStateMachine;
-		workView.OpenViewEvent += () => isWorkViewActive = true;
-		workView.QuitViewEvent += () => isWorkViewActive = false;
+		workView.OpenViewEvent += () =>
+		{
+			isWorkViewActive = true;
+			SetMissionObjectiveDisplay(false);
+		};
+		workView.QuitViewEvent += () =>
+		{
+			isWorkViewActive = false;
+			SetMissionObjectiveDisplay(true);
+		};
 		workView.SubmitAnswerEvent += CheckWorkSubActivityAnswers;
 		workSubmissionStatusDisplay.ProceedEvent += UpdateWorkViewState;
 
@@ -215,6 +230,7 @@ public class ActivitySixManager : ActivityManager
 		if (results.isAllCorrect())
 		{
 			dotProductSubmissionStatusDisplay.SetSubmissionStatus(true, "The submitted calculations are correct.");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Monitor the Satellite's Direction by Computing for the Dot Product on the Satellite Control Panel ({currentDotProductLevel.numberOfTests - currentNumDotProductTests}/{currentDotProductLevel.numberOfTests})");
 		}
 		else
 		{
@@ -310,6 +326,7 @@ public class ActivitySixManager : ActivityManager
 	private void UpdateWorkViewState()
 	{
 		workSubActivityStateQueue.Dequeue();
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(1, $"Embark on the Satellite Truck and Monitor the Work Exerted by the Vehicle ({currentWorkLevel.numberOfRepetitions * 3 - workSubActivityStateQueue.Count}/{currentWorkLevel.numberOfRepetitions * 3})");
 		if (workSubActivityStateQueue.Count > 0)
 		{
 			UpdateWorkSubActivityStateMachine();
@@ -388,6 +405,7 @@ public class ActivitySixManager : ActivityManager
 		if (result)
 		{
 			workGraphSubmissionStatusDisplay.SetSubmissionStatus(true, "The submitted calculations are correct.");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(2, $"Find the Crashed Drone and Determine the Net Work Exerted from its Force vs. Displacement Graph Data ({totalWorkGraphTests - currentNumWorkGraphTests}/{totalWorkGraphTests})");
 		}
 		else
 		{

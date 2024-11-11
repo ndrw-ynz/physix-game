@@ -2,7 +2,7 @@ using System;
 
 public class PowerSourceCubeContainer : IInteractableObject
 {
-	public static event Action InteractEvent;
+	public event Action InteractEvent;
 	public override void Interact()
 	{
 		InteractEvent?.Invoke();

@@ -42,7 +42,9 @@ public class MediumHardMomentumImpulseForceAnswerSubmission : MomentumImpulseFor
 
 public class MomentumImpulseForceView : MonoBehaviour
 {
-	public static event Action<MomentumImpulseForceAnswerSubmission> SubmitAnswerEvent;
+	public event Action OpenViewEvent;
+	public event Action QuitViewEvent;
+	public event Action<MomentumImpulseForceAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
@@ -80,6 +82,11 @@ public class MomentumImpulseForceView : MonoBehaviour
 	[SerializeField] private TMP_InputField changeInMomentumResultField2; // Medium-hard config (finalMomentum - initialMomentum)
 	[SerializeField] private TMP_InputField impulseResultField;
 	[SerializeField] private TMP_InputField netForceResultField;
+
+	private void OnEnable()
+	{
+		OpenViewEvent?.Invoke();
+	}
 
 	#region View Setup
 
@@ -131,6 +138,12 @@ public class MomentumImpulseForceView : MonoBehaviour
 	}
 
 	#endregion
+
+	public void OnQuitButtonClick()
+	{
+		gameObject.SetActive(false);
+		QuitViewEvent?.Invoke();
+	}
 
 	public void OnSubmitButtonClick()
 	{

@@ -21,9 +21,10 @@ public class MomentOfInertiaAnswerSubmission
 
 public class MomentOfInertiaView : MonoBehaviour
 {
-	public static event Action QuitViewEvent;
-	public static event Action<MomentOfInertiaAnswerSubmission> SubmitAnswerEvent;
-	public static event Action<InertiaObjectType> UpdateObjectDisplayEvent;
+	public event Action OpenViewEvent;
+	public event Action QuitViewEvent;
+	public event Action<MomentOfInertiaAnswerSubmission> SubmitAnswerEvent;
+	public event Action<InertiaObjectType> UpdateObjectDisplayEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
@@ -42,6 +43,11 @@ public class MomentOfInertiaView : MonoBehaviour
 	[SerializeField] private List<MomentOfInertiaFormulaDisplay> formulaDisplays;
 
 	private InertiaObjectType? selectedInertiaObjectType;
+
+	private void OnEnable()
+	{
+		OpenViewEvent?.Invoke();
+	}
 
 	private void Start()
 	{

@@ -36,8 +36,9 @@ public class EquilibriumAnswerSubmission
 /// </summary>
 public class EquilibriumView : MonoBehaviour
 {
-	public static event Action QuitViewEvent;
-	public static event Action<EquilibriumAnswerSubmission> SubmitAnswerEvent;
+	public event Action OpenViewEvent;
+	public event Action QuitViewEvent;
+	public event Action<EquilibriumAnswerSubmission> SubmitAnswerEvent;
 
 	[Header("Text")]
 	[SerializeField] private TextMeshProUGUI calibrationTestText;
@@ -88,6 +89,11 @@ public class EquilibriumView : MonoBehaviour
 	[SerializeField] private EquilibriumTypeButton notInEquilibriumButton;
 	[SerializeField] private Button leftPageButton;
 	[SerializeField] private Button rightPageButton;
+
+	private void OnEnable()
+	{
+		OpenViewEvent?.Invoke();
+	}
 
 	/// <summary>
 	/// Setup state of <c>EquilibriumView</c> in displaying given information

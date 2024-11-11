@@ -1,8 +1,21 @@
 using UnityEngine;
 
-public class ActivitySevenEnvironmentManager : MonoBehaviour
+public class ActivitySevenEnvironmentManager : ActivityEnvironmentManager
 {
-    [Header("Room One")]
+	[Header("Activity Manager")]
+	[SerializeField] private ActivitySevenManager activitySevenManager;
+
+	[Header("Views")]
+	[SerializeField] CenterOfMassView centerOfMassView;
+	[SerializeField] MomentumImpulseForceView momentumImpulseForceView;
+	[SerializeField] ElasticInelasticCollisionView elasticInelasticCollisionView;
+
+    [Header("Environment Cameras")]
+    [SerializeField] private Camera centerOfMassTerminalEnvCamera;
+    [SerializeField] private Camera impulseMomentumTerminalEnvCamera;
+    [SerializeField] private Camera collisionTerminalEnvCamera;
+	
+	[Header("Center Of Mass Terminal Room Game Objects")]
     [SerializeField] private GameObject containerGlassOne;
 	[SerializeField] private GameObject containerGlassTwo;
     [SerializeField] private PowerSourceCube powerSourceCubeOne;
@@ -10,19 +23,19 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
     [SerializeField] private GameObject roomOneGate;
     [SerializeField] private GameObject roomOneGateBlocker;
     [SerializeField] private PowerSourceCubeContainer powerContainer;
-    [SerializeField] private InteractableControlPanel roomOneControlPanel;
+    [SerializeField] private InteractableViewOpenerObject centerOfMassTerminal;
 
-    [Header("Room Two")]
+    [Header("Impulse-Momentum Terminal Room Game Objects")]
 	[SerializeField] private GameObject roomTwoGate;
 	[SerializeField] private GameObject roomTwoGateBlocker;
     [SerializeField] private CubePusher cubePusher;
-	[SerializeField] private InteractableControlPanel roomTwoControlPanel;
+	[SerializeField] private InteractableViewOpenerObject impulseMomentumTerminal;
 
-    [Header("Room Three")]
+    [Header("Collision Terminal Room Game Objects")]
 	[SerializeField] private GameObject containerGlassThree;
 	[SerializeField] private DataModuleCube dataModuleCube;
     [SerializeField] private Camera collisionVideoCamera;
-	[SerializeField] private InteractableControlPanel roomThreeControlPanel;
+	[SerializeField] private InteractableViewOpenerObject collisionTerminal;
 
 	[Header("Gate Status Color Material")]
     [SerializeField] private Material openGateColor;
@@ -31,42 +44,44 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
 
 	void Start()
     {
-        // Room One Environment Events
-        ActivitySevenManager.RoomOneClearEvent += ReleasePowerCube;
-        PowerSourceCube.RetrieveEvent += () => canPlayerPlaceCube = true;
-        PowerSourceCubeContainer.InteractEvent += UpdateRoomOneGateState;
+		// Center of Mass Terminal Environment Events
+		centerOfMassView.OpenViewEvent += () => SetCenterOfMassTerminalEnvironmentState(true);
+		centerOfMassView.QuitViewEvent += () => SetCenterOfMassTerminalEnvironmentState(false);
+		activitySevenManager.CenterOfMassTerminalClearEvent += ClearCenterOfMassTerminalEnvironmentState;
+		powerSourceCubeOne.RetrieveEvent += () => canPlayerPlaceCube = true;
+		powerContainer.InteractEvent += UpdateCenterOfMassRoomGateState;
 
-        // Room Two Environment Events
-        ActivitySevenManager.RoomTwoClearEvent += UpdateRoomTwoGateState;
+		// Impulse Momentum Terminal Environment Events
+		momentumImpulseForceView.OpenViewEvent += () => SetImpulseMomentumTerminalEnvironmentState(true);
+		momentumImpulseForceView.QuitViewEvent += () => SetImpulseMomentumTerminalEnvironmentState(false);
+		activitySevenManager.MomentumImpulseTerminalClearEvent += ClearImpulseMomentumTerminalEnvironmentState;
 
-        // Room Three Environment Events
-        ActivitySevenManager.RoomThreeClearEvent += ReleaseDataModuleCube;
+		// Elastic Inelastic Collision Terminal Environment Events
+		elasticInelasticCollisionView.OpenViewEvent += () => SetCollisionTerminalEnvironmentState(true);
+		elasticInelasticCollisionView.QuitViewEvent += () => SetCollisionTerminalEnvironmentState(false);
+		activitySevenManager.CollisionTerminalClearEvent += ClearCollisionTerminalEnvironmentState;
     }
 
-    private void OnDisable()
-    {
-        // Room One Environment Events
-        ActivitySevenManager.RoomOneClearEvent -= ReleasePowerCube;
-        PowerSourceCube.RetrieveEvent -= () => canPlayerPlaceCube = true;
-        PowerSourceCubeContainer.InteractEvent -= UpdateRoomOneGateState;
+	#region Center of Mass Terminal Room
+	private void SetCenterOfMassTerminalEnvironmentState(bool isActive)
+	{
+		SetPlayerActivityState(!isActive);
+		activitySevenManager.SetMissionObjectiveDisplay(!isActive);
+		centerOfMassTerminalEnvCamera.gameObject.SetActive(isActive);
+	}
 
-        // Room Two Environment Events
-        ActivitySevenManager.RoomTwoClearEvent -= UpdateRoomTwoGateState;
-
-        // Room Three Environment Events
-        ActivitySevenManager.RoomThreeClearEvent -= ReleaseDataModuleCube;
-    }
-
-    #region Room One
-    private void ReleasePowerCube()
-    {
-        powerSourceCubeOne.SetInteractable(true);
-        powerContainer.SetInteractable(true);
+	private void ClearCenterOfMassTerminalEnvironmentState()
+	{
+		SetCenterOfMassTerminalEnvironmentState(false);
+		centerOfMassTerminal.SetInteractable(false);
+		impulseMomentumTerminal.SetInteractable(true);
+		// Release power cube
+		powerSourceCubeOne.SetInteractable(true);
+		powerContainer.SetInteractable(true);
 		containerGlassOne.gameObject.SetActive(false);
-        roomOneControlPanel.SetInteractable(false);
-    }
+	}
 
-    private void UpdateRoomOneGateState()
+    private void UpdateCenterOfMassRoomGateState()
     {
         if (canPlayerPlaceCube)
         {
@@ -83,26 +98,43 @@ public class ActivitySevenEnvironmentManager : MonoBehaviour
     }
 	#endregion
 
-	#region Room Two
-    private void UpdateRoomTwoGateState()
-    {
-        roomTwoControlPanel.SetInteractable(false);
-        // Open room two gate
-        OpenGate(roomTwoGate, roomTwoGateBlocker);
-        cubePusher.SetWorkState(true);
-    }
+	#region Impulse-Momentum Terminal Room
+	private void SetImpulseMomentumTerminalEnvironmentState(bool isActive)
+	{
+		SetPlayerActivityState(!isActive);
+		activitySevenManager.SetMissionObjectiveDisplay(!isActive);
+		impulseMomentumTerminalEnvCamera.gameObject.SetActive(isActive);
+	}
+
+	private void ClearImpulseMomentumTerminalEnvironmentState()
+	{
+		SetImpulseMomentumTerminalEnvironmentState(false);
+		impulseMomentumTerminal.SetInteractable(false);
+		collisionTerminal.SetInteractable(true);
+		// Open gate and activate pusher
+		OpenGate(roomTwoGate, roomTwoGateBlocker);
+		cubePusher.SetWorkState(true);
+	}
 
 	#endregion
 
-	#region Room Three
+	#region Collision Terminal Room
+	private void SetCollisionTerminalEnvironmentState(bool isActive)
+	{
+		SetPlayerActivityState(!isActive);
+		activitySevenManager.SetMissionObjectiveDisplay(!isActive);
+		collisionTerminalEnvCamera.gameObject.SetActive(isActive);
+	}
 
-    private void ReleaseDataModuleCube()
-    {
-        containerGlassThree.gameObject.SetActive(false);
-        dataModuleCube.SetInteractable(true);
+	private void ClearCollisionTerminalEnvironmentState()
+	{
+		SetCollisionTerminalEnvironmentState(false);
+		collisionTerminal.SetInteractable(false);
+		// Release data module cube
+		containerGlassThree.gameObject.SetActive(false);
+		dataModuleCube.SetInteractable(true);
 		collisionVideoCamera.gameObject.SetActive(true);
-        roomThreeControlPanel.SetInteractable(false);
-    }
+	}
 
 	#endregion
 

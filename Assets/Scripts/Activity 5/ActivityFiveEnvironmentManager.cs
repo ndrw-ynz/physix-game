@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 {
+	[Header("Activity Manager")]
+	[SerializeField] private ActivityFiveManager activityFiveManager;
+
 	[Header("Views")]
 	[SerializeField] private ForceMotionView appleMotionView;
 	[SerializeField] private ForceMotionView rockMotionView;
@@ -172,6 +175,8 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 			appleTreeAreaIndicatorEffect.gameObject.SetActive(false);
 			interactableApples.SetInteractable(false);
 
+			activityFiveManager.SetMissionObjectiveDisplay(true);
+
 			appleMotionEnvironmentStateMachine.TransitionToState(AppleMotionEnvironmentState.None);
 		}
 		else
@@ -218,6 +223,8 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 			rockAreaIndicatorEffect.gameObject.SetActive(false);
 			interactableRock.SetInteractable(false);
 
+			activityFiveManager.SetMissionObjectiveDisplay(true);
+
 			rockMotionEnvironmentStateMachine.TransitionToState(RockMotionEnvironmentState.None);
 		}
 		else
@@ -257,6 +264,8 @@ public class ActivityFiveEnvironmentManager : ActivityEnvironmentManager
 			// Deactivate area effect and interactable boat
 			boatAreaIndicatorEffect.gameObject.SetActive(false);
 			interactableBoat.SetInteractable(false);
+
+			activityFiveManager.SetMissionObjectiveDisplay(true);
 
 			boatMotionEnvironmentStateMachine.TransitionToState(BoatMotionEnvironmentState.None);
 		}

@@ -1,28 +1,27 @@
-using System;
 using UnityEngine;
 
 /// <summary>
 /// A class managing interaction of <c>GameObjects</c> within the environment
 /// of Activity Eight.
 /// </summary>
-public class ActivityEightEnvironmentManager : MonoBehaviour
+public class ActivityEightEnvironmentManager : ActivityEnvironmentManager
 {
-	[Header("Input Reader")]
-	[SerializeField] private InputReader inputReader;
+	[Header("Activity Manager")]
+	[SerializeField] private ActivityEightManager activityEightManager;
 
+	[Header("Views")]
+	[SerializeField] private MomentOfInertiaView momentOfInertiaView;
+	[SerializeField] private TorqueView torqueView;
+	[SerializeField] private EquilibriumView equilibriumView;
 
-	[Header("Player")]
-	[SerializeField] private GameObject player;
-
-
-	[Header("Cameras")]
+	[Header("Environment Cameras")]
 	[SerializeField] private Camera generatorCamera;
 	[SerializeField] private Camera fulcrumCamera;
 	[SerializeField] private Camera weighingScaleCamera;
 
 
 	[Header("Generator Room")]
-	[SerializeField] private InteractableControlPanel generatorControlPanel;
+	[SerializeField] private InteractableViewOpenerObject generatorControlTerminal;
 
 
 	[Header("Moment of Inertia Objects")]
@@ -38,13 +37,13 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 	[Header("Weighing Scale Room")]
 	[SerializeField] private GameObject weighingScaleRoomGate;
 	[SerializeField] private GameObject weighingScaleRoomGateBlocker;
-	[SerializeField] private InteractableControlPanel weighingScaleControlPanel;
+	[SerializeField] private InteractableViewOpenerObject weighingScaleControlTerminal;
 
 
 	[Header("Reboot Room")]
 	[SerializeField] private GameObject rebootRoomGate;
 	[SerializeField] private GameObject rebootRoomGateBlocker;
-	[SerializeField] private InteractableControlPanel equilibriumControlPanel;
+	[SerializeField] private InteractableViewOpenerObject equilibriumControlTerminal;
 	[SerializeField] private RebootButton rebootButton;
 	[SerializeField] private GameObject rebootButtonGlassCover;
 
@@ -54,57 +53,56 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 
 	private void Start()
 	{
-		ActivityEightManager.GeneratorRoomClearEvent += UpdateGeneratorRoomState;
-		ActivityEightManager.WeighingScaleRoomClearEvent += UpdateWeighingScaleRoomState;
-		ActivityEightManager.RebootRoomClearEvent += UpdateRebootRoomState;
+		// Generator Room Environment Events
+		momentOfInertiaView.OpenViewEvent += () => SetGeneratorRoomEnvironmentState(true);
+		momentOfInertiaView.QuitViewEvent += () => SetGeneratorRoomEnvironmentState(false);
+		momentOfInertiaView.UpdateObjectDisplayEvent += UpdateDisplayedMomentOfInertiaObject;
+		activityEightManager.GeneratorRoomClearEvent += ClearGeneratorRoomEnvironmentState;
 
-		ActivityEightManager.GeneratorRoomClearEvent += () => SwitchCameraToPlayerCamera(generatorCamera);
-		ActivityEightManager.WeighingScaleRoomClearEvent += () => SwitchCameraToPlayerCamera(fulcrumCamera);
-		ActivityEightManager.RebootRoomClearEvent += () => SwitchCameraToPlayerCamera(weighingScaleCamera);
+		// Weighing Scale Room Environment Events
+		torqueView.OpenViewEvent += () => SetWeighingScaleRoomEnvironmentState(true);
+		torqueView.QuitViewEvent += () => SetWeighingScaleRoomEnvironmentState(false);
+		activityEightManager.WeighingScaleRoomClearEvent += ClearWeighingScaleRoomEnvironmentState;
 
-		InteractableControlPanel.SwitchToTargetCameraEvent += SwitchCameraToTargetCamera;
-
-		MomentOfInertiaView.QuitViewEvent += () => SwitchCameraToPlayerCamera(generatorCamera);
-		MomentOfInertiaView.UpdateObjectDisplayEvent += UpdateDisplayedMomentOfInertiaObject;
-		TorqueView.QuitViewEvent += () => SwitchCameraToPlayerCamera(fulcrumCamera);
-		EquilibriumView.QuitViewEvent += () => SwitchCameraToPlayerCamera(weighingScaleCamera);
+		// Reboot Room Environment Events
+		equilibriumView.OpenViewEvent += () => SetRebootRoomEnvironmentState(true);
+		equilibriumView.QuitViewEvent += () => SetRebootRoomEnvironmentState(false);
+		activityEightManager.RebootRoomClearEvent += ClearRebootRoomEnvironmentState;
 	}
 
     private void OnDisable()
     {
-        ActivityEightManager.GeneratorRoomClearEvent -= UpdateGeneratorRoomState;
-        ActivityEightManager.WeighingScaleRoomClearEvent -= UpdateWeighingScaleRoomState;
-        ActivityEightManager.RebootRoomClearEvent -= UpdateRebootRoomState;
+		// Generator Room Environment Events
+		momentOfInertiaView.OpenViewEvent -= () => SetGeneratorRoomEnvironmentState(true);
+		momentOfInertiaView.QuitViewEvent -= () => SetGeneratorRoomEnvironmentState(false);
+		momentOfInertiaView.UpdateObjectDisplayEvent -= UpdateDisplayedMomentOfInertiaObject;
+		activityEightManager.GeneratorRoomClearEvent -= ClearGeneratorRoomEnvironmentState;
 
-        ActivityEightManager.GeneratorRoomClearEvent -= () => SwitchCameraToPlayerCamera(generatorCamera);
-        ActivityEightManager.WeighingScaleRoomClearEvent -= () => SwitchCameraToPlayerCamera(fulcrumCamera);
-        ActivityEightManager.RebootRoomClearEvent -= () => SwitchCameraToPlayerCamera(weighingScaleCamera);
+		// Weighing Scale Room Environment Events
+		torqueView.OpenViewEvent -= () => SetWeighingScaleRoomEnvironmentState(true);
+		torqueView.QuitViewEvent -= () => SetWeighingScaleRoomEnvironmentState(false);
+		activityEightManager.WeighingScaleRoomClearEvent -= ClearWeighingScaleRoomEnvironmentState;
 
-        InteractableControlPanel.SwitchToTargetCameraEvent -= SwitchCameraToTargetCamera;
-
-        MomentOfInertiaView.QuitViewEvent -= () => SwitchCameraToPlayerCamera(generatorCamera);
-        MomentOfInertiaView.UpdateObjectDisplayEvent -= UpdateDisplayedMomentOfInertiaObject;
-        TorqueView.QuitViewEvent -= () => SwitchCameraToPlayerCamera(fulcrumCamera);
-        EquilibriumView.QuitViewEvent -= () => SwitchCameraToPlayerCamera(weighingScaleCamera);
+		// Reboot Room Environment Events
+		equilibriumView.OpenViewEvent -= () => SetRebootRoomEnvironmentState(true);
+		equilibriumView.QuitViewEvent -= () => SetRebootRoomEnvironmentState(false);
+		activityEightManager.RebootRoomClearEvent -= ClearRebootRoomEnvironmentState;
     }
 
-    private void UpdateGeneratorRoomState()
+	#region Generator Room Environment
+	private void SetGeneratorRoomEnvironmentState(bool isActive)
 	{
-		generatorControlPanel.SetInteractable(false);
+		SetPlayerActivityState(!isActive);
+		activityEightManager.SetMissionObjectiveDisplay(!isActive);
+		generatorCamera.gameObject.SetActive(isActive);
+	}
+
+	private void ClearGeneratorRoomEnvironmentState()
+	{
+		SetGeneratorRoomEnvironmentState(false);
+		generatorControlTerminal.SetInteractable(false);
+		weighingScaleControlTerminal.SetInteractable(true);
 		OpenGate(weighingScaleRoomGate, weighingScaleRoomGateBlocker);
-	}
-
-	private void UpdateWeighingScaleRoomState()
-	{
-		weighingScaleControlPanel.SetInteractable(false);
-		OpenGate(rebootRoomGate, rebootRoomGateBlocker);
-	}
-
-	private void UpdateRebootRoomState()
-	{
-		equilibriumControlPanel.SetInteractable(false);
-		rebootButton.SetInteractable(true);
-		rebootButtonGlassCover.SetActive(false);
 	}
 
 	/// <summary>
@@ -157,6 +155,41 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 		sphere.SetActive(false);
 		disk.SetActive(false);
 	}
+	#endregion
+
+	#region Weighing Scale Room Environment
+	private void SetWeighingScaleRoomEnvironmentState(bool isActive)
+	{
+		SetPlayerActivityState(!isActive);
+		activityEightManager.SetMissionObjectiveDisplay(!isActive);
+		fulcrumCamera.gameObject.SetActive(isActive);
+	}
+
+	private void ClearWeighingScaleRoomEnvironmentState()
+	{
+		SetWeighingScaleRoomEnvironmentState(false);
+		weighingScaleControlTerminal.SetInteractable(false);
+		equilibriumControlTerminal.SetInteractable(true);
+		OpenGate(rebootRoomGate, rebootRoomGateBlocker);
+	}
+	#endregion
+
+	#region Reboot Room Environment
+	private void SetRebootRoomEnvironmentState(bool isActive)
+	{
+		SetPlayerActivityState(!isActive);
+		activityEightManager.SetMissionObjectiveDisplay(!isActive);
+		weighingScaleCamera.gameObject.SetActive(isActive);
+	}
+
+	private void ClearRebootRoomEnvironmentState()
+	{
+		SetRebootRoomEnvironmentState(false);
+		equilibriumControlTerminal.SetInteractable(false);
+		rebootButtonGlassCover.SetActive(false);
+		rebootButton.SetInteractable(true);
+	}
+	#endregion
 
 	/// <summary>
 	/// Updates the color indicator of a gate and removes associated gate blocker.
@@ -173,25 +206,5 @@ public class ActivityEightEnvironmentManager : MonoBehaviour
 
 		// Remove gate blocker.
 		roomGateBlocker.gameObject.SetActive(false);
-	}
-
-	private void SwitchCameraToTargetCamera(Camera targetCamera)
-	{
-		if (player != null && targetCamera != null)
-		{
-			player.gameObject.SetActive(false);
-			targetCamera.gameObject.SetActive(true);
-		}
-		inputReader.SetUI();
-	}
-
-	public void SwitchCameraToPlayerCamera(Camera targetCamera)
-	{
-		if (player != null && targetCamera != null)
-		{
-			player.gameObject.SetActive(true);
-			targetCamera.gameObject.SetActive(false);
-		}
-		inputReader.SetGameplay();
 	}
 }
