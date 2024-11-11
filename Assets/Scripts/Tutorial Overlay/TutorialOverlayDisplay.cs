@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TutorialOverlayDisplay : MonoBehaviour
@@ -10,6 +11,9 @@ public class TutorialOverlayDisplay : MonoBehaviour
     [SerializeField] private TutorialNavigationButton previousTutorialPageButton;
     [SerializeField] private TutorialNavigationButton nextTutorialPageButton;
 
+    [Header("Tutorial Page Text Indicator")]
+    [SerializeField] private TextMeshProUGUI pageNumberText;
+
     // Sector and page index values
     private int _currentSectorIndex;
     private int _currentPageIndex;
@@ -18,6 +22,7 @@ public class TutorialOverlayDisplay : MonoBehaviour
     {
         // On start, change the page according to the current sector and page indexes assigned
         ChangeTutorialSector(_currentSectorIndex);
+        UpdatePageNumberText();
 
         // Subscribe listeners
         TutorialNavigationButton.TutorialNavigationButtonClick += NavigatePage;
@@ -48,6 +53,7 @@ public class TutorialOverlayDisplay : MonoBehaviour
 
         // Change the page according to the current sector and page indexes
         ChangeTutorialPage(_currentSectorIndex, _currentPageIndex);
+        UpdatePageNumberText();
         UpdateNavigationButtons();
     }
 
@@ -60,6 +66,7 @@ public class TutorialOverlayDisplay : MonoBehaviour
             {
                 // Opens the current page if i is the current page
                 tutorialSectors[currentSector].pages[i].gameObject.SetActive(true);
+                UpdatePageNumberText();
             }
             else
             {
@@ -86,12 +93,26 @@ public class TutorialOverlayDisplay : MonoBehaviour
 
                 // Update navigation button states
                 UpdateNavigationButtons();
+                UpdatePageNumberText();
             }
             else
             {
                 // Ensure that all other sector's game object are closed
                 tutorialSectors[i].gameObject.SetActive(false);
+                for (int j = 0; j < tutorialSectors[i].pages.Count; j++)
+                {
+                    tutorialSectors[i].pages[j].gameObject.SetActive(false);
+                }
             }
+        }
+    }
+
+    private void CloseTutorialOverlay()
+    {
+        // Close tutorial overlay
+        if (this.gameObject.activeSelf)
+        {
+            this.gameObject.SetActive(false);
         }
     }
 
@@ -119,11 +140,13 @@ public class TutorialOverlayDisplay : MonoBehaviour
         }
     }
 
-    private void CloseTutorialOverlay()
+    private void UpdatePageNumberText()
     {
-        if (this.gameObject.activeSelf)
-        {
-            this.gameObject.SetActive(false);
-        }
+        // Get the current page number and sector's total pages
+        int currentPageNumber = ((_currentPageIndex) +1);
+        int currentSectorTotalPages = tutorialSectors[_currentSectorIndex].pages.Count;
+
+        // Update the page number indicator text
+        pageNumberText.text = $"Page {currentPageNumber}/{currentSectorTotalPages}";
     }
 }
