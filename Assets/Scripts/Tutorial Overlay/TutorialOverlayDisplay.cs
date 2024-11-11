@@ -38,6 +38,7 @@ public class TutorialOverlayDisplay : MonoBehaviour
         _currentSectorIndex = 0;
         _currentPageIndex = 0;
 
+        // Ensure there is no duplicate when loading the scene again so, deactivate all pages on disable
         DeactivateAllPages();
 
         // Unsubscribe listeners
@@ -198,6 +199,7 @@ public class TutorialOverlayDisplay : MonoBehaviour
 
     private void DeactivateAllPages()
     {
+        // Deactivate all pages for tutorial overlay
         for (int i = 0; i < tutorialSectors.Count; i++)
         {
             for (int j = 0; j < tutorialSectors[i].pages.Count; j++)
