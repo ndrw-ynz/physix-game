@@ -80,29 +80,30 @@ public class ActivityNineManager : ActivityManager
 	{
 		base.Start();
 
-		// Set level data based from difficulty configuration.
-		ConfigureLevelData(difficultyConfiguration); // IN THE FUTURE, REPLACE WITH WHATEVER SELECTED DIFFICULTY. FOR NOW SET FOR TESTING
+		ConfigureLevelData(difficultyConfiguration);
 
-		// Subscribe to view events
-		GravityView.SubmitAnswerEvent += CheckGravityAnswers;
-		GravitySubmissionStatusDisplay.ProceedEvent += GenerateNewGravityTest;
-		GravitySubmissionStatusDisplay.ProceedEvent += CloseGravityView;
+		SubscribeViewAndDisplayEvents();
 
+		// Initializing given values
 		GenerateGravityGivenData(currentGravityLevel);
 
+		// Setting number of tests
 		currentNumGravityTests = currentGravityLevel.numberOfTests;
 
+		// Setting up views
 		gravityView.SetupGravityView(gravityGivenData);
 		gravityView.UpdateCalibrationTestTextDisplay(0, currentGravityLevel.numberOfTests);
+
+		// Update mission objective display
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Calculate the Gravitational Potential Energy and Gravitational Force of the satellite on the Gravity Control Terminal ({currentGravityLevel.numberOfTests - currentNumGravityTests}/{currentGravityLevel.numberOfTests})");
 
 		inputReader.SetGameplay();
 	}
 
     private void OnDisable()
     {
-        GravityView.SubmitAnswerEvent -= CheckGravityAnswers;
-        GravitySubmissionStatusDisplay.ProceedEvent -= GenerateNewGravityTest;
-        GravitySubmissionStatusDisplay.ProceedEvent -= CloseGravityView;
+        gravityView.SubmitAnswerEvent -= CheckGravityAnswers;
+        gravitySubmissionStatusDisplay.ProceedEvent -= UpdateGravityViewState;
     }
 
     private void Update()
@@ -131,6 +132,13 @@ public class ActivityNineManager : ActivityManager
 				currentGravityLevel = gravityLevelThree;
 				break;
 		}
+	}
+
+	private void SubscribeViewAndDisplayEvents()
+	{
+		// Gravity Sub Activity Related Events
+		gravityView.SubmitAnswerEvent += CheckGravityAnswers;
+		gravitySubmissionStatusDisplay.ProceedEvent += UpdateGravityViewState;
 	}
 
 	private void GenerateGravityGivenData(GravitySubActivitySO gravitySubActivitySO)
@@ -232,26 +240,28 @@ public class ActivityNineManager : ActivityManager
 		gravitySubmissionStatusDisplay.gameObject.SetActive(true);
 	}
 
-	private void GenerateNewGravityTest()
+	private void UpdateGravityViewState()
 	{
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Calculate the Gravitational Potential Energy and Gravitational Force of the satellite on the Gravity Control Terminal ({currentGravityLevel.numberOfTests - currentNumGravityTests}/{currentGravityLevel.numberOfTests})");
+
 		if (currentNumGravityTests > 0)
 		{
 			GenerateGravityGivenData(currentGravityLevel);
 			gravityView.SetupGravityView(gravityGivenData);
 		}
-	}
-
-	private void CloseGravityView()
-	{
-		if (currentNumGravityTests <= 0)
+		else
 		{
 			gravityView.gameObject.SetActive(false);
 			DisplayPerformanceView();
+			missionObjectiveDisplayUI.ClearMissionObjective(0);
 		}
 	}
 
 	public override void DisplayPerformanceView()
 	{
+		missionObjectiveDisplayUI.ClearMissionObjective(1);
+		SetMissionObjectiveDisplay(false);
+
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
 
