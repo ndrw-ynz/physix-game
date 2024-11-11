@@ -38,6 +38,8 @@ public class TutorialOverlayDisplay : MonoBehaviour
         _currentSectorIndex = 0;
         _currentPageIndex = 0;
 
+        DeactivateAllPages();
+
         // Unsubscribe listeners
         TutorialNavigationButton.TutorialNavigationButtonClick -= NavigatePage;
         TutorialSectorJumpButton.SectorJumpButtonClick -= ChangeTutorialSector;
@@ -192,5 +194,16 @@ public class TutorialOverlayDisplay : MonoBehaviour
 
         // Update the page number indicator text
         pageNumberText.text = $"Page {currentPageNumber}/{currentSectorTotalPages}";
+    }
+
+    private void DeactivateAllPages()
+    {
+        for (int i = 0; i < tutorialSectors.Count; i++)
+        {
+            for (int j = 0; j < tutorialSectors[i].pages.Count; j++)
+            {
+                tutorialSectors[i].pages[j].gameObject.SetActive(false);
+            }
+        }
     }
 }
