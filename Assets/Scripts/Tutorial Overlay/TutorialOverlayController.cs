@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TutorialOverlayController : MonoBehaviour
@@ -20,8 +21,15 @@ public class TutorialOverlayController : MonoBehaviour
     [Header("Input Reader")]
     [SerializeField] protected InputReader inputReader;
 
+    [Header("Activity Number")]
+    [SerializeField] private int activityNumber;
+
+    private Difficulty currentActivityDifficulty;
+
     private void OnEnable()
     {
+        GetCurrentActivityDifficulty();
+
         // Add subscriber for resuming gameplay with tutorial overlay is closed
         TutorialOverlayDisplay.TutorialOverlayClose += ResumeGameplay;
     }
@@ -36,6 +44,12 @@ public class TutorialOverlayController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
+            // If the current difficulty is hard for any activity, don't open tutorial overlay
+            if (currentActivityDifficulty == Difficulty.Hard)
+            {
+                return;
+            }
+
             // If tutorial overlay is active, close tutorial overlay
             if (tutorialDisplay.gameObject.activeSelf)
             {
@@ -127,5 +141,48 @@ public class TutorialOverlayController : MonoBehaviour
 
         // Go back to gameplay mode if there is no active terminals
         inputReader.SetGameplay();
+    }
+
+    private void GetCurrentActivityDifficulty()
+    {
+        // Get the current difficulty for the specific activity
+        switch (activityNumber)
+        {
+            case 1:
+                currentActivityDifficulty = ActivityOneManager.difficultyConfiguration;
+                break;
+
+            case 2:
+                currentActivityDifficulty = ActivityTwoManager.difficultyConfiguration;
+                break;
+
+            case 3:
+                currentActivityDifficulty = ActivityThreeManager.difficultyConfiguration;
+                break;
+
+            case 4:
+                currentActivityDifficulty = ActivityFourManager.difficultyConfiguration;
+                break;
+
+            case 5:
+                currentActivityDifficulty = ActivityFiveManager.difficultyConfiguration;
+                break;
+
+            case 6:
+                currentActivityDifficulty = ActivitySixManager.difficultyConfiguration;
+                break;
+
+            case 7:
+                currentActivityDifficulty = ActivitySevenManager.difficultyConfiguration;
+                break;
+
+            case 8:
+                currentActivityDifficulty = ActivityEightManager.difficultyConfiguration;
+                break;
+
+            case 9:
+                currentActivityDifficulty = ActivityNineManager.difficultyConfiguration;
+                break;
+        }
     }
 }
