@@ -1,10 +1,15 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TutorialSectorJumpButton : MonoBehaviour
+public class MechanicSectorButton : MonoBehaviour
 {
     public static event Action<int> SectorJumpButtonClick;
+
+    [Header("Button Image and Text Properties")]
+    public Image buttonImage;
+    public TextMeshProUGUI buttonText;
 
     [Header("Sector Jump Button Properties")]
     [SerializeField] private Button sectorJumpButton;
