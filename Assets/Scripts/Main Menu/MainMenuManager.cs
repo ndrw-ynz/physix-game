@@ -104,7 +104,7 @@ public class MainMenuManager : MonoBehaviour
     private void OpenTopicDiscussionScene(int topicDiscussionNumber)
     {
         // Load specified topic discussion
-        SceneManager.LoadScene(topicDiscussionNumber);
+        SceneManager.LoadScene($"Topic Discussion {topicDiscussionNumber}");
     }
 
     private void OpenDifficultySelectOverlay(int keyValue)
