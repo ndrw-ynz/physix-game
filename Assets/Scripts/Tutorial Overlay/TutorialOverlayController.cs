@@ -10,22 +10,25 @@ public class TutorialOverlayController : MonoBehaviour
         public GameObject terminalStatusScreenUI;
     }
 
+    [Header ("Game Objects To Be Checked")]
     [SerializeField] private List<TerminalStatusScreenGroup> terminalStatusScreenGroup;
     [SerializeField] private List<GameObject> noStatusScreenTerminals;
     [SerializeField] private TutorialOverlayDisplay tutorialDisplay;
-
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject performanceResultsUI;
 
-    [SerializeField] protected  InputReader inputReader;
+    [Header("Input Reader")]
+    [SerializeField] protected InputReader inputReader;
 
     private void OnEnable()
     {
+        // Add subscriber for resuming gameplay with tutorial overlay is closed
         TutorialOverlayDisplay.TutorialOverlayClose += ResumeGameplay;
     }
 
     private void OnDisable()
     {
+        // Remove subscribers
         TutorialOverlayDisplay.TutorialOverlayClose -= ResumeGameplay;
     }
 
