@@ -9,6 +9,7 @@ public class TutorialOverlayController : MonoBehaviour
     {
         public GameObject terminalUI;
         public GameObject terminalStatusScreenUI;
+        public GameObject terminalStatusScreenUI2;
     }
 
     [Header ("Game Objects To Be Checked")]
@@ -92,6 +93,11 @@ public class TutorialOverlayController : MonoBehaviour
                 // If a sub activity terminal is active, and its results screen is not active,
                 // open the tutorial overlay to the solvings section's first page
                 if (terminalStatusScreenGroup[i].terminalStatusScreenUI.activeSelf)
+                {
+                    return;
+                }
+
+                if (terminalStatusScreenGroup[i].terminalStatusScreenUI2 != null && terminalStatusScreenGroup[i].terminalStatusScreenUI2.activeSelf)
                 {
                     return;
                 }
