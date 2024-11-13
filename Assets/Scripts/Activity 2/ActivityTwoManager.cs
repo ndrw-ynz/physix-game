@@ -309,8 +309,69 @@ public class ActivityTwoManager : ActivityManager
 	}
 	#endregion
 
+	protected override void AddAttemptRecord()
+	{
+		Dictionary<string, object> quantitiesResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isQuantitiesSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectQuantitiesSubmission) },
+					{ "durationInSec", new FirestoreField((int)quantitiesGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> cartesianComponentsResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isCartesianComponentsSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectCartesianComponentsSubmission) },
+					{ "durationInSec", new FirestoreField((int)cartesianComponentsGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> vectorAdditionResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isVectorAdditionSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectVectorAdditionSubmission) },
+					{ "durationInSec", new FirestoreField((int)vectorAdditionGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> results = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, object>
+				{
+					{ "quantities", new FirestoreField(quantitiesResults)},
+					{ "cartesianComponents", new FirestoreField(cartesianComponentsResults)},
+					{ "vectorAddition", new FirestoreField(vectorAdditionResults)},
+				}
+			}
+		};
+
+		Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+		{
+			{ "dateAttempted", new FirestoreField(DateTime.UtcNow) },
+			{ "difficulty", new FirestoreField($"{difficultyConfiguration}") },
+			{ "results", new FirestoreField(results) },
+			{ "isAccomplished", new FirestoreField(isQuantitiesSubActivityFinished && isCartesianComponentsSubActivityFinished && isVectorAdditionSubActivityFinished) },
+			{ "studentId", new FirestoreField(UserManager.Instance.CurrentUser.localId) },
+			{ "totalDurationInSec", new FirestoreField((int)(quantitiesGameplayDuration + cartesianComponentsGameplayDuration + vectorAdditionGameplayDuration)) }
+		};
+
+		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityTwoAttempts"));
+	}
+
 	public override void DisplayPerformanceView()
 	{
+		base.DisplayPerformanceView();
+
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
 
