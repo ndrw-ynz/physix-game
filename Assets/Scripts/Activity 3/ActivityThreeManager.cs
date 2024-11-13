@@ -380,8 +380,59 @@ public class ActivityThreeManager : ActivityManager
 	}
 	#endregion
 
+	protected override void AddAttemptRecord()
+	{
+		Dictionary<string, object> graphsResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isGraphsSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectGraphsSubmission) },
+					{ "durationInSec", new FirestoreField((int)graphsGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> kinematics1DResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccelerationAccomplished", new FirestoreField(isAccelerationCalcFinished) },
+					{ "accelerationMistakes", new FirestoreField(numIncorrectAccelerationSubmission) },
+					{ "isTotalDepthAccomplished", new FirestoreField(isTotalDepthCalcFinished) },
+					{ "totalDepthMistakes", new FirestoreField(numIncorrectTotalDepthSubmission) },
+					{ "durationInSec", new FirestoreField((int)kinematics1DGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> results = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, object>
+				{
+					{ "graphs", new FirestoreField(graphsResults)},
+					{ "1DKinematics", new FirestoreField(kinematics1DResults)},
+				}
+			}
+		};
+
+		Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+		{
+			{ "dateAttempted", new FirestoreField(DateTime.UtcNow) },
+			{ "difficulty", new FirestoreField($"{difficultyConfiguration}") },
+			{ "results", new FirestoreField(results) },
+			{ "isAccomplished", new FirestoreField(isGraphsSubActivityFinished && isAccelerationCalcFinished && isTotalDepthCalcFinished) },
+			{ "studentId", new FirestoreField(UserManager.Instance.CurrentUser.localId) },
+			{ "totalDurationInSec", new FirestoreField((int)(graphsGameplayDuration + kinematics1DGameplayDuration)) }
+		};
+
+		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityThreeAttempts"));
+	}
+
 	public override void DisplayPerformanceView()
 	{
+		base.DisplayPerformanceView();
+
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
 
