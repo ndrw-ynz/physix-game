@@ -551,8 +551,55 @@ public class ActivityFiveManager : ActivityManager
 	}
 	#endregion
 
+	protected override void AddAttemptRecord()
+	{
+		Dictionary<string, object> forceResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isAppleMotionSubActivityFinished && isRockMotionSubActivityFinished && isBoatMotionSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectAppleMotionForceSubmission + numIncorrectRockMotionForceSubmission + numIncorrectBoatMotionForceSubmission) },
+				}
+			}
+		};
+
+		Dictionary<string, object> forceDiagramResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isAppleMotionSubActivityFinished && isRockMotionSubActivityFinished && isBoatMotionSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectAppleMotionForceDiagramSubmission + numIncorrectRockMotionForceDiagramSubmission + numIncorrectBoatMotionForceDiagramSubmission) },
+				}
+			}
+		};
+
+		Dictionary<string, object> results = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, object>
+				{
+					{ "forceCalculations", new FirestoreField(forceResults)},
+					{ "forceDiagrams", new FirestoreField(forceDiagramResults)},
+				}
+			}
+		};
+
+		Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+		{
+			{ "dateAttempted", new FirestoreField(DateTime.UtcNow) },
+			{ "difficulty", new FirestoreField($"{difficultyConfiguration}") },
+			{ "results", new FirestoreField(results) },
+			{ "isAccomplished", new FirestoreField(isAppleMotionSubActivityFinished && isRockMotionSubActivityFinished && isBoatMotionSubActivityFinished) },
+			{ "studentId", new FirestoreField(UserManager.Instance.CurrentUser.localId) },
+			{ "totalDurationInSec", new FirestoreField((int)(appleMotionGameplayDuartion + rockMotionGameplayDuartion + boatMotionGameplayDuartion)) }
+		};
+
+		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityFiveAttempts"));
+	}
+
 	public override void DisplayPerformanceView()
 	{
+		base.DisplayPerformanceView();
+
 		SetMissionObjectiveDisplay(false);
 
 		inputReader.SetUI();
