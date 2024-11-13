@@ -772,8 +772,69 @@ public class ActivitySevenManager : ActivityManager
 	}
 	#endregion
 
+	protected override void AddAttemptRecord()
+	{
+		Dictionary<string, object> centerOfMassResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isCenterOfMassCalculationFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectCenterOfMassSubmission) },
+					{ "durationInSec", new FirestoreField((int)centerOfMassDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> momentumImpulseForceResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isMomentumImpulseForceCalculationFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectMomentumImpulseForceSubmission) },
+					{ "durationInSec", new FirestoreField((int)momentumImpulseForceDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> elasticInelasticCollisionResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isElasticInelasticCollisionCalculationFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectElasticInelasticCollisionSubmission) },
+					{ "durationInSec", new FirestoreField((int)elasticInelasticCollisionDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> results = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, object>
+				{
+					{ "centerOfMass", new FirestoreField(centerOfMassResults)},
+					{ "momentumImpulseForce", new FirestoreField(momentumImpulseForceResults)},
+					{ "elasticInelasticCollision", new FirestoreField(elasticInelasticCollisionResults)},
+				}
+			}
+		};
+
+		Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+		{
+			{ "dateAttempted", new FirestoreField(DateTime.UtcNow) },
+			{ "difficulty", new FirestoreField($"{difficultyConfiguration}") },
+			{ "results", new FirestoreField(results) },
+			{ "isAccomplished", new FirestoreField(isCenterOfMassCalculationFinished && isMomentumImpulseForceCalculationFinished && isElasticInelasticCollisionCalculationFinished) },
+			{ "studentId", new FirestoreField(UserManager.Instance.CurrentUser.localId) },
+			{ "totalDurationInSec", new FirestoreField((int)(centerOfMassDuration + momentumImpulseForceDuration + elasticInelasticCollisionDuration)) }
+		};
+
+		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activitySevenAttempts"));
+	}
+
 	public override void DisplayPerformanceView()
 	{
+		base.DisplayPerformanceView();
+
 		missionObjectiveDisplayUI.ClearMissionObjective(3);
 		SetMissionObjectiveDisplay(false);
 

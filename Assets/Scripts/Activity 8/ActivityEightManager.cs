@@ -636,8 +636,69 @@ public class ActivityEightManager : ActivityManager
 	}
 	#endregion
 
+	protected override void AddAttemptRecord()
+	{
+		Dictionary<string, object> momentOfInertiaResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isMomentOfInertiaCalculationFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectMomentOfInertiaSubmission) },
+					{ "durationInSec", new FirestoreField((int)momentOfInertiaDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> torqueResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isTorqueCalculationFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectTorqueSubmission) },
+					{ "durationInSec", new FirestoreField((int)torqueDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> equilibriumResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isEquilibriumCalculationFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectEquilibriumSubmission) },
+					{ "durationInSec", new FirestoreField((int)equilibriumDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> results = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, object>
+				{
+					{ "momentOfInertia", new FirestoreField(momentOfInertiaResults)},
+					{ "torque", new FirestoreField(torqueResults)},
+					{ "equilibrium", new FirestoreField(equilibriumResults)},
+				}
+			}
+		};
+
+		Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+		{
+			{ "dateAttempted", new FirestoreField(DateTime.UtcNow) },
+			{ "difficulty", new FirestoreField($"{difficultyConfiguration}") },
+			{ "results", new FirestoreField(results) },
+			{ "isAccomplished", new FirestoreField(isMomentOfInertiaCalculationFinished && isTorqueCalculationFinished && isEquilibriumCalculationFinished) },
+			{ "studentId", new FirestoreField(UserManager.Instance.CurrentUser.localId) },
+			{ "totalDurationInSec", new FirestoreField((int)(momentOfInertiaDuration + torqueDuration + equilibriumDuration)) }
+		};
+
+		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityEightAttempts"));
+	}
+
 	public override void DisplayPerformanceView()
 	{
+		base.DisplayPerformanceView();
+
 		missionObjectiveDisplayUI.ClearMissionObjective(3);
 		SetMissionObjectiveDisplay(false);
 

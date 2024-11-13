@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -25,8 +26,37 @@ public class FirestoreDocument
 [System.Serializable]
 public class FirestoreField
 {
-	public string stringValue;
-	public string timestampValue;
+#nullable enable
+	public string? stringValue;
+	public int? integerValue;
+	public bool? booleanValue;
+	public string? timestampValue;
+	public Dictionary<string, object>? mapValue;
+#nullable disable
+
+	public FirestoreField(string value)
+	{
+		stringValue = value;
+	}
+
+	public FirestoreField(int value)
+	{
+		integerValue = value;
+	}
+
+	public FirestoreField(bool value)
+	{
+		booleanValue = value;
+	}
+
+	public FirestoreField(DateTime value)
+	{
+		timestampValue = value.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+	}
+
+	public FirestoreField(Dictionary<string, object> map) => mapValue = map;
+
+	public FirestoreField() { }
 }
 
 public class UserManager : MonoBehaviour
@@ -66,7 +96,7 @@ public class UserManager : MonoBehaviour
 		if (request.result == UnityWebRequest.Result.Success)
 		{
 			CurrentUser = JsonConvert.DeserializeObject<FirebaseAuthResponse>(request.downloadHandler.text);
-			yield return StartCoroutine(GetDocument(CurrentUser.localId, CurrentUser.idToken, (success) =>
+			yield return StartCoroutine(GetDocument(CurrentUser.localId, (success) =>
 			{
 				if (success)
 				{
@@ -89,11 +119,11 @@ public class UserManager : MonoBehaviour
 	}
 
 	// Method to retrieve user document from Firestore
-	public IEnumerator GetDocument(string documentId, string idToken, System.Action<bool> callback)
+	public IEnumerator GetDocument(string documentId, System.Action<bool> callback)
 	{
 		string url = FirestoreBaseURL + documentId;
 		UnityWebRequest request = UnityWebRequest.Get(url);
-		request.SetRequestHeader("Authorization", "Bearer " + idToken);
+		request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
 		yield return request.SendWebRequest();
 
@@ -133,6 +163,39 @@ public class UserManager : MonoBehaviour
 		else
 		{
 			Debug.LogError("Failed to update document: " + request.downloadHandler.text);
+		}
+	}
+
+	public IEnumerator CreateAttemptDocument(Dictionary<string, FirestoreField> fields, string documentName)
+	{
+		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{documentName}";
+
+		var requestBody = new { fields = fields };
+		string jsonData = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+		{
+			NullValueHandling = NullValueHandling.Ignore
+		}); 
+		Debug.Log("BODY:\n: " + jsonData);
+
+		// Set up UnityWebRequest for POST
+		UnityWebRequest request = new UnityWebRequest(url, "POST");
+		request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
+		request.downloadHandler = new DownloadHandlerBuffer();
+
+		// Set headers
+		request.SetRequestHeader("Content-Type", "application/json");
+		request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+		// Send the request and wait for a response
+		yield return request.SendWebRequest();
+
+		if (request.result == UnityWebRequest.Result.Success)
+		{
+			Debug.Log("Document created successfully: " + request.downloadHandler.text);
+		}
+		else
+		{
+			Debug.LogError("Failed to create document: " + request.downloadHandler.text);
 		}
 	}
 }

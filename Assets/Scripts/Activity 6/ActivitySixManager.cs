@@ -431,8 +431,69 @@ public class ActivitySixManager : ActivityManager
 	}
 	#endregion
 
+	protected override void AddAttemptRecord()
+	{
+		Dictionary<string, object> dotProductResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isDotProductSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectDotProductSubmission) },
+					{ "durationInSec", new FirestoreField((int)dotProductGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> workResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isWorkSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectWorkSubmission) },
+					{ "durationInSec", new FirestoreField((int)workSubActivityGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> workGraphInterpretationResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isWorkGraphSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectWorkGraphSubmission) },
+					{ "durationInSec", new FirestoreField((int)workGraphSubActivityDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> results = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, object>
+				{
+					{ "dotProduct", new FirestoreField(dotProductResults)},
+					{ "work", new FirestoreField(workResults)},
+					{ "workGraphInterpretation", new FirestoreField(workGraphInterpretationResults)},
+				}
+			}
+		};
+
+		Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+		{
+			{ "dateAttempted", new FirestoreField(DateTime.UtcNow) },
+			{ "difficulty", new FirestoreField($"{difficultyConfiguration}") },
+			{ "results", new FirestoreField(results) },
+			{ "isAccomplished", new FirestoreField(isDotProductSubActivityFinished && isWorkSubActivityFinished && isWorkGraphSubActivityFinished) },
+			{ "studentId", new FirestoreField(UserManager.Instance.CurrentUser.localId) },
+			{ "totalDurationInSec", new FirestoreField((int)(dotProductGameplayDuration + workSubActivityGameplayDuration + workGraphSubActivityDuration)) }
+		};
+
+		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activitySixAttempts"));
+	}
+
 	public override void DisplayPerformanceView()
 	{
+		base.DisplayPerformanceView();
+
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
 

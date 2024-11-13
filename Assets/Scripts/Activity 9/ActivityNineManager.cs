@@ -257,8 +257,45 @@ public class ActivityNineManager : ActivityManager
 		}
 	}
 
+	protected override void AddAttemptRecord()
+	{
+		Dictionary<string, object> gravityResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isGravityCalculationFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectGravitySubmission) },
+					{ "durationInSec", new FirestoreField((int)gameplayTime) }
+				}
+			}
+		};
+
+		Dictionary<string, object> results = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, object>
+				{
+					{ "gravity", new FirestoreField(gravityResults)},
+				}
+			}
+		};
+
+		Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+		{
+			{ "dateAttempted", new FirestoreField(DateTime.UtcNow) },
+			{ "difficulty", new FirestoreField($"{difficultyConfiguration}") },
+			{ "results", new FirestoreField(results) },
+			{ "isAccomplished", new FirestoreField(isGravityCalculationFinished) },
+			{ "studentId", new FirestoreField(UserManager.Instance.CurrentUser.localId) },
+			{ "totalDurationInSec", new FirestoreField((int)gameplayTime)}
+		};
+
+		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityNineAttempts"));
+	}
+
 	public override void DisplayPerformanceView()
 	{
+		base.DisplayPerformanceView();
+
 		missionObjectiveDisplayUI.ClearMissionObjective(1);
 		SetMissionObjectiveDisplay(false);
 

@@ -98,7 +98,10 @@ public class ActivityOneManager : ActivityManager
 		if (isVarianceViewActive && !isVarianceSubActivityFinished) varianceGameplayDuration += Time.deltaTime;
 		if (isAPViewActive && !isAPSubActivityFinished) APGameplayDuration += Time.deltaTime;
 		if (isErrorsViewActive && !isErrorsSubActivityFinished) errorsGameplayDuration += Time.deltaTime;
-		if (isSNSubActivityFinished && isVarianceSubActivityFinished && isAPSubActivityFinished && isErrorsSubActivityFinished) DisplayPerformanceView();
+		if (isSNSubActivityFinished && isVarianceSubActivityFinished && isAPSubActivityFinished && isErrorsSubActivityFinished)
+		{
+			DisplayPerformanceView();
+		}
 	}
 
 	private void ConfigureLevelData(Difficulty difficulty)
@@ -347,8 +350,81 @@ public class ActivityOneManager : ActivityManager
 	}
 	#endregion
 
+	protected override void AddAttemptRecord()
+	{
+		Dictionary<string, object> scientificNotationResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isSNSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectSNSubmission) },
+					{ "durationInSec", new FirestoreField((int)SNGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> varianceResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isVarianceSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectVarianceSubmission) },
+					{ "durationInSec", new FirestoreField((int)varianceGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> accuracyPrecisionResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isAPSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectAPSubmission) },
+					{ "durationInSec", new FirestoreField((int)APGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> errorsResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isErrorsSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectErrorsSubmission) },
+					{ "durationInSec", new FirestoreField((int)errorsGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> results = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, object>
+				{
+					{ "scientificNotation", new FirestoreField(scientificNotationResults)},
+					{ "variance", new FirestoreField(varianceResults)},
+					{ "accuracyPrecision", new FirestoreField(accuracyPrecisionResults)},
+					{ "errors", new FirestoreField(errorsResults)},
+				}
+			}
+		};
+
+		Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+		{
+			{ "dateAttempted", new FirestoreField(DateTime.UtcNow) },
+			{ "difficulty", new FirestoreField($"{difficultyConfiguration}") },
+			{ "results", new FirestoreField(results) },
+			{ "isAccomplished", new FirestoreField(isSNSubActivityFinished && isVarianceSubActivityFinished && isAPSubActivityFinished && isErrorsSubActivityFinished) },
+			{ "studentId", new FirestoreField(UserManager.Instance.CurrentUser.localId) },
+			{ "totalDurationInSec", new FirestoreField((int)(SNGameplayDuration + varianceGameplayDuration + APGameplayDuration + errorsGameplayDuration)) }
+		};
+
+		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityOneAttempts"));
+	}
+
 	public override void DisplayPerformanceView()
 	{
+		base.DisplayPerformanceView();
+
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
 

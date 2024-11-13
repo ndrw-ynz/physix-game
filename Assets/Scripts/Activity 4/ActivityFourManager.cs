@@ -273,8 +273,57 @@ public class ActivityFourManager : ActivityManager
 	}
 	#endregion
 
+	protected override void AddAttemptRecord()
+	{
+		Dictionary<string, object> projectileMotionResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isProjectileMotionSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectProjectileMotionSubmission) },
+					{ "durationInSec", new FirestoreField((int)projectileMotionGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> circularMotionResults = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, FirestoreField>
+				{
+					{ "isAccomplished", new FirestoreField(isCircularMotionSubActivityFinished) },
+					{ "mistakes", new FirestoreField(numIncorrectCircularMotionSubmission) },
+					{ "durationInSec", new FirestoreField((int)circularMotionGameplayDuration) }
+				}
+			}
+		};
+
+		Dictionary<string, object> results = new Dictionary<string, object>
+		{
+			{ "fields", new Dictionary<string, object>
+				{
+					{ "projectileMotion", new FirestoreField(projectileMotionResults)},
+					{ "circularMotion", new FirestoreField(circularMotionResults)},
+				}
+			}
+		};
+
+		Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+		{
+			{ "dateAttempted", new FirestoreField(DateTime.UtcNow) },
+			{ "difficulty", new FirestoreField($"{difficultyConfiguration}") },
+			{ "results", new FirestoreField(results) },
+			{ "isAccomplished", new FirestoreField(isProjectileMotionSubActivityFinished && isCircularMotionSubActivityFinished) },
+			{ "studentId", new FirestoreField(UserManager.Instance.CurrentUser.localId) },
+			{ "totalDurationInSec", new FirestoreField((int)(projectileMotionGameplayDuration + circularMotionGameplayDuration)) }
+		};
+
+		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityFourAttempts"));
+	}
+
 	public override void DisplayPerformanceView()
 	{
+		base.DisplayPerformanceView();
+
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
 

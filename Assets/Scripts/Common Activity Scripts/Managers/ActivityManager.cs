@@ -6,6 +6,8 @@ public abstract class ActivityManager : MonoBehaviour
 	[SerializeField] protected ActivityPauseMenuUI activityPauseMenuUI;
 	[SerializeField] protected MissionObjectiveDisplayUI missionObjectiveDisplayUI;
 
+	protected bool hasDisplayedPerformance = false;
+
 	protected virtual void Start()
 	{
 		inputReader.PauseGameplayEvent += HandleGameplayPause;
@@ -35,5 +37,13 @@ public abstract class ActivityManager : MonoBehaviour
 		missionObjectiveDisplayUI.gameObject.SetActive(isActive);
 	}
 
-	public abstract void DisplayPerformanceView();
+	protected abstract void AddAttemptRecord();
+
+	public virtual void DisplayPerformanceView()
+	{
+		if (hasDisplayedPerformance) return;
+		hasDisplayedPerformance = true;
+
+		AddAttemptRecord();
+	}
 }
