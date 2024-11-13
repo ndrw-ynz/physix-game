@@ -71,9 +71,6 @@ public class ActivityOneManager : ActivityManager
 	private int numIncorrectErrorsSubmission;
 	private int numCorrectErrorsSubmission;
 
-	// Variable for tracking if activity performance is displayed
-	private bool hasDisplayedPerformance = false;
-
 	protected override void Start()
 	{
 		base.Start();
@@ -353,7 +350,7 @@ public class ActivityOneManager : ActivityManager
 	}
 	#endregion
 
-	private void AddAttemptRecord()
+	protected override void AddAttemptRecord()
 	{
 		Dictionary<string, object> scientificNotationResults = new Dictionary<string, object>
 		{
@@ -416,7 +413,7 @@ public class ActivityOneManager : ActivityManager
 			{ "dateAttempted", new FirestoreField(DateTime.UtcNow) },
 			{ "difficulty", new FirestoreField($"{difficultyConfiguration}") },
 			{ "results", new FirestoreField(results) },
-			{ "status", new FirestoreField(isSNSubActivityFinished && isVarianceSubActivityFinished && isAPSubActivityFinished && isErrorsSubActivityFinished) },
+			{ "isAccomplished", new FirestoreField(isSNSubActivityFinished && isVarianceSubActivityFinished && isAPSubActivityFinished && isErrorsSubActivityFinished) },
 			{ "studentId", new FirestoreField(UserManager.Instance.CurrentUser.localId) },
 			{ "totalDurationInSec", new FirestoreField((int)(SNGameplayDuration + varianceGameplayDuration + APGameplayDuration + errorsGameplayDuration)) }
 		};
@@ -426,9 +423,7 @@ public class ActivityOneManager : ActivityManager
 
 	public override void DisplayPerformanceView()
 	{
-		if (hasDisplayedPerformance) return;
-
-		AddAttemptRecord();
+		base.DisplayPerformanceView();
 
 		inputReader.SetUI();
 		performanceView.gameObject.SetActive(true);
@@ -494,8 +489,6 @@ public class ActivityOneManager : ActivityManager
 				averageScoreThreshold: 2
 				)
 			);
-
-		hasDisplayedPerformance = true;
 	}
 
 	protected override void HandleGameplayPause()
