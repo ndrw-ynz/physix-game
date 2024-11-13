@@ -26,11 +26,13 @@ public class FirestoreDocument
 [System.Serializable]
 public class FirestoreField
 {
+#nullable enable
 	public string? stringValue;
 	public int? integerValue;
 	public bool? booleanValue;
 	public string? timestampValue;
 	public Dictionary<string, object>? mapValue;
+#nullable disable
 
 	public FirestoreField(string value)
 	{
