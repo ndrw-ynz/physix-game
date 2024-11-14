@@ -32,6 +32,7 @@ public class FirestoreField
 	public bool? booleanValue;
 	public string? timestampValue;
 	public Dictionary<string, object>? mapValue;
+	public List<object>? arrayValue; // New array field
 #nullable disable
 
 	public FirestoreField(string value)
@@ -55,6 +56,8 @@ public class FirestoreField
 	}
 
 	public FirestoreField(Dictionary<string, object> map) => mapValue = map;
+
+	public FirestoreField(List<object> array) => arrayValue = array;
 
 	public FirestoreField() { }
 }
@@ -198,4 +201,34 @@ public class UserManager : MonoBehaviour
 			Debug.LogError("Failed to create document: " + request.downloadHandler.text);
 		}
 	}
+
+	public IEnumerator UpdateDiscussionPageProgress(Dictionary<string, FirestoreField> updatedFields, string collectionName, string studentID, System.Action<bool> callback)
+	{
+		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{collectionName}/{studentID}";
+
+		var requestBody = new { fields = updatedFields };
+        string jsonData = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore
+        });
+
+        UnityWebRequest request = new UnityWebRequest(url, "PATCH");
+        request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log($"{collectionName} document updated successfully!");
+			callback(true);
+        }
+        else
+        {
+            Debug.LogError($"Failed to update document {collectionName}: " + request.downloadHandler.text);
+            callback(false);
+        }
+    }
 }

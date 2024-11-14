@@ -102,7 +102,7 @@ public class DiscussionPagesDisplay : MonoBehaviour
         }
     }
 
-    public Dictionary<string, List<int>> SaveReadPagesData()
+    public Dictionary<string, List<int>> RecordReadPagesData()
     {
         Dictionary<string, List<int>> newReadPagesMapData = new Dictionary<string, List<int>>();
 
@@ -121,7 +121,7 @@ public class DiscussionPagesDisplay : MonoBehaviour
                 }
             }
 
-            string sectorKey = "sector "+(i + 1);
+            string sectorKey = "sector"+(i + 1);
             newReadPagesMapData[sectorKey] = currentSectorReadPages;
         }
 

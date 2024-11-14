@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TopicDiscussionManager : MonoBehaviour
 {
@@ -47,8 +48,10 @@ public class TopicDiscussionManager : MonoBehaviour
         // Test data for topic discussion 9
         _readPagesMapData = new Dictionary<string, List<int>>()
         {
-            { "sector1", new List<int> { 0, 1, 2, 3, 4} },
+            { "sector1", new List<int> { 0, 1} },
             { "sector2", new List<int> { 0 } },
+            { "sector3", new List<int> { } },
+            { "sector4", new List<int> { } },
         };
 
         // Load read pages data into the sub topics list of discussion pages display
@@ -100,6 +103,7 @@ public class TopicDiscussionManager : MonoBehaviour
         DiscussionBackToActivityButton.BackToActivityClickEvent -= HandleBackToGameClick;
     }
 
+#region Function for Event Handling
     private void HandlePrevNextClick(Direction direction)
     {
         // Change current sector and page index values based on direction
@@ -219,27 +223,29 @@ public class TopicDiscussionManager : MonoBehaviour
 
         UpdatePageJumpButtonColors();
     }
+#endregion
 
+#region Discussion Scene Close Related Buttons
     private void HandleBackToMainMenuClick()
     {
-        // Save read pages data and load main menu scene
-        discussionPagesDisplay.SaveReadPagesData();
-        sceneNavigationDisplay.LoadMainMenu();
+        SaveReadPagesDataToDB(_topicDiscussionNumber);
     }
     private void HandleStartActivityClick()
     {
-        // Save read pages data and load specified activity scene
-        discussionPagesDisplay.SaveReadPagesData();
-        sceneNavigationDisplay.LoadActivity(_topicDiscussionNumber);
+        //// Save read pages data and load specified activity scene
+        //discussionPagesDisplay.RecordReadPagesData();
+        //sceneNavigationDisplay.LoadActivity(_topicDiscussionNumber);
     }
     private void HandleBackToGameClick()
     {
-        // Save read pages data and close current discussion scene
-        discussionPagesDisplay.SaveReadPagesData();
-        sceneNavigationDisplay.CloseCurrentDiscussion(_topicDiscussionNumber);
+        //// Save read pages data and close current discussion scene
+        //discussionPagesDisplay.RecordReadPagesData();
+        //sceneNavigationDisplay.CloseCurrentDiscussion(_topicDiscussionNumber);
 
     }
+#endregion
 
+#region Helper Functions
     private void ChangePreviousAndNextButtonState()
     {
         /* Set the current sector's pages count, previous sector title,next sector title, and update
@@ -307,4 +313,198 @@ public class TopicDiscussionManager : MonoBehaviour
             pageJumpDisplay.UpdatePageJumpButtonColor(_currentSectorIndex, isPageMarkedRead, i);
         }
     }
+#endregion
+
+#region Database Functionalities
+    private void SaveReadPagesDataToDB(int topicDiscussionNumber)
+    {
+        // Create generalize data to be used in all cases
+        Dictionary<string, List<int>> recordedMarkedPages = discussionPagesDisplay.RecordReadPagesData();
+        List<List<object>> sectors;
+        Dictionary<string, FirestoreField> updatedFields;
+
+        //To Do: Add a checker to see if the recordedMarkedPages is == to the current discussion's 
+
+        string currentUserLocalID = UserManager.Instance.CurrentUser.localId;
+
+        switch (topicDiscussionNumber)
+        {
+            case 1: // 5 Sectors
+                // Create the appropriate amount of lists needed for a discussion's sector count
+                sectors = new List<List<object>>()
+                {
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                };
+
+                // Process and create the updated fields dictionary
+                updatedFields = CreateUpdatedFieldsDictionary(sectors, recordedMarkedPages);
+                StartCoroutine(UserManager.Instance.UpdateDiscussionPageProgress(updatedFields, "discussionOnePageProgress", currentUserLocalID, OnPagesSaveResult));
+                break;
+
+            case 2: // 4 Sectors
+                // Create the appropriate amount of lists needed for a discussion's sector count
+                sectors = new List<List<object>>()
+                {
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                };
+
+                // Process and create the updated fields dictionary
+                updatedFields = CreateUpdatedFieldsDictionary(sectors, recordedMarkedPages);
+                StartCoroutine(UserManager.Instance.UpdateDiscussionPageProgress(updatedFields, "discussionTwoPageProgress", currentUserLocalID, OnPagesSaveResult));
+                break;
+
+            case 3: // 3 Sectors
+                // Create the appropriate amount of lists needed for a discussion's sector count
+                sectors = new List<List<object>>()
+                {
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                };
+
+                // Process and create the updated fields dictionary
+                updatedFields = CreateUpdatedFieldsDictionary(sectors, recordedMarkedPages);
+                StartCoroutine(UserManager.Instance.UpdateDiscussionPageProgress(updatedFields, "discussionThreePageProgress", currentUserLocalID, OnPagesSaveResult));
+                break;
+
+            case 4: // 3 Sectors
+                // Create the appropriate amount of lists needed for a discussion's sector count
+                sectors = new List<List<object>>()
+                {
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                };
+
+                // Process and create the updated fields dictionary
+                updatedFields = CreateUpdatedFieldsDictionary(sectors, recordedMarkedPages);
+                StartCoroutine(UserManager.Instance.UpdateDiscussionPageProgress(updatedFields, "discussionFourPageProgress", currentUserLocalID, OnPagesSaveResult));
+                break;
+
+            case 5: // 3 Sectors
+                // Create the appropriate amount of lists needed for a discussion's sector count
+                sectors = new List<List<object>>()
+                {
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                };
+
+                // Process and create the updated fields dictionary
+                updatedFields = CreateUpdatedFieldsDictionary(sectors, recordedMarkedPages);
+                StartCoroutine(UserManager.Instance.UpdateDiscussionPageProgress(updatedFields, "discussionFivePageProgress", currentUserLocalID, OnPagesSaveResult));
+                break;
+
+            case 6: // 4 Sectors
+                // Create the appropriate amount of lists needed for a discussion's sector count
+                sectors = new List<List<object>>()
+                {
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                };
+
+                // Process and create the updated fields dictionary
+                updatedFields = CreateUpdatedFieldsDictionary(sectors, recordedMarkedPages);
+                StartCoroutine(UserManager.Instance.UpdateDiscussionPageProgress(updatedFields, "discussionSixPageProgress", currentUserLocalID, OnPagesSaveResult));
+                break;
+
+            case 7: // 4 Sectors
+                // Create the appropriate amount of lists needed for a discussion's sector count
+                sectors = new List<List<object>>()
+                {
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                };
+
+                // Process and create the updated fields dictionary
+                updatedFields = CreateUpdatedFieldsDictionary(sectors, recordedMarkedPages);
+                StartCoroutine(UserManager.Instance.UpdateDiscussionPageProgress(updatedFields, "discussionSevenPageProgress", currentUserLocalID, OnPagesSaveResult));
+                break;
+
+            case 8: // 4 Sectors
+                // Create the appropriate amount of lists needed for a discussion's sector count
+                sectors = new List<List<object>>()
+                {
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                    new List<object>(),
+                };
+
+                // Process and create the updated fields dictionary
+                updatedFields = CreateUpdatedFieldsDictionary(sectors, recordedMarkedPages);
+                StartCoroutine(UserManager.Instance.UpdateDiscussionPageProgress(updatedFields, "discussionEigthPageProgress", currentUserLocalID, OnPagesSaveResult));
+                break;
+
+            case 9: // 2 Sectors
+                // Create the appropriate amount of lists needed for a discussion's sector count
+                sectors = new List<List<object>>()
+                {
+                    new List<object>(),
+                    new List<object>(),
+                };
+
+                // Process and create the updated fields dictionary
+                updatedFields = CreateUpdatedFieldsDictionary(sectors, recordedMarkedPages);
+                StartCoroutine(UserManager.Instance.UpdateDiscussionPageProgress(updatedFields, "discussionNinePageProgress", currentUserLocalID, OnPagesSaveResult));
+                break;
+        }
+    }
+
+    private void OnPagesSaveResult(bool success)
+    {
+        if (success)
+        {
+            SceneManager.LoadScene("Main Menu");
+        }
+        else
+        {
+            Debug.LogError("Marked Pages Data was not saved");
+        }
+    }
+
+    private Dictionary<string, FirestoreField> CreateUpdatedFieldsDictionary(List<List<object>> sectors, Dictionary<string, List<int>> recordedMarkedPages)
+    {
+        // Add the values of each array from the recorded marked pages as FirestoreField data
+        for (int i = 0; i < sectors.Count; i++)
+        {
+            foreach (var value in recordedMarkedPages[$"sector{i + 1}"])
+            {
+                sectors[i].Add(new FirestoreField(value));
+            }
+        }
+
+        // Create the sectorListPairs dictionary to be used in the markedPages Dictionary
+        Dictionary<string, object> sectorListPairs = new Dictionary<string, object>();
+
+        // Add all sector key and array values that were converted to FirestoreField data
+        for (int i = 0; i < sectors.Count; i++)
+        {
+            sectorListPairs[$"sector{i + 1}"] = new { arrayValue = new { values = sectors[i] } };
+        }
+
+        Dictionary<string, object> markedPages = new Dictionary<string, object>()
+        {
+            {"fields", sectorListPairs}
+        };
+
+        Dictionary<string, FirestoreField> updatedFields = new Dictionary<string, FirestoreField>()
+        {
+            {"markedPages", new FirestoreField(markedPages) }
+        };
+
+        return updatedFields;
+    }
+#endregion
 }
