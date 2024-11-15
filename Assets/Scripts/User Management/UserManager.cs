@@ -224,9 +224,28 @@ public class UserManager : MonoBehaviour
 	}
 
 
-	// Three functions that I added for main menu and topic discussion //
-	// Method to get section name from student's section Id
-	public IEnumerator GetSectionDocument(string documentId, System.Action<bool> callback)
+    // Four functions that I added for logging out, main menu and topic discussion //
+    // Method to get section name from student's section Id
+    public IEnumerator LogoutCurrentUser()
+    {
+        CurrentUser = null;
+        UserData = null;
+        UserSection = null;
+        DiscussionOneMarkedPagesData = null;
+        DiscussionTwoMarkedPagesData = null;
+        DiscussionThreeMarkedPagesData = null;
+        DiscussionFourMarkedPagesData = null;
+        DiscussionFiveMarkedPagesData = null;
+        DiscussionSixMarkedPagesData = null;
+        DiscussionSevenMarkedPagesData = null;
+        DiscussionEightMarkedPagesData = null;
+        DiscussionNineMarkedPagesData = null;
+
+		Debug.Log("Logout Successful");
+        yield break;
+    }
+
+    public IEnumerator GetSectionDocument(string documentId, System.Action<bool> callback)
 	{
 		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/sections/{documentId}";
 		UnityWebRequest request = UnityWebRequest.Get(url);

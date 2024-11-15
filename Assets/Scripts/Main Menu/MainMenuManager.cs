@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -80,7 +81,7 @@ public class MainMenuManager : MonoBehaviour
         ActivityButton.ActivityClick -= OpenDifficultySelectOverlay;
         ActivityDifficultyButton.DifficultyClick -= OpenActivityWithDifficultyType;
         OverlayCloseButton.OverlayCloseClicked -= CloseDifficultySelectOverlay;
-        LogoutButton.LogoutButtonClick += LogoutUser;
+        LogoutButton.LogoutButtonClick -= LogoutUser;
     }
 
     private void OpenLessonComponentsScreen(int keyValue)
@@ -172,7 +173,13 @@ public class MainMenuManager : MonoBehaviour
 
     private void LogoutUser()
     {
-        // In the future, remove user data and UID session
+        StartCoroutine(LogoutSequence());
+    }
+
+    // Sequence for logging out current user ensuring all fields are set to null
+    private IEnumerator LogoutSequence()
+    {
+        yield return StartCoroutine(UserManager.Instance.LogoutCurrentUser());
         SceneManager.LoadScene("Login");
     }
 }
