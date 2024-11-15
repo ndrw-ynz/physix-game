@@ -71,8 +71,17 @@ public class UserManager : MonoBehaviour
 
 	public FirebaseAuthResponse CurrentUser { get; private set; }
 	public FirestoreDocument UserData { get; private set; }
+	public FirestoreDocument DiscussionOneMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionTwoMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionThreeMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionFourMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionFiveMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionSixMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionSevenMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionEightMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionNineMarkedPagesData { get; private set; }
 
-	private void Awake()
+    private void Awake()
 	{
 		if (Instance != null && Instance != this)
 		{
@@ -202,7 +211,67 @@ public class UserManager : MonoBehaviour
 		}
 	}
 
-	public IEnumerator UpdateDiscussionPageProgress(Dictionary<string, FirestoreField> updatedFields, string collectionName, string studentID, System.Action<bool> callback)
+	// Method to get discussion pages progress document of the current user
+    public IEnumerator GetDiscussionPagesProgress(int topicDiscussionNumber, string collectionName, string documentId, System.Action<bool> callback)
+    {
+		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{collectionName}/{documentId}";
+        UnityWebRequest request = UnityWebRequest.Get(url);
+        request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+			switch (topicDiscussionNumber)
+			{
+				case 1:
+                    DiscussionOneMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 2:
+                    DiscussionTwoMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 3:
+                    DiscussionThreeMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 4:
+                    DiscussionFourMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 5:
+                    DiscussionFiveMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 6:
+                    DiscussionSixMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 7:
+                    DiscussionSevenMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 8:
+                    DiscussionEightMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 9:
+                    DiscussionNineMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+            }
+            Debug.Log("Discussion Pages retrieved successfully!");
+            callback(true);
+        }
+        else
+        {
+            Debug.LogError("Failed to retrieve discussion pages: " + request.downloadHandler.text);
+            callback(false);
+        }
+    }
+
+	// Method to update discussion pages progress document of the current user
+    public IEnumerator UpdateDiscussionPageProgress(Dictionary<string, FirestoreField> updatedFields, string collectionName, string studentID, System.Action<bool> callback)
 	{
 		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{collectionName}/{studentID}";
 

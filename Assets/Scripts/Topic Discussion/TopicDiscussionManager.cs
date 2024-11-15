@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,6 +27,9 @@ public class TopicDiscussionManager : MonoBehaviour
     private Dictionary<string, List<int>> _readPagesMapData;
     private void Start()
     {
+        // Get read pages data from database and update UI according to the data
+        GetReadPagesDataFromDB();
+
         // TO DO: add a function that checks if an activity scene is currently active
         bool isActivitySceneActive = false;
 
@@ -45,39 +49,11 @@ public class TopicDiscussionManager : MonoBehaviour
         // Get the sub topics' list count
         _subTopicsListCount = discussionPagesDisplay.GetSubTopicListCount();
 
-        // Test data for topic discussion 9
-        _readPagesMapData = new Dictionary<string, List<int>>()
-        {
-            { "sector1", new List<int> { 0, 1} },
-            { "sector2", new List<int> { 0 } },
-            { "sector3", new List<int> { } },
-            { "sector4", new List<int> { } },
-        };
-
-        // Load read pages data into the sub topics list of discussion pages display
-        discussionPagesDisplay.LoadReadPagesData(_readPagesMapData);
-
         // Load the current sector and page of the topic discussion
         discussionPagesDisplay.ChangePage(_currentSectorIndex, _currentPageIndex);
 
         // Activate the proper previous and next button(s) based from the current sector and page of the topic discussion
         ChangePreviousAndNextButtonState();
-
-        // Activate the proper read indicator button based on the current sector and page read state
-        ChangeReadIndicatorButtonState();
-
-        // Load all progress bar buttons' texts and colors to the left of the screen based on the amount of sectors of the topic discussion
-        LoadProgressBarButtons();
-
-        // Set the indicator's line position to the bottom of the current sector's progress bar button
-        progressDisplay.UpdateIndicatorLinePosition(_currentSectorIndex);
-
-        // Load all page jump buttons based on the current sector's page count
-        LoadPageJumpButtons();
-        // Set the page jump button outline to the current page's page jump button
-        pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
-        // Update the page jump button colors of the current sector based on their read states
-        UpdatePageJumpButtonColors();
 
         // Add button click listeners
         PagePrevNextButton.PagePrevNextClickEvent += HandlePrevNextClick;
@@ -103,11 +79,11 @@ public class TopicDiscussionManager : MonoBehaviour
         DiscussionBackToActivityButton.BackToActivityClickEvent -= HandleBackToGameClick;
     }
 
-#region Function for Event Handling
+    #region Function for Event Handling
     private void HandlePrevNextClick(Direction direction)
     {
         // Change current sector and page index values based on direction
-        switch (direction) 
+        switch (direction)
         {
             case Direction.PreviousPage:
                 _currentPageIndex -= 1;
@@ -135,7 +111,7 @@ public class TopicDiscussionManager : MonoBehaviour
             case Direction.PreviousSector:
                 discussionPagesDisplay.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
 
-                int previousSectorLastPageIndex = discussionPagesDisplay.GetCurrentSectorPagesCount((_currentSectorIndex)-1) - 1;
+                int previousSectorLastPageIndex = discussionPagesDisplay.GetCurrentSectorPagesCount((_currentSectorIndex) - 1) - 1;
                 _currentSectorIndex -= 1;
                 _currentPageIndex = previousSectorLastPageIndex;
 
@@ -178,7 +154,7 @@ public class TopicDiscussionManager : MonoBehaviour
         // Close current page and jump to the specified sector index if not sectorIndex is not the current sector
         if (_currentSectorIndex != sectorIndex)
         {
-            discussionPagesDisplay.CloseCurrentPage(_currentSectorIndex,_currentPageIndex);
+            discussionPagesDisplay.CloseCurrentPage(_currentSectorIndex, _currentPageIndex);
 
             _currentSectorIndex = sectorIndex;
             _currentPageIndex = 0;
@@ -223,9 +199,9 @@ public class TopicDiscussionManager : MonoBehaviour
 
         UpdatePageJumpButtonColors();
     }
-#endregion
+    #endregion
 
-#region Discussion Scene Close Related Buttons
+    #region Discussion Scene Close Related Buttons
     private void HandleBackToMainMenuClick()
     {
         SaveReadPagesDataToDB(_topicDiscussionNumber);
@@ -243,16 +219,16 @@ public class TopicDiscussionManager : MonoBehaviour
         //sceneNavigationDisplay.CloseCurrentDiscussion(_topicDiscussionNumber);
 
     }
-#endregion
+    #endregion
 
-#region Helper Functions
+    #region Helper Functions of Events
     private void ChangePreviousAndNextButtonState()
     {
         /* Set the current sector's pages count, previous sector title,next sector title, and update
            and update previous and next button state*/
         int currentSectorPagesCount = discussionPagesDisplay.GetCurrentSectorPagesCount(_currentSectorIndex);
-        string previousSectorTitle = _currentSectorIndex>0 ? discussionPagesDisplay.GetPreviousSectorTitle(_currentSectorIndex): null;
-        string nextSectorTitle = _currentSectorIndex< _subTopicsListCount - 1 ? discussionPagesDisplay.GetNextSectorTitle(_currentSectorIndex): null;
+        string previousSectorTitle = _currentSectorIndex > 0 ? discussionPagesDisplay.GetPreviousSectorTitle(_currentSectorIndex) : null;
+        string nextSectorTitle = _currentSectorIndex < _subTopicsListCount - 1 ? discussionPagesDisplay.GetNextSectorTitle(_currentSectorIndex) : null;
         previousNextButtonsDisplay.ChangePrevNextButtonsState(_currentSectorIndex, _currentPageIndex, _subTopicsListCount, currentSectorPagesCount, previousSectorTitle, nextSectorTitle);
     }
     private void ChangeReadIndicatorButtonState()
@@ -313,9 +289,48 @@ public class TopicDiscussionManager : MonoBehaviour
             pageJumpDisplay.UpdatePageJumpButtonColor(_currentSectorIndex, isPageMarkedRead, i);
         }
     }
-#endregion
+    #endregion
 
-#region Database Functionalities
+    #region Database Functionalities
+    // Get read pages data from database
+    private void GetReadPagesDataFromDB()
+    {
+        FirestoreDocument currentDiscussionDocument = UserManager.Instance.DiscussionOneMarkedPagesData;
+        string currentUserLocalID = UserManager.Instance.CurrentUser.localId;
+
+        switch (_topicDiscussionNumber)
+        {
+            case 1:
+                StartCoroutine(UserManager.Instance.GetDiscussionPagesProgress(_topicDiscussionNumber, "discussionOnePageProgress", currentUserLocalID, OnPagesGetResult));
+                break;
+            case 2:
+                StartCoroutine(UserManager.Instance.GetDiscussionPagesProgress(_topicDiscussionNumber, "discussionTwoPageProgress", currentUserLocalID, OnPagesGetResult));
+                break;
+            case 3:
+                StartCoroutine(UserManager.Instance.GetDiscussionPagesProgress(_topicDiscussionNumber, "discussionThreePageProgress", currentUserLocalID, OnPagesGetResult));
+                break;
+            case 4:
+                StartCoroutine(UserManager.Instance.GetDiscussionPagesProgress(_topicDiscussionNumber, "discussionFourPageProgress", currentUserLocalID, OnPagesGetResult));
+                break;
+            case 5:
+                StartCoroutine(UserManager.Instance.GetDiscussionPagesProgress(_topicDiscussionNumber, "discussionFivePageProgress", currentUserLocalID, OnPagesGetResult));
+                break;
+            case 6:
+                StartCoroutine(UserManager.Instance.GetDiscussionPagesProgress(_topicDiscussionNumber, "discussionSixPageProgress", currentUserLocalID, OnPagesGetResult));
+                break;
+            case 7:
+                StartCoroutine(UserManager.Instance.GetDiscussionPagesProgress(_topicDiscussionNumber, "discussionSevenPageProgress", currentUserLocalID, OnPagesGetResult));
+                break;
+            case 8:
+                StartCoroutine(UserManager.Instance.GetDiscussionPagesProgress(_topicDiscussionNumber, "discussionEightPageProgress", currentUserLocalID, OnPagesGetResult));
+                break;
+            case 9:
+                StartCoroutine(UserManager.Instance.GetDiscussionPagesProgress(_topicDiscussionNumber, "discussionNinePageProgress", currentUserLocalID, OnPagesGetResult));
+                break;
+        }
+    }
+
+    // Save new read pages data to database
     private void SaveReadPagesDataToDB(int topicDiscussionNumber)
     {
         // Create generalize data to be used in all cases
@@ -462,6 +477,74 @@ public class TopicDiscussionManager : MonoBehaviour
         }
     }
 
+    // Callbacks
+    // Callback for GetReadPagesDataFromDB()
+    private void OnPagesGetResult(bool success)
+    {
+        if (success)
+        {
+            Debug.Log("Read Pages Data Get Successful");
+            Dictionary<string, object> markedPages;
+            switch (_topicDiscussionNumber)
+            {
+                case 1:
+                    markedPages = UserManager.Instance.DiscussionOneMarkedPagesData.fields["markedPages"].mapValue;
+                    _readPagesMapData = ParseDocumentToDict(markedPages);
+                    break;
+                case 2:
+                    markedPages = UserManager.Instance.DiscussionTwoMarkedPagesData.fields["markedPages"].mapValue;
+                    _readPagesMapData = ParseDocumentToDict(markedPages);
+                    break;
+                case 3:
+                    markedPages = UserManager.Instance.DiscussionThreeMarkedPagesData.fields["markedPages"].mapValue;
+                    _readPagesMapData = ParseDocumentToDict(markedPages);
+                    break;
+                case 4:
+                    markedPages = UserManager.Instance.DiscussionFourMarkedPagesData.fields["markedPages"].mapValue;
+                    _readPagesMapData = ParseDocumentToDict(markedPages);
+                    break;
+                case 5:
+                    markedPages = UserManager.Instance.DiscussionFiveMarkedPagesData.fields["markedPages"].mapValue;
+                    _readPagesMapData = ParseDocumentToDict(markedPages);
+                    break;
+                case 6:
+                    markedPages = UserManager.Instance.DiscussionSixMarkedPagesData.fields["markedPages"].mapValue;
+                    _readPagesMapData = ParseDocumentToDict(markedPages);
+                    break;
+                case 7:
+                    markedPages = UserManager.Instance.DiscussionSevenMarkedPagesData.fields["markedPages"].mapValue;
+                    _readPagesMapData = ParseDocumentToDict(markedPages);
+                    break;
+                case 8:
+                    markedPages = UserManager.Instance.DiscussionEightMarkedPagesData.fields["markedPages"].mapValue;
+                    _readPagesMapData = ParseDocumentToDict(markedPages);
+                    break;
+                case 9:
+                    markedPages = UserManager.Instance.DiscussionNineMarkedPagesData.fields["markedPages"].mapValue;
+                    _readPagesMapData = ParseDocumentToDict(markedPages);
+                    break;
+            }
+            // Load read pages data into the sub topics list of discussion pages display
+            discussionPagesDisplay.LoadReadPagesData(_readPagesMapData);
+            // Activate the proper read indicator button based on the current sector and page read state
+            ChangeReadIndicatorButtonState();
+            // Load all progress bar buttons' texts and colors to the left of the screen based on the amount of sectors of the topic discussion
+            LoadProgressBarButtons();
+            // Set the indicator's line position to the bottom of the current sector's progress bar button
+            progressDisplay.UpdateIndicatorLinePosition(_currentSectorIndex);
+            // Load all page jump buttons based on the current sector's page count
+            LoadPageJumpButtons();
+            // Set the page jump button outline to the current page's page jump button
+            pageJumpDisplay.UpdatePageJumpButtonsOutline(_currentPageIndex);
+            // Update the page jump button colors of the current sector based on their read states
+            UpdatePageJumpButtonColors();
+        }
+        else
+        {
+            Debug.LogError("Marked Pages Data was not saved");
+        }
+    }
+    // Callback for SaveReadPagesDataToDB
     private void OnPagesSaveResult(bool success)
     {
         if (success)
@@ -474,6 +557,43 @@ public class TopicDiscussionManager : MonoBehaviour
         }
     }
 
+    // Helper Functions
+    // Helper function of GetReadPagesDataFromDB()
+    private Dictionary<string, List<int>> ParseDocumentToDict(Dictionary<string, object> markedPages)
+    {
+        Dictionary<string, List<int>> sectorArrayPairs = new Dictionary<string, List<int>>();
+
+        foreach (var fields in markedPages)
+        {
+            // Access each sector in the "fields"
+            foreach (var sector in fields.Value as JObject)
+            {
+                // Extract the array of "values"
+                JArray valuesArray = sector.Value["arrayValue"]?["values"] as JArray;
+
+                if (valuesArray != null)
+                {
+                    // Initialize a List for the sector
+                    List<int> sectorValues = new List<int>();
+
+                    // Loop through the values array and extract integer values
+                    foreach (var value in valuesArray)
+                    {
+                        if (value["integerValue"] != null)
+                        {
+                            // Add the integer value to the HashSet
+                            sectorValues.Add(int.Parse(value["integerValue"].ToString()));
+                        }
+                    }
+
+                    // Store the List in the dictionary
+                    sectorArrayPairs[sector.Key] = sectorValues;
+                }
+            }
+        }
+        return sectorArrayPairs;
+    }
+    // Helper function of SaveReadPagesDataToDB()
     private Dictionary<string, FirestoreField> CreateUpdatedFieldsDictionary(List<List<object>> sectors, Dictionary<string, List<int>> recordedMarkedPages)
     {
         // Add the values of each array from the recorded marked pages as FirestoreField data
