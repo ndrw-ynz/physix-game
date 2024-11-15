@@ -21,12 +21,11 @@ public class MainMenuManager : MonoBehaviour
     private int highestLessonUnlockedDifficulties;
     private void Start()
 	{
-
         // Setup mock user profile and set it up in the title screen
         // Change first name, last name, and section into the loaded user value in the future
-        firstName = "Superman";
-        lastName = "Balatayo";
-        section = "4";
+        firstName = UserManager.Instance.UserData.fields["firstName"].stringValue;
+        lastName = UserManager.Instance.UserData.fields["lastName"].stringValue;
+        section = UserManager.Instance.UserSection.fields["sectionName"].stringValue;
         titleScreen.SetUserProfile(firstName, lastName, section);
 
         // Setup current user's mock highest unlocked lesson and load all unlocked lessons
