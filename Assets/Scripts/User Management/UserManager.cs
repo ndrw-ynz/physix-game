@@ -265,13 +265,13 @@ public class UserManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Failed to retrieve discussion pages: " + request.downloadHandler.text);
+            Debug.Log("Failed to retrieve discussion pages: " + request.downloadHandler.text);
             callback(false);
         }
     }
 
 	// Method to update discussion pages progress document of the current user
-    public IEnumerator UpdateDiscussionPageProgress(Dictionary<string, FirestoreField> updatedFields, string collectionName, string studentID, System.Action<bool> callback)
+    public IEnumerator UpdateDiscussionPageProgress(Dictionary<string, FirestoreField> updatedFields, string collectionName, string studentID)
 	{
 		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{collectionName}/{studentID}";
 
@@ -292,12 +292,10 @@ public class UserManager : MonoBehaviour
         if (request.result == UnityWebRequest.Result.Success)
         {
             Debug.Log($"{collectionName} document updated successfully!");
-			callback(true);
         }
         else
         {
             Debug.LogError($"Failed to update document {collectionName}: " + request.downloadHandler.text);
-            callback(false);
         }
     }
 }
