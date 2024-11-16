@@ -32,6 +32,7 @@ public class FirestoreField
 	public bool? booleanValue;
 	public string? timestampValue;
 	public Dictionary<string, object>? mapValue;
+	public List<object>? arrayValue; // New array field
 #nullable disable
 
 	public FirestoreField(string value)
@@ -56,6 +57,8 @@ public class FirestoreField
 
 	public FirestoreField(Dictionary<string, object> map) => mapValue = map;
 
+	public FirestoreField(List<object> array) => arrayValue = array;
+
 	public FirestoreField() { }
 }
 
@@ -68,8 +71,18 @@ public class UserManager : MonoBehaviour
 
 	public FirebaseAuthResponse CurrentUser { get; private set; }
 	public FirestoreDocument UserData { get; private set; }
+	public FirestoreDocument UserSection { get; private set; }
+	public FirestoreDocument DiscussionOneMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionTwoMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionThreeMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionFourMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionFiveMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionSixMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionSevenMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionEightMarkedPagesData { get; private set; }
+    public FirestoreDocument DiscussionNineMarkedPagesData { get; private set; }
 
-	private void Awake()
+    private void Awake()
 	{
 		if (Instance != null && Instance != this)
 		{
@@ -100,14 +113,25 @@ public class UserManager : MonoBehaviour
 			{
 				if (success)
 				{
-					Debug.Log("User signed in successfully.");
-					callback(true);
+					StartCoroutine(GetSectionDocument(UserData.fields["sectionId"].stringValue, (success) =>
+					{
+						if (success)
+						{
+                            Debug.Log("User signed in successfully.");
+                            callback(true);
+                        }
+						else
+						{
+                            Debug.LogError("Sign-in failed: " + request.downloadHandler.text);
+                            callback(false);
+							UserSection = null;
+                        }
+					}));
+					
 				}
 				else
 				{
-					Debug.LogError("Sign-in failed: " + request.downloadHandler.text);
 					CurrentUser = null;
-					callback(false);
 				}
 			}));
 		}
@@ -198,4 +222,135 @@ public class UserManager : MonoBehaviour
 			Debug.LogError("Failed to create document: " + request.downloadHandler.text);
 		}
 	}
+
+
+    // Four functions that I added for logging out, main menu and topic discussion //
+    // Method to get section name from student's section Id
+    public IEnumerator LogoutCurrentUser()
+    {
+        CurrentUser = null;
+        UserData = null;
+        UserSection = null;
+        DiscussionOneMarkedPagesData = null;
+        DiscussionTwoMarkedPagesData = null;
+        DiscussionThreeMarkedPagesData = null;
+        DiscussionFourMarkedPagesData = null;
+        DiscussionFiveMarkedPagesData = null;
+        DiscussionSixMarkedPagesData = null;
+        DiscussionSevenMarkedPagesData = null;
+        DiscussionEightMarkedPagesData = null;
+        DiscussionNineMarkedPagesData = null;
+
+		Debug.Log("Logout Successful");
+        yield break;
+    }
+
+    public IEnumerator GetSectionDocument(string documentId, System.Action<bool> callback)
+	{
+		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/sections/{documentId}";
+		UnityWebRequest request = UnityWebRequest.Get(url);
+		request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+		yield return request.SendWebRequest();
+
+		if (request.result == UnityWebRequest.Result.Success)
+		{
+			UserSection = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+			Debug.Log("Section document retrieved successfully!");
+			callback(true);
+		}
+		else
+		{
+            Debug.LogError("Failed to retrieve section document: " + request.downloadHandler.text);
+            callback(false);
+        }
+    }
+
+    // Method to get discussion pages progress document of the current user
+    public IEnumerator GetDiscussionPagesProgress(int topicDiscussionNumber, string collectionName, string documentId, System.Action<bool> callback)
+    {
+		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{collectionName}/{documentId}";
+        UnityWebRequest request = UnityWebRequest.Get(url);
+        request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+			switch (topicDiscussionNumber)
+			{
+				case 1:
+                    DiscussionOneMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 2:
+                    DiscussionTwoMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 3:
+                    DiscussionThreeMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 4:
+                    DiscussionFourMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 5:
+                    DiscussionFiveMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 6:
+                    DiscussionSixMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 7:
+                    DiscussionSevenMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 8:
+                    DiscussionEightMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+
+                case 9:
+                    DiscussionNineMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+                    break;
+            }
+            Debug.Log("Discussion Pages retrieved successfully!");
+            callback(true);
+        }
+        else
+        {
+            Debug.Log("Failed to retrieve discussion pages: " + request.downloadHandler.text);
+            callback(false);
+        }
+    }
+
+	// Method to update discussion pages progress document of the current user
+    public IEnumerator UpdateDiscussionPageProgress(Dictionary<string, FirestoreField> updatedFields, string collectionName, string studentID)
+	{
+		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{collectionName}/{studentID}";
+
+		var requestBody = new { fields = updatedFields };
+        string jsonData = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore
+        });
+
+        UnityWebRequest request = new UnityWebRequest(url, "PATCH");
+        request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log($"{collectionName} document updated successfully!");
+        }
+        else
+        {
+            Debug.LogError($"Failed to update document {collectionName}: " + request.downloadHandler.text);
+        }
+    }
 }

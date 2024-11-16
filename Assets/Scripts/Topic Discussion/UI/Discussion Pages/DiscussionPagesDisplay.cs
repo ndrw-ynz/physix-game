@@ -79,30 +79,34 @@ public class DiscussionPagesDisplay : MonoBehaviour
     public void LoadReadPagesData(Dictionary<string, List<int>> readPagesMapData)
     {
         // Get the list of keys from dictionary
-        List<string> sectorNames = new List<string>(readPagesMapData.Keys);
+        //List<string> sectorNames = new List<string>(readPagesMapData.Keys);
 
-        // Loop through the indices of the key list
-        for (int i = 0; i < sectorNames.Count; i++)
+        foreach(var sectorName in readPagesMapData)
         {
-            string sectorName = sectorNames[i];
-            List<int> readPagesIndexes = readPagesMapData[sectorName];
-            
-            // Set specified pages to have been read state based on the read pages map data
-            foreach(int index in readPagesIndexes)
+            if (sectorName.Key == "sector1")
             {
-                if (index < subTopicsList[i].pages.Count)
-                {
-                    subTopicsList[i].pages[index].isMarkedRead = true;
-                }
-                else
-                {
-                    Debug.Log("Index is out of bounds. Index is greater than the current sector's pages count");
-                }
+                SetPagesMarkedRead(sectorName.Value, 0);
+            }
+            if (sectorName.Key == "sector2")
+            {
+                SetPagesMarkedRead(sectorName.Value, 1);
+            }
+            if (sectorName.Key == "sector3")
+            {
+                SetPagesMarkedRead(sectorName.Value, 2);
+            }
+            if (sectorName.Key == "sector4")
+            {
+                SetPagesMarkedRead(sectorName.Value, 3);
+            }
+            if (sectorName.Key == "sector5")
+            {
+                SetPagesMarkedRead(sectorName.Value, 4);
             }
         }
     }
 
-    public Dictionary<string, List<int>> SaveReadPagesData()
+    public Dictionary<string, List<int>> RecordReadPagesData()
     {
         Dictionary<string, List<int>> newReadPagesMapData = new Dictionary<string, List<int>>();
 
@@ -121,11 +125,27 @@ public class DiscussionPagesDisplay : MonoBehaviour
                 }
             }
 
-            string sectorKey = "sector "+(i + 1);
+            string sectorKey = "sector"+(i + 1);
             newReadPagesMapData[sectorKey] = currentSectorReadPages;
         }
 
         return newReadPagesMapData;
+    }
+
+    // Helper function of LoadReadPagesData
+    private void SetPagesMarkedRead(List<int> sectorReadDataList, int index)
+    {
+        foreach (int value  in sectorReadDataList)
+        {
+            if (value < subTopicsList[index].pages.Count)
+            {
+                subTopicsList[index].pages[value].isMarkedRead = true;
+            }
+            else
+            {
+                Debug.Log("Index is out of bounds. Index is greater than the current sector's pages count");
+            }
+        }
     }
 
     #region Page Animation

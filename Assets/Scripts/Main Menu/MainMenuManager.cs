@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -21,12 +22,11 @@ public class MainMenuManager : MonoBehaviour
     private int highestLessonUnlockedDifficulties;
     private void Start()
 	{
-
         // Setup mock user profile and set it up in the title screen
         // Change first name, last name, and section into the loaded user value in the future
-        firstName = "Superman";
-        lastName = "Balatayo";
-        section = "4";
+        firstName = UserManager.Instance.UserData.fields["firstName"].stringValue;
+        lastName = UserManager.Instance.UserData.fields["lastName"].stringValue;
+        section = UserManager.Instance.UserSection.fields["sectionName"].stringValue;
         titleScreen.SetUserProfile(firstName, lastName, section);
 
         // Setup current user's mock highest unlocked lesson and load all unlocked lessons
@@ -81,7 +81,7 @@ public class MainMenuManager : MonoBehaviour
         ActivityButton.ActivityClick -= OpenDifficultySelectOverlay;
         ActivityDifficultyButton.DifficultyClick -= OpenActivityWithDifficultyType;
         OverlayCloseButton.OverlayCloseClicked -= CloseDifficultySelectOverlay;
-        LogoutButton.LogoutButtonClick += LogoutUser;
+        LogoutButton.LogoutButtonClick -= LogoutUser;
     }
 
     private void OpenLessonComponentsScreen(int keyValue)
@@ -173,7 +173,13 @@ public class MainMenuManager : MonoBehaviour
 
     private void LogoutUser()
     {
-        // In the future, remove user data and UID session
+        StartCoroutine(LogoutSequence());
+    }
+
+    // Sequence for logging out current user ensuring all fields are set to null
+    private IEnumerator LogoutSequence()
+    {
+        yield return StartCoroutine(UserManager.Instance.LogoutCurrentUser());
         SceneManager.LoadScene("Login");
     }
 }
