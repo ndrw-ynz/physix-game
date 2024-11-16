@@ -45,11 +45,6 @@ public class TitleScreenButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
             screenToDeactivate.gameObject.SetActive(false);
             screenToActivate.gameObject.SetActive(true);
         }
-        else
-        {
-            Debug.Log("Title screen is already deactivated. Maybe there's an error to references.");
-            Debug.Log("Or you may have pressed the Logout Button which does not have a function yet");
-        }
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
