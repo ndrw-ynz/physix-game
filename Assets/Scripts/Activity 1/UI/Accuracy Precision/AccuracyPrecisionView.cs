@@ -18,6 +18,8 @@ public class AccuracyPrecisionView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		// Checking collisionType
 		APGraphType? selectedAPGraphType = null;
 		foreach (APGraphTypeButton button in APGraphTypeButtons)

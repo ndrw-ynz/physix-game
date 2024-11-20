@@ -13,6 +13,7 @@ public class ContainerPickerView : MonoBehaviour
 	public void UpdateContainerDisplay(BoxContainer boxContainer)
 	{
 		containerValueText.text = boxContainer == null ? "" : $"{boxContainer.measurementText.text}";
+		SceneSoundManager.Instance.PlaySFX("Click");
 	}
 
 	private void OnEnable()
