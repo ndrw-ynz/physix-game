@@ -91,6 +91,8 @@ public class ActivityThreeManager : ActivityManager
 	{
 		base.Start();
 
+		SceneSoundManager.Instance.PlayMusic("With love from Vertex Studio (3)");
+
 		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeViewAndDisplayEvents();
@@ -212,12 +214,16 @@ public class ActivityThreeManager : ActivityManager
 
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectGraphsSubmission++;
 			currentNumGraphsTests--;
 			graphsView.UpdateTestCountTextDisplay(currentGraphsLevel.numberOfTests - currentNumGraphsTests, currentGraphsLevel.numberOfTests);
 		}
 		else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectGraphsSubmission++;
 		}
 
@@ -281,12 +287,16 @@ public class ActivityThreeManager : ActivityManager
 
 		if (isAccelerationCorrect)
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectAccelerationSubmission++;
 			currentNumAccelerationTests--;
 			kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfAccelerationProblems - currentNumAccelerationTests, currentKinematics1DLevel.numberOfAccelerationProblems);
 		}
 		else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectAccelerationSubmission++;
 		}
 
@@ -299,12 +309,16 @@ public class ActivityThreeManager : ActivityManager
 
 		if (isTotalDepthCorrect)
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectTotalDepthSubmission++;
 			currentNumTotalDepthTests--;
 			kinematics1DView.UpdateTestCountTextDisplay(currentKinematics1DLevel.numberOfTotalDepthProblems - currentNumTotalDepthTests, currentKinematics1DLevel.numberOfTotalDepthProblems);
 		}
 		else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectTotalDepthSubmission++;
 		}
 
