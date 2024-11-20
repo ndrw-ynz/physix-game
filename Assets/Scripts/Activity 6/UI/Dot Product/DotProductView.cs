@@ -62,6 +62,8 @@ public class DotProductView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		DotProductAnswerSubmission submission = new DotProductAnswerSubmission(
 			xCoordScalarProduct: xCoordScalarProductDisplay.productValue,
 			yCoordScalarProduct: yCoordScalarProductDisplay.productValue,
