@@ -129,6 +129,8 @@ public class ActivityFiveManager : ActivityManager
 	{
 		base.Start();
 
+		SceneSoundManager.Instance.PlayMusic("With love from Vertex Studio (34)");
+
 		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeForceMotionEvents();
@@ -403,9 +405,13 @@ public class ActivityFiveManager : ActivityManager
 		// Update force answer gameplay metric
 		if (!result)
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectForceSubmissionRef++;
 		} else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectForceSubmissionRef++;
 		}
 
@@ -418,9 +424,13 @@ public class ActivityFiveManager : ActivityManager
 
 		// Update force diagram answer gameplay metric
 		if (!results.isAllCorrect()) {
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectForceDiagramSubmissionRef++;
 		} else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectForceDiagramSubmissionRef++;
 		}
 
