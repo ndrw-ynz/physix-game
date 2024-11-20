@@ -91,6 +91,8 @@ public class ProjectileMotionView : MonoBehaviour
 
 	public void OnLeftPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		calculationPages[currentPageIndex].gameObject.SetActive(false);
 		currentPageIndex--;
 		calculationPages[currentPageIndex].gameObject.SetActive(true);
@@ -104,6 +106,8 @@ public class ProjectileMotionView : MonoBehaviour
 
 	public void OnRightPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		calculationPages[currentPageIndex].gameObject.SetActive(false);
 		currentPageIndex++;
 		calculationPages[currentPageIndex].gameObject.SetActive(true);
@@ -117,6 +121,8 @@ public class ProjectileMotionView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		ProjectileMotionAnswerSubmission submission = new ProjectileMotionAnswerSubmission(
 			maximumHeight: maximumHeightFormulaDisplay.resultValue,
 			horizontalRange: horizontalRangeFormulaDisplay.resultValue,

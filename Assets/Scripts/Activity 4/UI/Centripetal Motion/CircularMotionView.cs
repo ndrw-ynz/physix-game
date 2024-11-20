@@ -40,6 +40,8 @@ public class CircularMotionView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		SubmitAnswerEvent?.Invoke(centripetalAccelerationFormulaDisplay.resultValue);
 	}
 
