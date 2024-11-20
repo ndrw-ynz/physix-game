@@ -53,6 +53,8 @@ public class ActivityThreeEnvironmentManager : ActivityEnvironmentManager
 		SetGraphsTerminalEnvironmentState(false);
 		graphsTerminal.SetInteractable(false);
 		graphsTransitionDoor.GetComponent<Animator>().SetBool("door_open", true);
+
+		SceneSoundManager.Instance.PlaySFX("Door_Large_Open_01");
 	}
 	#endregion
 
