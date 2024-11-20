@@ -38,6 +38,8 @@ public class GraphPlacementSystem : MonoBehaviour
 	{
 		if (graphManager.currentGraph && graphManager.canEditGraph)
 		{
+			SceneSoundManager.Instance.PlaySFX("Click");
+
 			Graph currentGraph = graphManager.currentGraph;
 
 			Vector3 mousePosition = graphManager.GetSelectedMapPosition();
