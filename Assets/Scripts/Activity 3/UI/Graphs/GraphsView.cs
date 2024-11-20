@@ -58,6 +58,8 @@ public class GraphsView : MonoBehaviour
 
 	private void SwitchToGraphEditorUI(Graph graph)
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		gameObject.SetActive(false);
 
 		graphEditorUI.gameObject.SetActive(true);
@@ -69,6 +71,8 @@ public class GraphsView : MonoBehaviour
 
 	private void SwitchToGraphViewerUI(Graph graph)
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		gameObject.SetActive(false);
 
 		graphEditorUI.gameObject.SetActive(false);
@@ -80,6 +84,8 @@ public class GraphsView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		GraphsAnswerSubmission submission = new GraphsAnswerSubmission(
 			positionVsTimeGraph: graphManager.positionVsTimeGraph,
 			velocityVsTimeGraph: graphManager.velocityVsTimeGraph,

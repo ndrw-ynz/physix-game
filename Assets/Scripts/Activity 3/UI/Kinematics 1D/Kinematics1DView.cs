@@ -77,6 +77,8 @@ public class Kinematics1DView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		if (accelerationCalcDisplay.activeSelf)
 		{
 			SubmitAccelerationAnswerEvent?.Invoke(accelerationFormulaDisplay.resultValue);
