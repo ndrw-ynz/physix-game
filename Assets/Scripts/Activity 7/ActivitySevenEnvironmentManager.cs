@@ -81,7 +81,7 @@ public class ActivitySevenEnvironmentManager : ActivityEnvironmentManager
 		containerGlassOne.gameObject.SetActive(false);
 	}
 
-    private void UpdateCenterOfMassRoomGateState()
+	private void UpdateCenterOfMassRoomGateState()
     {
         if (canPlayerPlaceCube)
         {
@@ -92,8 +92,10 @@ public class ActivitySevenEnvironmentManager : ActivityEnvironmentManager
             // Open room one gate
             OpenGate(roomOneGate, roomOneGateBlocker);
 
-            // Disable interaction on powerContainer
-            powerContainer.SetInteractable(false);
+			// Disable interaction on powerContainer
+			powerContainer.SetInteractable(false);
+
+			SceneSoundManager.Instance.PlaySFX("Door_Large_Open_01");
 		}
     }
 	#endregion
@@ -114,6 +116,8 @@ public class ActivitySevenEnvironmentManager : ActivityEnvironmentManager
 		// Open gate and activate pusher
 		OpenGate(roomTwoGate, roomTwoGateBlocker);
 		cubePusher.SetWorkState(true);
+
+		SceneSoundManager.Instance.PlaySFX("Door_Large_Open_01");
 	}
 
 	#endregion
@@ -134,6 +138,8 @@ public class ActivitySevenEnvironmentManager : ActivityEnvironmentManager
 		containerGlassThree.gameObject.SetActive(false);
 		dataModuleCube.SetInteractable(true);
 		collisionVideoCamera.gameObject.SetActive(true);
+
+		SceneSoundManager.Instance.PlaySFX("Door_Large_Open_01");
 	}
 
 	#endregion
