@@ -106,6 +106,8 @@ public class GravityView : MonoBehaviour
 	#region Buttons
 	public void OnLeftPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(false);
 		rightPageButton.gameObject.SetActive(true);
 
@@ -116,6 +118,8 @@ public class GravityView : MonoBehaviour
 
 	public void OnRightPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(true);
 		rightPageButton.gameObject.SetActive(false);
 
@@ -126,6 +130,8 @@ public class GravityView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		GravityAnswerSubmission submission = new GravityAnswerSubmission(
 			gravitationalForce: gravitationalForceFormulaDisplay.resultValue,
 			GPE: GPEFormulaDisplay.resultValue
