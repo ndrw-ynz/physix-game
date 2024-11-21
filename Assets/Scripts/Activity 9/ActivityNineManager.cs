@@ -80,6 +80,8 @@ public class ActivityNineManager : ActivityManager
 	{
 		base.Start();
 
+		SceneSoundManager.Instance.PlayMusic("Space Walk");
+
 		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeViewAndDisplayEvents();
@@ -213,6 +215,8 @@ public class ActivityNineManager : ActivityManager
 	{
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectGravitySubmission++;
 			currentNumGravityTests--;
 			string displayText;
@@ -230,6 +234,8 @@ public class ActivityNineManager : ActivityManager
 			gravityView.UpdateCalibrationTestTextDisplay(currentGravityLevel.numberOfTests - currentNumGravityTests, currentGravityLevel.numberOfTests);
 		} else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectGravitySubmission++;
 			gravitySubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
