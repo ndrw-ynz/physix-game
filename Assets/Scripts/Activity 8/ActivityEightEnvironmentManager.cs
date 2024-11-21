@@ -171,6 +171,8 @@ public class ActivityEightEnvironmentManager : ActivityEnvironmentManager
 		weighingScaleControlTerminal.SetInteractable(false);
 		equilibriumControlTerminal.SetInteractable(true);
 		OpenGate(rebootRoomGate, rebootRoomGateBlocker);
+
+		SceneSoundManager.Instance.PlaySFX("Door_Large_Open_01");
 	}
 	#endregion
 
@@ -206,5 +208,7 @@ public class ActivityEightEnvironmentManager : ActivityEnvironmentManager
 
 		// Remove gate blocker.
 		roomGateBlocker.gameObject.SetActive(false);
+
+		SceneSoundManager.Instance.PlaySFX("Door_Large_Open_01");
 	}
 }
