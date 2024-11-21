@@ -158,6 +158,8 @@ public class EquilibriumView : MonoBehaviour
 	#region Buttons
 	public void OnLeftPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(false);
 		rightPageButton.gameObject.SetActive(true);
 
@@ -169,6 +171,8 @@ public class EquilibriumView : MonoBehaviour
 
 	public void OnRightPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(true);
 		rightPageButton.gameObject.SetActive(false);
 
@@ -180,6 +184,8 @@ public class EquilibriumView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		// Checking equilibriumType
 		EquilibriumType? equilibriumType;
 		if (inEquilibriumButton.isClicked == true && notInEquilibriumButton.isClicked == false)

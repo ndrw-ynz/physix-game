@@ -31,6 +31,8 @@ public class EquilibriumSubmissionStatusDisplay : SubmissionStatusDisplay
 
 	public void DisplayLeftPageInfo()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(false);
 		rightPageButton.gameObject.SetActive(true);
 
@@ -42,6 +44,8 @@ public class EquilibriumSubmissionStatusDisplay : SubmissionStatusDisplay
 
 	public void DisplayRightPageInfo()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(true);
 		rightPageButton.gameObject.SetActive(false);
 

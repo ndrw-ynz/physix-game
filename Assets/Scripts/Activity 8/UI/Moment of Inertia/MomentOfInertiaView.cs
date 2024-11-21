@@ -156,6 +156,8 @@ public class MomentOfInertiaView : MonoBehaviour
 	/// </summary>
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		MomentOfInertiaFormulaDisplay formulaDisplay = GetFormulaDisplay(selectedInertiaObjectType);
 		var resultValue = formulaDisplay == null ? null : formulaDisplay.resultValue;
 
