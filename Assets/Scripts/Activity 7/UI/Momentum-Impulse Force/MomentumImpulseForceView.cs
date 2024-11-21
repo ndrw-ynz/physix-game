@@ -147,6 +147,8 @@ public class MomentumImpulseForceView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		switch (ActivitySevenManager.difficultyConfiguration)
 		{
 			case Difficulty.Easy:

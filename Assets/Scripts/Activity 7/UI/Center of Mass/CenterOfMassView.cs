@@ -228,6 +228,8 @@ public class CenterOfMassView : MonoBehaviour
 
 	public void OnLeftPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(false);
 		rightPageButton.gameObject.SetActive(true);
 
@@ -240,6 +242,8 @@ public class CenterOfMassView : MonoBehaviour
 
 	public void OnRightPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(true);
 		rightPageButton.gameObject.SetActive(false);
 
@@ -252,6 +256,8 @@ public class CenterOfMassView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		CenterOfMassAnswerSubmission centerOfMassAnswerSubmission = new CenterOfMassAnswerSubmission();
 
 		// Set MassTimesCoordinates for X and Y

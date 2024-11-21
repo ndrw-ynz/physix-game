@@ -36,6 +36,8 @@ public class CenterOfMassSubmissionStatusDisplay : SubmissionStatusDisplay
 
 	public void DisplayCenterOfMassXInfo()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(false);
 		rightPageButton.gameObject.SetActive(true);
 
@@ -46,6 +48,8 @@ public class CenterOfMassSubmissionStatusDisplay : SubmissionStatusDisplay
 
 	public void DisplayCenterOfMassYInfo()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(true);
 		rightPageButton.gameObject.SetActive(false);
 

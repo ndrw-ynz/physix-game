@@ -40,6 +40,8 @@ public class ElasticInelasticCollisionSubmissionStatusDisplay : SubmissionStatus
 
 	public void DisplayLeftPageInfo()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(false);
 		rightPageButton.gameObject.SetActive(true);
 
@@ -49,6 +51,8 @@ public class ElasticInelasticCollisionSubmissionStatusDisplay : SubmissionStatus
 
 	public void DisplayRightPageInfo()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(true);
 		rightPageButton.gameObject.SetActive(false);
 
