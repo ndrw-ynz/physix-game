@@ -196,6 +196,8 @@ public class ActivityEightManager : ActivityManager
     {
 		base.Start();
 
+		SceneSoundManager.Instance.PlayMusic("With love from Vertex Studio (28)");
+
 		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeViewAndDisplayEvents();
@@ -379,6 +381,8 @@ public class ActivityEightManager : ActivityManager
 	{
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectMomentOfInertiaSubmission++;
 			currentNumMomentOfInertiaTests--;
 			string displayText;
@@ -397,6 +401,8 @@ public class ActivityEightManager : ActivityManager
 			momentOfInertiaView.UpdateCalibrationTestTextDisplay(currentMomentOfInertiaLevel.numberOfTests - currentNumMomentOfInertiaTests, currentMomentOfInertiaLevel.numberOfTests);
 		} else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectMomentOfInertiaSubmission++;
 			momentOfInertiaSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
@@ -487,6 +493,8 @@ public class ActivityEightManager : ActivityManager
 	{
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectTorqueSubmission++;
 			currentNumOfTorqueTests--;
 			string displayText;
@@ -505,6 +513,8 @@ public class ActivityEightManager : ActivityManager
 			torqueView.UpdateCalibrationTestTextDisplay(currentTorqueLevel.numberOfTests - currentNumOfTorqueTests, currentTorqueLevel.numberOfTests);
 		} else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectTorqueSubmission++;
 			torqueSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
@@ -590,6 +600,8 @@ public class ActivityEightManager : ActivityManager
 	{
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectEquilibriumSubmission++;
 			currentNumOfEquilibriumTests--;
 			string displayText;
@@ -607,6 +619,8 @@ public class ActivityEightManager : ActivityManager
 			equilibriumView.UpdateCalibrationTestTextDisplay(currentEquilibriumLevel.numberOfTests - currentNumOfEquilibriumTests, currentEquilibriumLevel.numberOfTests);
 		} else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectEquilibriumSubmission++;
 			equilibriumSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
