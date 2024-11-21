@@ -24,8 +24,6 @@ public class DraggableQuantityText : DraggableUIObject<DraggableQuantityText>
 
 	public override void OnBeginDrag(PointerEventData eventData)
 	{
-		SceneSoundManager.Instance.PlaySFX("UI_Select_Stereo_01");
-
 		parentAfterDrag = transform.parent;
 		base.OnBeginDrag(eventData);
 	}
