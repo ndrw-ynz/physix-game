@@ -51,8 +51,23 @@ public class ActivitySixPerformanceView : ActivityPerformanceView
 
 	public override void ProceedToNextLevel()
 	{
-		// IN THE FUTURE, ADD SCENE FOR TOPIC DISCUSSION
-	}
+        Difficulty activityDifficulty = ActivitySixManager.difficultyConfiguration;
+
+        switch (activityDifficulty)
+        {
+            case Difficulty.Easy:
+                ActivitySixManager.difficultyConfiguration = Difficulty.Medium;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                break;
+            case Difficulty.Medium:
+                ActivitySixManager.difficultyConfiguration = Difficulty.Hard;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                break;
+            case Difficulty.Hard:
+                SceneManager.LoadScene("Topic Discussion 7");
+                break;
+        }
+    }
 
 	public override void GoToSelectionScreen()
 	{
