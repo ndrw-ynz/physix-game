@@ -29,8 +29,23 @@ public class ActivityNinePerformanceView : ActivityPerformanceView
 
 	public override void ProceedToNextLevel()
 	{
-		// IN THE FUTURE, ADD SCENE FOR TOPIC DISCUSSION
-	}
+        Difficulty activityDifficulty = ActivityNineManager.difficultyConfiguration;
+
+        switch (activityDifficulty)
+        {
+            case Difficulty.Easy:
+                ActivityNineManager.difficultyConfiguration = Difficulty.Medium;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                break;
+            case Difficulty.Medium:
+                ActivityNineManager.difficultyConfiguration = Difficulty.Hard;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                break;
+            case Difficulty.Hard:
+				Debug.Log("NO ACTION: Last lesson, last difficulty reached. Ending");
+                break;
+        }
+    }
 
 	public override void GoToSelectionScreen()
 	{
