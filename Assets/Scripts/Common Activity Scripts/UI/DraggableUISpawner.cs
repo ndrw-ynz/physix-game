@@ -11,6 +11,8 @@ public abstract class DraggableUISpawner<T> : MonoBehaviour, IBeginDragHandler, 
 
 	public void OnBeginDrag(PointerEventData eventData)
 	{
+		SceneSoundManager.Instance.PlaySFX("UI_Select_Stereo_01");
+
 		currentDraggableObject = Instantiate(draggableUIPrefab, canvas.transform, false);
 		currentDraggableObject.canvas = canvas;
 		Initialize();

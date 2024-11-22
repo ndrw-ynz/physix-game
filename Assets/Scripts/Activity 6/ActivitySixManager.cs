@@ -98,6 +98,8 @@ public class ActivitySixManager : ActivityManager
 	{
 		base.Start();
 
+		SceneSoundManager.Instance.PlayMusic("With love from Vertex Studio (37)");
+
 		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeViewAndDisplayEvents();
@@ -215,10 +217,14 @@ public class ActivitySixManager : ActivityManager
 		DotProductAnswerSubmissionResults results = ActivitySixUtilities.ValidateDotProductSubmission(answer, dotProductGivenData);
 
 		if (results.isAllCorrect()) {
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectDotProductSubmission++;
 			currentNumDotProductTests--;
 		} else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectDotProductSubmission++;
 		}
 
@@ -298,9 +304,13 @@ public class ActivitySixManager : ActivityManager
 		WorkSubActivityAnswerSubmissionResults results = ActivitySixUtilities.ValidateWorkSubActivitySubmission(answer, workSubActivityGivenData);
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectWorkSubmission++;
 		} else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectWorkSubmission++;
 		}
 
@@ -389,12 +399,16 @@ public class ActivitySixManager : ActivityManager
 		bool result = ActivitySixUtilities.ValidateWorkGraphInterpretationSubmission(answer, forceDisplacementGraphData, currentGraphTypeDisplayed);
 		if (result)
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			currentNumWorkGraphTests--;
 			numCorrectWorkGraphSubmission++;
 			forceDisplacementGraphData.Remove(currentGraphTypeDisplayed);
 		}
 		else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectWorkGraphSubmission++;
 		}
 		DisplayWorkGraphInterpretationSubmissionResults(result);

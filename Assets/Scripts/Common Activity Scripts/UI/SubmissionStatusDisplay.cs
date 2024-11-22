@@ -33,8 +33,17 @@ public class SubmissionStatusDisplay : MonoBehaviour
 
 	protected virtual void OnEnable()
 	{
-		proceedButton.onClick.AddListener(() => transform.gameObject.SetActive(false));
-		fixErrorButton.onClick.AddListener(() => transform.gameObject.SetActive(false));
+		proceedButton.onClick.AddListener(() => {
+			SceneSoundManager.Instance.PlaySFX("Click");
+
+			transform.gameObject.SetActive(false);
+		});
+
+		fixErrorButton.onClick.AddListener(() => {
+			SceneSoundManager.Instance.PlaySFX("Click");
+
+			transform.gameObject.SetActive(false); 
+		});
 	}
 
 	protected virtual void OnDisable()

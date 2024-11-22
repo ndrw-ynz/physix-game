@@ -14,9 +14,11 @@ public abstract class ActivityEnvironmentManager : MonoBehaviour
 		player.gameObject.SetActive(isActive);
 		if (isActive)
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_MenufadeOut_Stereo_01");
 			inputReader.SetGameplay();
 		} else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_MenufadeIn_Stereo_01");
 			inputReader.SetUI();
 		}
 	}

@@ -72,6 +72,8 @@ public class WorkView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		WorkSubActivityAnswerSubmission submission = new WorkSubActivityAnswerSubmission(
 			force: forceEquationDisplay.productValue,
 			work: linearWorkCalculationDisplay.activeSelf ? linearWorkEquationDisplay.productValue : angularWorkEquationDisplay.angularWorkValue

@@ -75,6 +75,8 @@ public class CartesianComponentsView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		CartesianComponentsAnswerSubmission submission = new CartesianComponentsAnswerSubmission(
 			vectorXComponent: xComponentFormulaDisplay.resultValue,
 			vectorYComponent: yComponentFormulaDisplay.resultValue

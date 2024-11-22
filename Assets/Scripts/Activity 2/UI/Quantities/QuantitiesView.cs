@@ -87,6 +87,8 @@ public class QuantitiesView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		QuantitiesAnswerSubmission submission = new QuantitiesAnswerSubmission(
 			unsolvedQuantities: givenQuantitiesHolder.itemHolder.GetComponentsInChildren<DraggableQuantityText>(),
 			scalarQuantities: scalarQuantitiesHolder.itemHolder.GetComponentsInChildren<DraggableQuantityText>(),

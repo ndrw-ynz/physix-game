@@ -95,6 +95,8 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 
 		scientificNotationTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false); ;
 		scientificNotationTransitionBarrier.gameObject.SetActive(false);
+
+		SceneSoundManager.Instance.PlaySFX("Door_Large_Open_01");
 	}
 
 	#endregion
@@ -115,6 +117,8 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 
 		varianceTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false);
 		varianceTransitionBarrier.gameObject.SetActive(false);
+
+		SceneSoundManager.Instance.PlaySFX("Door_Large_Open_01");
 	}
 	#endregion
 
@@ -133,6 +137,8 @@ public class ActivityOneEnvironmentManager : ActivityEnvironmentManager
 
 		accuracyPrecisionTransitionDoor.GetComponent<Animator>().SetBool("door_closed", false);
 		accuracyPrecisionTransitionBarrier.gameObject.SetActive(false);
+
+		SceneSoundManager.Instance.PlaySFX("Door_Large_Open_01");
 	}
 	#endregion
 

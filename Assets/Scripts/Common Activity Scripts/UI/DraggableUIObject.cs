@@ -7,6 +7,8 @@ public abstract class DraggableUIObject<T> : MonoBehaviour, IBeginDragHandler, I
 
 	public virtual void OnBeginDrag(PointerEventData eventData)
 	{
+		SceneSoundManager.Instance.PlaySFX("UI_Select_Stereo_01");
+
 		transform.SetParent(canvas.transform, false);
 	}
 

@@ -82,12 +82,16 @@ public class ForceMotionView : MonoBehaviour
 
 	public void OnSubmitForceButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		bool canParse = float.TryParse(forceResultField.text, out float result);
 		SubmitForceAnswerEvent?.Invoke(canParse ? result : null);
 	}
 
 	public void OnSubmitForceTypesButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		ForceDiagramAnswerSubmission submission = new ForceDiagramAnswerSubmission(
 			upForceType: upForceContainer.GetCurrentForceType(),
 			downForceType: downForceContainer.GetCurrentForceType(),

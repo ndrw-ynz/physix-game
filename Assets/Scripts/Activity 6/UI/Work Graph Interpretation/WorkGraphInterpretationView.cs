@@ -76,6 +76,8 @@ public class WorkGraphInterpretationView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		float? submission = constantWorkCalculationDisplay.activeSelf ? constantWorkEquationDisplay.productValue : linearWorkEquationDisplay.productValue;
 
 		SubmitAnswerEvent?.Invoke(submission);

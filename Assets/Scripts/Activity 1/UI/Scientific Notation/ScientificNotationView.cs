@@ -68,6 +68,8 @@ public class ScientificNotationView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		ScientificNotationAnswerSubmission submission = new ScientificNotationAnswerSubmission(
 			coefficientValue: float.Parse(coefficientInputField.text),
 			exponentValue: float.Parse(exponentInputField.text)

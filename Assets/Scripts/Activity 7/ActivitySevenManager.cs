@@ -267,6 +267,8 @@ public class ActivitySevenManager : ActivityManager
     {
 		base.Start();
 
+		SceneSoundManager.Instance.PlayMusic("With love from Vertex Studio (22)");
+
 		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeViewAndDisplayEvents();
@@ -405,6 +407,8 @@ public class ActivitySevenManager : ActivityManager
 		// Modify display border and text
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectCenterOfMassSubmission++;
 			currentNumCenterOfMassTests--;
 			string displayText;
@@ -417,10 +421,11 @@ public class ActivitySevenManager : ActivityManager
 				displayText = "Calculations correct. Loaded next test.";
 			}
 			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(true, displayText);
-
 		}
 		else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectCenterOfMassSubmission++;
 			centerOfMassSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}
@@ -562,6 +567,8 @@ public class ActivitySevenManager : ActivityManager
 		{
 			if (easyResults.isAllCorrect())
 			{
+				SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 				numCorrectMomentumImpulseForceSubmission++;
 				currentNumMomentumImpulseForceTests--;
 				string displayText;
@@ -581,6 +588,8 @@ public class ActivitySevenManager : ActivityManager
 			}
 			else
 			{
+				SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 				numIncorrectMomentumImpulseForceSubmission++;
 				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(false, "Calibration tests found discrepancies in your calculations. Please review and fix it.");
 			}
@@ -592,6 +601,8 @@ public class ActivitySevenManager : ActivityManager
 		{
 			if (mediumHardResults.isAllCorrect())
 			{
+				SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 				numCorrectMomentumImpulseForceSubmission++;
 				currentNumMomentumImpulseForceTests--;
 				string displayText;
@@ -611,6 +622,8 @@ public class ActivitySevenManager : ActivityManager
 			}
 			else
 			{
+				SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 				numIncorrectMomentumImpulseForceSubmission++;
 				momentumImpulseForceSubmissionStatusDisplay.SetSubmissionStatus(false, "Calibration tests found discrepancies in your calculations. Please review and fix it.");
 			}
@@ -725,6 +738,8 @@ public class ActivitySevenManager : ActivityManager
 		// Modify display border and text
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectElasticInelasticCollisionSubmission++;
 			currentNumElasticInelasticCollisionTests--;
 			string displayText;
@@ -743,6 +758,8 @@ public class ActivitySevenManager : ActivityManager
 		}
 		else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectElasticInelasticCollisionSubmission++;
 			elasticInelasticCollisionSubmissionStatusDisplay.SetSubmissionStatus(false, "The system found discrepancies in your calculations. Please review and fix it.");
 		}

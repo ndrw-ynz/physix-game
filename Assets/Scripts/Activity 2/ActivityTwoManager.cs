@@ -72,6 +72,8 @@ public class ActivityTwoManager : ActivityManager
 	{
 		base.Start();
 
+		SceneSoundManager.Instance.PlayMusic("With love from Vertex Studio (15)");
+
 		ConfigureLevelData(difficultyConfiguration);
 
 		SubscribeViewAndDisplayEvents();
@@ -150,10 +152,14 @@ public class ActivityTwoManager : ActivityManager
 
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectQuantitiesSubmission++;
 		}
 		else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectQuantitiesSubmission++;
 		}
 
@@ -223,11 +229,15 @@ public class ActivityTwoManager : ActivityManager
 
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectCartesianComponentsSubmission++;
 			currentNumCartesianComponentsTests--;
 		}
 		else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectCartesianComponentsSubmission++;
 		}
 
@@ -275,9 +285,13 @@ public class ActivityTwoManager : ActivityManager
 
 		if (results.isAllCorrect())
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Buttonconfirm_Stereo_01");
+
 			numCorrectVectorAdditionSubmission++;
 		}  else
 		{
+			SceneSoundManager.Instance.PlaySFX("UI_Forbidden_Stereo_02");
+
 			numIncorrectVectorAdditionSubmission++;
 		}
 		DisplayVectorAdditionSubmissionResults(results);

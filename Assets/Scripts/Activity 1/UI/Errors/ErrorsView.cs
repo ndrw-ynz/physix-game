@@ -25,6 +25,8 @@ public class ErrorsView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		// Checking collisionType
 		ErrorType? selectedErrorType = null;
 		foreach (ErrorTypeButton button in ErrorTypeButtons)

@@ -74,6 +74,8 @@ public class VarianceView : MonoBehaviour
 
 	public void OnLeftPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		calculationPages[currentPageIndex].gameObject.SetActive(false);
 		currentPageIndex--;
 		calculationPages[currentPageIndex].gameObject.SetActive(true);
@@ -87,6 +89,8 @@ public class VarianceView : MonoBehaviour
 
 	public void OnRightPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		calculationPages[currentPageIndex].gameObject.SetActive(false);
 		currentPageIndex++;
 		calculationPages[currentPageIndex].gameObject.SetActive(true);
@@ -100,6 +104,8 @@ public class VarianceView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		List<float?> squaredDeviationValues = new List<float?>();
 		foreach (ContainerSquaredDeviationEquationDisplay squaredDeviationDisplay in squaredDeviationEquationContainer.GetComponentsInChildren<ContainerSquaredDeviationEquationDisplay>())
 		{

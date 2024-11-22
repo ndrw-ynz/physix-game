@@ -157,6 +157,8 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 	#region Buttons
 	public void OnLeftPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(false);
 		rightPageButton.gameObject.SetActive(true);
 
@@ -169,6 +171,8 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 
 	public void OnRightPageButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		leftPageButton.gameObject.SetActive(true);
 		rightPageButton.gameObject.SetActive(false);
 
@@ -187,6 +191,8 @@ public class ElasticInelasticCollisionView : MonoBehaviour
 
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		// Checking collisionType
 		CollisionType? collisionType;
 		if (elasticButton.isClicked == true && inelasticButton.isClicked == false)

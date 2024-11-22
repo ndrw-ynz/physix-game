@@ -87,6 +87,8 @@ public class TorqueView : MonoBehaviour
 	/// </summary>
 	public void OnSubmitButtonClick()
 	{
+		SceneSoundManager.Instance.PlaySFX("Click");
+
 		List<TorqueAnswerSubmission> submission = new List<TorqueAnswerSubmission>();
 
 		for (int i = 0; i < 3; i++)
