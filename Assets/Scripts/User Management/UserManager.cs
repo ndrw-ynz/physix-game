@@ -96,7 +96,7 @@ public class UserManager : MonoBehaviour
 		DontDestroyOnLoad(gameObject); // Persist between scenes
 	}
 
-	// Method to sign in
+	// Method to sign in (Uses loading screen indicator for both GetDocument and GetSectionDocument)
 	public IEnumerator SignInWithEmailAndPassword(string email, string password, System.Action<bool> callback)
 	{
 		var requestData = new { email, password, returnSecureToken = true };
@@ -137,8 +137,9 @@ public class UserManager : MonoBehaviour
         loadingIndicator.gameObject.SetActive(false);
 	}
 
-	// Method to retrieve user document from Firestore
-	public IEnumerator GetDocument(string documentId, System.Action<bool> callback)
+    #region Document Get Functions
+    // Method to retrieve user document from Firestore (Used in SignInWithEmailAndPassword)
+    public IEnumerator GetDocument(string documentId, System.Action<bool> callback)
 	{
 		string url = FirestoreBaseURL + documentId;
 		UnityWebRequest request = UnityWebRequest.Get(url);
@@ -174,112 +175,10 @@ public class UserManager : MonoBehaviour
 		}
 	}
 
-	// Method to update user document
-	public IEnumerator UpdateDocument(string documentId, Dictionary<string, FirestoreField> updatedFields)
-	{
-		string url = FirestoreBaseURL + documentId + "?updateMask.fieldPaths=" + string.Join(",", updatedFields.Keys);
-
-		var updateData = new { fields = updatedFields };
-		string jsonBody = JsonConvert.SerializeObject(updateData);
-
-		UnityWebRequest request = new UnityWebRequest(url, "PATCH");
-		request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonBody));
-		request.downloadHandler = new DownloadHandlerBuffer();
-		request.SetRequestHeader("Content-Type", "application/json");
-		request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
-
-		yield return request.SendWebRequest();
-
-		if (request.result == UnityWebRequest.Result.Success)
-		{
-			Debug.Log("Document updated successfully!");
-		}
-		else
-		{
-			Debug.LogError("Failed to update document: " + request.downloadHandler.text);
-		}
-	}
-
-	public IEnumerator CreateAttemptDocument(Dictionary<string, FirestoreField> fields, string documentName)
-	{
-		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{documentName}";
-
-		var requestBody = new { fields = fields };
-		string jsonData = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
-		{
-			NullValueHandling = NullValueHandling.Ignore
-		}); 
-		Debug.Log("BODY:\n: " + jsonData);
-
-		// Set up UnityWebRequest for POST
-		UnityWebRequest request = new UnityWebRequest(url, "POST");
-		request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
-		request.downloadHandler = new DownloadHandlerBuffer();
-
-		// Set headers
-		request.SetRequestHeader("Content-Type", "application/json");
-		request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
-
-		// Send the request and wait for a response
-		yield return request.SendWebRequest();
-
-		if (request.result == UnityWebRequest.Result.Success)
-		{
-			Debug.Log("Document created successfully: " + request.downloadHandler.text);
-		}
-		else
-		{
-			Debug.LogError("Failed to create document: " + request.downloadHandler.text);
-		}
-	}
-
-
-    // Four functions that I added for logging out, main menu and topic discussion //
-    // Method to get section name from student's section Id
-    public IEnumerator LogoutCurrentUser()
-    {
-        CurrentUser = null;
-        UserData = null;
-        UserSection = null;
-        DiscussionOneMarkedPagesData = null;
-        DiscussionTwoMarkedPagesData = null;
-        DiscussionThreeMarkedPagesData = null;
-        DiscussionFourMarkedPagesData = null;
-        DiscussionFiveMarkedPagesData = null;
-        DiscussionSixMarkedPagesData = null;
-        DiscussionSevenMarkedPagesData = null;
-        DiscussionEightMarkedPagesData = null;
-        DiscussionNineMarkedPagesData = null;
-
-		Debug.Log("Logout Successful");
-        yield break;
-    }
-
+    // Method to get section name from student's section Id (Used in GetDocument)
     public IEnumerator GetSectionDocument(string documentId, System.Action<bool> callback)
-	{
-		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/sections/{documentId}";
-		UnityWebRequest request = UnityWebRequest.Get(url);
-		request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
-
-		yield return request.SendWebRequest();
-
-		if (request.result == UnityWebRequest.Result.Success)
-		{
-			UserSection = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
-			Debug.Log("Section document retrieved successfully!");
-			callback(true);
-		}
-		else
-		{
-            Debug.LogError("Failed to retrieve section document: " + request.downloadHandler.text);
-            callback(false);
-        }
-    }
-
-    // Method to get discussion pages progress document of the current user
-    public IEnumerator GetDiscussionPagesProgress(int topicDiscussionNumber, string collectionName, string documentId, System.Action<bool> callback)
     {
-		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{collectionName}/{documentId}";
+        string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/sections/{documentId}";
         UnityWebRequest request = UnityWebRequest.Get(url);
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
@@ -287,9 +186,32 @@ public class UserManager : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-			switch (topicDiscussionNumber)
-			{
-				case 1:
+            UserSection = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+            Debug.Log("Section document retrieved successfully!");
+            callback(true);
+        }
+        else
+        {
+            Debug.LogError("Failed to retrieve section document: " + request.downloadHandler.text);
+            callback(false);
+        }
+    }
+
+    // Method to get discussion pages progress document of the current user (Uses Loading Screen Indicator)
+    public IEnumerator GetDiscussionPagesProgress(int topicDiscussionNumber, string collectionName, string documentId, System.Action<bool> callback)
+    {
+        string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{collectionName}/{documentId}";
+        UnityWebRequest request = UnityWebRequest.Get(url);
+        request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+        loadingIndicator.gameObject.SetActive(true);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            switch (topicDiscussionNumber)
+            {
+                case 1:
                     DiscussionOneMarkedPagesData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
                     break;
 
@@ -333,14 +255,53 @@ public class UserManager : MonoBehaviour
             Debug.Log("Failed to retrieve discussion pages: " + request.downloadHandler.text);
             callback(false);
         }
+        loadingIndicator.gameObject.SetActive(false);
     }
+    #endregion
 
-	// Method to update discussion pages progress document of the current user
+    #region Document Write Functions
+    // Method to create attempt document to Firestore
+    public IEnumerator CreateAttemptDocument(Dictionary<string, FirestoreField> fields, string documentName)
+    {
+        string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{documentName}";
+
+        var requestBody = new { fields = fields };
+        string jsonData = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore
+        });
+        Debug.Log("BODY:\n: " + jsonData);
+
+        // Set up UnityWebRequest for POST
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+        request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        // Set headers
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+        // Send the request and wait for a response
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log("Document created successfully: " + request.downloadHandler.text);
+        }
+        else
+        {
+            Debug.LogError("Failed to create document: " + request.downloadHandler.text);
+        }
+    }
+    #endregion
+
+    #region Document Update Functions
+    // Method to update discussion pages progress document of the current user
     public IEnumerator UpdateDiscussionPageProgress(Dictionary<string, FirestoreField> updatedFields, string collectionName, string studentID)
-	{
-		string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{collectionName}/{studentID}";
+    {
+        string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/{collectionName}/{studentID}";
 
-		var requestBody = new { fields = updatedFields };
+        var requestBody = new { fields = updatedFields };
         string jsonData = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
         {
             NullValueHandling = NullValueHandling.Ignore
@@ -363,4 +324,53 @@ public class UserManager : MonoBehaviour
             Debug.LogError($"Failed to update document {collectionName}: " + request.downloadHandler.text);
         }
     }
+
+    // Method to update user document
+    public IEnumerator UpdateDocument(string documentId, Dictionary<string, FirestoreField> updatedFields)
+	{
+		string url = FirestoreBaseURL + documentId + "?updateMask.fieldPaths=" + string.Join(",", updatedFields.Keys);
+
+		var updateData = new { fields = updatedFields };
+		string jsonBody = JsonConvert.SerializeObject(updateData);
+
+		UnityWebRequest request = new UnityWebRequest(url, "PATCH");
+		request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonBody));
+		request.downloadHandler = new DownloadHandlerBuffer();
+		request.SetRequestHeader("Content-Type", "application/json");
+		request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+		yield return request.SendWebRequest();
+
+		if (request.result == UnityWebRequest.Result.Success)
+		{
+			Debug.Log("Document updated successfully!");
+		}
+		else
+		{
+			Debug.LogError("Failed to update document: " + request.downloadHandler.text);
+		}
+	}
+    #endregion
+
+    // Method for logging out current user
+    public IEnumerator LogoutCurrentUser()
+    {
+        CurrentUser = null;
+        UserData = null;
+        UserSection = null;
+        DiscussionOneMarkedPagesData = null;
+        DiscussionTwoMarkedPagesData = null;
+        DiscussionThreeMarkedPagesData = null;
+        DiscussionFourMarkedPagesData = null;
+        DiscussionFiveMarkedPagesData = null;
+        DiscussionSixMarkedPagesData = null;
+        DiscussionSevenMarkedPagesData = null;
+        DiscussionEightMarkedPagesData = null;
+        DiscussionNineMarkedPagesData = null;
+
+		Debug.Log("Logout Successful");
+        yield break;
+    }
+
+	
 }
