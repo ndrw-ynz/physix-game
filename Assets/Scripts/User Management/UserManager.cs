@@ -281,6 +281,7 @@ public class UserManager : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
+        loadingIndicator.gameObject.SetActive(true);
         // Send the request and wait for a response
         yield return request.SendWebRequest();
 
@@ -292,6 +293,8 @@ public class UserManager : MonoBehaviour
         {
             Debug.LogError("Failed to create document: " + request.downloadHandler.text);
         }
+
+        loadingIndicator.gameObject.SetActive(false);
     }
     #endregion
 
@@ -313,6 +316,7 @@ public class UserManager : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
+        loadingIndicator.gameObject.SetActive(true);
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
@@ -323,6 +327,8 @@ public class UserManager : MonoBehaviour
         {
             Debug.LogError($"Failed to update document {collectionName}: " + request.downloadHandler.text);
         }
+
+        loadingIndicator.gameObject.SetActive(false);
     }
 
     // Method to update user document
