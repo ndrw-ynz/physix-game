@@ -28,8 +28,10 @@ public class TopicDiscussionManager : MonoBehaviour
     private Dictionary<string, List<int>> _readPagesMapData;
     private void Start()
     {
-        // Get read pages data from database and update UI according to the data
-        GetReadPagesDataFromDB();
+		SceneSoundManager.Instance.PlayMusic("With love from Vertex Studio (8)");
+
+		// Get read pages data from database and update UI according to the data
+		GetReadPagesDataFromDB();
 
         // TO DO: add a function that checks if an activity scene is currently active
         bool isActivitySceneActive = false;
