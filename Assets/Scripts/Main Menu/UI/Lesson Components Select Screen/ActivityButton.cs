@@ -22,7 +22,11 @@ public class ActivityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private void OnEnable()
     {
         // Subscribe Button Click Listeners
-        activityButton.onClick.AddListener(() => ActivityClick?.Invoke(activityNumber));
+        activityButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			ActivityClick?.Invoke(activityNumber);
+        });
     }
 
     private void OnDisable()
@@ -41,8 +45,9 @@ public class ActivityButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Change panel color to black and text to white on hover for activity button
-        activityPanel.color = Color.black;
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+		// Change panel color to black and text to white on hover for activity button
+		activityPanel.color = Color.black;
         panelText.color = Color.white;
         isHovered = true;
     }

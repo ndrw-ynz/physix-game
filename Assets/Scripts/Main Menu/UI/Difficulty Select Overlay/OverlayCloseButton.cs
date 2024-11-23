@@ -20,7 +20,11 @@ public class OverlayCloseButton : MonoBehaviour, IPointerEnterHandler, IPointerE
     private void OnEnable()
     {
         // Subscribe Button Click Listeners
-        closeOverlayButton.onClick.AddListener(() => OverlayCloseClicked?.Invoke(lessonNumber));
+        closeOverlayButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			OverlayCloseClicked?.Invoke(lessonNumber);
+        });
     }
 
     private void OnDisable()
@@ -38,8 +42,9 @@ public class OverlayCloseButton : MonoBehaviour, IPointerEnterHandler, IPointerE
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Activate button hover red outline
-        buttonHoverOutline.gameObject.SetActive(true);
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+		// Activate button hover red outline
+		buttonHoverOutline.gameObject.SetActive(true);
         isHovered = true;
     }
 

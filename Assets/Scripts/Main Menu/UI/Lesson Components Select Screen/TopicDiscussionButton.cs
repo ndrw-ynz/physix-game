@@ -22,7 +22,11 @@ public class TopicDiscussionButton : MonoBehaviour, IPointerEnterHandler, IPoint
     private void OnEnable()
     {
         // Subscribe Button Click Listeners
-        topicDiscussionButton.onClick.AddListener(() => TopicDiscussionClick?.Invoke(topicDiscussionNumber));
+        topicDiscussionButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			TopicDiscussionClick?.Invoke(topicDiscussionNumber);
+        });
     }
 
     private void OnDisable()
@@ -41,8 +45,9 @@ public class TopicDiscussionButton : MonoBehaviour, IPointerEnterHandler, IPoint
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Change panel color to black and text to white on hover for topic discussion button
-        topicDiscussionPanel.color = Color.black;
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+		// Change panel color to black and text to white on hover for topic discussion button
+		topicDiscussionPanel.color = Color.black;
         panelText.color = Color.white;
         isHovered = true;
     }

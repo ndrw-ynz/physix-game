@@ -20,7 +20,11 @@ public class TitleScreenButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private void OnEnable()
     {
         // Subscribe Button Click Listeners
-        titleScreenButton.onClick.AddListener(() => ChangeScreen(screenToActivate, screenToDeactivate));
+        titleScreenButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			ChangeScreen(screenToActivate, screenToDeactivate);
+        });
     }
 
     private void OnDisable()
@@ -48,8 +52,9 @@ public class TitleScreenButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Activate button hover white outline and change text to black
-        titleScreenButtonImage.gameObject.SetActive(true);
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+		// Activate button hover white outline and change text to black
+		titleScreenButtonImage.gameObject.SetActive(true);
         titleScreenButtonText.color = Color.black;
         isHovered = true;
     }

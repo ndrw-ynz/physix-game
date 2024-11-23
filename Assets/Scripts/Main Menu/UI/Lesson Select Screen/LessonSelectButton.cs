@@ -26,7 +26,11 @@ public class LessonSelectButton : MonoBehaviour, IPointerEnterHandler, IPointerE
     private void OnEnable()
     {
         // Subscribe Button Click Listeners
-        lessonSelectButton.onClick.AddListener(() => CheckLessonAvailability());
+        lessonSelectButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			CheckLessonAvailability();
+        });
 
         // Load proper lock image state for current button
         LoadLockImage();
@@ -71,8 +75,9 @@ public class LessonSelectButton : MonoBehaviour, IPointerEnterHandler, IPointerE
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Change panel color to light blue on hover if lesson is unlocked
-        if (isUnlocked)
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+		// Change panel color to light blue on hover if lesson is unlocked
+		if (isUnlocked)
         {
             panelImage.color = new Color(0.5037736f, 0.6785805f, 1f);
             isHovered = true;

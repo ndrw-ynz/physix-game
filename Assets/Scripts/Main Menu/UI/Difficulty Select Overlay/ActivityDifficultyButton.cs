@@ -51,7 +51,11 @@ public class ActivityDifficultyButton : MonoBehaviour, IPointerEnterHandler, IPo
     private void OnEnable()
     {
         // Subscribe Button Click Listeners
-        difficultyButton.onClick.AddListener(() => DifficultyClick?.Invoke(activityName, difficultyType));
+        difficultyButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			DifficultyClick?.Invoke(activityName, difficultyType);
+        });
         LoadTextColor();
     }
 
@@ -86,7 +90,8 @@ public class ActivityDifficultyButton : MonoBehaviour, IPointerEnterHandler, IPo
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (isUnlocked)
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+		if (isUnlocked)
         {
             // Change text to green, orange, or red on hover based on the difficulty type of text button
             switch (difficultyType)
