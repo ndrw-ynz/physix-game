@@ -83,7 +83,7 @@ public class UserManager : MonoBehaviour
     public FirestoreDocument DiscussionNineMarkedPagesData { get; private set; }
 
 	[Header("All Scene's Loading Indicator")]
-	[SerializeField] private GameObject loadingIndicator;
+	[SerializeField] private GameObject loadingIndicatorScreen;
 
     private void Awake()
 	{
@@ -107,7 +107,7 @@ public class UserManager : MonoBehaviour
 		request.downloadHandler = new DownloadHandlerBuffer();
 		request.SetRequestHeader("Content-Type", "application/json");
 
-		loadingIndicator.gameObject.SetActive(true);
+		loadingIndicatorScreen.gameObject.SetActive(true);
 		yield return request.SendWebRequest();
 
 		if (request.result == UnityWebRequest.Result.Success)
@@ -134,7 +134,7 @@ public class UserManager : MonoBehaviour
 			callback(false);
 		}
 
-        loadingIndicator.gameObject.SetActive(false);
+        loadingIndicatorScreen.gameObject.SetActive(false);
 	}
 
     #region Document Get Functions
@@ -204,7 +204,7 @@ public class UserManager : MonoBehaviour
         UnityWebRequest request = UnityWebRequest.Get(url);
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
-        loadingIndicator.gameObject.SetActive(true);
+        loadingIndicatorScreen.gameObject.SetActive(true);
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
@@ -255,7 +255,7 @@ public class UserManager : MonoBehaviour
             Debug.Log("Failed to retrieve discussion pages: " + request.downloadHandler.text);
             callback(false);
         }
-        loadingIndicator.gameObject.SetActive(false);
+        loadingIndicatorScreen.gameObject.SetActive(false);
     }
     #endregion
 
@@ -281,7 +281,7 @@ public class UserManager : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
-        loadingIndicator.gameObject.SetActive(true);
+        loadingIndicatorScreen.gameObject.SetActive(true);
         // Send the request and wait for a response
         yield return request.SendWebRequest();
 
@@ -294,7 +294,7 @@ public class UserManager : MonoBehaviour
             Debug.LogError("Failed to create document: " + request.downloadHandler.text);
         }
 
-        loadingIndicator.gameObject.SetActive(false);
+        loadingIndicatorScreen.gameObject.SetActive(false);
     }
     #endregion
 
@@ -316,7 +316,7 @@ public class UserManager : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
-        loadingIndicator.gameObject.SetActive(true);
+        loadingIndicatorScreen.gameObject.SetActive(true);
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
@@ -328,7 +328,7 @@ public class UserManager : MonoBehaviour
             Debug.LogError($"Failed to update document {collectionName}: " + request.downloadHandler.text);
         }
 
-        loadingIndicator.gameObject.SetActive(false);
+        loadingIndicatorScreen.gameObject.SetActive(false);
     }
 
     // Method to update user document
