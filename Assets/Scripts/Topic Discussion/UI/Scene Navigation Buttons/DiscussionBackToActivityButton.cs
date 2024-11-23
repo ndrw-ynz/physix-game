@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DiscussionBackToActivityButton : MonoBehaviour
+public class DiscussionBackToActivityButton : MonoBehaviour, IPointerEnterHandler
 {
     public static event Action BackToActivityClickEvent;
 
@@ -11,11 +12,20 @@ public class DiscussionBackToActivityButton : MonoBehaviour
 
     private void OnEnable()
     {
-        backToActivityButton.onClick.AddListener(() => BackToActivityClickEvent?.Invoke());
+        backToActivityButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			BackToActivityClickEvent?.Invoke();
+        });
     }
 
     private void OnDisable()
     {
         backToActivityButton.onClick.RemoveAllListeners();
     }
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+	}
 }

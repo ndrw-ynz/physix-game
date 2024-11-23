@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class DiscussionMainMenuButton : MonoBehaviour
+public class DiscussionMainMenuButton : MonoBehaviour, IPointerEnterHandler
 {
     public static event Action BackToMainMenuClickEvent;
 
@@ -12,11 +13,20 @@ public class DiscussionMainMenuButton : MonoBehaviour
 
     private void OnEnable()
     {
-        backToMainMenuButton.onClick.AddListener(() => BackToMainMenuClickEvent?.Invoke());
+        backToMainMenuButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			BackToMainMenuClickEvent?.Invoke();
+        });
     }
 
     private void OnDisable()
     {
         backToMainMenuButton.onClick.RemoveAllListeners();
     }
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+	}
 }

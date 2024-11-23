@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class DiscussionActivityButton : MonoBehaviour
@@ -11,11 +12,20 @@ public class DiscussionActivityButton : MonoBehaviour
 
     private void OnEnable()
     {
-        startActivityButton.onClick.AddListener(() => StartActivityClickEvent?.Invoke());
+        startActivityButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			StartActivityClickEvent?.Invoke();
+        });
     }
 
     private void OnDisable()
     {
         startActivityButton.onClick.RemoveAllListeners();
     }
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+	}
 }

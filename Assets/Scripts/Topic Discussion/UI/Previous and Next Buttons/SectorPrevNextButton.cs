@@ -1,9 +1,10 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class SectorPrevNextButton : MonoBehaviour
+public class SectorPrevNextButton : MonoBehaviour, IPointerEnterHandler
 {
     public static event Action<Direction> SectorPrevNextClickEvent;
 
@@ -19,7 +20,11 @@ public class SectorPrevNextButton : MonoBehaviour
     private void OnEnable()
     {
         // Add click listener for a previous and next sector button
-        _prevNextSectorButton.onClick.AddListener(() => SectorPrevNextClickEvent.Invoke(direction));
+        _prevNextSectorButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			SectorPrevNextClickEvent.Invoke(direction);
+        });
     }
 
     private void OnDisable()
@@ -27,4 +32,9 @@ public class SectorPrevNextButton : MonoBehaviour
         // Remove listeners of the button when the game object has been disabled
         _prevNextSectorButton.onClick.RemoveAllListeners();
     }
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+	}
 }

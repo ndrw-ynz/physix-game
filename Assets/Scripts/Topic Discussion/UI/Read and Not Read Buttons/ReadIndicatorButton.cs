@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ReadIndicatorButton : MonoBehaviour
+public class ReadIndicatorButton : MonoBehaviour, IPointerEnterHandler
 {
     public static event Action<ReadState> ReadIndicatorClickEvent;
 
@@ -15,7 +16,11 @@ public class ReadIndicatorButton : MonoBehaviour
     private void OnEnable()
     {
         // Add click listener for a read indicator button
-        _readIndicatorButton.onClick.AddListener(() => ReadIndicatorClickEvent?.Invoke(state));
+        _readIndicatorButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			ReadIndicatorClickEvent?.Invoke(state);
+        });
     }
 
     private void OnDisable()
@@ -23,4 +28,9 @@ public class ReadIndicatorButton : MonoBehaviour
         // Remove listeners of the button when the game object has been disabled
         _readIndicatorButton.onClick.RemoveAllListeners();
     }
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+	}
 }
