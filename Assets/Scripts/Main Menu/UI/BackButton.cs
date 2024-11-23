@@ -18,7 +18,11 @@ public class BackButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private void OnEnable()
     {
         // Subscribe Button Click Listeners
-        backButton.onClick.AddListener(() => CloseScreen(screenToActivate, screenToDeactivate));
+        backButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			CloseScreen(screenToActivate, screenToDeactivate);
+        });
     }
 
     private void OnDisable()
@@ -50,8 +54,9 @@ public class BackButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Activate button hover red outline
-        buttonHoverOutline.gameObject.SetActive(true);
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+		// Activate button hover red outline
+		buttonHoverOutline.gameObject.SetActive(true);
         isHovered = true;
     }
 

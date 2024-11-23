@@ -28,7 +28,11 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         // Initialize the proper page index, starting position, and on click listener for a page jump button
         _pageIndex = index;
         _startPosition = buttonColor.transform.position;
-        _pageCircleButton.onClick.AddListener(() => OnPageCircleButtonCLick());
+        _pageCircleButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			OnPageCircleButtonCLick();
+        });
     }
 
     private void OnDisable()
@@ -46,7 +50,9 @@ public class PageJumpButton : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if(!buttonOutline.gameObject.activeSelf)
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+
+		if (!buttonOutline.gameObject.activeSelf)
         {
             // Activate the button's hover outline upon mouse hover only if the button outline is not active
             buttonHoverOutline.gameObject.SetActive(true);

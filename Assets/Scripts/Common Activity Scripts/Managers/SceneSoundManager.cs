@@ -59,7 +59,7 @@ public class SceneSoundManager : MonoBehaviour
 	public void PlayMusic(string musicName)
 	{
 		AudioClip musicClip = audioLibrary.GetMusic(musicName);
-		if (musicClip != null)
+		if (musicClip != null && (musicClip != musicSource.clip || !musicSource.isPlaying))
 		{
 			musicSource.clip = musicClip;
 			musicSource.Play();

@@ -1,9 +1,10 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ProgressBarButton : MonoBehaviour
+public class ProgressBarButton : MonoBehaviour, IPointerEnterHandler
 {
     public static event Action<int> ProgressBarClickEvent;
 
@@ -28,6 +29,15 @@ public class ProgressBarButton : MonoBehaviour
         sectorTitleText.text = sectorTitle;
         progressCountText.text = progressCount;
         _sectorIndex = index;
-        _progressBarButton.onClick.AddListener(() => ProgressBarClickEvent?.Invoke(_sectorIndex));
+        _progressBarButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			ProgressBarClickEvent?.Invoke(_sectorIndex);
+        });
     }
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+	}
 }

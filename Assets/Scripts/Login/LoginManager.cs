@@ -9,8 +9,10 @@ public class LoginManager : MonoBehaviour
 
     private void Start()
     {
-        // Subscribe all listeners
-        LoginButton.LoginButtonClick += ValidateUserLogin;
+		SceneSoundManager.Instance.PlayMusic("With love from Vertex Studio (2)");
+
+		// Subscribe all listeners
+		LoginButton.LoginButtonClick += ValidateUserLogin;
         LoginXButton.LoginXButtonClicked += OpenCloseMessagePrompt;
         PromptChoice.ChoiceButtonClick += CheckUserChoice;
         loginBox.OnAuthenticationCompleted += LoadMainScene;
