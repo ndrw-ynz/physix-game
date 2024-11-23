@@ -26,7 +26,12 @@ public class PromptChoice : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private void OnEnable()
     {
         // Subscribe button click listeners
-        choiceTextButton.onClick.AddListener(() => ChoiceButtonClick?.Invoke(choice));
+        choiceTextButton.onClick.AddListener(() =>
+        {
+            SceneSoundManager.Instance.PlaySFX("Click_2");
+            ChoiceButtonClick?.Invoke(choice);
+        });
+
     }
 
     private void OnDisable()
@@ -44,8 +49,9 @@ public class PromptChoice : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Switch color to green or red based on the text choice on hover
-        switch (choice)
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+		// Switch color to green or red based on the text choice on hover
+		switch (choice)
         {
             case ClosePromptChoice.Yes:
                 buttonText.color = new Color(0f, 0.6431373f, 0.1019608f);

@@ -17,7 +17,11 @@ public class LoginXButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private void OnEnable()
     {
         // Subscribe Button Click Listeners
-        loginXButton.onClick.AddListener(() => LoginXButtonClicked?.Invoke());
+        loginXButton.onClick.AddListener(() =>
+        {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			LoginXButtonClicked?.Invoke();
+        });
     }
 
     private void OnDisable()
@@ -35,8 +39,9 @@ public class LoginXButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Activate button hover red outline
-        loginXHoverBackground.gameObject.SetActive(true);
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+		// Activate button hover red outline
+		loginXHoverBackground.gameObject.SetActive(true);
         isHovered = true;
     }
 

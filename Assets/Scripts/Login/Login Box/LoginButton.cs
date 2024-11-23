@@ -17,7 +17,10 @@ public class LoginButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private void OnEnable()
     {
         // Subscribe Button Click Listeners
-        loginButton.onClick.AddListener(() => LoginButtonClick?.Invoke());
+        loginButton.onClick.AddListener(() => {
+			SceneSoundManager.Instance.PlaySFX("Click_2");
+			LoginButtonClick?.Invoke(); 
+        });
     }
 
     private void OnDisable()
@@ -43,8 +46,9 @@ public class LoginButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        // Set color to darker blue when hovered
-        buttonImage.color = new Color(0.3393556f, 0.5116689f, 0.7735849f);
+		SceneSoundManager.Instance.PlaySFX("UI_Hover_Mono_01");
+		// Set color to darker blue when hovered
+		buttonImage.color = new Color(0.3393556f, 0.5116689f, 0.7735849f);
         isHovered = true;
     }
 
