@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -440,11 +439,10 @@ public class ActivityOneManager : ActivityManager
 		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityOneAttempts"));
 	}
 
-    protected override IEnumerator SetNextLevelButtonState()
+    protected override void SetNextLevelButtonState()
     {
 		Debug.Log($"Level Finished: {isSNSubActivityFinished && isVarianceSubActivityFinished && isAPSubActivityFinished && isErrorsSubActivityFinished}");
 		performanceView.SetNextLevelButtonState(false);
-		yield return null;
     }
 
     public override void DisplayPerformanceView()

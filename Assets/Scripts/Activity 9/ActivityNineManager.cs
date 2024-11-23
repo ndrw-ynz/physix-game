@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -330,7 +329,7 @@ public class ActivityNineManager : ActivityManager
 			);
 	}
 
-    protected override IEnumerator SetNextLevelButtonState()
+    protected override void SetNextLevelButtonState()
     {
         throw new NotImplementedException();
     }

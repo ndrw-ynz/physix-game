@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -607,7 +606,7 @@ public class ActivityFiveManager : ActivityManager
 		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityFiveAttempts"));
 	}
 
-    protected override IEnumerator SetNextLevelButtonState()
+    protected override void SetNextLevelButtonState()
     {
         throw new NotImplementedException();
     }

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -505,7 +504,7 @@ public class ActivitySixManager : ActivityManager
 		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activitySixAttempts"));
 	}
 
-    protected override IEnumerator SetNextLevelButtonState()
+    protected override void SetNextLevelButtonState()
     {
         throw new NotImplementedException();
     }

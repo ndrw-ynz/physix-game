@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public abstract class ActivityManager : MonoBehaviour
@@ -40,7 +39,7 @@ public abstract class ActivityManager : MonoBehaviour
 
 	protected abstract void AddAttemptRecord();
 
-	protected abstract IEnumerator SetNextLevelButtonState();
+	protected abstract void SetNextLevelButtonState();
 
 	public virtual void DisplayPerformanceView()
 	{
@@ -48,6 +47,6 @@ public abstract class ActivityManager : MonoBehaviour
 		hasDisplayedPerformance = true;
 
 		AddAttemptRecord();
-		StartCoroutine(SetNextLevelButtonState());
+		SetNextLevelButtonState();
     }
 }
