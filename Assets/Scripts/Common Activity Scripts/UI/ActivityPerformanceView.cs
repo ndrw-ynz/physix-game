@@ -15,10 +15,8 @@ public abstract class ActivityPerformanceView : MonoBehaviour
 
 	[Header("Next Level Button")]
     [SerializeField] private Button nextLevelButton;
-
-	[Header("Next Level Button Text")]
-	[SerializeField] private TextMeshProUGUI nextLevelButtonText;
-
+    [SerializeField] private TextMeshProUGUI nextLevelButtonText;
+	
     public void SetTotalTimeDisplay(float totalTime)
 	{
 		SetDurationText(totalTimeText, totalTime);
