@@ -72,6 +72,7 @@ public class UserManager : MonoBehaviour
 	public FirebaseAuthResponse CurrentUser { get; private set; }
 	public FirestoreDocument UserData { get; private set; }
 	public FirestoreDocument UserSection { get; private set; }
+    public FirestoreDocument UserUnlockedLevels { get; private set; }
 	public FirestoreDocument DiscussionOneMarkedPagesData { get; private set; }
     public FirestoreDocument DiscussionTwoMarkedPagesData { get; private set; }
     public FirestoreDocument DiscussionThreeMarkedPagesData { get; private set; }
@@ -96,7 +97,7 @@ public class UserManager : MonoBehaviour
 		DontDestroyOnLoad(gameObject); // Persist between scenes
 	}
 
-	// Method to sign in (Uses loading screen indicator for both GetDocument and GetSectionDocument)
+	// Method to sign in
 	public IEnumerator SignInWithEmailAndPassword(string email, string password, System.Action<bool> callback)
 	{
 		var requestData = new { email, password, returnSecureToken = true };
@@ -145,7 +146,8 @@ public class UserManager : MonoBehaviour
 		UnityWebRequest request = UnityWebRequest.Get(url);
 		request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
-		yield return request.SendWebRequest();
+        loadingIndicatorScreen.SetActive(true);
+        yield return request.SendWebRequest();
 
 		if (request.result == UnityWebRequest.Result.Success)
 		{
@@ -173,7 +175,9 @@ public class UserManager : MonoBehaviour
 			Debug.LogError("Failed to retrieve document: " + request.downloadHandler.text);
 			callback(false);
 		}
-	}
+
+        loadingIndicatorScreen.SetActive(false);
+    }
 
     // Method to get section name from student's section Id (Used in GetDocument)
     public IEnumerator GetSectionDocument(string documentId, System.Action<bool> callback)
@@ -182,19 +186,59 @@ public class UserManager : MonoBehaviour
         UnityWebRequest request = UnityWebRequest.Get(url);
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
+        loadingIndicatorScreen.SetActive(true);
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
         {
             UserSection = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
-            Debug.Log("Section document retrieved successfully!");
-            callback(true);
+
+            yield return StartCoroutine(GetUnlockedLevels(CurrentUser.localId, (success) =>
+            {
+                if (success)
+                {
+                    Debug.Log("Section document retrieved successfully!");
+                    callback(true);
+                }
+                else
+                {
+                    Debug.LogError("Failed to retrieve section document: " + request.downloadHandler.text);
+                    callback(false);
+                }
+            }));
         }
         else
         {
             Debug.LogError("Failed to retrieve section document: " + request.downloadHandler.text);
             callback(false);
         }
+
+        loadingIndicatorScreen.SetActive(false);
+    }
+
+    // Method to get unlocked levels
+    public IEnumerator GetUnlockedLevels(string documentId, System.Action<bool> callback)
+    {
+        string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/unlockedLevels/{documentId}";
+        UnityWebRequest request = UnityWebRequest.Get(url);
+        request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+        loadingIndicatorScreen.SetActive(true);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            UserUnlockedLevels = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
+            Debug.Log("Unlocked Levels document retrieved successfully!");
+            callback(true);
+        }
+        else
+        {
+            Debug.LogError("Failed to retrieve unlocked levels document: " + request.downloadHandler.text);
+            callback(false);
+        }
+
+        loadingIndicatorScreen.SetActive(false);
     }
 
     // Method to get discussion pages progress document of the current user (Uses Loading Screen Indicator)

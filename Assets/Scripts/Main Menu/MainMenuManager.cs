@@ -34,7 +34,7 @@ public class MainMenuManager : MonoBehaviour
         // Setup current user's mock highest unlocked lesson and load all unlocked lessons
         // 1 is the lowest unlocked lesson and 9 is the highest unlocked lesson
         // Change into the loaded user highest unlocked lesson value in the future
-        highestUnlockedLesson = 9; // [1-9] Lessons
+        highestUnlockedLesson = (int) UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue; // [1-9] Lessons
         if (highestUnlockedLesson > 0)
         {
             lessonSelectScreen.LockAllLessons();
@@ -44,7 +44,7 @@ public class MainMenuManager : MonoBehaviour
         // Setup current user's mock highest lesson unlocked level and load all lesson's difficulties
         // 1 is the lowest unlocked difficulty(Easy) and 3 is the highest unlocked difficulty(Hard)
         // Change into the loaded user highest highest lesson unlocked difficulties value in the future
-        highestLessonUnlockedDifficulties = 3; // [1-3] Difficulty Levels
+        highestLessonUnlockedDifficulties = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue; ; // [1-3] Difficulty Levels
         if (highestLessonUnlockedDifficulties > 0)
         {
             difficultySelectOverlays.LockAllDifficulty();
