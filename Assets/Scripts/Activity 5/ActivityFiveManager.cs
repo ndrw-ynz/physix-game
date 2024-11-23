@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -606,7 +607,12 @@ public class ActivityFiveManager : ActivityManager
 		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityFiveAttempts"));
 	}
 
-	public override void DisplayPerformanceView()
+    protected override IEnumerator SetNextLevelButtonState()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void DisplayPerformanceView()
 	{
 		base.DisplayPerformanceView();
 

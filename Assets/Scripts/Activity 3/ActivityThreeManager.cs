@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -443,7 +444,12 @@ public class ActivityThreeManager : ActivityManager
 		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityThreeAttempts"));
 	}
 
-	public override void DisplayPerformanceView()
+    protected override IEnumerator SetNextLevelButtonState()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void DisplayPerformanceView()
 	{
 		base.DisplayPerformanceView();
 

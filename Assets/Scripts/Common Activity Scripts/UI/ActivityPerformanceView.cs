@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class ActivityPerformanceView : MonoBehaviour
 {
@@ -12,7 +13,13 @@ public abstract class ActivityPerformanceView : MonoBehaviour
 	[Header("Activity Feedback Display")]
 	[SerializeField] private ActivityFeedbackDisplay activityFeedbackDisplay;
 
-	public void SetTotalTimeDisplay(float totalTime)
+	[Header("Next Level Button")]
+    [SerializeField] private Button nextLevelButton;
+
+	[Header("Next Level Button Text")]
+	[SerializeField] private TextMeshProUGUI nextLevelButtonText;
+
+    public void SetTotalTimeDisplay(float totalTime)
 	{
 		SetDurationText(totalTimeText, totalTime);
 	}
@@ -43,7 +50,13 @@ public abstract class ActivityPerformanceView : MonoBehaviour
 		activityFeedbackDisplay.UpdateFeedbackDisplay(performanceMetrics);
 	}
 
-	public abstract void RetryLevel();
+    public void SetNextLevelButtonState(bool isInteractable)
+    {
+		nextLevelButton.interactable = isInteractable;
+		nextLevelButtonText.color = Color.gray;
+    }
+
+    public abstract void RetryLevel();
 
 	public abstract void ReturnMainMenu();
 

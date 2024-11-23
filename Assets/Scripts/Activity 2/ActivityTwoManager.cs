@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -382,7 +383,12 @@ public class ActivityTwoManager : ActivityManager
 		StartCoroutine(UserManager.Instance.CreateAttemptDocument(fields, "activityTwoAttempts"));
 	}
 
-	public override void DisplayPerformanceView()
+    protected override IEnumerator SetNextLevelButtonState()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void DisplayPerformanceView()
 	{
 		base.DisplayPerformanceView();
 
@@ -436,6 +442,8 @@ public class ActivityTwoManager : ActivityManager
 				averageScoreThreshold: 2
 				)
 			);
+
+		//Debug.Log(isQuantitiesSubActivityFinished && isCartesianComponentsSubActivityFinished && isVectorAdditionSubActivityFinished);
 	}
 
 	protected override void HandleGameplayPause()

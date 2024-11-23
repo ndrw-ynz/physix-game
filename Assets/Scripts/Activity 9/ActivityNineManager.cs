@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -329,7 +330,12 @@ public class ActivityNineManager : ActivityManager
 			);
 	}
 
-	protected override void HandleGameplayPause()
+    protected override IEnumerator SetNextLevelButtonState()
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void HandleGameplayPause()
 	{
 		base.HandleGameplayPause();
 		// Update content of activity pause menu UI
