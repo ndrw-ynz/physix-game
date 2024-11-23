@@ -82,6 +82,9 @@ public class UserManager : MonoBehaviour
     public FirestoreDocument DiscussionEightMarkedPagesData { get; private set; }
     public FirestoreDocument DiscussionNineMarkedPagesData { get; private set; }
 
+	[Header("All Scene's Loading Indicator")]
+	[SerializeField] private GameObject loadingIndicator;
+
     private void Awake()
 	{
 		if (Instance != null && Instance != this)
@@ -104,6 +107,7 @@ public class UserManager : MonoBehaviour
 		request.downloadHandler = new DownloadHandlerBuffer();
 		request.SetRequestHeader("Content-Type", "application/json");
 
+		loadingIndicator.gameObject.SetActive(true);
 		yield return request.SendWebRequest();
 
 		if (request.result == UnityWebRequest.Result.Success)
@@ -113,26 +117,15 @@ public class UserManager : MonoBehaviour
 			{
 				if (success)
 				{
-					StartCoroutine(GetSectionDocument(UserData.fields["sectionId"].stringValue, (success) =>
-					{
-						if (success)
-						{
-                            Debug.Log("User signed in successfully.");
-                            callback(true);
-                        }
-						else
-						{
-                            Debug.LogError("Sign-in failed: " + request.downloadHandler.text);
-                            callback(false);
-							UserSection = null;
-                        }
-					}));
-					
-				}
+                    Debug.Log("User signed in successfully.");
+                    callback(true);
+                }
 				else
 				{
-					CurrentUser = null;
-				}
+                    Debug.LogError("Sign-in failed: " + request.downloadHandler.text);
+                    CurrentUser = null;
+                    callback(false);
+                }
 			}));
 		}
 		else
@@ -140,6 +133,8 @@ public class UserManager : MonoBehaviour
 			Debug.LogError("Sign-in failed: " + request.downloadHandler.text);
 			callback(false);
 		}
+
+        loadingIndicator.gameObject.SetActive(false);
 	}
 
 	// Method to retrieve user document from Firestore
@@ -155,7 +150,22 @@ public class UserManager : MonoBehaviour
 		{
 			UserData = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
 			Debug.Log("Document retrieved successfully!");
-			callback(true);
+
+			// Automatically get the section details of the student
+            yield return StartCoroutine(GetSectionDocument(UserData.fields["sectionId"].stringValue, (success) =>
+            {
+                if (success)
+                {
+                    Debug.Log("User signed in successfully.");
+                    callback(true);
+                }
+                else
+                {
+                    Debug.LogError("Sign-in failed: " + request.downloadHandler.text);
+                    callback(false);
+                    UserSection = null;
+                }
+            }));
 		}
 		else
 		{
