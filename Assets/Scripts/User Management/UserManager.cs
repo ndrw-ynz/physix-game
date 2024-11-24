@@ -375,6 +375,40 @@ public class UserManager : MonoBehaviour
         loadingIndicatorScreen.gameObject.SetActive(false);
     }
 
+    // Method to update unlocked levels document of the current user
+    public IEnumerator UpdateUnlockedLevels(Dictionary<string, FirestoreField> updatedFields, string studentID, System.Action<bool> callback)
+    {
+        string url = $"https://firestore.googleapis.com/v1/projects/physix-9c8bd/databases/(default)/documents/unlockedLevels/{studentID}";
+
+        var requestBody = new { fields = updatedFields };
+        string jsonData = JsonConvert.SerializeObject(requestBody, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore
+        });
+
+        UnityWebRequest request = new UnityWebRequest(url, "PATCH");
+        request.uploadHandler = new UploadHandlerRaw(System.Text.Encoding.UTF8.GetBytes(jsonData));
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+        request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
+
+        loadingIndicatorScreen.gameObject.SetActive(true);
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            Debug.Log($"Unlocked levels document updated successfully!");
+            callback(true);
+        }
+        else
+        {
+            Debug.LogError($"Failed to update document unlocked levels: " + request.downloadHandler.text);
+            callback(false);
+        }
+
+        loadingIndicatorScreen.gameObject.SetActive(false);
+    }
+
     // Method to update user document
     public IEnumerator UpdateDocument(string documentId, Dictionary<string, FirestoreField> updatedFields)
 	{

@@ -51,7 +51,16 @@ public abstract class ActivityPerformanceView : MonoBehaviour
     public void SetNextLevelButtonState(bool isInteractable)
     {
 		nextLevelButton.interactable = isInteractable;
-		nextLevelButtonText.color = Color.gray;
+
+		if (isInteractable)
+		{
+            nextLevelButtonText.color = Color.white;
+        }
+		else
+		{
+            nextLevelButtonText.color = Color.gray;
+        }
+		
     }
 
     public abstract void RetryLevel();
