@@ -506,7 +506,89 @@ public class ActivitySixManager : ActivityManager
 
     protected override void SetNextLevelButtonState()
     {
-        throw new NotImplementedException();
+        //bool isAccomplished = isDotProductSubActivityFinished && isWorkSubActivityFinished && isWorkGraphSubActivityFinished;
+        bool isAccomplished = true;
+
+        int currentUserUnlockedLesson = (int)UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
+        int currentUserHighestLessonUnlockedDifficulty = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;
+
+        // If the player accomplished the whole activity in any difficulty, do a switch case
+        if (isAccomplished)
+        {
+            string currentUserLocalID = UserManager.Instance.CurrentUser.localId;
+
+            // If the player accomplished in easy mode, check if the unlocked levels need to progress with respect to the current lesson
+            switch (difficultyConfiguration)
+            {
+                case Difficulty.Easy:
+                    if (currentUserUnlockedLesson == 6 && currentUserHighestLessonUnlockedDifficulty == 1)
+                    {
+                        Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+                        {
+                            {"highestUnlockedLesson", new FirestoreField(6) },
+                            {"highestLessonUnlockedDifficulty", new FirestoreField(2) }
+                        };
+
+                        StartCoroutine(UserManager.Instance.UpdateUnlockedLevels(fields, currentUserLocalID, (success) =>
+                        {
+                            if (success)
+                            {
+                                StartCoroutine(UserManager.Instance.GetUnlockedLevels(currentUserLocalID, HandleUnlockedLevelsChange));
+                            }
+                            else { Debug.LogError("Failed To Update Unlocked Levels"); }
+                        }));
+                    }
+                    break;
+
+                // If the player accomplished in medium mode, check if the unlocked levels need to progress with respect to the current lesson
+                case Difficulty.Medium:
+                    if (currentUserUnlockedLesson == 6 && currentUserHighestLessonUnlockedDifficulty == 2)
+                    {
+                        Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+                        {
+                            {"highestUnlockedLesson", new FirestoreField(6) },
+                            {"highestLessonUnlockedDifficulty", new FirestoreField(3) }
+                        };
+
+                        StartCoroutine(UserManager.Instance.UpdateUnlockedLevels(fields, currentUserLocalID, (success) =>
+                        {
+                            if (success)
+                            {
+                                StartCoroutine(UserManager.Instance.GetUnlockedLevels(currentUserLocalID, HandleUnlockedLevelsChange));
+                            }
+                            else { Debug.LogError("Failed To Update Unlocked Levels"); }
+                        }));
+                    }
+                    break;
+
+                // If the player accomplished in hard mode, check if the unlocked levels need to progress with respect to the current lesson
+                case Difficulty.Hard:
+                    if (currentUserUnlockedLesson == 6 && currentUserHighestLessonUnlockedDifficulty == 3)
+                    {
+                        Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+                        {
+                            {"highestUnlockedLesson", new FirestoreField(7) },
+                            {"highestLessonUnlockedDifficulty", new FirestoreField(1) }
+                        };
+
+                        StartCoroutine(UserManager.Instance.UpdateUnlockedLevels(fields, currentUserLocalID, (success) =>
+                        {
+                            if (success)
+                            {
+                                StartCoroutine(UserManager.Instance.GetUnlockedLevels(currentUserLocalID, HandleUnlockedLevelsChange));
+                            }
+                            else { Debug.LogError("Failed To Update Unlocked Levels"); }
+                        }));
+                    }
+                    break;
+            }
+        }
+
+        // Accomplished or not, check and change the next level button's state
+        // Useful for checking if the level was already finished before but student just reattempted the activity on any difficulty
+        ProcessNextLevelButtonStateChange(currentUserUnlockedLesson, currentUserHighestLessonUnlockedDifficulty);
+
+        Debug.Log($"Level Finished: {isDotProductSubActivityFinished && isWorkSubActivityFinished && isWorkGraphSubActivityFinished}");
     }
 
     public override void DisplayPerformanceView()
@@ -589,4 +671,46 @@ public class ActivitySixManager : ActivityManager
 
 		activityPauseMenuUI.UpdateContent("Lesson 6 - Activity 6", taskText, objectiveText);
 	}
+
+    private void HandleUnlockedLevelsChange(bool success)
+    {
+        if (success)
+        {
+            Debug.Log("Incremented Student's Level Progress by 1");
+            int currentUserUnlockedLesson = (int)UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
+            int currentUserHighestLessonUnlockedDifficulty = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;
+            ProcessNextLevelButtonStateChange(currentUserUnlockedLesson, currentUserHighestLessonUnlockedDifficulty);
+        }
+        else
+        {
+            Debug.LogError("Failed To Increment Student's Progress");
+        }
+    }
+
+    private void ProcessNextLevelButtonStateChange(int currentUnlockedLesson, int currentHighestLessonUnlockedDifficulty)
+    {
+        // If the current unlocked lesson is higher than lesson 6, allow user to proceed to next level
+        if (currentUnlockedLesson > 6) { performanceView.SetNextLevelButtonState(true); Debug.Log("Next button state is interactable"); return; }
+
+        switch (difficultyConfiguration)
+        {
+            // If player completed easy, check if current unlocked lesson is greater than or equal to 6
+            // and if current unlocked difficulty is greater than 1 or Easy mode, then allow user to proceed to next level
+            case Difficulty.Easy:
+                if (!(currentUnlockedLesson >= 6)) { performanceView.SetNextLevelButtonState(false); return; }
+                if (!(currentHighestLessonUnlockedDifficulty > 1)) { performanceView.SetNextLevelButtonState(false); return; }
+                performanceView.SetNextLevelButtonState(true); Debug.Log("Next button state is interactable");
+                break;
+
+            // If player completed easy, check if current unlocked lesson is greater than or equal to 6
+            // and if current unlocked difficulty is greater than 2 or Medium mode, then allow user to proceed to next level
+            case Difficulty.Medium:
+                if (!(currentUnlockedLesson >= 6)) { performanceView.SetNextLevelButtonState(false); return; }
+                if (!(currentHighestLessonUnlockedDifficulty > 2)) { performanceView.SetNextLevelButtonState(false); return; }
+                performanceView.SetNextLevelButtonState(true); Debug.Log("Next button state is interactable");
+                break;
+
+                // Don't need case for hard difficulty since the if statement before the switch case already handles it
+        }
+    }
 }
