@@ -123,7 +123,7 @@ public class UserManager : MonoBehaviour
                 }
 				else
 				{
-                    Debug.LogError("Sign-in failed: " + request.downloadHandler.text);
+                    Debug.Log("Sign-in failed: " + request.downloadHandler.text);
                     CurrentUser = null;
                     callback(false);
                 }
@@ -164,7 +164,7 @@ public class UserManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("Sign-in failed: " + request.downloadHandler.text);
+                    Debug.Log("Sign-in failed: " + request.downloadHandler.text);
                     callback(false);
                     UserSection = null;
                 }
@@ -202,7 +202,7 @@ public class UserManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogError("Failed to retrieve section document: " + request.downloadHandler.text);
+                    Debug.Log("Failed to retrieve section document: " + request.downloadHandler.text);
                     callback(false);
                 }
             }));
@@ -234,8 +234,19 @@ public class UserManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("Failed to retrieve unlocked levels document: " + request.downloadHandler.text);
-            callback(false);
+            StartCoroutine(CreateNewUnlockedLevelsData (success =>
+            {
+                if (success)
+                {
+                    callback(true);
+                }
+                else
+                {
+                    callback(false);
+                }
+            }));
+
+            Debug.Log("Creating new unlocked levels data instead");
         }
 
         loadingIndicatorScreen.SetActive(false);
@@ -456,5 +467,54 @@ public class UserManager : MonoBehaviour
         yield break;
     }
 
-	
+    private IEnumerator CreateNewUnlockedLevelsData(System.Action<bool> callback)
+    {
+        // Create new unlocked levels data
+        Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
+                        {
+                            {"highestUnlockedLesson", new FirestoreField(1) },
+                            {"highestLessonUnlockedDifficulty", new FirestoreField(1) }
+    };
+
+        yield return StartCoroutine(UpdateUnlockedLevels(fields, CurrentUser.localId, (success) =>
+        {
+            if (success)
+            {
+                StartCoroutine(GetNewUnlockedLevelsData(success =>
+                {
+                    if (success)
+                    {
+                    callback(true); 
+                    }
+                    else
+                    {
+
+                    callback(false); 
+                    }
+                }));
+            }
+            else 
+            {
+                callback(false);
+                Debug.LogError("Failed To Update Unlocked Levels");
+            }
+        }));
+    }
+
+    private IEnumerator GetNewUnlockedLevelsData(System.Action<bool> callback)
+    {
+        yield return StartCoroutine(GetUnlockedLevels(CurrentUser.localId, (success) =>
+        {
+            if (success)
+            {
+                callback(true);
+                Debug.Log("New unlocked levels data successfully created");
+            }
+            else
+            {
+                callback(false);
+                Debug.LogError("Failed to create new unlocked levels data");
+            }
+        }));
+    }
 }
