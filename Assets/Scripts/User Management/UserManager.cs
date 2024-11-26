@@ -115,6 +115,8 @@ public class UserManager : MonoBehaviour
 		if (request.result == UnityWebRequest.Result.Success)
 		{
 			CurrentUser = JsonConvert.DeserializeObject<FirebaseAuthResponse>(request.downloadHandler.text);
+
+            // Automatically get user document
 			yield return StartCoroutine(GetDocument(CurrentUser.localId, (success) =>
 			{
 				if (success)
@@ -198,6 +200,7 @@ public class UserManager : MonoBehaviour
         {
             UserSection = JsonConvert.DeserializeObject<FirestoreDocument>(request.downloadHandler.text);
 
+            // Automatically get unlocked levels document
             yield return StartCoroutine(GetUnlockedLevels(CurrentUser.localId, (success) =>
             {
                 if (success)
@@ -241,6 +244,7 @@ public class UserManager : MonoBehaviour
         }
         else
         {
+            // Create new user documents if there is none found
             yield return StartCoroutine(CreateNewUnlockedLevelsData (success =>
             {
                 if (success)
@@ -486,6 +490,7 @@ public class UserManager : MonoBehaviour
         yield break;
     }
 
+    // Method for creating new unlocked levels data (ONLY USED IN USERMANAGER.CS)
     private IEnumerator CreateNewUnlockedLevelsData(System.Action<bool> callback)
     {
         // Activate loading screen
