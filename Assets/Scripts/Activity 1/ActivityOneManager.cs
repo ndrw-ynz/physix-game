@@ -40,8 +40,11 @@ public class ActivityOneManager : ActivityManager
     [SerializeField] private APSubmissionStatusDisplay accuracyPrecisionSubmissionStatusDisplay;
     [SerializeField] private ErrorsSubmissionStatusDisplay errorsSubmissionStatusDisplay;
 
-	// Variables for keeping track of current number of tests
-	private int currentNumSNTests;
+	[Header("New Level Unlocked Screen")]
+	[SerializeField] private NewLevelUnlockedScreen newLevelUnlockedScreen;
+
+    // Variables for keeping track of current number of tests
+    private int currentNumSNTests;
 
 	private List<float> numericalContainerValues;
 
@@ -469,6 +472,8 @@ public class ActivityOneManager : ActivityManager
                         {
                             if (success)
                             {
+                                newLevelUnlockedScreen.gameObject.SetActive(true);
+                                StartCoroutine(newLevelUnlockedScreen.SetNewLevelUnlockedScreen("Lesson 1 - <color=#C5B501>Medium"));
                                 StartCoroutine(UserManager.Instance.GetUnlockedLevels(currentUserLocalID, HandleUnlockedLevelsChange));
                             }
                             else { Debug.LogError("Failed To Update Unlocked Levels"); }
@@ -490,6 +495,8 @@ public class ActivityOneManager : ActivityManager
                         {
                             if (success)
                             {
+                                newLevelUnlockedScreen.gameObject.SetActive(true);
+                                StartCoroutine(newLevelUnlockedScreen.SetNewLevelUnlockedScreen("Lesson 1 - <color=#FF0000>Hard"));
                                 StartCoroutine(UserManager.Instance.GetUnlockedLevels(currentUserLocalID, HandleUnlockedLevelsChange));
                             }
                             else { Debug.LogError("Failed To Update Unlocked Levels"); }
@@ -511,7 +518,9 @@ public class ActivityOneManager : ActivityManager
                         {
 							if (success)
 							{
-								StartCoroutine(UserManager.Instance.GetUnlockedLevels(currentUserLocalID, HandleUnlockedLevelsChange));
+                                newLevelUnlockedScreen.gameObject.SetActive(true);
+                                StartCoroutine(newLevelUnlockedScreen.SetNewLevelUnlockedScreen("Lesson 2 - <color=#21B200>Easy"));
+                                StartCoroutine(UserManager.Instance.GetUnlockedLevels(currentUserLocalID, HandleUnlockedLevelsChange));
 							}
 							else { Debug.LogError("Failed To Update Unlocked Levels"); }
                         }));
