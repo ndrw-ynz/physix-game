@@ -876,6 +876,8 @@ public class ActivitySevenManager : ActivityManager
                         {
                             if (success)
                             {
+                                newLevelUnlockedScreen.gameObject.SetActive(true);
+                                StartCoroutine(newLevelUnlockedScreen.SetNewLevelUnlockedScreen("Lesson 7 - <color=#C5B501>Medium"));
                                 StartCoroutine(UserManager.Instance.GetUnlockedLevels(currentUserLocalID, HandleUnlockedLevelsChange));
                             }
                             else { Debug.LogError("Failed To Update Unlocked Levels"); }
@@ -897,6 +899,8 @@ public class ActivitySevenManager : ActivityManager
                         {
                             if (success)
                             {
+                                newLevelUnlockedScreen.gameObject.SetActive(true);
+                                StartCoroutine(newLevelUnlockedScreen.SetNewLevelUnlockedScreen("Lesson 7 - <color=#FF0000>Hard"));
                                 StartCoroutine(UserManager.Instance.GetUnlockedLevels(currentUserLocalID, HandleUnlockedLevelsChange));
                             }
                             else { Debug.LogError("Failed To Update Unlocked Levels"); }
@@ -918,6 +922,8 @@ public class ActivitySevenManager : ActivityManager
                         {
                             if (success)
                             {
+                                newLevelUnlockedScreen.gameObject.SetActive(true);
+                                StartCoroutine(newLevelUnlockedScreen.SetNewLevelUnlockedScreen("Lesson 8 - <color=#21B200>Easy"));
                                 StartCoroutine(UserManager.Instance.GetUnlockedLevels(currentUserLocalID, HandleUnlockedLevelsChange));
                             }
                             else { Debug.LogError("Failed To Update Unlocked Levels"); }
