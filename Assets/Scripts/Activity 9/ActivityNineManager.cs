@@ -431,6 +431,9 @@ public class ActivityNineManager : ActivityManager
 
     private void ProcessNextLevelButtonStateChange(int currentUnlockedLesson, int currentHighestLessonUnlockedDifficulty)
     {
+        // By default, set next level button state to not interactable
+        performanceView.SetNextLevelButtonState(false);
+
         // If the current unlocked lesson is higher than lesson 9, allow user to proceed to next level
         if (currentUnlockedLesson > 9) { performanceView.SetNextLevelButtonState(true); Debug.Log("Next button state is interactable"); return; }
 
