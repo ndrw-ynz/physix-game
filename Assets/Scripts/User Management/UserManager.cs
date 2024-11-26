@@ -108,6 +108,7 @@ public class UserManager : MonoBehaviour
 		request.downloadHandler = new DownloadHandlerBuffer();
 		request.SetRequestHeader("Content-Type", "application/json");
 
+        // Activate loading screen
 		loadingIndicatorScreen.gameObject.SetActive(true);
 		yield return request.SendWebRequest();
 
@@ -135,6 +136,7 @@ public class UserManager : MonoBehaviour
 			callback(false);
 		}
 
+        // Deactivate Loading Screen
         loadingIndicatorScreen.gameObject.SetActive(false);
 	}
 
@@ -146,6 +148,7 @@ public class UserManager : MonoBehaviour
 		UnityWebRequest request = UnityWebRequest.Get(url);
 		request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
+        // Activate loading screen
         loadingIndicatorScreen.SetActive(true);
         yield return request.SendWebRequest();
 
@@ -159,12 +162,12 @@ public class UserManager : MonoBehaviour
             {
                 if (success)
                 {
-                    Debug.Log("User signed in successfully.");
+                    Debug.Log("Section document retrieved successfully.");
                     callback(true);
                 }
                 else
                 {
-                    Debug.Log("Sign-in failed: " + request.downloadHandler.text);
+                    Debug.Log("Failed to retrieve section document");
                     callback(false);
                     UserSection = null;
                 }
@@ -176,6 +179,7 @@ public class UserManager : MonoBehaviour
 			callback(false);
 		}
 
+        // Deactivate Loading Screen
         loadingIndicatorScreen.SetActive(false);
     }
 
@@ -186,6 +190,7 @@ public class UserManager : MonoBehaviour
         UnityWebRequest request = UnityWebRequest.Get(url);
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
+        // Activate loading screen
         loadingIndicatorScreen.SetActive(true);
         yield return request.SendWebRequest();
 
@@ -197,7 +202,7 @@ public class UserManager : MonoBehaviour
             {
                 if (success)
                 {
-                    Debug.Log("Section document retrieved successfully!");
+                    Debug.Log("Unlocked levels document retrieved successfully!");
                     callback(true);
                 }
                 else
@@ -213,6 +218,7 @@ public class UserManager : MonoBehaviour
             callback(false);
         }
 
+        // Deactivate Loading Screen
         loadingIndicatorScreen.SetActive(false);
     }
 
@@ -223,6 +229,7 @@ public class UserManager : MonoBehaviour
         UnityWebRequest request = UnityWebRequest.Get(url);
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
+        // Activate loading screen
         loadingIndicatorScreen.SetActive(true);
         yield return request.SendWebRequest();
 
@@ -238,10 +245,12 @@ public class UserManager : MonoBehaviour
             {
                 if (success)
                 {
+                    Debug.Log("New unlocked levels data created");
                     callback(true);
                 }
                 else
                 {
+                    Debug.Log("Failed to create new level data");
                     callback(false);
                 }
             }));
@@ -249,6 +258,7 @@ public class UserManager : MonoBehaviour
             Debug.Log("Creating new unlocked levels data instead");
         }
 
+        // Deactivate Loading Screen
         loadingIndicatorScreen.SetActive(false);
     }
 
@@ -259,6 +269,7 @@ public class UserManager : MonoBehaviour
         UnityWebRequest request = UnityWebRequest.Get(url);
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
+        // Activate loading screen
         loadingIndicatorScreen.gameObject.SetActive(true);
         yield return request.SendWebRequest();
 
@@ -310,6 +321,8 @@ public class UserManager : MonoBehaviour
             Debug.Log("Failed to retrieve discussion pages: " + request.downloadHandler.text);
             callback(false);
         }
+
+        // Deactivate Loading Screen
         loadingIndicatorScreen.gameObject.SetActive(false);
     }
     #endregion
@@ -336,6 +349,7 @@ public class UserManager : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
+        // Activate loading screen
         loadingIndicatorScreen.gameObject.SetActive(true);
         // Send the request and wait for a response
         yield return request.SendWebRequest();
@@ -349,6 +363,7 @@ public class UserManager : MonoBehaviour
             Debug.LogError("Failed to create document: " + request.downloadHandler.text);
         }
 
+        // Deactivate Loading Screen
         loadingIndicatorScreen.gameObject.SetActive(false);
     }
     #endregion
@@ -371,6 +386,7 @@ public class UserManager : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
+        // Activate loading screen
         loadingIndicatorScreen.gameObject.SetActive(true);
         yield return request.SendWebRequest();
 
@@ -383,6 +399,7 @@ public class UserManager : MonoBehaviour
             Debug.LogError($"Failed to update document {collectionName}: " + request.downloadHandler.text);
         }
 
+        // Deactivate Loading Screen
         loadingIndicatorScreen.gameObject.SetActive(false);
     }
 
@@ -403,6 +420,7 @@ public class UserManager : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
         request.SetRequestHeader("Authorization", "Bearer " + CurrentUser.idToken);
 
+        // Activate loading screen
         loadingIndicatorScreen.gameObject.SetActive(true);
         yield return request.SendWebRequest();
 
@@ -417,6 +435,7 @@ public class UserManager : MonoBehaviour
             callback(false);
         }
 
+        // Deactivate Loading Screen
         loadingIndicatorScreen.gameObject.SetActive(false);
     }
 
@@ -469,6 +488,7 @@ public class UserManager : MonoBehaviour
 
     private IEnumerator CreateNewUnlockedLevelsData(System.Action<bool> callback)
     {
+        // Activate loading screen
         loadingIndicatorScreen.gameObject.SetActive(true);
         // Create new unlocked levels data
         Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
@@ -481,12 +501,12 @@ public class UserManager : MonoBehaviour
         {
             if (success)
             {
-                
+                Debug.Log("New unlocked levels created"); 
             }
             else 
             {
                 callback(false);
-                Debug.LogError("Failed To Update Unlocked Levels");
+                Debug.Log("Failed to create new unlocked levels");
             }
         }));
 
@@ -500,9 +520,11 @@ public class UserManager : MonoBehaviour
             else
             {
                 callback(false);
-                Debug.LogError("Failed to create new unlocked levels data");
+                Debug.Log("Failed to create new unlocked levels data");
             }
         }));
+
+        // Deactivate Loading Screen
         loadingIndicatorScreen.gameObject.SetActive(false);
     }
 }
