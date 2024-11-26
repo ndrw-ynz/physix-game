@@ -506,8 +506,7 @@ public class ActivitySixManager : ActivityManager
 
     protected override void SetNextLevelButtonState()
     {
-        //bool isAccomplished = isDotProductSubActivityFinished && isWorkSubActivityFinished && isWorkGraphSubActivityFinished;
-        bool isAccomplished = true;
+        bool isAccomplished = isDotProductSubActivityFinished && isWorkSubActivityFinished && isWorkGraphSubActivityFinished;
 
         int currentUserUnlockedLesson = (int)UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
         int currentUserHighestLessonUnlockedDifficulty = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;

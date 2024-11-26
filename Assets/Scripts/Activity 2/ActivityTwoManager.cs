@@ -384,8 +384,7 @@ public class ActivityTwoManager : ActivityManager
 
     protected override void SetNextLevelButtonState()
     {
-		//bool isAccomplished = isQuantitiesSubActivityFinished && isCartesianComponentsSubActivityFinished && isVectorAdditionSubActivityFinished;
-		bool isAccomplished = true;
+		bool isAccomplished = isQuantitiesSubActivityFinished && isCartesianComponentsSubActivityFinished && isVectorAdditionSubActivityFinished;
 
         int currentUserUnlockedLesson = (int)UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
         int currentUserHighestLessonUnlockedDifficulty = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;

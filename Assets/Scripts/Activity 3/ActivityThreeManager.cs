@@ -445,8 +445,7 @@ public class ActivityThreeManager : ActivityManager
 
     protected override void SetNextLevelButtonState()
     {
-        //bool isAccomplished = isGraphsSubActivityFinished && isAccelerationCalcFinished && isTotalDepthCalcFinished;
-        bool isAccomplished = true;
+        bool isAccomplished = isGraphsSubActivityFinished && isAccelerationCalcFinished && isTotalDepthCalcFinished;
 
         int currentUserUnlockedLesson = (int)UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
         int currentUserHighestLessonUnlockedDifficulty = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;

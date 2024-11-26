@@ -300,8 +300,7 @@ public class ActivityNineManager : ActivityManager
 
     protected override void SetNextLevelButtonState()
     {
-        //bool isAccomplished = isGravityCalculationFinished;
-        bool isAccomplished = true;
+        bool isAccomplished = isGravityCalculationFinished;
 
         int currentUserUnlockedLesson = (int)UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
         int currentUserHighestLessonUnlockedDifficulty = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;

@@ -443,8 +443,7 @@ public class ActivityOneManager : ActivityManager
 
     protected override void SetNextLevelButtonState()
     {
-		//bool isAccomplished = isSNSubActivityFinished && isVarianceSubActivityFinished && isAPSubActivityFinished && isErrorsSubActivityFinished;
-        bool isAccomplished = true;
+		bool isAccomplished = isSNSubActivityFinished && isVarianceSubActivityFinished && isAPSubActivityFinished && isErrorsSubActivityFinished;
 
         int currentUserUnlockedLesson = (int) UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
 		int currentUserHighestLessonUnlockedDifficulty = (int) UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;

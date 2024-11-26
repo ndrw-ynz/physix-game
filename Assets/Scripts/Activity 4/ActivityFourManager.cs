@@ -332,8 +332,7 @@ public class ActivityFourManager : ActivityManager
 
     protected override void SetNextLevelButtonState()
     {
-        //bool isAccomplished = isProjectileMotionSubActivityFinished && isCircularMotionSubActivityFinished;
-        bool isAccomplished = true;
+        bool isAccomplished = isProjectileMotionSubActivityFinished && isCircularMotionSubActivityFinished;
 
         int currentUserUnlockedLesson = (int)UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
         int currentUserHighestLessonUnlockedDifficulty = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;

@@ -711,8 +711,7 @@ public class ActivityEightManager : ActivityManager
 
     protected override void SetNextLevelButtonState()
     {
-        //bool isAccomplished = isMomentOfInertiaCalculationFinished && isTorqueCalculationFinished && isEquilibriumCalculationFinished;
-        bool isAccomplished = true;
+        bool isAccomplished = isMomentOfInertiaCalculationFinished && isTorqueCalculationFinished && isEquilibriumCalculationFinished;
 
         int currentUserUnlockedLesson = (int)UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
         int currentUserHighestLessonUnlockedDifficulty = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;

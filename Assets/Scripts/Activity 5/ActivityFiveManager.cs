@@ -608,8 +608,7 @@ public class ActivityFiveManager : ActivityManager
 
     protected override void SetNextLevelButtonState()
     {
-        //bool isAccomplished = isAppleMotionSubActivityFinished && isRockMotionSubActivityFinished && isBoatMotionSubActivityFinished;
-        bool isAccomplished = true;
+        bool isAccomplished = isAppleMotionSubActivityFinished && isRockMotionSubActivityFinished && isBoatMotionSubActivityFinished;
 
         int currentUserUnlockedLesson = (int)UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
         int currentUserHighestLessonUnlockedDifficulty = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;

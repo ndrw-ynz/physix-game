@@ -850,8 +850,7 @@ public class ActivitySevenManager : ActivityManager
 
     protected override void SetNextLevelButtonState()
     {
-        //bool isAccomplished = isCenterOfMassCalculationFinished && isMomentumImpulseForceCalculationFinished && isElasticInelasticCollisionCalculationFinished;
-        bool isAccomplished = true;
+        bool isAccomplished = isCenterOfMassCalculationFinished && isMomentumImpulseForceCalculationFinished && isElasticInelasticCollisionCalculationFinished;
 
         int currentUserUnlockedLesson = (int)UserManager.Instance.UserUnlockedLevels.fields["highestUnlockedLesson"].integerValue;
         int currentUserHighestLessonUnlockedDifficulty = (int)UserManager.Instance.UserUnlockedLevels.fields["highestLessonUnlockedDifficulty"].integerValue;
