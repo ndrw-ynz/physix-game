@@ -49958,6 +49958,7 @@ MonoBehaviour:
   inputReader: {fileID: 11400000, guid: 814afce522f247f4f91d4ca5f861c36a, type: 2}
   activityPauseMenuUI: {fileID: 682926872}
   missionObjectiveDisplayUI: {fileID: 1239930117}
+  newLevelUnlockedScreen: {fileID: 391512688}
   SNLevelOne: {fileID: 11400000, guid: b1717561829a3db46bc703d786802eac, type: 2}
   SNLevelTwo: {fileID: 11400000, guid: d022ebc3c184d4f43aa50c4688998a90, type: 2}
   SNLevelThree: {fileID: 11400000, guid: a85d48f3e8c1a624692ba61265fc7021, type: 2}
@@ -49973,7 +49974,6 @@ MonoBehaviour:
   varianceSubmissionStatusDisplay: {fileID: 1711314476}
   accuracyPrecisionSubmissionStatusDisplay: {fileID: 12697465}
   errorsSubmissionStatusDisplay: {fileID: 656040555}
-  newLevelUnlockedScreen: {fileID: 391512688}
 --- !u!1001 &1474107414
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74773,6 +74773,18 @@ PrefabInstance:
     - target: {fileID: 5827858240135377785, guid: 093484c14ab9f724d9a0884c0c11f7c4, type: 3}
       propertyPath: m_text
       value: Lesson 1 Selection Screen
+      objectReference: {fileID: 0}
+    - target: {fileID: 6338836739154837994, guid: 093484c14ab9f724d9a0884c0c11f7c4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 213597385711740288}
+    - target: {fileID: 6338836739154837994, guid: 093484c14ab9f724d9a0884c0c11f7c4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RetryLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 6338836739154837994, guid: 093484c14ab9f724d9a0884c0c11f7c4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ActivityOnePerformanceView, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6767405297078828263, guid: 093484c14ab9f724d9a0884c0c11f7c4, type: 3}
       propertyPath: m_SizeDelta.y

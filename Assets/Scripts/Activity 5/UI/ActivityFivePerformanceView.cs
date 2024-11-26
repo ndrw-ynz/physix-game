@@ -46,8 +46,7 @@ public class ActivityFivePerformanceView : ActivityPerformanceView
 
 	public override void RetryLevel()
 	{
-		/*inputReader.SetGameplay();
-		SceneManager.LoadScene(SceneManager.GetActiveScene().name);*/
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
 	public override void ReturnMainMenu()
