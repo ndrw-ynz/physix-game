@@ -40,9 +40,6 @@ public class ActivityOneManager : ActivityManager
     [SerializeField] private APSubmissionStatusDisplay accuracyPrecisionSubmissionStatusDisplay;
     [SerializeField] private ErrorsSubmissionStatusDisplay errorsSubmissionStatusDisplay;
 
-	[Header("New Level Unlocked Screen")]
-	[SerializeField] private NewLevelUnlockedScreen newLevelUnlockedScreen;
-
     // Variables for keeping track of current number of tests
     private int currentNumSNTests;
 

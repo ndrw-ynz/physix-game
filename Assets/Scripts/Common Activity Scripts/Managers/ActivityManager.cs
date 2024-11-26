@@ -6,7 +6,10 @@ public abstract class ActivityManager : MonoBehaviour
 	[SerializeField] protected ActivityPauseMenuUI activityPauseMenuUI;
 	[SerializeField] protected MissionObjectiveDisplayUI missionObjectiveDisplayUI;
 
-	protected bool hasDisplayedPerformance = false;
+    [Header("New Level Unlocked Screen")]
+    [SerializeField] protected NewLevelUnlockedScreen newLevelUnlockedScreen;
+
+    protected bool hasDisplayedPerformance = false;
 
 	protected virtual void Start()
 	{
