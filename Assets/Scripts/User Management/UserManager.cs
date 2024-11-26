@@ -234,7 +234,7 @@ public class UserManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(CreateNewUnlockedLevelsData (success =>
+            yield return StartCoroutine(CreateNewUnlockedLevelsData (success =>
             {
                 if (success)
                 {
@@ -469,6 +469,7 @@ public class UserManager : MonoBehaviour
 
     private IEnumerator CreateNewUnlockedLevelsData(System.Action<bool> callback)
     {
+        loadingIndicatorScreen.gameObject.SetActive(true);
         // Create new unlocked levels data
         Dictionary<string, FirestoreField> fields = new Dictionary<string, FirestoreField>
                         {
@@ -480,18 +481,7 @@ public class UserManager : MonoBehaviour
         {
             if (success)
             {
-                StartCoroutine(GetNewUnlockedLevelsData(success =>
-                {
-                    if (success)
-                    {
-                    callback(true); 
-                    }
-                    else
-                    {
-
-                    callback(false); 
-                    }
-                }));
+                
             }
             else 
             {
@@ -499,10 +489,7 @@ public class UserManager : MonoBehaviour
                 Debug.LogError("Failed To Update Unlocked Levels");
             }
         }));
-    }
 
-    private IEnumerator GetNewUnlockedLevelsData(System.Action<bool> callback)
-    {
         yield return StartCoroutine(GetUnlockedLevels(CurrentUser.localId, (success) =>
         {
             if (success)
@@ -516,5 +503,6 @@ public class UserManager : MonoBehaviour
                 Debug.LogError("Failed to create new unlocked levels data");
             }
         }));
+        loadingIndicatorScreen.gameObject.SetActive(false);
     }
 }
