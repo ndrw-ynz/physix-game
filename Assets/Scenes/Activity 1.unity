@@ -16891,7 +16891,7 @@ GameObject:
   - component: {fileID: 525103227}
   - component: {fileID: 525103226}
   m_Layer: 5
-  m_Name: Speaker Name
+  m_Name: INA Name Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74684,6 +74684,7 @@ GameObject:
   - component: {fileID: 2128875999}
   - component: {fileID: 2128876001}
   - component: {fileID: 2128876000}
+  - component: {fileID: 2128876002}
   m_Layer: 5
   m_Name: Hint Dialouge
   m_TagString: Untagged
@@ -74751,6 +74752,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2128875998}
   m_CullTransparentMesh: 1
+--- !u!114 &2128876002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128875998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da60f3281cee5804fb66710c3b3ab599, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueText: {fileID: 1382475669}
+  downArrowButton: {fileID: 1435929572}
 --- !u!1 &2133560552
 GameObject:
   m_ObjectHideFlags: 0
