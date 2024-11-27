@@ -18,9 +18,25 @@ public class ChangeInputField : MonoBehaviour
 
     void Update()
     {
-        // Switch between input fields using tab or tab + lshift
-        if (Input.GetKeyDown(KeyCode.Tab) && Input.GetKey(KeyCode.LeftShift)){
-            Selectable previous = eventSystem.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnUp();
+        // Ensure there's a currently selected GameObject
+        if (eventSystem.currentSelectedGameObject == null)
+        {
+            firstInput.Select(); // Select the first input if nothing is selected
+            return;
+        }
+
+        // Get the current selectable
+        Selectable currentSelectable = eventSystem.currentSelectedGameObject.GetComponent<Selectable>();
+
+        if (currentSelectable == null)
+        {
+            return; // Skip if the selected object is not a Selectable
+        }
+
+        // Switch between input fields using Tab or Tab + LeftShift
+        if (Input.GetKeyDown(KeyCode.Tab) && Input.GetKey(KeyCode.LeftShift))
+        {
+            Selectable previous = currentSelectable.FindSelectableOnUp();
             if (previous != null)
             {
                 previous.Select();
@@ -28,11 +44,12 @@ public class ChangeInputField : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Tab))
         {
-            Selectable next = eventSystem.currentSelectedGameObject.GetComponent<Selectable>().FindSelectableOnDown();
-            if(next != null)
+            Selectable next = currentSelectable.FindSelectableOnDown();
+            if (next != null)
             {
                 next.Select();
             }
         }
     }
+
 }

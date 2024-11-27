@@ -39,8 +39,7 @@ public class ActivityThreePerformanceView : ActivityPerformanceView
 
 	public override void RetryLevel()
 	{
-		/*inputReader.SetGameplay();
-		SceneManager.LoadScene(SceneManager.GetActiveScene().name);*/
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 
 	public override void ReturnMainMenu()
@@ -50,8 +49,23 @@ public class ActivityThreePerformanceView : ActivityPerformanceView
 
 	public override void ProceedToNextLevel()
 	{
-		// IN THE FUTURE, ADD SCENE FOR TOPIC DISCUSSION
-	}
+        Difficulty activityDifficulty = ActivityThreeManager.difficultyConfiguration;
+
+        switch (activityDifficulty)
+        {
+            case Difficulty.Easy:
+                ActivityThreeManager.difficultyConfiguration = Difficulty.Medium;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                break;
+            case Difficulty.Medium:
+                ActivityThreeManager.difficultyConfiguration = Difficulty.Hard;
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                break;
+            case Difficulty.Hard:
+                SceneManager.LoadScene("Topic Discussion 4");
+                break;
+        }
+    }
 
 	public override void GoToSelectionScreen()
 	{
