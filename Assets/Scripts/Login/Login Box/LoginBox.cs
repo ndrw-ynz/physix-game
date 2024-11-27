@@ -24,8 +24,10 @@ public class LoginBox : MonoBehaviour
 
     public void ProcessLogin()
     {
-		// Take the value of input fields and feed then verify accoun credentials
-		if (emailInputField.text == "" || passwordInputField.text == "")
+		emailInputField.text = "oliverbrown@gmail.com";
+		passwordInputField.text = "oliverbrown";
+        // Take the value of input fields and feed then verify accoun credentials
+        if (emailInputField.text == "" || passwordInputField.text == "")
 		{
 			errorMessage.text = "Input fields cannot be blank. Please enter email and password.";
 		}
