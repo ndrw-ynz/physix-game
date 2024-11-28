@@ -476,6 +476,7 @@ public class UserManager : MonoBehaviour
         CurrentUser = null;
         UserData = null;
         UserSection = null;
+        UserUnlockedLevels = null;
         DiscussionOneMarkedPagesData = null;
         DiscussionTwoMarkedPagesData = null;
         DiscussionThreeMarkedPagesData = null;

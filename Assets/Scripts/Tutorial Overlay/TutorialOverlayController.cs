@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TutorialOverlayController : MonoBehaviour
@@ -87,7 +86,7 @@ public class TutorialOverlayController : MonoBehaviour
                 }
             }
 
-            // Loop through the terminaal results screen group
+            // Loop through the terminal results screen group
             for (int i = 0; i < terminalStatusScreenGroup.Count; i++)
             {
                 // If a sub activity terminal is active, and its results screen is not active,

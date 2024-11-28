@@ -5472,6 +5472,10 @@ PrefabInstance:
       propertyPath: m_Text
       value: 15 Kilograms
       objectReference: {fileID: 0}
+    - target: {fileID: 6773033205108115337, guid: 0dfff5748b3feab40964947951380c49, type: 3}
+      propertyPath: m_text
+      value: "15 Kilograms\u200B"
+      objectReference: {fileID: 0}
     - target: {fileID: 7996275120897439976, guid: 0dfff5748b3feab40964947951380c49, type: 3}
       propertyPath: m_PreferredWidth
       value: 225
@@ -14470,7 +14474,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &458963951
 RectTransform:
   m_ObjectHideFlags: 0
@@ -46413,6 +46417,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1352523615}
+  - component: {fileID: 1352523616}
   m_Layer: 5
   m_Name: Hint Dialogue Controller
   m_TagString: Untagged
@@ -46440,6 +46445,45 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1352523616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352523614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5986a2962de599d43bc026ad42b782d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terminalStatusScreenGroup:
+  - terminalUI: {fileID: 444744464}
+    terminalStatusScreenUI: {fileID: 12947170}
+    terminalStatusScreenUI2: {fileID: 2090823918}
+    sentences:
+    - THIS IS A SCIENTIFIC NOTATION PANEL
+  - terminalUI: {fileID: 2086862521}
+    terminalStatusScreenUI: {fileID: 1711314474}
+    terminalStatusScreenUI2: {fileID: 0}
+    sentences:
+    - THIS IS A VARIANCE PANEL
+    - SAMPLE SECOND SENTENCE
+  - terminalUI: {fileID: 791352933}
+    terminalStatusScreenUI: {fileID: 12697461}
+    terminalStatusScreenUI2: {fileID: 0}
+    sentences:
+    - THIS IS A ACCURACY PRECISION PANEL
+  - terminalUI: {fileID: 673873325}
+    terminalStatusScreenUI: {fileID: 656040548}
+    terminalStatusScreenUI2: {fileID: 0}
+    sentences:
+    - THIS IS A ERRORS PANEL
+    - SAMPLE SECOND SHII
+  hintDialogue: {fileID: 458963950}
+  dialogueBox: {fileID: 2128876002}
+  pauseMenuUI: {fileID: 1006586156}
+  activityNumber: 1
 --- !u!1001 &1358870560
 PrefabInstance:
   m_ObjectHideFlags: 0

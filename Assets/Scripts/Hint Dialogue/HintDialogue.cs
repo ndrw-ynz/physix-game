@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -7,6 +8,8 @@ using UnityEngine.UI;
 
 public class HintDialogue : MonoBehaviour
 {
+    public static event Action HintDialogueFinished;
+
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private Button backgroundButton;
     [SerializeField] private GameObject downArrowButton;
@@ -20,15 +23,6 @@ public class HintDialogue : MonoBehaviour
         downArrowButton.SetActive(false);
         backgroundButton.enabled = false;
 
-        sentences = new List<string>()
-        {
-            "Hello Charlie Chaplin DSPKAJDIOPJASIOD ASJDIOJASIP DOPIASJDP ASPDASPJDJSAPDJAPSO DJPOASJP",
-            "Hi Dyan Morena  Charlie Chaplin DSPKAJDIOPJASIOD ASJDIOJASIP DOPIASJDP ASPDASPJDJSAPDJAPSO DJPOASJP",
-            "Hi Dyan Morena  Charlie Chaplin DSPKAJDIOPJASIOD ASJDIOJASIP DOPIASJDP ASPDASPJDJSAPDJAPSO DJPOASJP",
-            "Hi Dyan Morena  Charlie Chaplin DSPKAJDIOPJASIOD ASJDIOJASIP DOPIASJDP ASPDASPJDJSAPDJAPSO DJPOASJP",
-            "Hi Dyan Morena  Charlie Chaplin DSPKAJDIOPJASIOD ASJDIOJASIP DOPIASJDP ASPDASPJDJSAPDJAPSO DJPOASJP",
-            "Hi Dyan Morena  Charlie Chaplin DSPKAJDIOPJASIOD ASJDIOJASIP DOPIASJDP ASPDASPJDJSAPDJAPSO DJPOASJP"
-        };
         StartCoroutine(Type());
     }
 
@@ -65,7 +59,7 @@ public class HintDialogue : MonoBehaviour
         else
         {
             Debug.Log("Dialogue is done");
-            // Invoke dialogue done here
+            HintDialogueFinished?.Invoke();
         }
     }
 }
