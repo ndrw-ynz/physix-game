@@ -28,11 +28,13 @@ public class HintDialogueController : MonoBehaviour
     {
         GetCurrentActivityDifficulty();
 
+        // Add subscriber for closing dialogue box when dialogue is finished
         HintDialogue.HintDialogueFinished += CloseHintDialogue;
     }
 
     private void OnDisable()
     {
+        // Remove subscribers
         HintDialogue.HintDialogueFinished -= CloseHintDialogue;
     }
 
@@ -87,6 +89,7 @@ public class HintDialogueController : MonoBehaviour
 
     private void CloseHintDialogue()
     {
+        // Close dialogue box
         if (hintDialogue.gameObject.activeSelf)
         {
             hintDialogue.gameObject.SetActive(false);
