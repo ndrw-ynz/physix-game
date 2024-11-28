@@ -13,11 +13,10 @@ public class HintDialogue : MonoBehaviour
     public List<string> sentences = new List<string>();
     private int index;
 
-
-
-    // Start is called before the first frame update
     void OnEnable()
     {
+        // Reset index to 0
+        index = 0;
         downArrowButton.SetActive(false);
         backgroundButton.enabled = false;
 
@@ -33,7 +32,6 @@ public class HintDialogue : MonoBehaviour
         StartCoroutine(Type());
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (dialogueText.text == sentences[index])
@@ -50,7 +48,7 @@ public class HintDialogue : MonoBehaviour
         foreach (char letter in sentences[index].ToCharArray())
         {
             dialogueText.text += letter;
-            yield return new WaitForSeconds(0.02f);
+            yield return new WaitForSeconds(0.01f);
         }
     }
 
@@ -66,7 +64,8 @@ public class HintDialogue : MonoBehaviour
         }
         else
         {
-            this.gameObject.SetActive(false);
+            Debug.Log("Dialogue is done");
+            // Invoke dialogue done here
         }
     }
 }
