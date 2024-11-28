@@ -15,6 +15,7 @@ public class TutorialOverlayController : MonoBehaviour
     [SerializeField] private List<TerminalStatusScreenGroup> terminalStatusScreenGroup;
     [SerializeField] private List<GameObject> noStatusScreenTerminals;
     [SerializeField] private TutorialOverlayDisplay tutorialDisplay;
+    [SerializeField] private GameObject hintDialogue;
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject performanceResultsUI;
 
@@ -60,6 +61,12 @@ public class TutorialOverlayController : MonoBehaviour
 
             // If pause menu UI is active, don't open tutorial overlay
             if (pauseMenuUI.activeSelf)
+            {
+                return;
+            }
+
+            // If hint dialogue is active, don't open tutorial overlay
+            if (hintDialogue.activeSelf)
             {
                 return;
             }
