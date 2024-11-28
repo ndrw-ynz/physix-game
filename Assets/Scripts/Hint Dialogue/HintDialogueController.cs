@@ -14,8 +14,9 @@ public class HintDialogueController : MonoBehaviour
 
     [Header("Game Objects To Be Checked")]
     [SerializeField] private List<TerminalStatusScreenGroup> terminalStatusScreenGroup;
-    [SerializeField] private GameObject hintDialogue;
     [SerializeField] private HintDialogue dialogueBox;
+    [SerializeField] private GameObject hintDialogue;
+    [SerializeField] private GameObject tutorialScreenOverlay;
     [SerializeField] private GameObject pauseMenuUI;
 
     [Header("Activity Number")]
@@ -57,6 +58,12 @@ public class HintDialogueController : MonoBehaviour
 
             // If pause menu UI is active, don't open hint dialogue
             if (pauseMenuUI.activeSelf)
+            {
+                return;
+            }
+
+            // If tutorial screen overlay is active, don't open hint dialogue
+            if (tutorialScreenOverlay.activeSelf)
             {
                 return;
             }
