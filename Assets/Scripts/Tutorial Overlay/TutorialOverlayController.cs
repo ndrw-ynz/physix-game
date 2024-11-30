@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TutorialOverlayController : MonoBehaviour
@@ -16,6 +15,7 @@ public class TutorialOverlayController : MonoBehaviour
     [SerializeField] private List<TerminalStatusScreenGroup> terminalStatusScreenGroup;
     [SerializeField] private List<GameObject> noStatusScreenTerminals;
     [SerializeField] private TutorialOverlayDisplay tutorialDisplay;
+    [SerializeField] private GameObject hintDialogue;
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject performanceResultsUI;
 
@@ -65,6 +65,12 @@ public class TutorialOverlayController : MonoBehaviour
                 return;
             }
 
+            // If hint dialogue is active, don't open tutorial overlay
+            if (hintDialogue.activeSelf)
+            {
+                return;
+            }
+
             // If performance results UI is active, dont open tutorial overlay
             if (performanceResultsUI.activeSelf)
             {
@@ -87,7 +93,7 @@ public class TutorialOverlayController : MonoBehaviour
                 }
             }
 
-            // Loop through the terminaal results screen group
+            // Loop through the terminal results screen group
             for (int i = 0; i < terminalStatusScreenGroup.Count; i++)
             {
                 // If a sub activity terminal is active, and its results screen is not active,
