@@ -223,9 +223,7 @@ public class TopicDiscussionManager : MonoBehaviour
     }
     private void HandleBackToGameClick()
     {
-        EventSystem.current.gameObject.SetActive(false);
-        BackToActivityEvent?.Invoke();
-        sceneNavigationDisplay.CloseCurrentDiscussion(_topicDiscussionNumber);
+        StartCoroutine(BackToGameSequence());
     }
     // Used for handling the sequences of going back to main menu while also saving current pages data
     private IEnumerator BackToMenuSequence()
@@ -238,6 +236,14 @@ public class TopicDiscussionManager : MonoBehaviour
     {
         yield return StartCoroutine(SaveReadPagesDataToDB());
         sceneNavigationDisplay.LoadActivity(_topicDiscussionNumber);
+    }
+
+    private IEnumerator BackToGameSequence()
+    {
+        yield return StartCoroutine(SaveReadPagesDataToDB());
+        EventSystem.current.gameObject.SetActive(false);
+        BackToActivityEvent?.Invoke();
+        sceneNavigationDisplay.CloseCurrentDiscussion(_topicDiscussionNumber);
     }
     #endregion
 

@@ -34,7 +34,6 @@ public class SceneNavigationButtons : MonoBehaviour, IPointerEnterHandler
 
     public void CloseCurrentDiscussion(int activeDiscussionScene)
     {
-		SceneSoundManager.Instance.PlaySFX("Click_2");
         // Commented as an altenative way to close current scene
         //Scene activeScene = SceneManager.GetActiveScene();
         //SceneManager.UnloadSceneAsync(activeScene.buildIndex);
