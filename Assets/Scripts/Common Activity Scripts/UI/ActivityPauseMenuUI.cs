@@ -40,19 +40,25 @@ public class ActivityPauseMenuUI : MonoBehaviour
     }
 
     private void InitializeInteractableButtons()
-	{
-		interactableButtons = new List<Button>
-		{
+    {
+        interactableButtons = new List<Button>
+    {
 			resumeActivityButton,
 			topicDiscussionButton,
 			quitActivityButton
-		};
-		resumeActivityButton.onClick.AddListener(() => ResumeActivity());
-		topicDiscussionButton.onClick.AddListener(() => GoToTopicDiscussion());
-		quitActivityButton.onClick.AddListener(() => QuitActivity());
-	}
+    };
 
-	private void HandleButtonNavigationChange(Vector2 obj)
+        resumeActivityButton.onClick.RemoveAllListeners();
+        resumeActivityButton.onClick.AddListener(() => ResumeActivity());
+
+        topicDiscussionButton.onClick.RemoveAllListeners();
+        topicDiscussionButton.onClick.AddListener(() => GoToTopicDiscussion());
+
+        quitActivityButton.onClick.RemoveAllListeners();
+        quitActivityButton.onClick.AddListener(() => QuitActivity());
+    }
+
+    private void HandleButtonNavigationChange(Vector2 obj)
 	{
 		selectedButtonIndex = (selectedButtonIndex - (int) obj.y + interactableButtons.Count) % interactableButtons.Count;
 		UpdateSelectedButtonState(selectedButtonIndex);
@@ -111,7 +117,7 @@ public class ActivityPauseMenuUI : MonoBehaviour
 
 	public void GoToTopicDiscussion()
 	{
-		
+		Debug.Log("I am called");
 	}
 
 	public void QuitActivity()
