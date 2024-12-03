@@ -56,6 +56,17 @@ public class InputReader : ScriptableObject, GameInput.IGameplayActions, GameInp
 		Cursor.lockState = CursorLockMode.None;
 	}
 
+    /// <summary>
+    /// Enables activity topic discussion as current state.
+    /// </summary>
+    public void SetInActivityTopicDiscussion()
+    {
+        _gameInput.Gameplay.Disable();
+        _gameInput.GameplayPauseMenu.Disable();
+        _gameInput.GameplayUI.Disable();
+        Cursor.lockState = CursorLockMode.None;
+    }
+
 	/// <summary>
 	/// Enables UI as current state.
 	/// </summary>

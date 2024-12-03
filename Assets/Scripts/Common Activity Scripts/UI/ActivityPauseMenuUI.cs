@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class ActivityPauseMenuUI : MonoBehaviour
@@ -20,6 +22,12 @@ public class ActivityPauseMenuUI : MonoBehaviour
 	[SerializeField] private Button topicDiscussionButton;
 	[SerializeField] private Button quitActivityButton;
 
+	[Header("Activity Event System")]
+	[SerializeField] private EventSystem eventSystem;
+
+	[Header("Topic Discussion To Load")]
+	[SerializeField] private int discussionToLoad;
+
 	private List<Button> interactableButtons;
 	private int selectedButtonIndex;
 
@@ -30,6 +38,8 @@ public class ActivityPauseMenuUI : MonoBehaviour
 		inputReader.PauseMenuSelectChoiceEvent += HandleMenuSelectChoice;
 
 		InitializeInteractableButtons();
+
+		TopicDiscussionManager.BackToActivityEvent += HandleBackToActivity;
 	}
 
     private void OnDestroy()
@@ -37,6 +47,8 @@ public class ActivityPauseMenuUI : MonoBehaviour
         inputReader.ResumeGameplayEvent -= ResumeActivity;
         inputReader.PauseMenuNavigationEvent -= HandleButtonNavigationChange;
         inputReader.PauseMenuSelectChoiceEvent -= HandleMenuSelectChoice;
+
+        TopicDiscussionManager.BackToActivityEvent -= HandleBackToActivity;
     }
 
     private void InitializeInteractableButtons()
@@ -117,8 +129,12 @@ public class ActivityPauseMenuUI : MonoBehaviour
 
 	public void GoToTopicDiscussion()
 	{
-		Debug.Log("I am called");
-	}
+        eventSystem.gameObject.SetActive(false);
+        inputReader.SetInActivityTopicDiscussion();
+        TopicDiscussionManager.isActivitySceneActive = true;
+
+        SceneManager.LoadScene($"Topic Discussion {discussionToLoad}", LoadSceneMode.Additive);
+    }
 
 	public void QuitActivity()
 	{
@@ -126,4 +142,10 @@ public class ActivityPauseMenuUI : MonoBehaviour
 		gameObject.SetActive(false);
 		activityManager.DisplayPerformanceView();
 	}
+
+	private void HandleBackToActivity()
+	{
+        eventSystem.gameObject.SetActive(true);
+        inputReader.SetGameplayPauseMenu();
+    }
 }

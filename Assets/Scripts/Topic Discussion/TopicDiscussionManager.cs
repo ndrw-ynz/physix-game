@@ -2,10 +2,21 @@ using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
+using System;
+using UnityEngine.EventSystems;
 
 
 public class TopicDiscussionManager : MonoBehaviour
 {
+    public static event Action BackToActivityEvent;
+
+    // Current sector and page index values
+    public static int currentSectorIndex;
+    public static int currentPageIndex;
+
+    // Is there an active activity scene
+    public static bool isActivitySceneActive;
+
     [Header("Game Objects with Attached Display Scripts")]
     [SerializeField] private DiscussionPagesDisplay discussionPagesDisplay;
     [SerializeField] private ProgressBarsDisplay progressDisplay;
@@ -17,9 +28,8 @@ public class TopicDiscussionManager : MonoBehaviour
     [Header("Current Topic Discussion Number")]
     [SerializeField] private int _topicDiscussionNumber;
 
-    // Current sector and page index values
-    public static int currentSectorIndex;
-    public static int currentPageIndex;
+    [Header("Audio Source")]
+    [SerializeField] private AudioListener audioListener;
 
     // Current topic discussion's sub topics list count
     private int _subTopicsListCount;
@@ -28,18 +38,18 @@ public class TopicDiscussionManager : MonoBehaviour
     private Dictionary<string, List<int>> _readPagesMapData;
     private void Start()
     {
-		SceneSoundManager.Instance.PlayMusic("With love from Vertex Studio (8)");
-
 		// Get read pages data from database and update UI according to the data
 		GetReadPagesDataFromDB();
-
-        // TO DO: add a function that checks if an activity scene is currently active
-        bool isActivitySceneActive = false;
 
         // Activate only the back to game button when an activity scene is active
         if (isActivitySceneActive)
         {
+            audioListener.gameObject.SetActive(false);
             sceneNavigationDisplay.ActivateBackToGameButtonOnly();
+        }
+        else
+        {
+            SceneSoundManager.Instance.PlayMusic("With love from Vertex Studio (8)");
         }
 
         // Get the sub topics' list count
@@ -66,6 +76,8 @@ public class TopicDiscussionManager : MonoBehaviour
     {
         currentSectorIndex = 0;
         currentPageIndex = 0;
+
+        isActivitySceneActive = false;
 
         // Remove button click listeners
         PagePrevNextButton.PagePrevNextClickEvent -= HandlePrevNextClick;
@@ -211,10 +223,9 @@ public class TopicDiscussionManager : MonoBehaviour
     }
     private void HandleBackToGameClick()
     {
-        //// Save read pages data and close current discussion scene
-        //discussionPagesDisplay.RecordReadPagesData();
-        //sceneNavigationDisplay.CloseCurrentDiscussion(_topicDiscussionNumber);
-
+        EventSystem.current.gameObject.SetActive(false);
+        BackToActivityEvent?.Invoke();
+        sceneNavigationDisplay.CloseCurrentDiscussion(_topicDiscussionNumber);
     }
     // Used for handling the sequences of going back to main menu while also saving current pages data
     private IEnumerator BackToMenuSequence()
