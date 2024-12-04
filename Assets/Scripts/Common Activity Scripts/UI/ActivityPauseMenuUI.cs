@@ -22,6 +22,9 @@ public class ActivityPauseMenuUI : MonoBehaviour
 	[SerializeField] private Button topicDiscussionButton;
 	[SerializeField] private Button quitActivityButton;
 
+	[Header("Locked Grey Images")]
+	[SerializeField] private Image topicDiscussionLockImage;
+
 	[Header("Activity Event System")]
 	[SerializeField] private EventSystem eventSystem;
 
@@ -30,6 +33,7 @@ public class ActivityPauseMenuUI : MonoBehaviour
 
 	private List<Button> interactableButtons;
 	private int selectedButtonIndex;
+	private Difficulty currentDifficulty;
 
 	private void Start()
 	{
@@ -37,7 +41,8 @@ public class ActivityPauseMenuUI : MonoBehaviour
 		inputReader.PauseMenuNavigationEvent += HandleButtonNavigationChange;
 		inputReader.PauseMenuSelectChoiceEvent += HandleMenuSelectChoice;
 
-		InitializeInteractableButtons();
+		GetCurrentDifficulty();
+        InitializeInteractableButtons();
 
 		TopicDiscussionManager.BackToActivityEvent += HandleBackToActivity;
 	}
@@ -53,21 +58,44 @@ public class ActivityPauseMenuUI : MonoBehaviour
 
     private void InitializeInteractableButtons()
     {
-        interactableButtons = new List<Button>
-    {
-			resumeActivityButton,
-			topicDiscussionButton,
-			quitActivityButton
-    };
+		if (currentDifficulty == Difficulty.Hard)
+		{
+            interactableButtons = new List<Button>
+            {
+                    resumeActivityButton,
+                    quitActivityButton
+            };
 
-        resumeActivityButton.onClick.RemoveAllListeners();
-        resumeActivityButton.onClick.AddListener(() => ResumeActivity());
+            resumeActivityButton.onClick.RemoveAllListeners();
+            resumeActivityButton.onClick.AddListener(() => ResumeActivity());
 
-        topicDiscussionButton.onClick.RemoveAllListeners();
-        topicDiscussionButton.onClick.AddListener(() => GoToTopicDiscussion());
+			topicDiscussionLockImage.gameObject.SetActive(true);
 
-        quitActivityButton.onClick.RemoveAllListeners();
-        quitActivityButton.onClick.AddListener(() => QuitActivity());
+            topicDiscussionButton.enabled = false;
+
+            quitActivityButton.onClick.RemoveAllListeners();
+            quitActivityButton.onClick.AddListener(() => QuitActivity());
+        }
+		else
+		{
+            interactableButtons = new List<Button>
+            {
+                    resumeActivityButton,
+                    topicDiscussionButton,
+                    quitActivityButton
+            };
+
+            resumeActivityButton.onClick.RemoveAllListeners();
+            resumeActivityButton.onClick.AddListener(() => ResumeActivity());
+
+            topicDiscussionButton.onClick.RemoveAllListeners();
+            topicDiscussionButton.onClick.AddListener(() => GoToTopicDiscussion());
+
+            quitActivityButton.onClick.RemoveAllListeners();
+            quitActivityButton.onClick.AddListener(() => QuitActivity());
+        }
+
+        
     }
 
     private void HandleButtonNavigationChange(Vector2 obj)
@@ -148,4 +176,46 @@ public class ActivityPauseMenuUI : MonoBehaviour
         eventSystem.gameObject.SetActive(true);
         inputReader.SetGameplayPauseMenu();
     }
+
+	private void GetCurrentDifficulty()
+	{
+		switch (discussionToLoad)
+		{
+			case 1:
+				currentDifficulty = ActivityOneManager.difficultyConfiguration;
+				break;
+
+			case 2:
+                currentDifficulty = ActivityTwoManager.difficultyConfiguration;
+                break;
+
+            case 3:
+                currentDifficulty = ActivityThreeManager.difficultyConfiguration;
+                break;
+
+            case 4:
+                currentDifficulty = ActivityFourManager.difficultyConfiguration;
+                break;
+
+            case 5:
+                currentDifficulty = ActivityFiveManager.difficultyConfiguration;
+                break;
+
+            case 6:
+                currentDifficulty = ActivitySixManager.difficultyConfiguration;
+                break;
+
+            case 7:
+                currentDifficulty = ActivitySevenManager.difficultyConfiguration;
+                break;
+
+            case 8:
+                currentDifficulty = ActivityEightManager.difficultyConfiguration;
+                break;
+
+            case 9:
+                currentDifficulty = ActivityNineManager.difficultyConfiguration;
+                break;
+        }
+	}
 }
