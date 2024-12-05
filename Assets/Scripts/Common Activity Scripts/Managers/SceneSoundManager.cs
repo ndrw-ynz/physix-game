@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 public class SceneSoundManager : MonoBehaviour
@@ -10,8 +11,33 @@ public class SceneSoundManager : MonoBehaviour
 	[SerializeField] private AudioSource musicSource;
 	[SerializeField] private AudioSource sfxSource;
 	[SerializeField] private AudioLibrary audioLibrary;
+	[SerializeField] private AudioMixer audioMixer;
+    private void Start()
+    {
+        // Load and apply the music volume
+        if (PlayerPrefs.HasKey("musicVolume"))
+        {
+            float musicVolume = PlayerPrefs.GetFloat("musicVolume");
+            audioMixer.SetFloat("Music", Mathf.Log10(musicVolume) * 20);
+        }
+        else
+        {
+            audioMixer.SetFloat("Music", 0); // Default value
+        }
 
-	private void Awake()
+        // Load and apply the SFX volume
+        if (PlayerPrefs.HasKey("sfxVolume"))
+        {
+            float sfxVolume = PlayerPrefs.GetFloat("sfxVolume");
+            audioMixer.SetFloat("SFX", Mathf.Log10(sfxVolume) * 20);
+        }
+        else
+        {
+            audioMixer.SetFloat("SFX", 0); // Default value
+        }
+    }
+
+    private void Awake()
 	{
 		if (Instance == null)
 		{
@@ -24,9 +50,9 @@ public class SceneSoundManager : MonoBehaviour
 		}
 	}
 
-	private void OnEnable()
-	{
-		SceneManager.sceneLoaded += OnSceneLoaded;
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
 	}
 
 	private void OnDisable()
