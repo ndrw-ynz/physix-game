@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -20,7 +21,11 @@ public class ActivityPauseMenuUI : MonoBehaviour
 	[Header("Interactable Pause Menu Buttons")]
     [SerializeField] private Button resumeActivityButton;
 	[SerializeField] private Button topicDiscussionButton;
-	[SerializeField] private Button quitActivityButton;
+    [SerializeField] private Button optionsButton;
+    [SerializeField] private Button quitActivityButton;
+
+	[Header("Overlay Screens")]
+	[SerializeField] private GameObject optionsScreen;
 
 	[Header("Locked Grey Images")]
 	[SerializeField] private Image topicDiscussionLockImage;
@@ -63,6 +68,7 @@ public class ActivityPauseMenuUI : MonoBehaviour
             interactableButtons = new List<Button>
             {
                     resumeActivityButton,
+                    optionsButton,
                     quitActivityButton
             };
 
@@ -73,6 +79,9 @@ public class ActivityPauseMenuUI : MonoBehaviour
 
             topicDiscussionButton.enabled = false;
 
+            optionsButton.onClick.RemoveAllListeners();
+			optionsButton.onClick.AddListener(() => OpenOptionsScreen());
+
             quitActivityButton.onClick.RemoveAllListeners();
             quitActivityButton.onClick.AddListener(() => QuitActivity());
         }
@@ -82,6 +91,7 @@ public class ActivityPauseMenuUI : MonoBehaviour
             {
                     resumeActivityButton,
                     topicDiscussionButton,
+                    optionsButton,
                     quitActivityButton
             };
 
@@ -90,6 +100,9 @@ public class ActivityPauseMenuUI : MonoBehaviour
 
             topicDiscussionButton.onClick.RemoveAllListeners();
             topicDiscussionButton.onClick.AddListener(() => GoToTopicDiscussion());
+
+            optionsButton.onClick.RemoveAllListeners();
+            optionsButton.onClick.AddListener(() => OpenOptionsScreen());
 
             quitActivityButton.onClick.RemoveAllListeners();
             quitActivityButton.onClick.AddListener(() => QuitActivity());
@@ -151,6 +164,11 @@ public class ActivityPauseMenuUI : MonoBehaviour
 
 	public void ResumeActivity()
 	{
+		if (optionsScreen.gameObject.activeSelf)
+		{
+			optionsScreen.gameObject.SetActive(false);
+		}
+
 		inputReader.SetGameplayPreviousState();
 		gameObject.SetActive(false);
 	}
@@ -163,6 +181,11 @@ public class ActivityPauseMenuUI : MonoBehaviour
 
         SceneManager.LoadScene($"Topic Discussion {discussionToLoad}", LoadSceneMode.Additive);
     }
+
+	public void OpenOptionsScreen()
+	{
+		optionsScreen.gameObject.SetActive(true);
+	}
 
 	public void QuitActivity()
 	{
