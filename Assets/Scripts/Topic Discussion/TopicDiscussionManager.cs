@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 
 public class TopicDiscussionManager : MonoBehaviour
@@ -24,6 +25,9 @@ public class TopicDiscussionManager : MonoBehaviour
     [SerializeField] private PreviousNextButtonsDisplay previousNextButtonsDisplay;
     [SerializeField] private ReadIndicatorsDisplay readIndicatorsDisplay;
     [SerializeField] private SceneNavigationButtons sceneNavigationDisplay;
+
+    [Header("Difficulty Select Overlay")]
+    [SerializeField] private GameObject difficultySelectOverlay;
 
     [Header("Current Topic Discussion Number")]
     [SerializeField] private int _topicDiscussionNumber;
@@ -70,6 +74,8 @@ public class TopicDiscussionManager : MonoBehaviour
         DiscussionMainMenuButton.BackToMainMenuClickEvent += HandleBackToMainMenuClick;
         DiscussionActivityButton.StartActivityClickEvent += HandleStartActivityClick;
         DiscussionBackToActivityButton.BackToActivityClickEvent += HandleBackToGameClick;
+        ActivityDifficultyButton.DifficultyClick += HandleDifficultySelectClick;
+        OverlayCloseButton.OverlayCloseClicked += CloseCurrentOverlay;
     }
 
     private void OnDisable()
@@ -88,6 +94,8 @@ public class TopicDiscussionManager : MonoBehaviour
         DiscussionMainMenuButton.BackToMainMenuClickEvent -= HandleBackToMainMenuClick;
         DiscussionActivityButton.StartActivityClickEvent -= HandleStartActivityClick;
         DiscussionBackToActivityButton.BackToActivityClickEvent -= HandleBackToGameClick;
+        ActivityDifficultyButton.DifficultyClick -= HandleDifficultySelectClick;
+        OverlayCloseButton.OverlayCloseClicked -= CloseCurrentOverlay;
     }
 
     #region Function for Event Handling
@@ -210,6 +218,10 @@ public class TopicDiscussionManager : MonoBehaviour
 
         UpdatePageJumpButtonColors();
     }
+    private void CloseCurrentOverlay(int activityNumber)
+    {
+        difficultySelectOverlay.gameObject.SetActive(false);
+    }
     #endregion
 
     #region Discussion Scene Close Related Buttons
@@ -219,8 +231,16 @@ public class TopicDiscussionManager : MonoBehaviour
     }
     private void HandleStartActivityClick()
     {
-        StartCoroutine(StartActivitySequence());
+        // Opens Difficulty Select Overlay
+        difficultySelectOverlay.gameObject.SetActive(true);
     }
+
+    private void HandleDifficultySelectClick(Activity activity, Difficulty difficulty)
+    {
+        // Save the marked pages data and load activity based on difficulty
+        StartCoroutine(StartActivitySequence(activity, difficulty));
+    }
+
     private void HandleBackToGameClick()
     {
         StartCoroutine(BackToGameSequence());
@@ -232,18 +252,72 @@ public class TopicDiscussionManager : MonoBehaviour
         sceneNavigationDisplay.LoadMainMenu();
     }
     // Used for handling the sequences of starting the activity while also saving current pages data
-    private IEnumerator StartActivitySequence()
+    private IEnumerator StartActivitySequence(Activity activity, Difficulty difficulty)
     {
         yield return StartCoroutine(SaveReadPagesDataToDB());
-        sceneNavigationDisplay.LoadActivity(_topicDiscussionNumber);
+        OpenActivityWithDifficultyType(activity, difficulty);
     }
 
+    // Used for handling the sequences of going back to current activity while also saving current pages data
     private IEnumerator BackToGameSequence()
     {
         yield return StartCoroutine(SaveReadPagesDataToDB());
         EventSystem.current.gameObject.SetActive(false);
         BackToActivityEvent?.Invoke();
         sceneNavigationDisplay.CloseCurrentDiscussion(_topicDiscussionNumber);
+    }
+
+    // Helper function of starting activity with difficulty
+    private void OpenActivityWithDifficultyType(Activity activity, Difficulty difficulty)
+    {
+        // Set proper difficulty of the activity manager and load scene of the specified activity
+        switch (activity)
+        {
+            case Activity.ActivityOne:
+                ActivityOneManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 1");
+                break;
+
+            case Activity.ActivityTwo:
+                ActivityTwoManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 2");
+                break;
+
+            case Activity.ActivityThree:
+                ActivityThreeManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 3");
+                break;
+
+            case Activity.ActivityFour:
+                ActivityFourManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 4");
+                break;
+
+            case Activity.ActivityFive:
+                ActivityFiveManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 5");
+                break;
+
+            case Activity.ActivitySix:
+                ActivitySixManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 6");
+                break;
+
+            case Activity.ActivitySeven:
+                ActivitySevenManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 7");
+                break;
+
+            case Activity.ActivityEight:
+                ActivityEightManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 8");
+                break;
+
+            case Activity.ActivityNine:
+                ActivityNineManager.difficultyConfiguration = difficulty;
+                SceneManager.LoadScene("Activity 9");
+                break;
+        }
     }
     #endregion
 
