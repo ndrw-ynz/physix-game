@@ -24,8 +24,6 @@ public class LoginBox : MonoBehaviour
 
     public void ProcessLogin()
     {
-		emailInputField.text = "marybrown@gmail.com";
-		passwordInputField.text = "marybrown";
         // Take the value of input fields and feed then verify accoun credentials
         if (emailInputField.text == "" || passwordInputField.text == "")
 		{
