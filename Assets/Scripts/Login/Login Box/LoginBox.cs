@@ -28,21 +28,41 @@ public class LoginBox : MonoBehaviour
         if (emailInputField.text == "" || passwordInputField.text == "")
 		{
 			errorMessage.text = "Input fields cannot be blank. Please enter email and password.";
+			return;
 		}
 
 		StartCoroutine(UserManager.Instance.SignInWithEmailAndPassword(emailInputField.text, passwordInputField.text, (success) =>
 		{
-			if (success)
+			switch (success)
 			{
-				Debug.Log("User signed in successfully.");
-				isUserAuthenticated = true;
-				// Proceed to next actions
+				case LoginType.UserNotFound:
+                    errorMessage.text = "Your password is incorrect or this account does not exist. Please try again.";
+                    Debug.Log("Sign-in failed.");
+                    break;
+
+				case LoginType.UserIsInactive:
+                    errorMessage.text = "This account is inactive, please contact your teacher.";
+                    Debug.Log("Account is inactive");
+                    break;
+
+				case LoginType.UserLoginSuccess:
+                    Debug.Log("User signed in successfully.");
+                    isUserAuthenticated = true;
+                    // Proceed to next actions
+                    break;
 			}
-			else
-			{
-				errorMessage.text = "Your password is incorrect or this account does not exist. Please try again.";
-				Debug.Log("Sign-in failed.");
-			}
+
+			//if (true)
+			//{
+			//	Debug.Log("User signed in successfully.");
+			//	isUserAuthenticated = true;
+			//	// Proceed to next actions
+			//}
+			//else
+			//{
+			//	errorMessage.text = "Your password is incorrect or this account does not exist. Please try again.";
+			//	Debug.Log("Sign-in failed.");
+			//}
 			OnAuthenticationCompleted?.Invoke(isUserAuthenticated);
 		}));
 	}

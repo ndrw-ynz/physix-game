@@ -5,6 +5,13 @@ using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Networking;
 
+public enum LoginType
+{
+    UserNotFound,
+    UserIsInactive,
+    UserLoginSuccess,
+}
+
 [System.Serializable]
 public class FirebaseAuthResponse
 {
@@ -98,7 +105,7 @@ public class UserManager : MonoBehaviour
 	}
 
 	// Method to sign in
-	public IEnumerator SignInWithEmailAndPassword(string email, string password, System.Action<bool> callback)
+	public IEnumerator SignInWithEmailAndPassword(string email, string password, System.Action<LoginType> callback)
 	{
 		var requestData = new { email, password, returnSecureToken = true };
 		string jsonBody = JsonConvert.SerializeObject(requestData);
@@ -122,20 +129,27 @@ public class UserManager : MonoBehaviour
 				if (success)
 				{
                     Debug.Log("User signed in successfully.");
-                    callback(true);
+                    if (UserData.fields["status"].booleanValue == true)
+                    {
+                        callback(LoginType.UserLoginSuccess);
+                    }
+                    else
+                    {
+                        callback(LoginType.UserIsInactive);
+                    }
                 }
 				else
 				{
                     Debug.Log("Sign-in failed: " + request.downloadHandler.text);
                     CurrentUser = null;
-                    callback(false);
+                    callback(LoginType.UserNotFound);
                 }
 			}));
 		}
 		else
 		{
 			Debug.LogError("Sign-in failed: " + request.downloadHandler.text);
-			callback(false);
+			callback(LoginType.UserNotFound);
 		}
 
         // Deactivate Loading Screen
