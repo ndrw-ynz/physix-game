@@ -155,21 +155,24 @@ public class ActivityFiveManager : ActivityManager
 			appleForceMotionSubActivityStateQueue,
 			appleMotionView,
 			ref appleForceGivenData,
-			ref isAppleMotionSubActivityFinished
+			ref isAppleMotionSubActivityFinished,
+			true
 			);
 		UpdateSubActivityStateMachine(
 			rockForceMotionSubActivityStateMachine,
 			rockForceMotionSubActivityStateQueue,
 			rockMotionView,
 			ref rockForceGivenData,
-			ref isRockMotionSubActivityFinished
+			ref isRockMotionSubActivityFinished,
+			true
 			);
 		UpdateSubActivityStateMachine(
 			boatForceMotionSubActivityStateMachine,
 			boatForceMotionSubActivityStateQueue,
 			boatMotionView,
 			ref boatForceGivenData,
-			ref isBoatMotionSubActivityFinished
+			ref isBoatMotionSubActivityFinished,
+			true
 			);
 	}
 
@@ -212,7 +215,8 @@ public class ActivityFiveManager : ActivityManager
 			appleForceMotionSubActivityStateQueue,
 			appleMotionView,
 			ref appleForceGivenData,
-			ref isAppleMotionSubActivityFinished
+			ref isAppleMotionSubActivityFinished,
+			false
 			);
 		appleMotionView.QuitViewEvent += () =>
 		{
@@ -247,7 +251,8 @@ public class ActivityFiveManager : ActivityManager
 			rockForceMotionSubActivityStateQueue,
 			rockMotionView,
 			ref rockForceGivenData,
-			ref isRockMotionSubActivityFinished
+			ref isRockMotionSubActivityFinished,
+			false
 			);
 		rockMotionView.QuitViewEvent += () =>
 		{
@@ -282,7 +287,8 @@ public class ActivityFiveManager : ActivityManager
 			boatForceMotionSubActivityStateQueue,
 			boatMotionView,
 			ref boatForceGivenData,
-			ref isBoatMotionSubActivityFinished
+			ref isBoatMotionSubActivityFinished,
+			false
 			);
 		boatMotionView.QuitViewEvent += () =>
 		{
@@ -471,7 +477,8 @@ public class ActivityFiveManager : ActivityManager
 		Queue<ActivityFiveSubActivityState> subactivityStateQueue,
 		ForceMotionView forceMotionView,
 		ref ForceData forceGivenData,
-		ref bool isSubActivityFinished
+		ref bool isSubActivityFinished,
+		bool generateProblem
 		)
 	{
 		if (subactivityStateQueue.Count == 0)
@@ -491,8 +498,11 @@ public class ActivityFiveManager : ActivityManager
 					forceMotionView.ResetForceDiagram();
 					break;
 				case ActivityFiveSubActivityState.SolveForceCalculation:
-					forceGivenData = GenerateNewForceGivenData(currentForceLevel);
-					forceMotionView.SetupForceCalculationDisplay(forceGivenData);
+					if (generateProblem)
+					{
+						forceGivenData = GenerateNewForceGivenData(currentForceLevel);
+						forceMotionView.SetupForceCalculationDisplay(forceGivenData);
+					}
 					break;
 			}
 
@@ -516,7 +526,8 @@ public class ActivityFiveManager : ActivityManager
 			appleForceMotionSubActivityStateQueue,
 			appleMotionView,
 			ref appleForceGivenData,
-			ref isAppleMotionSubActivityFinished
+			ref isAppleMotionSubActivityFinished,
+			true
 			);
 	}
 	#endregion
@@ -536,7 +547,8 @@ public class ActivityFiveManager : ActivityManager
 			rockForceMotionSubActivityStateQueue,
 			rockMotionView,
 			ref rockForceGivenData,
-			ref isRockMotionSubActivityFinished
+			ref isRockMotionSubActivityFinished,
+			true
 			);
 	}
 	#endregion
@@ -556,7 +568,8 @@ public class ActivityFiveManager : ActivityManager
 			boatForceMotionSubActivityStateQueue,
 			boatMotionView,
 			ref boatForceGivenData,
-			ref isBoatMotionSubActivityFinished
+			ref isBoatMotionSubActivityFinished,
+			true
 			);
 	}
 	#endregion
