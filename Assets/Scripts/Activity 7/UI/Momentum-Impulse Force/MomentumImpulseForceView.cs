@@ -178,16 +178,16 @@ public class MomentumImpulseForceView : MonoBehaviour
 
 	private void ClearAllInputFields()
 	{
-		initialMomentumMultiplicandField.text = "";
-		initialMomentumMultiplierField.text = "";
-		finalMomentumMultiplicandField.text = "";
-		deltaMomentumMultiplicandField.text = "";
-		deltaMomentumMultiplierField.text = "";
-		finalMomentumMultiplierField.text = "";
-		deltaMomentumMinuendField.text = "";
-		deltaMomentumSubtrahendField.text = "";
-		impulseField.text = "";
-		netForceDividendField.text = "";
-		netForceDivisorField.text = "";
+		initialMomentumMultiplicandField.text = "0";
+		initialMomentumMultiplierField.text = "0";
+		finalMomentumMultiplicandField.text = "0";
+		deltaMomentumMultiplicandField.text = "0";
+		deltaMomentumMultiplierField.text = "0";
+		finalMomentumMultiplierField.text = "0";
+		deltaMomentumMinuendField.text = "0";
+		deltaMomentumSubtrahendField.text = "0";
+		impulseField.text = "0";
+		netForceDividendField.text = "0";
+		netForceDivisorField.text = "0";
 	}
 }
