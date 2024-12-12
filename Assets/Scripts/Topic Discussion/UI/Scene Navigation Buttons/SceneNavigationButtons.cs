@@ -20,7 +20,6 @@ public class SceneNavigationButtons : MonoBehaviour, IPointerEnterHandler
 
     public void LoadMainMenu()
     {
-		SceneSoundManager.Instance.PlaySFX("Click_2");
 		// Load main menu scene
 		SceneManager.LoadScene($"Main Menu");
     }
