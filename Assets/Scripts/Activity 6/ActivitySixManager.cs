@@ -259,6 +259,7 @@ public class ActivitySixManager : ActivityManager
 			isDotProductSubActivityFinished = true;
 			dotProductView.gameObject.SetActive(false);
 			MainSatelliteAreaClearEvent?.Invoke();
+			missionObjectiveDisplayUI.ClearMissionObjective(0);
 		}
 	}
 	#endregion
@@ -347,6 +348,7 @@ public class ActivitySixManager : ActivityManager
 		{
 			isWorkSubActivityFinished = true;
 			workView.gameObject.SetActive(false);
+			missionObjectiveDisplayUI.ClearMissionObjective(1);
 		}
 	}
 	#endregion
@@ -441,6 +443,7 @@ public class ActivitySixManager : ActivityManager
 		{
 			isWorkGraphSubActivityFinished = true;
 			workGraphInterpretationView.gameObject.SetActive(false);
+			missionObjectiveDisplayUI.ClearMissionObjective(2);
 		}
 	}
 	#endregion

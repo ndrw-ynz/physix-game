@@ -93,6 +93,8 @@ public class ActivityOneManager : ActivityManager
         // Setup views
         scientificNotationView.UpdateNumberOfContainersTextDisplay(0, currentNumSNTests);
 
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Select storage containers and determine its value in standard scientific notation ({currentSNLevel.numberOfTests - currentNumSNTests}/{currentSNLevel.numberOfTests})");
+
 		inputReader.SetGameplay();
 	}
 
@@ -185,7 +187,7 @@ public class ActivityOneManager : ActivityManager
 		if (results.isAllCorrect())
 		{
 			scientificNotationSubmissionStatusDisplay.SetSubmissionStatus(true, "Great job! Your calculations are correct. Making containers for ejection.");
-			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Select storage containers and determine its value in standard scientific notation ({currentNumSNTests}/{currentSNLevel.numberOfTests})");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Select storage containers and determine its value in standard scientific notation ({currentSNLevel.numberOfTests - currentNumSNTests}/{currentSNLevel.numberOfTests})");
 		}
 		else
 		{
@@ -202,7 +204,7 @@ public class ActivityOneManager : ActivityManager
 		SNCorrectAnswerEvent.Invoke();
 		if (currentNumSNTests > 0)
 		{
-            scientificNotationView.UpdateNumberOfContainersTextDisplay(currentNumSNTests, currentSNLevel.numberOfTests);
+            scientificNotationView.UpdateNumberOfContainersTextDisplay(currentSNLevel.numberOfTests - currentNumSNTests, currentSNLevel.numberOfTests);
 			scientificNotationView.UpdateScientificNotationView(containerSelectionHandler.GetSelectedContainer());
 		}
 		else
