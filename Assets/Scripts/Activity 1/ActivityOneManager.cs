@@ -93,6 +93,8 @@ public class ActivityOneManager : ActivityManager
         // Setup views
         scientificNotationView.UpdateNumberOfContainersTextDisplay(0, currentNumSNTests);
 
+		missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Select storage containers and determine its value in standard scientific notation ({currentSNLevel.numberOfTests - currentNumSNTests}/{currentSNLevel.numberOfTests})");
+
 		inputReader.SetGameplay();
 	}
 
