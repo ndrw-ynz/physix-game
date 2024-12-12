@@ -2788,6 +2788,10 @@ PrefabInstance:
       propertyPath: _topicDiscussionNumber
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 7316107965698197666, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+      propertyPath: discussionDifficultySelectOverlay
+      value: 
+      objectReference: {fileID: 422919857}
     - target: {fileID: 7516363703406544057, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
       propertyPath: m_text
       value: One-Dimensional Kinematics
@@ -2804,13 +2808,45 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1316756370229507153, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1776163659}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8504986904757160481, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 422919857}
   m_SourcePrefab: {fileID: 100100000, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
 --- !u!224 &422919854 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1316756370229507153, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
   m_PrefabInstance: {fileID: 422919853}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &422919855 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4596978501470436545, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+  m_PrefabInstance: {fileID: 422919853}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1269b6cceb91b64ea40ec7a641d9496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &422919856 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8504986904757160481, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+  m_PrefabInstance: {fileID: 422919853}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &422919857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422919856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 694b7bf845e29a34686662c08f4e3fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lessonDifficultyButtonGroup: {fileID: 422919855}
 --- !u!1 &428293304
 GameObject:
   m_ObjectHideFlags: 0
@@ -2990,6 +3026,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8702527404341747179, guid: a8b5c426714b27445904ee7229214cc8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fb07d3a531faf914e82c24b15b5d2b2c, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5603024901312036448, guid: a8b5c426714b27445904ee7229214cc8, type: 3}
@@ -9272,6 +9312,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8702527404341747179, guid: a8b5c426714b27445904ee7229214cc8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d9e5f27167389a34a80b5cd070342aee, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5885695129183256774, guid: a8b5c426714b27445904ee7229214cc8, type: 3}
@@ -9693,6 +9737,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8702527404341747179, guid: a8b5c426714b27445904ee7229214cc8, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ba24e3cab6210f4478ba68d6037a41cc, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5603024901312036448, guid: a8b5c426714b27445904ee7229214cc8, type: 3}
@@ -16189,7 +16237,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: First, you will solve for the acceleration value to feed it into the system.
+  m_text: Then, you will solve for the acceleration value to feed it into the system.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c92ff4b47a16b8843a46f8ae328120d9, type: 2}
   m_sharedMaterial: {fileID: 1487677473026798926, guid: c92ff4b47a16b8843a46f8ae328120d9, type: 2}
