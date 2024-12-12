@@ -12586,6 +12586,10 @@ PrefabInstance:
       propertyPath: _topicDiscussionNumber
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 7316107965698197666, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+      propertyPath: discussionDifficultySelectOverlay
+      value: 
+      objectReference: {fileID: 2013769385}
     - target: {fileID: 7516363703406544057, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
       propertyPath: m_text
       value: Two- and Three- Dimensional Kinematics
@@ -12602,13 +12606,45 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1316756370229507153, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1182965116}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8504986904757160481, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2013769385}
   m_SourcePrefab: {fileID: 100100000, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
 --- !u!224 &2013769382 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1316756370229507153, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
   m_PrefabInstance: {fileID: 2013769381}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2013769383 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4596978501470436545, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+  m_PrefabInstance: {fileID: 2013769381}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1269b6cceb91b64ea40ec7a641d9496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1 &2013769384 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8504986904757160481, guid: 54b6b3815f92061448087b31b3588c9b, type: 3}
+  m_PrefabInstance: {fileID: 2013769381}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2013769385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013769384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 694b7bf845e29a34686662c08f4e3fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lessonDifficultyButtonGroup: {fileID: 2013769383}
 --- !u!1 &2067832513
 GameObject:
   m_ObjectHideFlags: 0
