@@ -204,7 +204,7 @@ public class ActivityOneManager : ActivityManager
 		SNCorrectAnswerEvent.Invoke();
 		if (currentNumSNTests > 0)
 		{
-            scientificNotationView.UpdateNumberOfContainersTextDisplay(currentNumSNTests, currentSNLevel.numberOfTests);
+            scientificNotationView.UpdateNumberOfContainersTextDisplay(currentSNLevel.numberOfTests - currentNumSNTests, currentSNLevel.numberOfTests);
 			scientificNotationView.UpdateScientificNotationView(containerSelectionHandler.GetSelectedContainer());
 		}
 		else
