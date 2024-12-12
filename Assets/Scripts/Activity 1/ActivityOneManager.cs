@@ -185,7 +185,7 @@ public class ActivityOneManager : ActivityManager
 		if (results.isAllCorrect())
 		{
 			scientificNotationSubmissionStatusDisplay.SetSubmissionStatus(true, "Great job! Your calculations are correct. Making containers for ejection.");
-			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Select storage containers and determine its value in standard scientific notation ({currentNumSNTests}/{currentSNLevel.numberOfTests})");
+			missionObjectiveDisplayUI.UpdateMissionObjectiveText(0, $"Select storage containers and determine its value in standard scientific notation ({currentSNLevel.numberOfTests - currentNumSNTests}/{currentSNLevel.numberOfTests})");
 		}
 		else
 		{
